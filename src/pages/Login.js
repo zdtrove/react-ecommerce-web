@@ -31,20 +31,18 @@ const validationSchema = Yup.object().shape({
 })
 
 const useStyles = makeStyles(theme => ({
-	paper: {
-		marginTop: theme.spacing(6)
+	root: {
+		marginTop: theme.spacing(6),
+		'& .MuiFormHelperText-root': {
+			marginLeft: 0,
+			marginTop: '3px'
+		}
 	},
 	buttons: {
 		display: 'flex',
 		justifyContent: 'flex-end',
 		'& button': {
 			marginLeft: theme.spacing(1)
-		}
-	},
-	input: {
-		'& .MuiFormHelperText-root': {
-			marginLeft: 0,
-			marginTop: '3px'
 		}
 	}
 }))
@@ -62,13 +60,12 @@ const Login = () => {
     return (
         <Layout>
             <Toolbar />
-            <Paper className={classes.paper} component={Box} p={4} pt={1} mx="auto" width="50%">
+            <Paper className={classes.root} component={Box} p={4} pt={1} mx="auto" width="50%">
             	<Typography variant="h4">Login</Typography>
 				<form onSubmit={formik.handleSubmit}>
 					<Grid container>
 						<Grid item sm={12}>
 							<Input
-								className={classes.input}
 								name="email"
 								label="Email"
 								type="email"
@@ -86,7 +83,6 @@ const Login = () => {
 								}}
 							/>
 							<Input
-								className={classes.input}
 								name="password"
 								label="Password"
 								type="password"
