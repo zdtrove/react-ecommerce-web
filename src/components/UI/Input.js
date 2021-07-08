@@ -9,17 +9,19 @@ const Input = ({
 	label,
 	value,
 	onChange,
+	error,
 	...rest
 }) => {
 	return (
 		<TextField
 			variant={variant || "outlined"}
-			fullWidth={fullWidth || "true"}
+			fullWidth={fullWidth || true}
 			margin={margin || "normal"}
 			name={name}
 			label={label}
 			value={value}
 			onChange={onChange}
+			{...(error && { error: true, helperText: error })}
 			{...rest}
 		/>
 	)

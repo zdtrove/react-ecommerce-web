@@ -36,9 +36,7 @@ const Register = () => {
 	const classes = useStyles()
 	const {
 		values,
-		setValues,
-		handleInputChange,
-		resetForm
+		handleInputChange
 	} = useForm(initialValues)
 
 	const handleSubmit = () => {

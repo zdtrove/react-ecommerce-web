@@ -6,17 +6,29 @@ import {
 	Paper,
 	Box,
 	Grid,
-	TextField,
 	Button,
-	Typography
+	Typography,
+	InputAdornment
 } from '@material-ui/core'
-import { useForm, Form } from '../hooks/useForm'
 import { Input } from '../components/UI'
+import { useFormik } from 'formik'
+import * as Yup from 'yup'
 
 const initialValues = {
 	email: '',
 	password: ''
 }
+
+const validationSchema = Yup.object().shape({
+	email: Yup.string()
+		.email("Invalid email address")
+		.required("Email is required")
+		.max(32, "Max email length is 32"),
+	password: Yup.string()
+		.required("Password is required")
+		.min(6, "Min password length is 6")
+		.max(24, "Max password length is 24")
+})
 
 const useStyles = makeStyles(theme => ({
 	paper: {
@@ -26,51 +38,78 @@ const useStyles = makeStyles(theme => ({
 		display: 'flex',
 		justifyContent: 'flex-end',
 		'& button': {
-			marginLeft: theme.spacing(0.5)
+			marginLeft: theme.spacing(1)
+		}
+	},
+	input: {
+		'& .MuiFormHelperText-root': {
+			marginLeft: 0,
+			marginTop: '3px'
 		}
 	}
 }))
 
 const Login = () => {
 	const classes = useStyles()
-	const {
-		values,
-		setValues,
-		handleInputChange,
-		resetForm
-	} = useForm(initialValues)
-
-	const handleSubmit = () => {
-		console.log(values)
-	}
+	const formik = useFormik({
+		initialValues,
+		validationSchema,
+		onSubmit: values => {
+			console.log(values)
+		}
+	})
 
     return (
         <Layout>
             <Toolbar />
             <Paper className={classes.paper} component={Box} p={4} pt={1} mx="auto" width="50%">
             	<Typography variant="h4">Login</Typography>
-            	<Form onSubmit={handleSubmit}>
-	            	<Grid container>
-	            		<Grid item sm={12}>
-	            			<Input
-	            				name="email"
-	            				label="Email"
-	            				value={values.email}
-	            				onChange={handleInputChange}
-	            			/>
-	            			<Input
-	            				name="password"
-	            				label="Password"
-	            				value={values.password}
-	            				onChange={handleInputChange}
-	            			/>
-	            			<div className={classes.buttons}>
-	            				<Button variant="contained" color="primary">Login</Button>
-	            				<Button variant="contained" color="secondary">Reset</Button>
-	            			</div>
-	            		</Grid>
-	            	</Grid>
-	            </Form>
+				<form onSubmit={formik.handleSubmit}>
+					<Grid container>
+						<Grid item sm={12}>
+							<Input
+								className={classes.input}
+								name="email"
+								label="Email"
+								type="email"
+								value={formik.values.email}
+								{...formik.getFieldProps('email')}
+								error={formik.touched.email && formik.errors.email}
+								InputProps={{
+									endAdornment: (
+										<InputAdornment position="end">
+											{formik.values.email && <span>
+												{formik.values.email.length}/32
+											</span>}
+										</InputAdornment>
+									)
+								}}
+							/>
+							<Input
+								className={classes.input}
+								name="password"
+								label="Password"
+								type="password"
+								value={formik.values.password}
+								{...formik.getFieldProps('password')}
+								error={formik.touched.password && formik.errors.password}
+								InputProps={{
+									endAdornment: (
+										<InputAdornment position="end">
+											{formik.values.password && <span>
+												{formik.values.password.length}/24
+											</span>}
+										</InputAdornment>
+									)
+								}}
+							/>
+							<div className={classes.buttons}>
+								<Button type="submit" variant="contained" color="primary">Login</Button>
+								<Button onClick={() => formik.resetForm()} variant="contained" color="secondary">Reset</Button>
+							</div>
+						</Grid>
+					</Grid>
+				</form>
             </Paper>
         </Layout>
     )
