@@ -6,7 +6,8 @@ import {
     Toolbar,
     IconButton,
     Typography,
-    Button
+    Button,
+    CssBaseline
 } from '@material-ui/core'
 import {
     Menu as MenuIcon
@@ -23,11 +24,12 @@ const useStyles = makeStyles(theme => ({
     }
 }))
 
-const Layout = ({ children, ...rest }) => {
+const Layout = ({ children, maxWidth, ...rest }) => {
     const classes = useStyles()
 
     return (
-        <Container>
+        <Container component="main" maxWidth={maxWidth || "lg"}>
+            <CssBaseline />
             <AppBar>
                 <Toolbar>
                     <IconButton color="inherit">

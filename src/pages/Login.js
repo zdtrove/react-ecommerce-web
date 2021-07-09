@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Layout from '../components/layouts/Layout'
 import {
 	makeStyles,
@@ -8,11 +8,22 @@ import {
 	Grid,
 	Button,
 	Typography,
-	InputAdornment
+	InputAdornment,
+	Tooltip,
+	Zoom,
+	IconButton,
+	Backdrop,
+	CircularProgress,
+	Avatar
 } from '@material-ui/core'
+import { green } from '@material-ui/core/colors'
 import { Input } from '../components/UI'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
+import EmailRoundedIcon from '@material-ui/icons/EmailRounded';
+import LockRoundedIcon from '@material-ui/icons/LockRounded';
+import VisibilityRoundedIcon from '@material-ui/icons/VisibilityRounded';
+import VisibilityOffRoundedIcon from '@material-ui/icons/VisibilityOffRounded';
 
 const initialValues = {
 	email: '',
@@ -32,10 +43,28 @@ const validationSchema = Yup.object().shape({
 
 const useStyles = makeStyles(theme => ({
 	root: {
-		marginTop: theme.spacing(6),
+		marginTop: theme.spacing(10),
 		'& .MuiFormHelperText-root': {
 			marginLeft: 0,
 			marginTop: '3px'
+		},
+		'& .MuiOutlinedInput-adornedEnd': {
+			paddingRight: '5px'
+		},
+		[theme.breakpoints.down("xs")]: {
+			marginTop: theme.spacing(5),
+			paddingLeft: theme.spacing(1.5),
+			paddingRight: theme.spacing(1.5)
+		},
+	},
+	header: {
+		display: 'flex',
+		alignItems: 'center',
+		flexDirection: 'column',
+		marginBottom: theme.spacing(2),
+		'& .MuiAvatar-root': {
+			background: green[500],
+			margin: theme.spacing(2)
 		}
 	},
 	buttons: {
@@ -43,25 +72,50 @@ const useStyles = makeStyles(theme => ({
 		justifyContent: 'flex-end',
 		'& button': {
 			marginLeft: theme.spacing(1)
-		}
+		},
+		marginTop: theme.spacing(1.5)
+	},
+	tooltip: {
+		margin: '7px 0'
+	},
+	backdrop: {
+		zIndex: theme.zIndex.tooltip + 1
 	}
 }))
 
 const Login = () => {
 	const classes = useStyles()
+	const [showPass, setShowPass] = useState(false)
+	const [typePass, setTypePass] = useState('password')
+	const [showBackdrop, setShowBackdrop] = useState(false)
+
 	const formik = useFormik({
 		initialValues,
 		validationSchema,
 		onSubmit: values => {
 			console.log(values)
+			setShowBackdrop(true)
 		}
 	})
 
+	const handleShowPass = () => {
+		setShowPass(!showPass)
+		setTypePass(showPass ? 'password' : 'text')
+	}
+
     return (
-        <Layout>
+        <Layout maxWidth="sm">
             <Toolbar />
-            <Paper className={classes.root} component={Box} p={4} pt={1} mx="auto" width="50%">
-            	<Typography variant="h4">Login</Typography>
+			<Backdrop classes={{ root: classes.backdrop }} open={showBackdrop}>
+				<CircularProgress />
+			</Backdrop>
+            <Paper className={classes.root} component={Box} p={3} pt={2} mx="auto" maxWidth="xs">
+				<Box className={classes.header}>
+					<Avatar>
+						<LockRoundedIcon color="inherit" />
+					</Avatar>
+					<Typography variant="h4">Login</Typography>
+				</Box>
 				<form onSubmit={formik.handleSubmit}>
 					<Grid container>
 						<Grid item sm={12}>
@@ -72,29 +126,31 @@ const Login = () => {
 								value={formik.values.email}
 								{...formik.getFieldProps('email')}
 								error={formik.touched.email && formik.errors.email}
-								InputProps={{
-									endAdornment: (
-										<InputAdornment position="end">
-											{formik.values.email && <span>
-												{formik.values.email.length}/32
-											</span>}
-										</InputAdornment>
-									)
-								}}
+								startIcon={<EmailRoundedIcon />}
 							/>
 							<Input
 								name="password"
 								label="Password"
-								type="password"
+								type={typePass}
 								value={formik.values.password}
 								{...formik.getFieldProps('password')}
 								error={formik.touched.password && formik.errors.password}
 								InputProps={{
+									startAdornment: (
+										<InputAdornment position="start">
+											<LockRoundedIcon />
+										</InputAdornment>
+									),
 									endAdornment: (
-										<InputAdornment position="end">
-											{formik.values.password && <span>
-												{formik.values.password.length}/24
-											</span>}
+										formik.values.password && <InputAdornment position="end" onClick={handleShowPass}>
+											<Tooltip classes={{ tooltipPlacementTop: classes.tooltip }} TransitionComponent={Zoom} arrow title={`${showPass ? 'Hide Password' : 'Show Password'}`} placement="top">
+												<IconButton size="medium">
+													{showPass 
+														? <VisibilityOffRoundedIcon />
+														: <VisibilityRoundedIcon />
+													}
+												</IconButton>
+											</Tooltip>
 										</InputAdornment>
 									)
 								}}
