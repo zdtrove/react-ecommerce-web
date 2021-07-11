@@ -8,8 +8,6 @@ import {
 } from '@material-ui/core'
 
 const RadioGroup = ({
-    name,
-    value,
     label,
     items,
     ...rest
@@ -19,13 +17,11 @@ const RadioGroup = ({
             <FormLabel>{label}</FormLabel>
             <MuiRadioGroup
                 row
-                name={name}
-                value={value}
                 {...rest}
             >
                 {
                     items && items.map((item, index) => (
-                        <FormControlLabel key={index} value={item.id} control={<Radio color="primary" />} label={item.title} />
+                        <FormControlLabel key={index} value={item} control={<Radio color="primary" />} label={item} />
                     ))
                 }
             </MuiRadioGroup>

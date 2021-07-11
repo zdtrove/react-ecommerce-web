@@ -1,4 +1,6 @@
 import React, { useState } from 'react'
+import { useDispatch } from 'react-redux'
+import { uiTypes } from '../redux/types'
 import Layout from '../components/layouts/Layout'
 import {
 	makeStyles,
@@ -12,8 +14,6 @@ import {
 	Tooltip,
 	Zoom,
 	IconButton,
-	Backdrop,
-	CircularProgress,
 	Avatar
 } from '@material-ui/core'
 import { green } from '@material-ui/core/colors'
@@ -52,7 +52,7 @@ const useStyles = makeStyles(theme => ({
 			paddingRight: '5px'
 		},
 		[theme.breakpoints.down("xs")]: {
-			marginTop: theme.spacing(5),
+			marginTop: theme.spacing(3),
 			paddingLeft: theme.spacing(1.5),
 			paddingRight: theme.spacing(1.5)
 		},
@@ -77,24 +77,21 @@ const useStyles = makeStyles(theme => ({
 	},
 	tooltip: {
 		margin: '7px 0'
-	},
-	backdrop: {
-		zIndex: theme.zIndex.tooltip + 1
 	}
 }))
 
 const Login = () => {
 	const classes = useStyles()
+	const dispatch = useDispatch()
 	const [showPass, setShowPass] = useState(false)
 	const [typePass, setTypePass] = useState('password')
-	const [showBackdrop, setShowBackdrop] = useState(false)
 
 	const formik = useFormik({
 		initialValues,
 		validationSchema,
 		onSubmit: values => {
 			console.log(values)
-			setShowBackdrop(true)
+			dispatch({ type: uiTypes.SHOW_BACKDROP, payload: true })
 		}
 	})
 
@@ -103,12 +100,13 @@ const Login = () => {
 		setTypePass(showPass ? 'password' : 'text')
 	}
 
+	const handleSnackbar = () => {
+		dispatch({ type: uiTypes.SHOW_SNACKBAR, payload: { snackbar: true, message: "Success Message", status: "error" }})
+	}
+
     return (
         <Layout maxWidth="sm">
             <Toolbar />
-			<Backdrop classes={{ root: classes.backdrop }} open={showBackdrop}>
-				<CircularProgress />
-			</Backdrop>
             <Paper className={classes.root} component={Box} p={3} pt={2} mx="auto" maxWidth="xs">
 				<Box className={classes.header}>
 					<Avatar>
@@ -158,6 +156,7 @@ const Login = () => {
 							<div className={classes.buttons}>
 								<Button type="submit" variant="contained" color="primary">Login</Button>
 								<Button onClick={() => formik.resetForm()} variant="contained" color="secondary">Reset</Button>
+								<Button onClick={handleSnackbar} variant="contained" color="secondary">Snackbar</Button>
 							</div>
 						</Grid>
 					</Grid>

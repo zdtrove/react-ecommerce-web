@@ -1,3 +1,7 @@
 export { default as Input } from './Input'
 export { default as RadioGroup } from './RadioGroup'
 export { default as Select } from './Select'
+export { default as Checkbox } from './Checkbox'
+export { default as Checkboxes } from './Checkboxes'
+export { default as Snackbar } from './Snackbar'
+export { default as Backdrop } from './Backdrop'

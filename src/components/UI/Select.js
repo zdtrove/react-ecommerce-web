@@ -9,8 +9,6 @@ import {
 
 const Select = ({
     label,
-    name,
-    value,
     error,
     items,
     ...rest
@@ -25,14 +23,11 @@ const Select = ({
             <InputLabel>{label}</InputLabel>
             <MuiSelect
                 fullWidth
-                label={label}
-                name={name}
-                value={value}
                 {...rest}
             >
                 {
                     items && items.map((item, index) => (
-                        <MenuItem key={index} value={item.id}>{item.title}</MenuItem>
+                        <MenuItem key={index} value={item}>{item}</MenuItem>
                     ))
                 }
             </MuiSelect>

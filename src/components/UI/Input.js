@@ -6,9 +6,6 @@ const Input = ({
 	fullWidth,
 	margin,
 	type,
-	name,
-	label,
-	value,
 	error,
 	startIcon,
 	endIcon,
@@ -31,9 +28,6 @@ const Input = ({
 			fullWidth={fullWidth || true}
 			margin={margin || "normal"}
 			type={type || "text"}
-			name={name}
-			label={label}
-			value={value}
 			{...((startIcon || endIcon) && adornment())}
 			{...(error && { error: true, helperText: error })}
 			{...rest}
