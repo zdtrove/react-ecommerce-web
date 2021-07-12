@@ -16,13 +16,13 @@ const Select = ({
     return (
         <FormControl 
             margin="normal" 
-            fullWidth 
+            fullWidth
             variant="outlined"
             {...(error && { error: true })}
         >
             <InputLabel>{label}</InputLabel>
             <MuiSelect
-                fullWidth
+                label={label}
                 {...rest}
             >
                 {

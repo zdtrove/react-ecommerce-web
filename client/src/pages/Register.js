@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
-import { uiTypes } from '../redux/types'
 import Layout from '../components/layouts/Layout'
 import {
 	makeStyles,
@@ -26,21 +25,22 @@ import PhoneAndroidRoundedIcon from '@material-ui/icons/PhoneAndroidRounded';
 import LockRoundedIcon from '@material-ui/icons/LockRounded';
 import VisibilityRoundedIcon from '@material-ui/icons/VisibilityRounded';
 import VisibilityOffRoundedIcon from '@material-ui/icons/VisibilityOffRounded';
+import { register } from '../redux/actions/auth.action'
 
 const initialValues = {
-	fullName: 'Full Name',
-	email: 'email@gmail.com',
-	phone: '0349998889',
+	fullname: '',
+	email: '',
+	phone: '',
 	gender: 'Male',
-	city: 'Ha Noi',
-	payments: ["Cash"],
-	password: '123456',
-	passwordConfirm: '123456',
+	city: '',
+	payments: [],
+	password: '',
+	passwordConfirm: '',
 	agree: false
 }
 
 const validationSchema = Yup.object().shape({
-	fullName: Yup.string()
+	fullname: Yup.string()
 		.required("Full Name is required")
 		.max(24, "Full Name max length is 24"),
 	email: Yup.string()
@@ -120,8 +120,7 @@ const Register = () => {
 		initialValues,
 		validationSchema,
 		onSubmit: values => {
-			console.log(values)
-			dispatch({ type: uiTypes.SHOW_BACKDROP, payload: true })
+			dispatch(register(values))
 		}
 	})
 
@@ -161,11 +160,11 @@ const Register = () => {
 	            	<Grid container>
 	            		<Grid item sm={12}>
 	            			<Input
-	            				name="fullName"
+	            				name="fullname"
 	            				label="Full Name"
-	            				value={formik.values.fullName}
-	            				{...formik.getFieldProps('fullName')}
-	            				error={formik.touched.fullName && formik.errors.fullName}
+	            				value={formik.values.fullname}
+	            				{...formik.getFieldProps('fullname')}
+	            				error={formik.touched.fullname && formik.errors.fullname}
 								startIcon={<AccountCircleRoundedIcon />}
 	            			/>
 	            			<Input

@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
-import { uiTypes } from '../redux/types'
 import Layout from '../components/layouts/Layout'
 import {
 	makeStyles,
@@ -24,6 +23,7 @@ import EmailRoundedIcon from '@material-ui/icons/EmailRounded';
 import LockRoundedIcon from '@material-ui/icons/LockRounded';
 import VisibilityRoundedIcon from '@material-ui/icons/VisibilityRounded';
 import VisibilityOffRoundedIcon from '@material-ui/icons/VisibilityOffRounded';
+import { login } from '../redux/actions/auth.action'
 
 const initialValues = {
 	email: '',
@@ -90,18 +90,13 @@ const Login = () => {
 		initialValues,
 		validationSchema,
 		onSubmit: values => {
-			console.log(values)
-			dispatch({ type: uiTypes.SHOW_BACKDROP, payload: true })
+			dispatch(login(values))
 		}
 	})
 
 	const handleShowPass = () => {
 		setShowPass(!showPass)
 		setTypePass(showPass ? 'password' : 'text')
-	}
-
-	const handleSnackbar = () => {
-		dispatch({ type: uiTypes.SHOW_SNACKBAR, payload: { snackbar: true, message: "Success Message", status: "error" }})
 	}
 
     return (
@@ -156,7 +151,6 @@ const Login = () => {
 							<div className={classes.buttons}>
 								<Button type="submit" variant="contained" color="primary">Login</Button>
 								<Button onClick={() => formik.resetForm()} variant="contained" color="secondary">Reset</Button>
-								<Button onClick={handleSnackbar} variant="contained" color="secondary">Snackbar</Button>
 							</div>
 						</Grid>
 					</Grid>

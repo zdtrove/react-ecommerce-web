@@ -9,13 +9,15 @@ const initialState = {
 
 const uiReducer = (state = initialState, action) => {
 	switch (action.type) {
-		case uiTypes.SHOW_SNACKBAR:
+		case uiTypes.SHOW_SNACKBAR: {
+			const { snackbar, snackbarMessage, snackbarStatus } = action.payload
 			return {
 				...state,
-				snackbar: action.payload.snackbar,
-				snackbarMessage: action.payload.message,
-				snackbarStatus: action.payload.status
+				snackbar,
+				snackbarMessage,
+				snackbarStatus
 			}
+		}
 		case uiTypes.HIDE_SNACKBAR:
 			return {
 				...state,
