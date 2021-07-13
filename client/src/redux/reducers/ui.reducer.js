@@ -26,12 +26,12 @@ const uiReducer = (state = initialState, action) => {
 		case uiTypes.SHOW_BACKDROP:
 			return {
 				...state,
-				backdrop: action.payload
+				backdrop: true
 			}
 		case uiTypes.HIDE_BACKDROP:
 			return {
 				...state,
-				backdrop: action.payload
+				backdrop: false
 			}
 		default:
 			return state

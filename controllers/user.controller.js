@@ -11,60 +11,91 @@ const createRefreshToken = payload => {
 }
 
 exports.register = async (req, res) => {
-    const { fullname, email, phone, gender, city, payments, password, agree } = req.body
+    try {
+        const { fullname, email, phone, gender, city, payments, password, agree } = req.body
 
-    const emailExist = await User.findOne({ email })
-    if (emailExist) return res.status(400).json({ message: "Email already exists"})
+        const emailExist = await User.findOne({ email })
+        if (emailExist) return res.status(400).json({ message: "Email already exists"})
 
-    const passwordHash = await bcrypt.hash(password, 12)
+        const passwordHash = await bcrypt.hash(password, 12)
 
-    const newUser = new User({
-        fullname, email, phone, gender, city, payments, password: passwordHash, agree
-    })
-
-    const accessToken = createAccessToken({ id: newUser._id })
-    const refreshToken = createRefreshToken({ id: newUser._id })
-
-    res.cookie('refresh_token', refreshToken, {
-        httpOnly: true,
-        path: '/api/refresh_token',
-        maxAge: 24 * 60 * 60 * 1000 // 1 days
-    })
-
-    await newUser.save((err, data) => {
-        if (err) res.status(400).json(err)
-        if (data) res.status(201).json({
-            message: "Register Success",
-            accessToken,
-            user: data
+        const newUser = new User({
+            fullname, email, phone, gender, city, payments, password: passwordHash, agree
         })
-    })
+
+        await newUser.save((err, data) => {
+            if (err) res.status(400).json(err)
+            if (data) res.status(201).json({
+                message: "Register Success",
+                user: data
+            })
+        })
+    } catch (err) {
+        return res.status(500).json({ message: err.message })
+    }
 }
 
 exports.login = async (req, res) => {
-    const { email, password } = req.body
+    try {
+        const { email, password, role } = req.body
 
-    const user = await User.findOne({ email })
-    if (!user) return res.status(400).json({ message: "User does not exist"})
+        const user = await User.findOne({ email, role })
+        if (!user) return res.status(400).json({ message: "User does not exist"})
 
-    const isMatch = await bcrypt.compare(password, user.password)
-    if (!isMatch) return res.status(400).json({ message: "Password incorrect"})
+        const isMatch = await bcrypt.compare(password, user.password)
+        if (!isMatch) return res.status(400).json({ message: "Password incorrect"})
 
-    const accessToken = createAccessToken({ id: user._id })
-    const refreshToken = createRefreshToken({ id: user._id })
+        const accessToken = createAccessToken({ id: user._id, role: user.role })
+        const refreshToken = createRefreshToken({ id: user._id, role: user.role })
 
-    res.cookie('refresh_token', refreshToken, {
-        httpOnly: true,
-        path: '/api/refresh_token',
-        maxAge: 24 * 60 * 60 * 1000 // 1 days
-    })
+        const cookiePath = user.role === 'user' ? 'refresh_token' : 'refresh_token_admin'
 
-    res.status(200).json({
-        message: "Login success",
-        accessToken,
-        user: {
-            ...user._doc,
-            password: ''
-        }
-    })
+        res.cookie(cookiePath, refreshToken, {
+            httpOnly: true,
+            path: `/api/${cookiePath}`,
+            maxAge: 24 * 60 * 60 * 1000 // 1 days
+        })
+
+        res.status(200).json({
+            message: "Login success",
+            accessToken,
+            user: {
+                ...user._doc,
+                password: ''
+            }
+        })
+    } catch (err) {
+        return res.status(500).json({ message: err.message })
+    }
+}
+
+exports.logout = async (req, res) => {
+    try {
+        const cookiePath = req.body.role === 'user' ? 'refresh_token' : 'refresh_token_admin'
+        res.clearCookie(cookiePath, { path: `/api/${cookiePath}`})
+
+        return res.status(200).json({ message: "Logout success" })
+    } catch (err) {
+        return res.status(500).json({ message: err.message })
+    }
+}
+
+exports.generateAccessToken = async (req, res) => {
+    try {
+        const refreshToken = req.body.user === 'user' ? req.cookies.refresh_token : req.cookies.refresh_token_admin
+        if (!refreshToken) return res.status(400).json({ message: "Please login now" })
+        jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, async (err, result) => {
+            if (err) return res.status(400).json({ message: "Please login now" })
+            const user = await User.findById(result.id).select("-password")
+
+            const accessToken = createAccessToken({ id: result.id, role: result.role })
+
+            res.status(200).json({
+                accessToken,
+                user
+            })
+        })
+    } catch (err) {
+        return res.status(500).json({ message: err.message })
+    }
 }

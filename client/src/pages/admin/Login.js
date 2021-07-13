@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import Layout from '../components/layouts/Layout'
+import React, { useState } from 'react'
+import { useDispatch } from 'react-redux'
 import {
 	makeStyles,
 	Toolbar,
@@ -13,18 +12,18 @@ import {
 	Tooltip,
 	Zoom,
 	IconButton,
-	Avatar
+	Avatar,
+    Container
 } from '@material-ui/core'
 import { green } from '@material-ui/core/colors'
-import { Input } from '../components/UI'
+import { Input } from '../../components/UI'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
 import EmailRoundedIcon from '@material-ui/icons/EmailRounded';
 import LockRoundedIcon from '@material-ui/icons/LockRounded';
 import VisibilityRoundedIcon from '@material-ui/icons/VisibilityRounded';
 import VisibilityOffRoundedIcon from '@material-ui/icons/VisibilityOffRounded';
-import { login } from '../redux/actions/auth.action'
-import { useHistory } from 'react-router-dom'
+import { login } from '../../redux/actions/auth.action'
 
 const initialValues = {
 	email: '',
@@ -83,9 +82,7 @@ const useStyles = makeStyles(theme => ({
 
 const Login = () => {
 	const classes = useStyles()
-	const { auth } = useSelector(state => state)
 	const dispatch = useDispatch()
-	const history = useHistory()
 	const [showPass, setShowPass] = useState(false)
 	const [typePass, setTypePass] = useState('password')
 
@@ -93,7 +90,7 @@ const Login = () => {
 		initialValues,
 		validationSchema,
 		onSubmit: values => {
-			dispatch(login(values))
+			dispatch(login(values, 'admin'))
 		}
 	})
 
@@ -102,12 +99,8 @@ const Login = () => {
 		setTypePass(showPass ? 'password' : 'text')
 	}
 
-	useEffect(() => {
-		if (auth.token) history.push('/')
-	}, [auth.token, history])
-
     return (
-        <Layout maxWidth="sm">
+        <Container maxWidth="sm">
             <Toolbar />
             <Paper className={classes.root} component={Box} p={3} pt={2} mx="auto" maxWidth="xs">
 				<Box className={classes.header}>
@@ -163,7 +156,7 @@ const Login = () => {
 					</Grid>
 				</form>
             </Paper>
-        </Layout>
+        </Container>
     )
 }
 
