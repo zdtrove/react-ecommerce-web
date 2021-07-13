@@ -1,4 +1,6 @@
 import React from 'react'
+import { useDispatch } from 'react-redux'
+import { useHistory } from 'react-router-dom'
 import {
     makeStyles,
     Container,
@@ -12,6 +14,8 @@ import {
 import {
     Menu as MenuIcon
 } from '@material-ui/icons'
+import { logout } from '../../../redux/actions/auth.action'
+import { userRole } from '../../../constants'
 
 const useStyles = makeStyles(theme => ({
     title: {
@@ -22,6 +26,9 @@ const useStyles = makeStyles(theme => ({
 
 const Layout = ({ children, maxWidth, ...rest }) => {
     const classes = useStyles()
+    const dispatch = useDispatch()
+    const history = useHistory()
+    const { ADMIN } = userRole
 
     return (
         <Container component="main" maxWidth={maxWidth || "lg"}>
@@ -34,7 +41,7 @@ const Layout = ({ children, maxWidth, ...rest }) => {
                     <Typography variant="h6" color="inherit" className={classes.title}>
                         Dashboard
                     </Typography>
-                    <Button disableRipple color="inherit">
+                    <Button onClick={() => dispatch(logout(history, ADMIN))} disableRipple color="inherit">
                         Logout
                     </Button>
                 </Toolbar>

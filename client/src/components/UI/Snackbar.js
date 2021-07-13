@@ -13,17 +13,23 @@ const useStyles = makeStyles(theme => ({
 
 const Snackbar = () => {
 	const classes = useStyles()
-	const { ui } = useSelector(state => state)
+	const { 
+		ui: { 
+			snackbar: { 
+				isShow, message, status 
+			} 
+		} 
+	} = useSelector(state => state)
 	const dispatch = useDispatch()
 
 	const handleClose = (event, reason) => {
 		if (reason === 'clickaway') return;
-		dispatch({ type: uiTypes.HIDE_SNACKBAR, payload: { snackbar: false }})
+		dispatch({ type: uiTypes.HIDE_SNACKBAR })
 	}
 
 	return <MuiSnackbar
 		classes={{ anchorOriginTopRight: classes.snackbar }}
-		open={ui.snackbar}
+		open={isShow}
 		autoHideDuration={3000}
 		anchorOrigin={{
           vertical: 'top',
@@ -32,10 +38,10 @@ const Snackbar = () => {
 		onClose={handleClose}
 	>
 		<Alert
-			severity={ui.snackbarStatus}
+			severity={status}
 			onClose={handleClose}
 		>
-			{ui.snackbarMessage}
+			{message}
 		</Alert>
 	</MuiSnackbar>
 }

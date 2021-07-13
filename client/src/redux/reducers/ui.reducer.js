@@ -1,27 +1,34 @@
 import { uiTypes } from '../types'
 
 const initialState = {
-	snackbar: false,
-	snackbarMessage: null,
-	snackbarStatus: null,
+	snackbar: {
+		isShow: false,
+		message: null,
+		status: null
+	},
 	backdrop: false
 }
 
-const uiReducer = (state = initialState, action) => {
-	switch (action.type) {
+const uiReducer = (state = initialState, { type, payload }) => {
+	switch (type) {
 		case uiTypes.SHOW_SNACKBAR: {
-			const { snackbar, snackbarMessage, snackbarStatus } = action.payload
+			const { message, status } = payload
 			return {
 				...state,
-				snackbar,
-				snackbarMessage,
-				snackbarStatus
+				snackbar: {
+					isShow: true,
+					message,
+					status
+				}
 			}
 		}
 		case uiTypes.HIDE_SNACKBAR:
 			return {
 				...state,
-				snackbar: action.payload.snackbar
+				snackbar: {
+					...state.snackbar,
+					isShow: false
+				}
 			}
 		case uiTypes.SHOW_BACKDROP:
 			return {

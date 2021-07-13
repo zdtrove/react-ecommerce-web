@@ -1,5 +1,5 @@
 import React from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import {
     makeStyles,
     Container,
@@ -26,8 +26,24 @@ const useStyles = makeStyles(theme => ({
 
 const Layout = ({ children, maxWidth, ...rest }) => {
     const classes = useStyles()
+    const { auth } = useSelector(state => state)
     const dispatch = useDispatch()
     const history = useHistory()
+
+    const renderAuthBtn = () => {
+        return auth.token
+            ? <Button onClick={() => dispatch(logout(history))} disableRipple color="inherit">
+                Logout
+            </Button>
+            : <>
+                <Button disableRipple color="inherit" to="login" component={Link}>
+                    Login
+                </Button>
+                <Button disableRipple color="inherit" to="register" component={Link}>
+                    Register
+                </Button>
+            </>
+    }
 
     return (
         <Container component="main" maxWidth={maxWidth || "lg"}>
@@ -40,15 +56,7 @@ const Layout = ({ children, maxWidth, ...rest }) => {
                     <Typography variant="h6" color="inherit" className={classes.title} to="/" component={Link}>
                         Home
                     </Typography>
-                    <Button disableRipple color="inherit" to="login" component={Link}>
-                        Login
-                    </Button>
-                    <Button disableRipple color="inherit" to="register" component={Link}>
-                        Register
-                    </Button>
-                    <Button onClick={() => dispatch(logout(history))} disableRipple color="inherit">
-                        Logout
-                    </Button>
+                    {renderAuthBtn()}
                 </Toolbar>
             </AppBar>
             {children}

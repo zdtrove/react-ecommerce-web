@@ -52,7 +52,7 @@ exports.login = async (req, res) => {
 
         res.cookie(cookiePath, refreshToken, {
             httpOnly: true,
-            path: `/api/${cookiePath}`,
+            path: `/api/auth/${cookiePath}`,
             maxAge: 24 * 60 * 60 * 1000 // 1 days
         })
 
@@ -72,7 +72,7 @@ exports.login = async (req, res) => {
 exports.logout = async (req, res) => {
     try {
         const cookiePath = req.body.role === 'user' ? 'refresh_token' : 'refresh_token_admin'
-        res.clearCookie(cookiePath, { path: `/api/${cookiePath}`})
+        res.clearCookie(cookiePath, { path: `/api/auth/${cookiePath}`})
 
         return res.status(200).json({ message: "Logout success" })
     } catch (err) {
@@ -82,14 +82,15 @@ exports.logout = async (req, res) => {
 
 exports.generateAccessToken = async (req, res) => {
     try {
-        const refreshToken = req.body.user === 'user' ? req.cookies.refresh_token : req.cookies.refresh_token_admin
+        const refreshToken = req.body.role === 'user' ? req.cookies.refresh_token : req.cookies.refresh_token_admin
         if (!refreshToken) return res.status(400).json({ message: "Please login now" })
         jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, async (err, result) => {
             if (err) return res.status(400).json({ message: "Please login now" })
-            const user = await User.findById(result.id).select("-password")
 
-            const accessToken = createAccessToken({ id: result.id, role: result.role })
-
+            const { id, role } = result
+            const user = await User.findById(id).select("-password")
+            const accessToken = createAccessToken({ id, role })
+            
             res.status(200).json({
                 accessToken,
                 user

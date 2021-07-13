@@ -1,5 +1,7 @@
 import { authTypes } from '../types'
 
+const { AUTH, AUTH_ADMIN, LOGOUT_SUCCESS, LOGOUT_ADMIN_SUCCESS } = authTypes
+
 const initialState = {
 	token: null,
 	tokenAdmin: null,
@@ -7,36 +9,36 @@ const initialState = {
 	userAdmin: null
 }
 
-const authReducer = (state = initialState, action) => {
-	switch (action.type) {
-		case authTypes.AUTH:
+const authReducer = (state = initialState, { type, payload }) => {
+	switch (type) {
+		case AUTH: {
+			const { accessToken, user } = payload
 			return {
 				...state,
-				token: action.payload.accessToken,
-				user: action.payload.user
+				token: accessToken,
+				user
 			}
-		case authTypes.LOGOUT_SUCCESS:
+		}
+		case LOGOUT_SUCCESS:
 			return {
 				...state,
 				token: null,
 				user: null
 			}
-		case authTypes.LOGOUT_ADMIN_SUCCESS:
+		case LOGOUT_ADMIN_SUCCESS:
 			return {
 				...state,
 				tokenAdmin: null,
 				userAdmin: null
 			}
-		case authTypes.AUTH_ADMIN:
+		case AUTH_ADMIN: {
+			const { accessToken, user } = payload
 			return {
 				...state,
-				tokenAdmin: action.payload.accessToken,
-				userAdmin: action.payload.user
+				tokenAdmin: accessToken,
+				userAdmin: user
 			}
-		case authTypes.LOGIN_REQUEST:
-			return {
-				...state
-			}
+		}
 		default:
 			return state
 	}

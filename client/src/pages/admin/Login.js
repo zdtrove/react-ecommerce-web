@@ -1,5 +1,6 @@
-import React, { useState } from 'react'
-import { useDispatch } from 'react-redux'
+import React, { useState, useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { useHistory } from 'react-router-dom'
 import {
 	makeStyles,
 	Toolbar,
@@ -82,7 +83,9 @@ const useStyles = makeStyles(theme => ({
 
 const Login = () => {
 	const classes = useStyles()
+	const { auth } = useSelector(state => state)
 	const dispatch = useDispatch()
+	const history = useHistory()
 	const [showPass, setShowPass] = useState(false)
 	const [typePass, setTypePass] = useState('password')
 
@@ -98,6 +101,10 @@ const Login = () => {
 		setShowPass(!showPass)
 		setTypePass(showPass ? 'password' : 'text')
 	}
+
+	useEffect(() => {
+		if (auth.tokenAdmin) history.push('/admin')
+	}, [auth.tokenAdmin, history])
 
     return (
         <Container maxWidth="sm">

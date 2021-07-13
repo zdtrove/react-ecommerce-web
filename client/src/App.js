@@ -27,7 +27,7 @@ function App() {
         <Route path="/login" component={Login} />
         <Route path="/register" component={Register} />
         {/* Admin */}
-        <Route exact path="/admin" component={Dashboard} />
+        <PrivateRoute admin exact path="/admin" component={Dashboard} />
         <Route path="/admin/login" component={LoginAdmin} />
         {/* Not Found */}
         <Route component={NotFound} />

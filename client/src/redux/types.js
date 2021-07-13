@@ -21,3 +21,15 @@ export const uiTypes = {
 	SHOW_BACKDROP: 'SHOW_BACKDROP',
 	HIDE_BACKDROP: 'HIDE_BACKDROP'
 }
+
+export const userTypes = {
+
+}
+
+export const categoryTypes = {
+
+}
+
+export const productTypes = {
+	
+}

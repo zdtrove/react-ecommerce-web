@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import { useHistory } from 'react-router-dom'
 import Layout from '../components/layouts/Layout'
 import {
 	makeStyles,
@@ -24,7 +25,6 @@ import LockRoundedIcon from '@material-ui/icons/LockRounded';
 import VisibilityRoundedIcon from '@material-ui/icons/VisibilityRounded';
 import VisibilityOffRoundedIcon from '@material-ui/icons/VisibilityOffRounded';
 import { login } from '../redux/actions/auth.action'
-import { useHistory } from 'react-router-dom'
 
 const initialValues = {
 	email: '',

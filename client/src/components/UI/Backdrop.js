@@ -9,12 +9,12 @@ const useStyles = makeStyles(theme => ({
 }))
 
 const Backdrop = () => {
-	const { ui } = useSelector(state => state)
+	const { ui: { backdrop } } = useSelector(state => state)
 	const classes = useStyles()
 
 	return <MuiBackdrop
 		classes={{ root: classes.backdrop }}
-		open={ui.backdrop}
+		open={backdrop}
 	>
 		<CircularProgress />
 	</MuiBackdrop>
