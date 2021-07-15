@@ -1,0 +1,19 @@
+Laptop
+  - Dell
+  - Asus
+PC
+  - Dell
+  - Asus
+Smartphone
+  - Apple
+  - Asus
+Tablet
+  - Apple
+  - Huawei
+Watch
+  - Samsung
+  - Casio
+  - Garmin
+Accessories
+  - Laptop 
+  - PC
