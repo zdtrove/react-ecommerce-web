@@ -52,14 +52,22 @@ exports.getCategories = async (req, res) => {
 
         return res.status(200).json({ categories: createCategories(categories) })
     } catch (err) {
-        res.status(500).json({ err })
+        res.status(500).json({ message: err.message })
     }
 }
 
 exports.updateCategory = async (req, res) => {
+    try {
 
+    } catch (err) {
+        res.status(500).json({ message: err.message })
+    }
 }
 
 exports.deleteCategory = async (req, res) => {
+    try {
 
+    } catch (err) {
+        res.status(500).json({ message: err.message })
+    }
 }
