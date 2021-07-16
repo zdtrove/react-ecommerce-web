@@ -25,6 +25,7 @@ import LockRoundedIcon from '@material-ui/icons/LockRounded';
 import VisibilityRoundedIcon from '@material-ui/icons/VisibilityRounded';
 import VisibilityOffRoundedIcon from '@material-ui/icons/VisibilityOffRounded';
 import { login } from '../redux/actions/auth.action'
+import api from '../utils/axios'
 
 const initialValues = {
 	email: '',
@@ -88,6 +89,15 @@ const Login = () => {
 	const history = useHistory()
 	const [showPass, setShowPass] = useState(false)
 	const [typePass, setTypePass] = useState('password')
+	const [dataList, setDataList] = useState([])
+
+	useEffect(() => {
+		api.get('/posts')
+		.then(res => {
+			setDataList(res.data)
+		})
+		setDataList()
+	}, [])
 
 	const formik = useFormik({
 		initialValues,
@@ -109,6 +119,11 @@ const Login = () => {
     return (
         <Layout maxWidth="sm">
             <Toolbar />
+			{dataList && dataList.map((val, index) => {
+				return (
+					<li key={index}>{val.title}</li>
+				)
+			})}
             <Paper className={classes.root} component={Box} p={3} pt={2} mx="auto" maxWidth="xs">
 				<Box className={classes.header}>
 					<Avatar>
