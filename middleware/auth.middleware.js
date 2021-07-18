@@ -3,29 +3,29 @@ const jwt = require('jsonwebtoken')
 
 exports.auth = async (req, res, next) => {
 	try {
-		const token = req.header('Authorization').split(" ")[1]
-		if (!token) return res.status(400).json({ message: "Invalid Authentication"})
+		const token = req.header('Authorization').split(" ")[1] || req.header('AuthorizationAdmin').split(" ")[1]
+		if (!token) return res.status(400).json({ message: "Invalid Authentication user 1"})
 
-		const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET)
-		if (!decoded) return res.status(400).json({ message: "Invalid Authentication"})
+		const decoded = await jwt.verify(token, process.env.ACCESS_TOKEN_SECRET)
+		if (!decoded) return res.status(400).json({ message: "Invalid Authentication user 2"})
 
 		const user = await User.findOne({ _id: decoded.id })
 		req.user = user
 
 		next()
 	} catch (err) {
-		res.status(500).json({ message: err.message  })
+		res.status(500).json({ ...err, role: 'user' })
 	}
 }
 
 exports.authAdmin = async (req, res, next) => {
 	try {
-		console.log(req.header("Authorization"))
-		const token = req.header("Authorization").split(" ")[1]
-		if (!token) return res.status(400).json({ message: "Invalid Authentication" })
+		const token = req.header("AuthorizationAdmin").split(" ")[1]
+		if (!token) return res.status(400).json({ message: "Invalid Authentication admin 1" })
 
-		const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET)
-		if (!decoded) return res.status(400).json({ message: "Invalid Authentication" })
+		const decoded = await jwt.verify(token, process.env.ACCESS_TOKEN_SECRET)
+		if (!decoded) return res.status(400).json({ message: "Invalid Authentication admin 2" })
+		if (decoded.role !== 'admin') return res.status(400).json({ message: "Only Admin User Can Access" })
 
 		const user = await User.findOne({ _id: decoded.id })
 		req.user = user
@@ -33,6 +33,6 @@ exports.authAdmin = async (req, res, next) => {
 		next()
 	} catch (err) {
 		console.log(err)
-		return res.status(500).json({ message: err.message })
+		return res.status(500).json({ ...err, role: 'admin' })
 	}
 }

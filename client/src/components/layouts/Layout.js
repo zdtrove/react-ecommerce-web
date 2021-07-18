@@ -53,8 +53,8 @@ const Layout = ({ children, maxWidth, ...rest }) => {
                     <IconButton color="inherit">
                         <MenuIcon />
                     </IconButton>
-                    <Typography variant="h6" color="inherit" className={classes.title} to="/" component={Link}>
-                        Home
+                    <Typography variant="h6" color="inherit" className={classes.title} to="/admin" component={Link}>
+                        Admin
                     </Typography>
                     {renderAuthBtn()}
                 </Toolbar>

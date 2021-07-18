@@ -3,7 +3,7 @@ const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 
 const createAccessToken = payload => {
-    return jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '1h'})
+    return jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '2h'})
 }
 
 const createRefreshToken = payload => {
@@ -80,13 +80,50 @@ exports.logout = async (req, res) => {
     }
 }
 
+exports.getLoggedUser = async (req, res) => {
+    try {
+        const { accessToken } = req.body
+        let user
+        
+        if (accessToken) {
+            await jwt.verify(accessToken.split(" ")[1], process.env.ACCESS_TOKEN_SECRET, async (err, result) => {
+                if (err) return res.status(400).json({ ...err, role: "user" })
+                const { id, role } = result
+                user = await User.findById(id).select("-password")
+            })
+        }
+
+        res.status(200).json({ user })
+    } catch (err) {
+        return res.status(500).json({ err })
+    }
+}
+
+exports.getLoggedUserAdmin = async (req, res) => {
+    try {
+        const { accessTokenAdmin } = req.body
+        let user
+        
+        if (accessTokenAdmin) {
+            await jwt.verify(accessTokenAdmin.split(" ")[1], process.env.ACCESS_TOKEN_SECRET, async (err, result) => {
+                if (err) return res.status(400).json({ ...err, role: "admin" })
+                const { id, role } = result
+                user = await User.findById(id).select("-password")
+            })
+        }
+
+        res.status(200).json({ user })
+    } catch (err) {
+        return res.status(500).json({ err })
+    }
+}
+
 exports.generateAccessToken = async (req, res) => {
     try {
         const refreshToken = req.body.role === 'user' ? req.cookies.refresh_token : req.cookies.refresh_token_admin
         if (!refreshToken) return res.status(400).json({ message: "Please login now" })
         jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, async (err, result) => {
-            if (err) return res.status(400).json({ message: "Please login now" })
-
+            if (err) return res.status(400).json(err)
             const { id, role } = result
             const user = await User.findById(id).select("-password")
             const accessToken = createAccessToken({ id, role })

@@ -1,6 +1,8 @@
 export const authTypes = {
 	AUTH: 'AUTH',
 	AUTH_ADMIN: 'AUTH_ADMIN',
+	REFRESH_TOKEN: 'REFRESH_TOKEN',
+	REFRESH_TOKEN_ADMIN: 'REFRESH_TOKEN_ADMIN',
 	REGISTER_REQUEST: 'REGISTER_REQUEST',
 	REGISTER_SUCCESS: 'REGISTER_SUCCESS',
 	REGISTER_FAILURE: 'REGISTER_FAILURE',
@@ -23,13 +25,13 @@ export const uiTypes = {
 }
 
 export const userTypes = {
-
+	GET_USERS: 'GET_USERS'
 }
 
 export const categoryTypes = {
-
+	GET_CATEGORIES: 'GET_CATEGORIES'
 }
 
 export const productTypes = {
-	
+	GET_PRODUCTS: 'GET_PRODUCTS'
 }

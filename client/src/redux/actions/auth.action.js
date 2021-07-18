@@ -1,105 +1,115 @@
-import { authTypes, uiTypes } from "../types"
-import { snackbar, userRole } from '../../constants'
-import axios from 'axios'
+import { authTypes } from "../types"
+import { userRoles, jwtConst } from '../../constants'
+import axios from '../../utils/axios'
 
-const { SHOW_BACKDROP, SHOW_SNACKBAR, HIDE_BACKDROP } = uiTypes
-const { AUTH, AUTH_ADMIN, LOGOUT_SUCCESS, LOGOUT_ADMIN_SUCCESS } = authTypes
-const { SNACKBAR_STATUS_SUCCESS, SNACKBAR_STATUS_ERROR } = snackbar
-const { ADMIN, USER } = userRole
+const { 
+	AUTH, 
+	AUTH_ADMIN, 
+	LOGOUT_SUCCESS, 
+	LOGOUT_ADMIN_SUCCESS,
+	REFRESH_TOKEN,
+	REFRESH_TOKEN_ADMIN
+} = authTypes
+const { ADMIN, USER } = userRoles
+const { ACCESS_TOKEN, ACCESS_TOKEN_ADMIN } = jwtConst
 
 export const register = user => async dispatch => {
 	try {
-		dispatch({ type: SHOW_BACKDROP })
 		const res = await axios.post('/api/auth/register', user)
-		const { status, data: { message } } = res
+		const { status } = res
 		if (status === 201) {
-			dispatch({ type: SHOW_SNACKBAR, payload: {
-				message: message,
-				status: SNACKBAR_STATUS_SUCCESS
-			}})
+			
 		}
-	} catch (err) {
-		dispatch({ type: SHOW_SNACKBAR, payload: {
-			message: err.response.data.message,
-			status: SNACKBAR_STATUS_ERROR
-		}})
-	}
-	dispatch({ type: HIDE_BACKDROP })
+	} catch (err) {}
 }
 
 export const login = (user, role = USER) => async dispatch => {
 	const type = role === USER ? AUTH : AUTH_ADMIN
-	const isLogin = role === USER ? 'isLogin' : 'isLoginAdmin'
+	const accessToken = role === USER ? ACCESS_TOKEN : ACCESS_TOKEN_ADMIN
 	try {
-		dispatch({ type: SHOW_BACKDROP })
 		const res = await axios.post('/api/auth/login', {...user, role})
 		const { status, data } = res
+		console.log(res)
 		if (status === 200) {
 			dispatch({ type, payload: data})
-			dispatch({ type: SHOW_SNACKBAR, payload: {
-				message: data.message,
-				status: SNACKBAR_STATUS_SUCCESS
-			}})
-			localStorage.setItem(isLogin, true)
+			localStorage.setItem(accessToken, `Bearer ${data.accessToken}`)
 		}
-	} catch (err) {
-		dispatch({ type: SHOW_SNACKBAR, payload: {
-			message: err.response.data.message,
-			status: SNACKBAR_STATUS_ERROR
-		}})
-	}
-	dispatch({ type: HIDE_BACKDROP })
+	} catch (err) {}
 }
 
-export const refreshToken = () => async dispatch => {
+export const getLoggedUser = () => async dispatch => {
 	try {
-		 const isLogin = localStorage.getItem("isLogin")
-		 const isLoginAdmin = localStorage.getItem("isLoginAdmin")
-		 if (isLogin) {
-			 const res = await axios.post('/api/auth/refresh_token', { role: USER })
+		const accessToken = localStorage.getItem(ACCESS_TOKEN)
+		if (accessToken) {
+			const res = await axios.post('/api/auth/get_logged_user', {
+				accessToken
+			})
+			const { status, data } = res
+			if (status === 200) {
+				dispatch({ type: AUTH, payload: data })
+			}
+		}
+		
+	} catch (err) {}
+}
+
+export const getLoggedUserAdmin = () => async dispatch => {
+	try {
+		const accessTokenAdmin = localStorage.getItem(ACCESS_TOKEN_ADMIN)
+		if (accessTokenAdmin) {
+			const res = await axios.post('/api/auth/get_logged_user_admin', {
+				accessTokenAdmin
+			})
+			const { status, data } = res
+			if (status === 200) {
+				dispatch({ type: AUTH_ADMIN, payload: data })
+			}
+		}
+	} catch (err) {}
+}
+
+export const refreshTokenUser = () => async dispatch => {
+	try {
+		 const accessToken = localStorage.getItem(ACCESS_TOKEN)
+		 if (accessToken) {
+			 const res = await axios.post('/api/auth/refresh_token', { accessToken, role: USER })
 			 const { status, data } = res
 			 if (status === 200) {
-				 dispatch({ type: AUTH, payload: data })
+				 dispatch({ type: REFRESH_TOKEN, payload: data })
+				 localStorage.setItem(ACCESS_TOKEN, `Bearer ${data.accessToken}`)
 			 }
 		 }
-		 if (isLoginAdmin) {
-			 const res = await axios.post('/api/auth/refresh_token_admin', { role: ADMIN })
+	} catch (err) {}
+}
+
+export const refreshTokenAdmin = () => async dispatch => {
+	try {
+		 const accessTokenAdmin = localStorage.getItem(ACCESS_TOKEN_ADMIN)
+		 if (accessTokenAdmin) {
+			 const res = await axios.post('/api/auth/refresh_token_admin', { accessTokenAdmin, role: ADMIN })
 			 const { status, data } = res
 			 if (status === 200) {
-				 dispatch({ type: AUTH_ADMIN, payload: data })
+				 dispatch({ type: REFRESH_TOKEN_ADMIN, payload: data })
+				 localStorage.setItem(ACCESS_TOKEN_ADMIN, `Bearer ${data.accessToken}`)
 			 }
 		 }
-	} catch (err) {
-		dispatch({ type: SHOW_SNACKBAR, payload: {
-			message: err.response.data.message,
-			status: SNACKBAR_STATUS_ERROR
-		}})
-	}
+	} catch (err) {}
 }
 
 export const logout = (history, role = USER) => async dispatch => {
 	try {
 		const res = await axios.post('/api/auth/logout', { role })
-		const { status, data: { message } } = res
+		const { status } = res
 		if (status === 200) {
 			if (role === USER) {
 				dispatch({ type: LOGOUT_SUCCESS })
-				localStorage.removeItem('isLogin')
+				localStorage.removeItem(ACCESS_TOKEN)
 				history.push('/login')
 			} else {
 				dispatch({ type: LOGOUT_ADMIN_SUCCESS })
-				localStorage.removeItem('isLoginAdmin')
+				localStorage.removeItem(ACCESS_TOKEN_ADMIN)
 				history.push('/admin/login')
 			}
-			dispatch({ type: SHOW_SNACKBAR, payload: {
-				message: message,
-				status: SNACKBAR_STATUS_SUCCESS
-			}})
 		}
-	} catch (err) {
-		dispatch({ type: SHOW_SNACKBAR, payload: {
-			message: err.response.data.message,
-			status: SNACKBAR_STATUS_ERROR
-		}})
-	}
+	} catch (err) {}
 }

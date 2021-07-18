@@ -1,9 +1,19 @@
 import { productTypes } from '../types'
 
-const initialState = {}
+const { GET_PRODUCTS } = productTypes
+
+const initialState = {
+	products: []
+}
 
 const productReducer = (state = initialState, { type, payload }) => {
 	switch (type) {
+		case GET_PRODUCTS: {
+			return {
+				...state,
+				products: payload.products
+			}
+		}
 		default:
 			return state
 	}

@@ -103,8 +103,8 @@ const Login = () => {
 	}
 
 	useEffect(() => {
-		if (auth.tokenAdmin) history.push('/admin')
-	}, [auth.tokenAdmin, history])
+		if (auth.isAuthenticatedAdmin) history.push('/admin')
+	}, [auth.isAuthenticatedAdmin, history])
 
     return (
         <Container maxWidth="sm">
