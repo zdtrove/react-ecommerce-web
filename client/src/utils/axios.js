@@ -17,7 +17,6 @@ axios.interceptors.request.use(function (config) {
         Authorization: localStorage.getItem(ACCESS_TOKEN),
         AuthorizationAdmin: localStorage.getItem(ACCESS_TOKEN_ADMIN)
     })
-    console.log(config)
     store.dispatch({ type: SHOW_BACKDROP })
     return config;
 }, function (error) {
@@ -25,7 +24,6 @@ axios.interceptors.request.use(function (config) {
 });
 
 axios.interceptors.response.use(function (response) {
-    console.log(response)
     const { message } = response.data
     if (message) {
         if (response.status === 200 || response.status === 201) {
@@ -40,7 +38,6 @@ axios.interceptors.response.use(function (response) {
     return response;
 }, async function (error) {
     const { data, config } = error.response
-    console.log(error.response.data)
     if (data.name === JWT_INVALID && data.role === ADMIN) {
         store.dispatch({ type: LOGOUT_ADMIN_SUCCESS })
         localStorage.removeItem(ACCESS_TOKEN_ADMIN)
