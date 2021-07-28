@@ -4,6 +4,8 @@ import './App.css';
 import { BrowserRouter as Router, Switch, Route} from 'react-router-dom'
 import Login from './pages/Login';
 import LoginAdmin from './pages/admin/Login';
+import CategoriesAdmin from './pages/admin/Categories';
+import UsersAdmin from './pages/admin/Users';
 import NotFound from './pages/NotFound';
 import Home from './pages/Home';
 import Register from './pages/Register';
@@ -29,6 +31,8 @@ function App() {
         <Route path="/register" component={Register} />
         {/* Admin */}
         <PrivateRoute admin exact path="/admin" component={Dashboard} />
+        <PrivateRoute admin exact path="/admin/categories" component={CategoriesAdmin} />
+        <PrivateRoute admin exact path="/admin/users" component={UsersAdmin} />
         <Route path="/admin/login" component={LoginAdmin} />
         {/* Not Found */}
         <Route component={NotFound} />

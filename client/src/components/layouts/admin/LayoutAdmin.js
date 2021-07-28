@@ -16,22 +16,30 @@ import {
 } from '@material-ui/icons'
 import { logout } from '../../../redux/actions/auth.action'
 import { userRoles } from '../../../constants'
+import SidebarAdmin from './SidebarAdmin'
 
 const useStyles = makeStyles(theme => ({
+    root: {
+        maxWidth: '100%'
+    },
     title: {
         flexGrow: 1,
         textDecoration: 'none'
+    },
+    main: {
+        paddingTop: 75,
+        paddingLeft: 250
     }
 }))
 
-const Layout = ({ children, maxWidth, ...rest }) => {
+const LayoutAdmin = ({ children, maxWidth, ...rest }) => {
     const classes = useStyles()
     const dispatch = useDispatch()
     const history = useHistory()
     const { ADMIN } = userRoles
 
     return (
-        <Container component="main" maxWidth={maxWidth || "lg"}>
+        <Container className={classes.root}>
             <CssBaseline />
             <AppBar>
                 <Toolbar>
@@ -46,9 +54,12 @@ const Layout = ({ children, maxWidth, ...rest }) => {
                     </Button>
                 </Toolbar>
             </AppBar>
-            {children}
+            <SidebarAdmin />
+            <main className={classes.main}>
+                {children}
+            </main>
         </Container>
     )
 }
 
-export default Layout
+export default LayoutAdmin
