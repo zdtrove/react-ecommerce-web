@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import {
     makeStyles,
     Paper,
@@ -12,7 +12,7 @@ import {
 import GroupRoundedIcon from '@material-ui/icons/GroupRounded';
 import CategoryRoundedIcon from '@material-ui/icons/CategoryRounded';
 import classNames from 'classnames'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 
 const useStyles = makeStyles(theme => ({
     sidebar: {
@@ -43,9 +43,15 @@ const useStyles = makeStyles(theme => ({
     }
 }))
 
+const sidebars = [
+    { name: 'Users', pathname: '/admin/users', icon: <GroupRoundedIcon />},
+    { name: 'Categories', pathname: '/admin/categories', icon: <CategoryRoundedIcon />},
+]
+
 const Sidebar = () => {
     const classes = useStyles()
-    const [selectedIdx, setSelectedIdx] = useState(0)
+    const location = useLocation()
+    const { pathname } = location
 
     return (
         <Paper component={Box} boxShadow={4} className={classes.sidebar}>
@@ -56,40 +62,25 @@ const Sidebar = () => {
                     />
                 </ListItem>
                 <Divider />
-                <ListItem 
-                    onClick={() => setSelectedIdx(1)}
-                    selected={selectedIdx === 1}
-                    classes={{ selected: classes.selected }} 
-                    className={classNames(
-                        classes.listItem,
-                        {[classes.disabled]: selectedIdx === 1}
-                    )} 
-                    button
-                    component={Link}
-                    to="/admin/users"
-                >
-                    <ListItemIcon>
-                        <GroupRoundedIcon />
-                    </ListItemIcon>
-                    <ListItemText primary="Users" />
-                </ListItem>
-                <ListItem 
-                    onClick={() => setSelectedIdx(2)}
-                    selected={selectedIdx === 2}
-                    classes={{ selected: classes.selected }} 
-                    className={classNames(
-                        classes.listItem,
-                        {[classes.disabled]: selectedIdx === 2}
-                    )} 
-                    button
-                    component={Link}
-                    to="/admin/categories"
-                >
-                    <ListItemIcon>
-                        <CategoryRoundedIcon />
-                    </ListItemIcon>
-                    <ListItemText primary="Categories" />
-                </ListItem>
+                {sidebars.map((sidebar, idx) => (
+                    <ListItem
+                        key={idx}
+                        selected={pathname === sidebar.pathname}
+                        classes={{ selected: classes.selected }} 
+                        className={classNames(
+                            classes.listItem,
+                            {[classes.disabled]: pathname === sidebar.pathname}
+                        )} 
+                        button
+                        component={Link}
+                        to={sidebar.pathname}
+                    >
+                        <ListItemIcon>
+                            {sidebar.icon}
+                        </ListItemIcon>
+                        <ListItemText primary={sidebar.name} />
+                    </ListItem>
+                ))}
             </List>
         </Paper>
     )

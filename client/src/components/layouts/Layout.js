@@ -54,7 +54,7 @@ const Layout = ({ children, maxWidth, ...rest }) => {
                         <MenuIcon />
                     </IconButton>
                     <Typography variant="h6" color="inherit" className={classes.title} to="/admin" component={Link}>
-                        Admin
+                        Go to Admin
                     </Typography>
                     {renderAuthBtn()}
                 </Toolbar>

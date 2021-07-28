@@ -47,7 +47,7 @@ const LayoutAdmin = ({ children, maxWidth, ...rest }) => {
                         <MenuIcon />
                     </IconButton>
                     <Typography variant="h6" color="inherit" className={classes.title} to="/" component={Link}>
-                        Home
+                        Go to website
                     </Typography>
                     <Button onClick={() => dispatch(logout(history, ADMIN))} disableRipple color="inherit">
                         Logout
