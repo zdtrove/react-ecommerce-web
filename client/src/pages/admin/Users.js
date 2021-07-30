@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import LayoutAdmin from '../../components/layouts/admin/LayoutAdmin'
+import { useDispatch } from 'react-redux'
+import LayoutAdmin from '../../components/admin/layouts/LayoutAdmin'
 import { Input } from '../../components/UI'
 import { getUsers } from '../../redux/actions/user.action'
 import {
@@ -16,11 +16,12 @@ import {
     Button,
     Card,
     Typography,
-    Toolbar
+    Toolbar,
 } from '@material-ui/core'
 import PeopleOutlineTwoToneIcon from '@material-ui/icons/PeopleOutlineTwoTone'
 import AddIcon from '@material-ui/icons/Add'
 import SearchIcon from '@material-ui/icons/Search'
+import UserCard from '../../components/admin/UserCard'
 
 const useStyles = makeStyles(theme => ({
     headerRoot: {
@@ -55,19 +56,17 @@ const useStyles = makeStyles(theme => ({
 }))
 
 const Users = () => {
-	const { user } = useSelector(state => state)
-	const { users } = user
 	const dispatch = useDispatch()
 	const classes = useStyles()
 	const [page, setPage] = useState(0)
     const [rowsPerPage, setRowsPerPage] = useState(3)
     const [allUsers, setAllUsers] = useState([])
+    const [showUserDetail, setShowUserDetail] = useState(false)
+    const [userDetail, setUserDetail] = useState(null)
 
     useEffect(() => {
-        if (users.length === 0) {
-            dispatch(getUsers()).then(users => setAllUsers(users))
-        }
-    }, [dispatch, users, users.length])
+        dispatch(getUsers()).then(users => setAllUsers(users))
+    }, [dispatch])
 
     const onPageChange = (event, nextPage) => {
         setPage(nextPage)
@@ -130,7 +129,15 @@ const Users = () => {
                                     <TableCell>{user.phone}</TableCell>
                                     <TableCell>{user.role}</TableCell>
                                     <TableCell>
-                                        <Button className={classes.marginBtn} size="small" variant="contained">Detail</Button>
+                                        <Button 
+                                            onClick={() => {
+                                                setUserDetail(user)
+                                                setShowUserDetail(true)
+                                            }} 
+                                            className={classes.marginBtn} 
+                                            size="small" 
+                                            variant="contained"
+                                        >Detail</Button>
                                         <Button className={classes.marginBtn} size="small" variant="contained" color="primary">Edit</Button>
                                         <Button className={classes.marginBtn} size="small" variant="contained" color="secondary">Delete</Button>
                                     </TableCell>
@@ -149,6 +156,11 @@ const Users = () => {
                     />
                 </TableContainer>}
             </Paper>
+            <UserCard {...{
+                showUserDetail,
+                setShowUserDetail,
+                userDetail
+            }} />
         </LayoutAdmin>
     )
 }

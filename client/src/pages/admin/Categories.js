@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import LayoutAdmin from '../../components/layouts/admin/LayoutAdmin'
+import LayoutAdmin from '../../components/admin/layouts/LayoutAdmin'
 import { getCategories } from '../../redux/actions/category.action'
 import { makeStyles } from '@material-ui/core/styles';
 import TreeView from '@material-ui/lab/TreeView';
