@@ -9,6 +9,7 @@ export const getUsers = () => async dispatch => {
 		const { status, data } = res
 		if (status === 200) {
 			dispatch({ type: GET_USERS, payload: data })
+			return data.users
 		}
 	} catch (err) {}
 }
