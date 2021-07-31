@@ -14,3 +14,10 @@ export const jwtConst = {
 	JWT_EXPIRED: 'TokenExpiredError',
 	JWT_INVALID: 'JsonWebTokenError'
 }
+
+export const userConst = {
+	GENDER: ["Male", "Female", "Other"],
+	CITY: ["Ha Noi", "Ho Chi Minh", "Da Nang"],
+	PAYMENT_METHODS: ["Cash", "Card", "Other"],
+	ROLES: ["admin", "user"]
+}

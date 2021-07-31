@@ -8,7 +8,6 @@ import {
     Toolbar,
     IconButton,
     Typography,
-    Button,
     CssBaseline
 } from '@material-ui/core'
 import {
@@ -17,6 +16,7 @@ import {
 import { logout } from '../../../redux/actions/auth.action'
 import { userRoles } from '../../../constants'
 import SidebarAdmin from './SidebarAdmin'
+import { Button } from '../../../components/UI'
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -49,9 +49,14 @@ const LayoutAdmin = ({ children, maxWidth, ...rest }) => {
                     <Typography variant="h6" color="inherit" className={classes.title} to="/" component={Link}>
                         Go to website
                     </Typography>
-                    <Button onClick={() => dispatch(logout(history, ADMIN))} disableRipple color="inherit">
-                        Logout
-                    </Button>
+                    <Button 
+                        size="medium" 
+                        onClick={() => dispatch(logout(history, ADMIN))} 
+                        disableRipple 
+                        color="inherit" 
+                        text="LOGOUT"
+                        variant="text"
+                    />
                 </Toolbar>
             </AppBar>
             <SidebarAdmin />

@@ -7,7 +7,6 @@ import {
     Toolbar,
     IconButton,
     Typography,
-    Button,
     CssBaseline
 } from '@material-ui/core'
 import {
@@ -16,6 +15,7 @@ import {
 import { Link } from 'react-router-dom'
 import { logout } from '../../redux/actions/auth.action'
 import { useHistory } from 'react-router-dom'
+import { Button } from '../../components/UI'
 
 const useStyles = makeStyles(theme => ({
     title: {
@@ -36,12 +36,8 @@ const Layout = ({ children, maxWidth, ...rest }) => {
                 Logout
             </Button>
             : <>
-                <Button disableRipple color="inherit" to="login" component={Link}>
-                    Login
-                </Button>
-                <Button disableRipple color="inherit" to="register" component={Link}>
-                    Register
-                </Button>
+                <Button variant="text" size="medium" disableRipple color="inherit" to="login" component={Link} text="LOGIN" />
+                <Button variant="text" size="medium" disableRipple color="inherit" to="register" component={Link} text="REGISTER" />
             </>
     }
 

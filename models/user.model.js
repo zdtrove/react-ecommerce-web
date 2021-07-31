@@ -30,7 +30,8 @@ const userSchema = new mongoose.Schema({
         required: true
     },
     payments: {
-        type: Array
+        type: Array,
+        default: []
     },
     agree: {
         type: Boolean,

@@ -25,7 +25,9 @@ export const uiTypes = {
 }
 
 export const userTypes = {
-	GET_USERS: 'GET_USERS'
+	GET_USERS: 'GET_USERS',
+	UPDATE_USER: 'UPDATE_USER',
+	DELETE_USER: 'DELETE_USER'
 }
 
 export const categoryTypes = {

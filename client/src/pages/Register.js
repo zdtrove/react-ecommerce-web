@@ -7,7 +7,6 @@ import {
 	Paper,
 	Box,
 	Grid,
-	Button,
 	Typography,
 	InputAdornment,
 	Tooltip,
@@ -16,7 +15,7 @@ import {
 	Avatar
 } from '@material-ui/core'
 import { green } from '@material-ui/core/colors'
-import { Input, RadioGroup, Select, Checkbox, Checkboxes } from '../components/UI'
+import { Input, RadioGroup, Select, Checkbox, Checkboxes, Button } from '../components/UI'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
 import AccountCircleRoundedIcon from '@material-ui/icons/AccountCircleRounded';
@@ -26,6 +25,9 @@ import LockRoundedIcon from '@material-ui/icons/LockRounded';
 import VisibilityRoundedIcon from '@material-ui/icons/VisibilityRounded';
 import VisibilityOffRoundedIcon from '@material-ui/icons/VisibilityOffRounded';
 import { register } from '../redux/actions/auth.action'
+import { userConst } from '../constants'
+
+const { GENDER, CITY, PAYMENT_METHODS } = userConst
 
 const initialValues = {
 	fullname: '',
@@ -101,12 +103,6 @@ const useStyles = makeStyles(theme => ({
 		margin: '7px 0'
 	}
 }))
-
-const gender = ["Male", "Female", "Other"]
-
-const city = ["Ha Noi", "Ho Chi Minh", "Da Nang"]
-
-const payments = ["Cash", "Card", "Other"]
 
 const Register = () => {
 	const dispatch = useDispatch()
@@ -189,7 +185,7 @@ const Register = () => {
 								label="Gender"
 								value={formik.values.gender}
 								{...formik.getFieldProps('gender')}
-								items={gender}
+								items={GENDER}
 							/>
 							<Select
 								label="City"
@@ -197,12 +193,12 @@ const Register = () => {
 								value={formik.values.city}
 								error={formik.touched.city && formik.errors.city}
 								{...formik.getFieldProps('city')}
-								items={city}
+								items={CITY}
 							/>
 							<Checkboxes
 								name="payments"
 								label="Payment Methods"
-								items={payments}
+								items={PAYMENT_METHODS}
 								formikValue={formik.values.payments}
 								onChange={handlePayments}
 							/>
@@ -282,8 +278,8 @@ const Register = () => {
 								{...formik.getFieldProps('agree')}
 							/>
 	            			<div className={classes.buttons}>
-	            				<Button type="submit" variant="contained" color="primary">Register</Button>
-	            				<Button onClick={() => formik.resetForm()} variant="contained" color="secondary">Reset</Button>
+	            				<Button type="submit" text="REGISTER" />
+	            				<Button onClick={() => formik.resetForm()} color="secondary" text="RESET" />
 	            			</div>
 	            		</Grid>
 	            	</Grid>

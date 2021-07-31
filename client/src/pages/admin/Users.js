@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import LayoutAdmin from '../../components/admin/layouts/LayoutAdmin'
-import { Input } from '../../components/UI'
-import { getUsers } from '../../redux/actions/user.action'
+import { Input, Button } from '../../components/UI'
+import { getUsers, deleteUser } from '../../redux/actions/user.action'
 import {
 	makeStyles,
 	Paper,
@@ -13,15 +13,19 @@ import {
     TableRow,
     TableCell,
     TablePagination,
-    Button,
     Card,
     Typography,
     Toolbar,
+    Dialog,
+    DialogContent,
+    DialogContentText,
+    DialogActions
 } from '@material-ui/core'
 import PeopleOutlineTwoToneIcon from '@material-ui/icons/PeopleOutlineTwoTone'
 import AddIcon from '@material-ui/icons/Add'
 import SearchIcon from '@material-ui/icons/Search'
-import UserCard from '../../components/admin/UserCard'
+import UserDetail from '../../components/admin/UserDetail'
+import UserEdit from '../../components/admin/UserEdit'
 
 const useStyles = makeStyles(theme => ({
     headerRoot: {
@@ -52,17 +56,24 @@ const useStyles = makeStyles(theme => ({
     newButton: {
         position: 'absolute',
         right: '10px'
+    },
+    dialogActions: {
+        justifyContent: "center"
     }
 }))
 
 const Users = () => {
+    const { user } = useSelector(state => state)
+    const { users } = user
 	const dispatch = useDispatch()
 	const classes = useStyles()
 	const [page, setPage] = useState(0)
     const [rowsPerPage, setRowsPerPage] = useState(3)
     const [allUsers, setAllUsers] = useState([])
     const [showUserDetail, setShowUserDetail] = useState(false)
-    const [userDetail, setUserDetail] = useState(null)
+    const [showUserEdit, setShowUserEdit] = useState(false)
+    const [showUserDelete, setShowUserDelete] = useState(false)
+    const [userRecord, setUserRecord] = useState(null)
 
     useEffect(() => {
         dispatch(getUsers()).then(users => setAllUsers(users))
@@ -79,8 +90,20 @@ const Users = () => {
 
     const handleSearch = e => {
         const { value } = e.target
-        let usersFilter = allUsers.filter(user => user.fullname.toLowerCase().includes(value))
+        let usersFilter
+
+        if (value) {
+            usersFilter = allUsers.filter(user => user.fullname.toLowerCase().includes(value))
+        } else {
+            usersFilter = users
+        }
+
         setAllUsers(usersFilter)
+    }
+
+    const handleDeleteUser = async id => {
+        await dispatch(deleteUser(id))
+        setShowUserDelete(false)
     }
 
     return (
@@ -109,7 +132,8 @@ const Users = () => {
                             variant="outlined"
                             startIcon={<AddIcon />}
                             className={classes.newButton}
-                        >Add New</Button>
+                            text="ADD NEW"
+                        />
                     </Toolbar>
                     <Table>
                         <TableHead>
@@ -131,15 +155,29 @@ const Users = () => {
                                     <TableCell>
                                         <Button 
                                             onClick={() => {
-                                                setUserDetail(user)
+                                                setUserRecord(user)
                                                 setShowUserDetail(true)
                                             }} 
+                                            className={classes.marginBtn}
+                                            text="DETAIL"
+                                            color="default"
+                                        />
+                                        <Button
+                                            onClick={() => {
+                                                setUserRecord(user)
+                                                setShowUserEdit(true)
+                                            }}
+                                            className={classes.marginBtn}
+                                            text="EDIT"
+                                        />
+                                        <Button 
                                             className={classes.marginBtn} 
-                                            size="small" 
-                                            variant="contained"
-                                        >Detail</Button>
-                                        <Button className={classes.marginBtn} size="small" variant="contained" color="primary">Edit</Button>
-                                        <Button className={classes.marginBtn} size="small" variant="contained" color="secondary">Delete</Button>
+                                            color="secondary" text="DELETE"
+                                            onClick={() => {
+                                                setUserRecord(user)
+                                                setShowUserDelete(true)
+                                            }}
+                                        />
                                     </TableCell>
                                 </TableRow>
                             ))}
@@ -156,11 +194,25 @@ const Users = () => {
                     />
                 </TableContainer>}
             </Paper>
-            <UserCard {...{
+            {showUserDetail && <UserDetail {...{
                 showUserDetail,
                 setShowUserDetail,
-                userDetail
-            }} />
+                userRecord
+            }} />}
+            {showUserEdit && <UserEdit {...{
+                showUserEdit,
+                setShowUserEdit,
+                userRecord
+            }} />}
+            {showUserDelete && <Dialog open={showUserDelete}>
+                <DialogContent>
+                    <DialogContentText>Are you sure to delete this user?</DialogContentText>
+                </DialogContent>
+                <DialogActions className={classes.dialogActions}>
+                    <Button onClick={() => handleDeleteUser(userRecord._id)} color="secondary" text="DELETE" />
+                    <Button onClick={() => setShowUserDelete(false)} color="default" text="CANCEL" />
+                </DialogActions>
+            </Dialog>}
         </LayoutAdmin>
     )
 }

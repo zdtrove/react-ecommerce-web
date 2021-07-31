@@ -7,7 +7,6 @@ import {
 	Paper,
 	Box,
 	Grid,
-	Button,
 	Typography,
 	InputAdornment,
 	Tooltip,
@@ -17,7 +16,7 @@ import {
     Container
 } from '@material-ui/core'
 import { green } from '@material-ui/core/colors'
-import { Input } from '../../components/UI'
+import { Input, Button } from '../../components/UI'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
 import EmailRoundedIcon from '@material-ui/icons/EmailRounded';
@@ -156,8 +155,8 @@ const Login = () => {
 								}}
 							/>
 							<div className={classes.buttons}>
-								<Button type="submit" variant="contained" color="primary">Login</Button>
-								<Button onClick={() => formik.resetForm()} variant="contained" color="secondary">Reset</Button>
+								<Button type="submit" text="LOGIN" />
+								<Button onClick={() => formik.resetForm()} color="secondary" text="RESET" />
 							</div>
 						</Grid>
 					</Grid>
