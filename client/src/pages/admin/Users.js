@@ -26,11 +26,9 @@ import AddIcon from '@material-ui/icons/Add'
 import SearchIcon from '@material-ui/icons/Search'
 import UserDetail from '../../components/admin/UserDetail'
 import UserEdit from '../../components/admin/UserEdit'
+import UserAdd from '../../components/admin/UserAdd'
 
 const useStyles = makeStyles(theme => ({
-    headerRoot: {
-        backgroundColor: '#fdfdff'
-    },
     header: {
         padding: theme.spacing(4),
         display: 'flex',
@@ -73,6 +71,7 @@ const Users = () => {
     const [showUserDetail, setShowUserDetail] = useState(false)
     const [showUserEdit, setShowUserEdit] = useState(false)
     const [showUserDelete, setShowUserDelete] = useState(false)
+    const [showUserAdd, setShowUserAdd] = useState(false)
     const [userRecord, setUserRecord] = useState(null)
 
     useEffect(() => {
@@ -108,7 +107,7 @@ const Users = () => {
 
     return (
         <LayoutAdmin>
-            <Paper elevation={0} square className={classes.rootHeader}>
+            <Paper>
                 <div className={classes.header}>
                     <Card className={classes.headerIcon}>
                         <PeopleOutlineTwoToneIcon />
@@ -129,6 +128,7 @@ const Users = () => {
                             onChange={handleSearch}
                         />
                         <Button
+                            onClick={() => setShowUserAdd(true)}
                             variant="outlined"
                             startIcon={<AddIcon />}
                             className={classes.newButton}
@@ -194,6 +194,10 @@ const Users = () => {
                     />
                 </TableContainer>}
             </Paper>
+            {showUserAdd && <UserAdd {...{
+                showUserAdd,
+                setShowUserAdd
+            }} />}
             {showUserDetail && <UserDetail {...{
                 showUserDetail,
                 setShowUserDetail,
@@ -206,7 +210,7 @@ const Users = () => {
             }} />}
             {showUserDelete && <Dialog open={showUserDelete}>
                 <DialogContent>
-                    <DialogContentText>Are you sure to delete this user?</DialogContentText>
+                    <DialogContentText>Are you sure to delete <strong>{userRecord.fullname}</strong>?</DialogContentText>
                 </DialogContent>
                 <DialogActions className={classes.dialogActions}>
                     <Button onClick={() => handleDeleteUser(userRecord._id)} color="secondary" text="DELETE" />

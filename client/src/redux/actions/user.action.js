@@ -1,7 +1,7 @@
 import axios from '../../utils/axios'
 import { userTypes } from '../../redux/types'
 
-const { GET_USERS, UPDATE_USER, DELETE_USER } = userTypes
+const { GET_USERS, ADD_USER, UPDATE_USER, DELETE_USER } = userTypes
 
 export const getUsers = () => async dispatch => {
 	try {
@@ -12,6 +12,18 @@ export const getUsers = () => async dispatch => {
 			return data.users
 		}
 	} catch (err) {}
+}
+
+export const addUser = user => async dispatch => {
+	try {
+		const res = await axios.post('/api/users', user)
+		const { status, data } = res
+		if (status === 201) {
+			dispatch({ type: ADD_USER, payload: data })
+		}
+	} catch (err) {
+
+	}
 }
 
 export const updateUser = user => async dispatch => {

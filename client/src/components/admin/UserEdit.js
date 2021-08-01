@@ -50,7 +50,7 @@ const validationSchema = Yup.object().shape({
         .required("City is required")
 })
 
-const UserCard = ({
+const UserEdit = ({
     showUserEdit,
     setShowUserEdit,
     userRecord
@@ -101,7 +101,7 @@ const UserCard = ({
                 </IconButton>
             </DialogTitle>
             <DialogContent dividers>
-                <form id="userEditForm" onSubmit={formik.handleSubmit}>
+                <form onSubmit={formik.handleSubmit}>
                     <Input
                         name="email"
                         label="Email"
@@ -166,4 +166,4 @@ const UserCard = ({
     
 }
 
-export default UserCard
+export default UserEdit

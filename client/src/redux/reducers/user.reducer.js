@@ -1,6 +1,6 @@
 import { userTypes } from '../types'
 
-const { GET_USERS, UPDATE_USER, DELETE_USER } = userTypes
+const { GET_USERS, ADD_USER, UPDATE_USER, DELETE_USER } = userTypes
 
 const initialState = {
 	users: []
@@ -8,6 +8,12 @@ const initialState = {
 
 const userReducer = (state = initialState, { type, payload }) => {
 	switch (type) {
+		case ADD_USER: {
+			return {
+				...state,
+				users: state.users.push(payload.newUser)
+			}
+		}
 		case GET_USERS:
 			return {
 				...state,

@@ -59,6 +59,7 @@ const validationSchema = Yup.object().shape({
 		.min(6, "Password min length is 6")
 		.max(24, "Password max length is 24"),
 	passwordConfirm: Yup.string()
+		.required("Password confirm is required")
 		.oneOf([Yup.ref('password'), null], "Password not matched"),
 	agree: Yup.bool()
 		.oneOf([true], 'Agree must be checked')

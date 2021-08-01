@@ -14,6 +14,7 @@ const createCategories = (categories, parentId = null) => {
             name: cat.name,
             slug: cat.slug,
             parentId: cat.parentId,
+            image: cat.image ? cat.image : null,
             children: createCategories(categories, cat._id)
         })
     }

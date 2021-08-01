@@ -34,8 +34,7 @@ const userSchema = new mongoose.Schema({
         default: []
     },
     agree: {
-        type: Boolean,
-        required: true
+        type: Boolean
     },
     role: {
         type: String,

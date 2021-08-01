@@ -20,7 +20,8 @@ import { Button } from '../../../components/UI'
 
 const useStyles = makeStyles(theme => ({
     root: {
-        maxWidth: '100%'
+        maxWidth: '100%',
+        paddingBottom: theme.spacing(3)
     },
     title: {
         flexGrow: 1,

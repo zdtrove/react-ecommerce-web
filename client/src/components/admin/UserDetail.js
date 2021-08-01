@@ -33,7 +33,7 @@ const useStyles = makeStyles(theme => ({
     }
 }))
 
-const UserCard = ({
+const UserDetail = ({
     showUserDetail,
     setShowUserDetail,
     userRecord
@@ -76,4 +76,4 @@ const UserCard = ({
     </>
 }
 
-export default UserCard
+export default UserDetail
