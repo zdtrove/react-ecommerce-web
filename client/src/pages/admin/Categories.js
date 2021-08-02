@@ -29,6 +29,9 @@ const useStyles = makeStyles(theme => ({
     		fontSize: 11,
     		marginTop: 0,
     		marginBottom: 0
+    	},
+    	'& .MuiTreeItem-label:hover .MuiButtonBase-root': {
+    		display: 'block'
     	}
   	},
     header: {
@@ -63,6 +66,10 @@ const useStyles = makeStyles(theme => ({
 	labelText: {
 	    fontWeight: 'inherit',
 	    flexGrow: 1,
+	},
+	btnHover: {
+		opacity: 0.3,
+		display: 'none'
 	}
 }));
 
@@ -82,17 +89,15 @@ const Categories = () => {
     	setSelected(nodeIds);
   	};
 
-  	const handleEdit = e => {
-  		console.log('---expanded---', expanded)
-  		console.log('---selected---', selected)
+  	const handleEdit = (e, category) => {
+  		console.log(category.name)
   		e.stopPropagation()
   	}
 
-  	useEffect(() => {
-  		console.log('expanded', expanded)
-  		console.log('selected', selected)
-  	}, [selected, expanded])
-
+  	const handleDelete = (e, category) => {
+  		console.log(category.name)
+  		e.stopPropagation()
+  	}
 
 	const renderTree = categories => {
 		let categoryList = []
@@ -102,8 +107,16 @@ const Categories = () => {
 					<div className={classes.labelRoot}>
 						{category.image && <img className={classes.labelIcon} src={category.image} alt={category.name} />}
 						<Typography className={classes.labelText}>{category.name}</Typography>
-						<Button onClick={e => handleEdit(e)} text="EDIT" />
-						<Button text="DELETE" color="secondary" />
+						{selected === category._id
+							? <>
+								<Button onClick={e => handleEdit(e, category)} text="EDIT" />
+								<Button onClick={e => handleDelete(e, category)} text="DELETE" color="secondary" />
+							</>
+							: <>
+								<Button className={classes.btnHover} text="EDIT" />
+								<Button className={classes.btnHover} text="DELETE" color="secondary" />
+							</>
+						}
 					</div>
 				}>
 		      		{(Array.isArray(category.children) && category.children.length > 0) ? renderTree(category.children) : null}
