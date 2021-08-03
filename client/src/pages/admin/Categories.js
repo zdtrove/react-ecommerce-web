@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import LayoutAdmin from '../../components/admin/layouts/LayoutAdmin'
 import { getCategories } from '../../redux/actions/category.action'
@@ -9,6 +9,7 @@ import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import TreeItem from '@material-ui/lab/TreeItem';
 import CategoryRoundedIcon from '@material-ui/icons/CategoryRounded';
 import { Button } from '../../components/UI'
+import CategoryEdit from '../../components/admin/category/CategoryEdit'
 
 const useStyles = makeStyles(theme => ({
   	treeview: {
@@ -78,8 +79,10 @@ const Categories = () => {
 	const { category } = useSelector(state => state)
 	const dispatch = useDispatch()
 	const { categories } = category
-	const [selected, setSelected] = React.useState([]);
-	const [expanded, setExpanded] = React.useState([]);
+	const [selected, setSelected] = useState([]);
+	const [expanded, setExpanded] = useState([]);
+    const [showCategoryEdit, setShowCategoryEdit] = useState(false)
+    const [categoryRecord, setCategoryRecord] = useState(null)
 
 	const handleToggle = (event, nodeIds) => {
     	setExpanded(nodeIds);
@@ -91,6 +94,8 @@ const Categories = () => {
 
   	const handleEdit = (e, category) => {
   		console.log(category.name)
+        setCategoryRecord(category)
+        setShowCategoryEdit(true)
   		e.stopPropagation()
   	}
 
@@ -158,6 +163,16 @@ const Categories = () => {
 			      	{categories.length > 0 && renderTree(categories)}
 			    </TreeView>
             </Paper>
+            {showCategoryEdit && (
+                <CategoryEdit
+                    {...{
+                        categories,
+                        categoryRecord,
+                        showCategoryEdit,
+                        setShowCategoryEdit
+                    }}
+                />
+            )}
         </LayoutAdmin>
     )
 }

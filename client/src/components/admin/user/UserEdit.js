@@ -9,11 +9,11 @@ import {
     IconButton
 } from '@material-ui/core'
 import CloseIcon from '@material-ui/icons/Close';
-import { Input, RadioGroup, Select, Checkboxes, Button } from '../../components/UI'
-import { userConst } from '../../constants'
+import { Input, RadioGroup, Select, Checkboxes, Button } from '../../../components/UI'
+import { userConst } from '../../../constants'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
-import { updateUser } from '../../redux/actions/user.action'
+import { updateUser } from '../../../redux/actions/user.action'
 import AccountCircleRoundedIcon from '@material-ui/icons/AccountCircleRounded';
 import PhoneAndroidRoundedIcon from '@material-ui/icons/PhoneAndroidRounded';
 

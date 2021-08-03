@@ -24,9 +24,9 @@ import {
 import PeopleOutlineTwoToneIcon from '@material-ui/icons/PeopleOutlineTwoTone'
 import AddIcon from '@material-ui/icons/Add'
 import SearchIcon from '@material-ui/icons/Search'
-import UserDetail from '../../components/admin/UserDetail'
-import UserEdit from '../../components/admin/UserEdit'
-import UserAdd from '../../components/admin/UserAdd'
+import UserDetail from '../../components/admin/user/UserDetail'
+import UserEdit from '../../components/admin/user/UserEdit'
+import UserAdd from '../../components/admin/user/UserAdd'
 
 const useStyles = makeStyles(theme => ({
     header: {

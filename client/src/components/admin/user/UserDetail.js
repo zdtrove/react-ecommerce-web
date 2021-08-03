@@ -9,7 +9,7 @@ import {
     IconButton
 } from '@material-ui/core'
 import CloseIcon from '@material-ui/icons/Close';
-import { Button } from '../../components/UI'
+import { Button } from '../../../components/UI'
 
 const useStyles = makeStyles(theme => ({
     root: {
