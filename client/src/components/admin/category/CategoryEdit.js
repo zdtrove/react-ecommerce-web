@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import { useDispatch } from 'react-redux'
 import {
 	makeStyles,
@@ -12,6 +12,7 @@ import CloseIcon from '@material-ui/icons/Close';
 import { Input, Select, Button } from '../../../components/UI'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
+import { updateCategory } from '../../../redux/actions/category.action';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -35,12 +36,8 @@ const useStyles = makeStyles(theme => ({
 
 const validationSchema = Yup.object().shape({
     name: Yup.string()
-        .required("Name is required"),
-    parentId: Yup.string()
-        .required("Parent Id is required")
+        .required("Name is required")
 })
-
-const list = ['a', 'b', 'c']
 
 const CategoryEdit = ({
     categories,
@@ -51,36 +48,33 @@ const CategoryEdit = ({
     const classes = useStyles()
     const dispatch = useDispatch()
     const { name } = categoryRecord
-    const [categoryList, setCategoryList] = useState([])
-    console.log(categories)
-    console.log(categoryRecord)
-    const { _id } = categoryRecord
+    const { _id, parentId } = categoryRecord
 
     const initialValues = {
         name,
-        parentId: ''
+        parentId: parentId ? parentId : ''
     }
 
     const formik = useFormik({
         initialValues,
         validationSchema,
         onSubmit: async values => {
-            console.log(values)
+            dispatch(updateCategory({id: _id, ...values}))
         }
     })
 
-    const createCategoryList = (categories, option = []) => {
+    const createCategoryList = (categories, options = []) => {
         categories && categories.forEach((cat, index) => {
             if (cat._id !== _id) {
-                option.push({
-                    label: cat.name,
+                options.push({
+                    name: cat.name,
                     id: cat._id
                 })
             }
             
-            if (cat.children && cat.children.length > 0) createCategoryList(cat.children, option)
+            if (cat.children && cat.children.length > 0) createCategoryList(cat.children, options)
         })
-        return option
+        return options
     }
 
     return <Dialog
@@ -108,16 +102,10 @@ const CategoryEdit = ({
                     value={formik.values.parentId}
                     error={formik.touched.parentId && formik.errors.parentId}
                     {...formik.getFieldProps('parentId')}
-                    items={list}
+                    items={createCategoryList(categories)}
+                    isObject
                 />
             </form>
-            <ul>
-                {
-                    createCategoryList(categories).map((item, idx) => (
-                        <li key={idx}>{item.label}</li>
-                    ))
-                }
-            </ul>
         </DialogContent>
         <DialogActions>
             <Button disabled={!(formik.isValid && formik.dirty)} onClick={() => formik.submitForm()} text="SAVE" />

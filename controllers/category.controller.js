@@ -6,7 +6,7 @@ const createCategories = (categories, parentId = null) => {
     const result = []
     let categoryList = parentId
         ? categories.filter(cat => cat.parentId == parentId)
-        : categories.filter(cat => cat.parentId === undefined)
+        : categories.filter(cat => cat.parentId === '')
 
     for (let cat of categoryList) {
         result.push({
@@ -59,7 +59,18 @@ exports.getCategories = async (req, res) => {
 
 exports.updateCategory = async (req, res) => {
     try {
+        const { name, parentId } = req.body
 
+        const category = Category.findOneAndUpdate({ _id: req.params.id }, {
+            name, parentId
+        })
+
+        const newCategory = { ...category, name, parentId }
+
+        res.status(200).json({
+            message: "Update category success",
+            newCategory
+        })
     } catch (err) {
         res.status(500).json({ message: err.message })
     }

@@ -11,6 +11,7 @@ const Select = ({
     label,
     error,
     items,
+    isObject,
     ...rest
 }) => {
     return (
@@ -25,8 +26,10 @@ const Select = ({
                 label={label}
                 {...rest}
             >
-                {
-                    items && items.map((item, index) => (
+                {isObject ? items && items.map((item, index) => (
+                        <MenuItem key={index} value={item.id}>{item.name}</MenuItem>
+                    ))
+                    : items && items.map((item, index) => (
                         <MenuItem key={index} value={item}>{item}</MenuItem>
                     ))
                 }

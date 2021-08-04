@@ -32,7 +32,10 @@ export const userTypes = {
 }
 
 export const categoryTypes = {
-	GET_CATEGORIES: 'GET_CATEGORIES'
+	GET_CATEGORIES: 'GET_CATEGORIES',
+	ADD_CATEGORY: 'ADD_CATEGORY',
+	UPDATE_CATEGORY: 'UPDATE_CATEGORY',
+	DELETE_CATEGORY: 'DELETE_CATEGORY'
 }
 
 export const productTypes = {

@@ -5,7 +5,7 @@ const { GET_CATEGORIES } = categoryTypes
 
 export const getCategories = () => async dispatch => {
 	try {
-		const res = await axios.get('/api/category', { role: 'admin' })
+		const res = await axios.get('/api/categories', { role: 'admin' })
 		const { status, data } = res
 		if (status === 200) {
 			dispatch({ type: GET_CATEGORIES, payload: data })
@@ -15,9 +15,20 @@ export const getCategories = () => async dispatch => {
 
 export const addCategory = () => async dispatch => {
 	try {
-		const res = await axios.post('/api/category', { name: "New Category" })
+		const res = await axios.post('/api/categories', { name: "New Category" })
 		if (res.status === 201) {
 			console.log(res)
+		}
+	} catch (err) {}
+}
+
+export const updateCategory = category => async dispatch => {
+	try {
+		const res = await axios.patch(`/api/category/${category.id}`, category)
+		const { status } = res
+		console.log(res)
+		if (status === 200) {
+			dispatch(getCategories())
 		}
 	} catch (err) {}
 }

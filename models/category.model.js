@@ -16,10 +16,12 @@ const categorySchema = new mongoose.Schema({
         type: String
     },
     parentId: {
-        type: String
+        type: String,
+        default: ''
     },
     image: {
-        type: String
+        type: String,
+        default: ''
     }
 }, { timestamps: true })
 

@@ -43,7 +43,7 @@ exports.updateUser = async (req, res) => {
 			fullname, phone, gender, city, payments
 		})
 
-		const newUser = { ...user._doc, password: "", fullname, phone, gender, city, payments }
+		const newUser = { ...user._doc, fullname, phone, gender, city, payments }
 		delete newUser.password
 		res.status(200).json({
 			message: "Update user success",
