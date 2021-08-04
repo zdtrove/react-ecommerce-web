@@ -26,7 +26,6 @@ export const updateCategory = category => async dispatch => {
 	try {
 		const res = await axios.patch(`/api/category/${category.id}`, category)
 		const { status } = res
-		console.log(res)
 		if (status === 200) {
 			dispatch(getCategories())
 		}

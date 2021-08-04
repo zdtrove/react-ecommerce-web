@@ -61,7 +61,7 @@ exports.updateCategory = async (req, res) => {
     try {
         const { name, parentId } = req.body
 
-        const category = Category.findOneAndUpdate({ _id: req.params.id }, {
+        const category = await Category.findOneAndUpdate({ _id: req.params.id }, {
             name, parentId
         })
 

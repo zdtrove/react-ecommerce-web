@@ -93,7 +93,6 @@ const Categories = () => {
   	};
 
   	const handleEdit = (e, category) => {
-  		console.log(category.name)
         setCategoryRecord(category)
         setShowCategoryEdit(true)
   		e.stopPropagation()

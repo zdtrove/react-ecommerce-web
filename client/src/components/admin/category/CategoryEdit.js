@@ -59,21 +59,26 @@ const CategoryEdit = ({
         initialValues,
         validationSchema,
         onSubmit: async values => {
-            dispatch(updateCategory({id: _id, ...values}))
+            await dispatch(updateCategory({id: _id, ...values}))
+            setShowCategoryEdit(false)
         }
     })
 
-    const createCategoryList = (categories, options = []) => {
-        categories && categories.forEach((cat, index) => {
+    const createCategoryList = (categories, options = [], level = 1) => {
+        categories && categories.forEach((cat, index, array) => {
             if (cat._id !== _id) {
                 options.push({
                     name: cat.name,
-                    id: cat._id
+                    id: cat._id,
+                    level
                 })
             }
             
-            if (cat.children && cat.children.length > 0) createCategoryList(cat.children, options)
+            if (cat.children && cat.children.length > 0) {
+                createCategoryList(cat.children, options, level + 1)
+            }
         })
+
         return options
     }
 
