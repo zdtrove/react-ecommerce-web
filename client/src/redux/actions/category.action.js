@@ -1,5 +1,6 @@
 import { categoryTypes } from '../../redux/types'
 import axios from '../../utils/axios'
+import { imageUpload } from '../../utils/upload'
 
 const { GET_CATEGORIES } = categoryTypes
 
@@ -24,6 +25,8 @@ export const addCategory = () => async dispatch => {
 
 export const updateCategory = category => async dispatch => {
 	try {
+		const image = await imageUpload(category.image)
+		category.image = image.url
 		const res = await axios.patch(`/api/category/${category.id}`, category)
 		const { status } = res
 		if (status === 200) {

@@ -1,7 +1,7 @@
 import axiosPackage from 'axios'
 import store from '../redux/store'
 import { uiTypes, authTypes } from '../redux/types'
-import { snackbar, userRoles, jwtConst } from '../constants'
+import { snackbar, userRoles, jwtConst, uploadConst } from '../constants'
 import { refreshTokenUser, refreshTokenAdmin } from '../redux/actions/auth.action'
 
 const { LOGOUT_SUCCESS, LOGOUT_ADMIN_SUCCESS } = authTypes
@@ -9,15 +9,19 @@ const { SHOW_SNACKBAR, SHOW_BACKDROP, HIDE_BACKDROP } = uiTypes
 const { SNACKBAR_STATUS_SUCCESS, SNACKBAR_STATUS_ERROR } = snackbar
 const { USER, ADMIN } = userRoles
 const { JWT_EXPIRED, JWT_INVALID, ACCESS_TOKEN, ACCESS_TOKEN_ADMIN } = jwtConst
+const { CLOUDINARY_URL } = uploadConst
 
 const axios = axiosPackage.create({});
 
 axios.interceptors.request.use(function (config) {
-    Object.assign(config.headers, { 
-        Authorization: localStorage.getItem(ACCESS_TOKEN),
-        AuthorizationAdmin: localStorage.getItem(ACCESS_TOKEN_ADMIN)
-    })
+    if (config.url !== CLOUDINARY_URL) {
+        Object.assign(config.headers, { 
+            Authorization: localStorage.getItem(ACCESS_TOKEN),
+            AuthorizationAdmin: localStorage.getItem(ACCESS_TOKEN_ADMIN)
+        })
+    }
     store.dispatch({ type: SHOW_BACKDROP })
+
     return config;
 }, function (error) {
     return Promise.reject(error);

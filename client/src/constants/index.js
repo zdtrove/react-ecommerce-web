@@ -21,3 +21,8 @@ export const userConst = {
 	PAYMENT_METHODS: ["Cash", "Card", "Other"],
 	ROLES: ["admin", "user"]
 }
+
+export const uploadConst = {
+	CLOUDINARY_URL: 'https://api.cloudinary.com/v1_1/dj7zmqrth/upload',
+	CLOUDINARY_UPLOAD_PRESET: 'uyg8yabv'
+}
