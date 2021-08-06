@@ -14,7 +14,7 @@ import AddIcon from '@material-ui/icons/Add';
 import { Input, Select, Button } from '../../../components/UI'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
-import { updateCategory } from '../../../redux/actions/category.action';
+import { addCategory } from '../../../redux/actions/category.action';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -55,30 +55,28 @@ const validationSchema = Yup.object().shape({
         .required("Name is required")
 })
 
-const CategoryEdit = ({
+const CategoryAdd = ({
     categories,
-    showCategoryEdit,
-    setShowCategoryEdit,
-    categoryRecord
+    showCategoryAdd,
+    setShowCategoryAdd
 }) => {
     const classes = useStyles()
     const dispatch = useDispatch()
-    const { _id, name, parentId, image } = categoryRecord
     const [categoryImg, setCategoryImg] = useState('')
     const [categoryImgReset, setCategoryImgReset] = useState('')
 
     const initialValues = {
-        name,
-        parentId: parentId ? parentId : '',
-        image
+        name: '',
+        parentId: '',
+        image: ''
     }
 
     const formik = useFormik({
         initialValues,
         validationSchema,
         onSubmit: async values => {
-            await dispatch(updateCategory({id: _id, ...values}))
-            setShowCategoryEdit(false)
+            await dispatch(addCategory(values))
+            setShowCategoryAdd(false)
         }
     })
 
@@ -90,14 +88,12 @@ const CategoryEdit = ({
     }
 
     const createCategoryList = (categories, options = [], level = 1) => {
-        categories && categories.forEach((cat, index, array) => {
-            if (cat._id !== _id) {
-                options.push({
-                    name: cat.name,
-                    id: cat._id,
-                    level
-                })
-            }
+        categories && categories.forEach(cat => {
+            options.push({
+                name: cat.name,
+                id: cat._id,
+                level
+            })
             
             if (cat.children && cat.children.length > 0) {
                 createCategoryList(cat.children, options, level + 1)
@@ -109,11 +105,11 @@ const CategoryEdit = ({
 
     return <Dialog
         classes={{ paper: classes.root }}
-        open={showCategoryEdit}
+        open={showCategoryAdd}
     >
         <DialogTitle>
-            CATEGORY EDIT
-            <IconButton aria-label="close" className={classes.closeButton} onClick={() => setShowCategoryEdit(false)}>
+            CATEGORY ADD
+            <IconButton aria-label="close" className={classes.closeButton} onClick={() => setShowCategoryAdd(false)}>
                 <CloseIcon />
             </IconButton>
         </DialogTitle>
@@ -141,10 +137,10 @@ const CategoryEdit = ({
                             size="medium"
                             component="span"
                         >
-                            <AddIcon /> {image ? 'Change image' : 'Add image'}
+                            <AddIcon /> Add image
                         </Fab>
                     </label>
-                    <img src={categoryImgReset ? categoryImgReset : (categoryImg ? URL.createObjectURL(categoryImg) : image)} alt="" />
+                    <img src={categoryImgReset ? categoryImgReset : (categoryImg ? URL.createObjectURL(categoryImg) : '')} alt="" />
                 </div>
                 <Select
                     label="Parent Category"
@@ -158,13 +154,14 @@ const CategoryEdit = ({
             </form>
         </DialogContent>
         <DialogActions>
-            <Button disabled={!(formik.isValid && formik.dirty)} onClick={() => formik.submitForm()} text="SAVE" />
+            <Button disabled={!(formik.isValid && formik.dirty)} onClick={() => formik.submitForm()} text="ADD" />
             <Button onClick={() => {
                 formik.resetForm()
-                setCategoryImgReset(image)
+                setCategoryImg('')
+                setCategoryImgReset('')
             }} color="secondary" text="RESET" />
         </DialogActions>
     </Dialog>
 }
 
-export default CategoryEdit
+export default CategoryAdd

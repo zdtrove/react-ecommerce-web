@@ -14,11 +14,13 @@ export const getCategories = () => async dispatch => {
 	} catch (err) {}
 }
 
-export const addCategory = () => async dispatch => {
+export const addCategory = category => async dispatch => {
 	try {
-		const res = await axios.post('/api/categories', { name: "New Category" })
+		const image = await imageUpload(category.image)
+		category.image = image.url
+		const res = await axios.post('/api/categories', category)
 		if (res.status === 201) {
-			console.log(res)
+			dispatch(getCategories())
 		}
 	} catch (err) {}
 }
@@ -28,8 +30,16 @@ export const updateCategory = category => async dispatch => {
 		const image = await imageUpload(category.image)
 		category.image = image.url
 		const res = await axios.patch(`/api/category/${category.id}`, category)
-		const { status } = res
-		if (status === 200) {
+		if (res.status === 200) {
+			dispatch(getCategories())
+		}
+	} catch (err) {}
+}
+
+export const deleteCategory = id => async dispatch => {
+	try {
+		const res = await axios.delete(`/api/category/${id}`)
+		if (res.status === 200) {
 			dispatch(getCategories())
 		}
 	} catch (err) {}

@@ -122,7 +122,7 @@ const Users = () => {
                 {allUsers && <TableContainer>
                     <Toolbar>
                         <Input
-                            label="Search Employees"
+                            label="Search Users"
                             className={classes.searchInput}
                             startIcon={<SearchIcon />}
                             onChange={handleSearch}

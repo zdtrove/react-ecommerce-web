@@ -1,20 +1,33 @@
 import React, { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import LayoutAdmin from '../../components/admin/layouts/LayoutAdmin'
-import { getCategories } from '../../redux/actions/category.action'
-import { makeStyles, Paper, Card, Typography } from '@material-ui/core';
+import { deleteCategory, getCategories } from '../../redux/actions/category.action'
+import { 
+	makeStyles, 
+	Paper, 
+	Card, 
+	Typography, 
+	Toolbar,
+	Dialog,
+	DialogContent,
+	DialogContentText,
+	DialogActions
+} from '@material-ui/core';
 import TreeView from '@material-ui/lab/TreeView';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
+import AddIcon from '@material-ui/icons/Add';
 import TreeItem from '@material-ui/lab/TreeItem';
 import CategoryRoundedIcon from '@material-ui/icons/CategoryRounded';
 import { Button } from '../../components/UI'
 import CategoryEdit from '../../components/admin/category/CategoryEdit'
+import CategoryAdd from '../../components/admin/category/CategoryAdd'
 
 const useStyles = makeStyles(theme => ({
   	treeview: {
 	    height: 'max-content',
 	    padding: theme.spacing(2),
+		paddingTop: 0,
 	    maxWidth: 600,
 	    '& .MuiTreeItem-label': {
 	    	margin: theme.spacing(.25)
@@ -33,7 +46,10 @@ const useStyles = makeStyles(theme => ({
     	},
     	'& .MuiTreeItem-label:hover .MuiButtonBase-root': {
     		display: 'block'
-    	}
+    	},
+		'& .MuiTreeItem-group': {
+			marginLeft: theme.spacing(5)
+		}
   	},
     header: {
         padding: theme.spacing(4),
@@ -71,7 +87,13 @@ const useStyles = makeStyles(theme => ({
 	btnHover: {
 		opacity: 0.3,
 		display: 'none'
-	}
+	},
+	searchInput: {
+        width: '75%'
+    },
+    newButton: {
+        right: '10px'
+    },
 }));
 
 const Categories = () => {
@@ -82,6 +104,8 @@ const Categories = () => {
 	const [selected, setSelected] = useState([]);
 	const [expanded, setExpanded] = useState([]);
     const [showCategoryEdit, setShowCategoryEdit] = useState(false)
+	const [showCategoryAdd, setShowCategoryAdd] = useState(false)
+	const [showCategoryDelete, setShowCategoryDelete] = useState(false)
     const [categoryRecord, setCategoryRecord] = useState(null)
 
 	const handleToggle = (event, nodeIds) => {
@@ -98,10 +122,10 @@ const Categories = () => {
   		e.stopPropagation()
   	}
 
-  	const handleDelete = (e, category) => {
-  		console.log(category.name)
-  		e.stopPropagation()
-  	}
+  	const handleDelete = async id => {
+        await dispatch(deleteCategory(id))
+        setShowCategoryDelete(false)
+    }
 
 	const renderTree = categories => {
 		let categoryList = []
@@ -114,7 +138,10 @@ const Categories = () => {
 						{selected === category._id
 							? <>
 								<Button onClick={e => handleEdit(e, category)} text="EDIT" />
-								<Button onClick={e => handleDelete(e, category)} text="DELETE" color="secondary" />
+								<Button onClick={() => {
+									setCategoryRecord(category)
+									setShowCategoryDelete(true)
+								}} text="DELETE" color="secondary" />
 							</>
 							: <>
 								<Button className={classes.btnHover} text="EDIT" />
@@ -130,7 +157,6 @@ const Categories = () => {
 
 		return categoryList
 	}
-		
 
 	useEffect(() => {
 		if (categories.length === 0) dispatch(getCategories())
@@ -150,6 +176,15 @@ const Categories = () => {
                 </div>
             </Paper>
             <Paper>
+				<Toolbar>
+					<Button
+						onClick={() => setShowCategoryAdd(true)}
+						variant="outlined"
+						startIcon={<AddIcon />}
+						className={classes.newButton}
+						text="ADD NEW"
+					/>
+				</Toolbar>
             	<TreeView
 			      	className={classes.treeview}
 			      	defaultCollapseIcon={<ExpandMoreIcon />}
@@ -172,6 +207,24 @@ const Categories = () => {
                     }}
                 />
             )}
+			{showCategoryAdd && (
+                <CategoryAdd
+                    {...{
+                        categories,
+                        showCategoryAdd,
+                        setShowCategoryAdd
+                    }}
+                />
+            )}
+			{showCategoryDelete && <Dialog open={showCategoryDelete}>
+                <DialogContent>
+                    <DialogContentText>Are you sure to delete <strong>{categoryRecord.name}</strong>?</DialogContentText>
+                </DialogContent>
+                <DialogActions className={classes.dialogActions}>
+                    <Button onClick={() => handleDelete(categoryRecord._id)} color="secondary" text="DELETE" />
+                    <Button onClick={() => setShowCategoryDelete(false)} color="default" text="CANCEL" />
+                </DialogActions>
+            </Dialog>}
         </LayoutAdmin>
     )
 }

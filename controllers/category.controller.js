@@ -24,9 +24,9 @@ const createCategories = (categories, parentId = null) => {
 
 exports.addCategory = async (req, res) => {
     try {
-        const { name, parentId } = req.body
+        const { name, parentId, image } = req.body
 
-        const categoryObj = { name, slug: slugify(`${name}-${shortid.generate()}`, { lower: true }) }
+        const categoryObj = { name, slug: slugify(`${name}-${shortid.generate()}`, { lower: true }), image }
         if (parentId) categoryObj.parentId = parentId
 
         const category = new Category(categoryObj)
@@ -78,7 +78,9 @@ exports.updateCategory = async (req, res) => {
 
 exports.deleteCategory = async (req, res) => {
     try {
+        const category = await Category.findOneAndDelete({ _id: req.params.id })
 
+		return res.status(200).json({ message: "Delete category success", categoryDelete: category })
     } catch (err) {
         res.status(500).json({ message: err.message })
     }
