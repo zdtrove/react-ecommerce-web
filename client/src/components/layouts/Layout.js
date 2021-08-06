@@ -31,10 +31,8 @@ const Layout = ({ children, maxWidth, ...rest }) => {
     const history = useHistory()
 
     const renderAuthBtn = () => {
-        return auth.token
-            ? <Button onClick={() => dispatch(logout(history))} disableRipple color="inherit">
-                Logout
-            </Button>
+        return auth.isAuthenticated
+            ? <Button variant="text" size="medium" text="LOGOUT" onClick={() => dispatch(logout(history))} disableRipple color="inherit" />
             : <>
                 <Button variant="text" size="medium" disableRipple color="inherit" to="login" component={Link} text="LOGIN" />
                 <Button variant="text" size="medium" disableRipple color="inherit" to="register" component={Link} text="REGISTER" />

@@ -7,7 +7,8 @@ const createAccessToken = payload => {
 }
 
 const createRefreshToken = payload => {
-    return jwt.sign(payload, process.env.REFRESH_TOKEN_SECRET, { expiresIn: '1d' })
+    // return jwt.sign(payload, process.env.REFRESH_TOKEN_SECRET, { expiresIn: '1d' })
+    return jwt.sign(payload, process.env.REFRESH_TOKEN_SECRET, { expiresIn: '4h' })
 }
 
 exports.register = async (req, res) => {
@@ -53,7 +54,8 @@ exports.login = async (req, res) => {
         res.cookie(cookiePath, refreshToken, {
             httpOnly: true,
             path: `/api/auth/${cookiePath}`,
-            maxAge: 24 * 60 * 60 * 1000 // 1 days
+            // maxAge: 24 * 60 * 60 * 1000 // 1 days
+            maxAge: 4 * 60 * 60 * 1000 // 4 hours
         })
 
         res.status(200).json({
