@@ -1,17 +1,15 @@
 import { authTypes } from "../types"
 import { userRoles, jwtConst } from '../../constants'
 import axios from '../../utils/axios'
+import jwtDecode from 'jwt-decode'
 
 const { 
-	AUTH, 
-	AUTH_ADMIN, 
-	LOGOUT_SUCCESS, 
-	LOGOUT_ADMIN_SUCCESS,
-	REFRESH_TOKEN,
-	REFRESH_TOKEN_ADMIN
+	AUTH,
+	LOGOUT_SUCCESS,
+	REFRESH_TOKEN
 } = authTypes
-const { ADMIN, USER } = userRoles
-const { ACCESS_TOKEN, ACCESS_TOKEN_ADMIN } = jwtConst
+const { USER } = userRoles
+const { ACCESS_TOKEN } = jwtConst
 
 export const register = user => async dispatch => {
 	try {
@@ -23,16 +21,13 @@ export const register = user => async dispatch => {
 	} catch (err) {}
 }
 
-export const login = (user, role = USER) => async dispatch => {
-	const type = role === USER ? AUTH : AUTH_ADMIN
-	const accessToken = role === USER ? ACCESS_TOKEN : ACCESS_TOKEN_ADMIN
+export const login = user => async dispatch => {
 	try {
-		const res = await axios.post('/api/auth/login', {...user, role})
+		const res = await axios.post('/api/auth/login', user)
 		const { status, data } = res
-		console.log(res)
 		if (status === 200) {
-			dispatch({ type, payload: data})
-			localStorage.setItem(accessToken, `Bearer ${data.accessToken}`)
+			dispatch({ type: AUTH, payload: data})
+			localStorage.setItem(ACCESS_TOKEN, `Bearer ${data.accessToken}`)
 		}
 	} catch (err) {}
 }
@@ -53,46 +48,18 @@ export const getLoggedUser = () => async dispatch => {
 	} catch (err) {}
 }
 
-export const getLoggedUserAdmin = () => async dispatch => {
+export const refreshToken = () => async dispatch => {
 	try {
-		const accessTokenAdmin = localStorage.getItem(ACCESS_TOKEN_ADMIN)
-		if (accessTokenAdmin) {
-			const res = await axios.post('/api/auth/get_logged_user_admin', {
-				accessTokenAdmin
-			})
-			const { status, data } = res
-			if (status === 200) {
-				dispatch({ type: AUTH_ADMIN, payload: data })
-			}
-		}
-	} catch (err) {}
-}
-
-export const refreshTokenUser = () => async dispatch => {
-	try {
-		 const accessToken = localStorage.getItem(ACCESS_TOKEN)
-		 if (accessToken) {
-			 const res = await axios.post('/api/auth/refresh_token', { accessToken, role: USER })
-			 const { status, data } = res
-			 if (status === 200) {
-				 dispatch({ type: REFRESH_TOKEN, payload: data })
-				 localStorage.setItem(ACCESS_TOKEN, `Bearer ${data.accessToken}`)
-			 }
-		 }
-	} catch (err) {}
-}
-
-export const refreshTokenAdmin = () => async dispatch => {
-	try {
-		 const accessTokenAdmin = localStorage.getItem(ACCESS_TOKEN_ADMIN)
-		 if (accessTokenAdmin) {
-			 const res = await axios.post('/api/auth/refresh_token_admin', { accessTokenAdmin, role: ADMIN })
-			 const { status, data } = res
-			 if (status === 200) {
-				 dispatch({ type: REFRESH_TOKEN_ADMIN, payload: data })
-				 localStorage.setItem(ACCESS_TOKEN_ADMIN, `Bearer ${data.accessToken}`)
-			 }
-		 }
+		const accessToken = localStorage.getItem(ACCESS_TOKEN)
+	 	if (accessToken) {
+	 		const decoded = jwtDecode(accessToken.split(" ")[1])
+		 	const res = await axios.post('/api/auth/refresh_token', { accessToken, role: decoded.role })
+		 	const { status, data } = res
+		 	if (status === 200) {
+			 	dispatch({ type: REFRESH_TOKEN, payload: data })
+			 	localStorage.setItem(ACCESS_TOKEN, `Bearer ${data.accessToken}`)
+		 	}
+	 	}
 	} catch (err) {}
 }
 
@@ -106,8 +73,8 @@ export const logout = (history, role = USER) => async dispatch => {
 				localStorage.removeItem(ACCESS_TOKEN)
 				history.push('/login')
 			} else {
-				dispatch({ type: LOGOUT_ADMIN_SUCCESS })
-				localStorage.removeItem(ACCESS_TOKEN_ADMIN)
+				dispatch({ type: LOGOUT_SUCCESS })
+				localStorage.removeItem(ACCESS_TOKEN)
 				history.push('/admin/login')
 			}
 		}

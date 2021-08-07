@@ -12,14 +12,13 @@ import Register from './pages/Register';
 import { Snackbar, Backdrop } from './components/UI'
 import Dashboard from './pages/admin/Dashboard';
 import PrivateRoute from './components/PrivateRoute';
-import { getLoggedUser, getLoggedUserAdmin } from './redux/actions/auth.action'
+import { getLoggedUser } from './redux/actions/auth.action'
 
 function App() {
   const dispatch = useDispatch()
 
   useEffect(() => {
     dispatch(getLoggedUser())
-    dispatch(getLoggedUserAdmin())
   }, [dispatch])
 
   return (

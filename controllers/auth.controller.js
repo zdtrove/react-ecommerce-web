@@ -7,8 +7,8 @@ const createAccessToken = payload => {
 }
 
 const createRefreshToken = payload => {
-    // return jwt.sign(payload, process.env.REFRESH_TOKEN_SECRET, { expiresIn: '1d' })
-    return jwt.sign(payload, process.env.REFRESH_TOKEN_SECRET, { expiresIn: '4h' })
+    return jwt.sign(payload, process.env.REFRESH_TOKEN_SECRET, { expiresIn: '1d' })
+    // return jwt.sign(payload, process.env.REFRESH_TOKEN_SECRET, { expiresIn: '30s' })
 }
 
 exports.register = async (req, res) => {
@@ -38,9 +38,9 @@ exports.register = async (req, res) => {
 
 exports.login = async (req, res) => {
     try {
-        const { email, password, role } = req.body
+        const { email, password } = req.body
 
-        const user = await User.findOne({ email, role })
+        const user = await User.findOne({ email })
         if (!user) return res.status(400).json({ message: "User does not exist"})
 
         const isMatch = await bcrypt.compare(password, user.password)
@@ -49,13 +49,13 @@ exports.login = async (req, res) => {
         const accessToken = createAccessToken({ id: user._id, role: user.role })
         const refreshToken = createRefreshToken({ id: user._id, role: user.role })
 
-        const cookiePath = user.role === 'user' ? 'refresh_token' : 'refresh_token_admin'
+        const cookiePath = 'refresh_token'
 
         res.cookie(cookiePath, refreshToken, {
             httpOnly: true,
             path: `/api/auth/${cookiePath}`,
-            // maxAge: 24 * 60 * 60 * 1000 // 1 days
-            maxAge: 4 * 60 * 60 * 1000 // 4 hours
+            maxAge: 24 * 60 * 60 * 1000 // 1 days
+            // maxAge: 30 * 1000 // 30 secons
         })
 
         res.status(200).json({
@@ -73,7 +73,7 @@ exports.login = async (req, res) => {
 
 exports.logout = async (req, res) => {
     try {
-        const cookiePath = req.body.role === 'user' ? 'refresh_token' : 'refresh_token_admin'
+        const cookiePath = 'refresh_token'
         res.clearCookie(cookiePath, { path: `/api/auth/${cookiePath}`})
 
         return res.status(200).json({ message: "Logout success" })
@@ -89,28 +89,8 @@ exports.getLoggedUser = async (req, res) => {
         
         if (accessToken) {
             await jwt.verify(accessToken.split(" ")[1], process.env.ACCESS_TOKEN_SECRET, async (err, result) => {
-                if (err) return res.status(400).json({ ...err, role: "user" })
-                const { id, role } = result
-                user = await User.findById(id).select("-password")
-            })
-        }
-
-        res.status(200).json({ user })
-    } catch (err) {
-        return res.status(500).json({ err })
-    }
-}
-
-exports.getLoggedUserAdmin = async (req, res) => {
-    try {
-        const { accessTokenAdmin } = req.body
-        let user
-        
-        if (accessTokenAdmin) {
-            await jwt.verify(accessTokenAdmin.split(" ")[1], process.env.ACCESS_TOKEN_SECRET, async (err, result) => {
-                if (err) return res.status(400).json({ ...err, role: "admin" })
-                const { id, role } = result
-                user = await User.findById(id).select("-password")
+                if (err) return res.status(400).json({ ...err })
+                user = await User.findById(result.id).select("-password")
             })
         }
 
@@ -122,10 +102,12 @@ exports.getLoggedUserAdmin = async (req, res) => {
 
 exports.generateAccessToken = async (req, res) => {
     try {
-        const refreshToken = req.body.role === 'user' ? req.cookies.refresh_token : req.cookies.refresh_token_admin
-        if (!refreshToken) return res.status(400).json({ message: "Please login now" })
+        const refreshToken = req.cookies.refresh_token
         jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, async (err, result) => {
-            if (err) return res.status(400).json(err)
+            if (err) {
+                console.log({ ...err, role: req.body.role })
+                return res.status(400).json({ ...err, role: req.body.role })
+            }
             const { id, role } = result
             const user = await User.findById(id).select("-password")
             const accessToken = createAccessToken({ id, role })

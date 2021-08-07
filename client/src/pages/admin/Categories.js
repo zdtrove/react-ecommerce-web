@@ -22,6 +22,9 @@ import CategoryRoundedIcon from '@material-ui/icons/CategoryRounded';
 import { Button } from '../../components/UI'
 import CategoryEdit from '../../components/admin/category/CategoryEdit'
 import CategoryAdd from '../../components/admin/category/CategoryAdd'
+import { userRoles } from '../../constants'
+
+const { ADMIN } = userRoles
 
 const useStyles = makeStyles(theme => ({
   	treeview: {
@@ -159,8 +162,8 @@ const Categories = () => {
 	}
 
 	useEffect(() => {
-		if (categories.length === 0) dispatch(getCategories())
-	}, [dispatch, categories.length])
+		dispatch(getCategories(ADMIN))
+	}, [dispatch])
 
     return (
         <LayoutAdmin>

@@ -1,16 +1,27 @@
 import React from 'react'
 import { Route, Redirect } from 'react-router-dom'
-import { jwtConst } from '../constants'
+import { jwtConst, userRoles } from '../constants'
+import jwtDecode from 'jwt-decode'
 
-const { ACCESS_TOKEN, ACCESS_TOKEN_ADMIN } = jwtConst
+const { ACCESS_TOKEN } = jwtConst
+const { ADMIN } = userRoles
 
 const PrivateRoute = ({ admin, ...rest }) => {
-	if (admin) {
-		const accessTokenAdmin = localStorage.getItem(ACCESS_TOKEN_ADMIN)
-    	return accessTokenAdmin ? <Route {...rest} /> : <Redirect to="/admin/login" />
-	} else {
+	try {
 		const accessToken = localStorage.getItem(ACCESS_TOKEN)
-    	return accessToken ? <Route {...rest} /> : <Redirect to="/login" />
+		
+		if (admin) {
+			if (accessToken) {
+				const decoded = jwtDecode(accessToken.split(" ")[1])
+			    return decoded.role === ADMIN ? <Route {...rest} /> : <Redirect to="/admin/login" />
+			} else return <Redirect to="/admin/login" />
+		} else {
+			if (accessToken) {
+			    return <Route {...rest} />
+			} else return <Redirect to="/login" />
+		}
+	} catch (err) {
+		return <Redirect to="/login" />
 	}
 }
 

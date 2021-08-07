@@ -4,9 +4,9 @@ import { imageUpload } from '../../utils/upload'
 
 const { GET_CATEGORIES } = categoryTypes
 
-export const getCategories = () => async dispatch => {
+export const getCategories = role=> async dispatch => {
 	try {
-		const res = await axios.get('/api/categories', { role: 'admin' })
+		const res = await axios.get('/api/categories', { role })
 		const { status, data } = res
 		if (status === 200) {
 			dispatch({ type: GET_CATEGORIES, payload: data })

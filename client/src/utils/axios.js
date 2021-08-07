@@ -2,22 +2,22 @@ import axiosPackage from 'axios'
 import store from '../redux/store'
 import { uiTypes, authTypes } from '../redux/types'
 import { snackbar, userRoles, jwtConst, uploadConst } from '../constants'
-import { refreshTokenUser, refreshTokenAdmin } from '../redux/actions/auth.action'
+import { refreshToken } from '../redux/actions/auth.action'
 
-const { LOGOUT_SUCCESS, LOGOUT_ADMIN_SUCCESS } = authTypes
+const { LOGOUT_SUCCESS } = authTypes
 const { SHOW_SNACKBAR, SHOW_BACKDROP, HIDE_BACKDROP } = uiTypes
 const { SNACKBAR_STATUS_SUCCESS, SNACKBAR_STATUS_ERROR } = snackbar
-const { USER, ADMIN } = userRoles
-const { JWT_EXPIRED, JWT_INVALID, ACCESS_TOKEN, ACCESS_TOKEN_ADMIN } = jwtConst
+const { ADMIN } = userRoles
+const { JWT_EXPIRED, JWT_INVALID, ACCESS_TOKEN } = jwtConst
 const { CLOUDINARY_URL } = uploadConst
 
 const axios = axiosPackage.create({});
 
 axios.interceptors.request.use(function (config) {
+    console.log(config)
     if (config.url !== CLOUDINARY_URL) {
         Object.assign(config.headers, { 
-            Authorization: localStorage.getItem(ACCESS_TOKEN),
-            AuthorizationAdmin: localStorage.getItem(ACCESS_TOKEN_ADMIN)
+            Authorization: localStorage.getItem(ACCESS_TOKEN)
         })
     }
     store.dispatch({ type: SHOW_BACKDROP })
@@ -42,34 +42,30 @@ axios.interceptors.response.use(function (response) {
     return response;
 }, async function (error) {
     const { data, config } = error.response
-    if (data.name === JWT_INVALID && data.role === ADMIN) {
-        store.dispatch({ type: LOGOUT_ADMIN_SUCCESS })
-        localStorage.removeItem(ACCESS_TOKEN_ADMIN)
-        window.location.href = "/admin/login"
-    }
-    if (data.name === JWT_INVALID && data.role === USER) {
+    console.log(error.response)
+    if (data.name === JWT_INVALID) {
         store.dispatch({ type: LOGOUT_SUCCESS })
         localStorage.removeItem(ACCESS_TOKEN)
-        window.location.href = "/login"
+        if (data.role) {
+            window.location.href = data.role === ADMIN ? "/admin/login" : "/login"
+        } else {
+            window.location.href = "/login"
+        }
     }
-    if (data.name === JWT_EXPIRED && data.role === USER) {
-        await store.dispatch(refreshTokenUser())
+
+    if (data.name === JWT_EXPIRED) {
+        await store.dispatch(refreshToken())
         config._retry = true
         config.headers['Authorization'] = localStorage.getItem(ACCESS_TOKEN)
 
         return axiosPackage(config)
     }
-    if (data.name === JWT_EXPIRED && data.role === ADMIN) {
-        await store.dispatch(refreshTokenAdmin())
-        config._retry = true
-        config.headers['AuthorizationAdmin'] = localStorage.getItem(ACCESS_TOKEN_ADMIN)
-        
-        return axiosPackage(config)
+    if (data.name !== JWT_INVALID) {
+        store.dispatch({ type: SHOW_SNACKBAR, payload: {
+            message: error.response.data.message,
+            status: SNACKBAR_STATUS_ERROR
+        }})
     }
-    store.dispatch({ type: SHOW_SNACKBAR, payload: {
-        message: error.response.data.message,
-        status: SNACKBAR_STATUS_ERROR
-    }})
     store.dispatch({ type: HIDE_BACKDROP })
 
     return Promise.reject(error);

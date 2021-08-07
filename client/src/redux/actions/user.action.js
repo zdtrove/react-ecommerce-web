@@ -5,7 +5,7 @@ const { GET_USERS, ADD_USER, UPDATE_USER, DELETE_USER } = userTypes
 
 export const getUsers = () => async dispatch => {
 	try {
-		const res = await axios.get('/api/users', { role: 'user' })
+		const res = await axios.get('/api/users')
 		const { status, data } = res
 		if (status === 200) {
 			dispatch({ type: GET_USERS, payload: data })
@@ -39,7 +39,6 @@ export const updateUser = user => async dispatch => {
 export const deleteUser = id => async dispatch => {
 	try {
 		const res = await axios.delete(`/api/user/${id}`)
-		console.log(res)
 		const { status, data } = res
 		if (status === 200) {
 			dispatch({ type: DELETE_USER, payload: data })

@@ -1,19 +1,14 @@
 import { authTypes } from '../types'
 
 const { 
-	AUTH, 
-	AUTH_ADMIN, 
-	LOGOUT_SUCCESS, 
-	LOGOUT_ADMIN_SUCCESS,
-	REFRESH_TOKEN,
-	REFRESH_TOKEN_ADMIN
+	AUTH,
+	LOGOUT_SUCCESS,
+	REFRESH_TOKEN
 } = authTypes
 
 const initialState = {
 	isAuthenticated: false,
-	isAuthenticatedAdmin: false,
-	user: null,
-	userAdmin: null
+	user: null
 }
 
 const authReducer = (state = initialState, { type, payload }) => {
@@ -25,26 +20,12 @@ const authReducer = (state = initialState, { type, payload }) => {
 				isAuthenticated: true,
 				user: payload.user
 			}
-		case AUTH_ADMIN:
-		case REFRESH_TOKEN_ADMIN:
-			return {
-				...state,
-				isAuthenticatedAdmin: true,
-				userAdmin: payload.user
-			}
 		case LOGOUT_SUCCESS:
 			return {
 				...state,
 				isAuthenticated: false,
 				user: null
 			}
-		case LOGOUT_ADMIN_SUCCESS:
-			return {
-				...state,
-				isAuthenticatedAdmin: false,
-				userAdmin: null
-			}
-
 		default:
 			return state
 	}

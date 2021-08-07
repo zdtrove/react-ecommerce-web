@@ -24,6 +24,9 @@ import LockRoundedIcon from '@material-ui/icons/LockRounded';
 import VisibilityRoundedIcon from '@material-ui/icons/VisibilityRounded';
 import VisibilityOffRoundedIcon from '@material-ui/icons/VisibilityOffRounded';
 import { login } from '../../redux/actions/auth.action'
+import { userRoles } from '../../constants'
+
+const { ADMIN } = userRoles
 
 const initialValues = {
 	email: '',
@@ -92,7 +95,7 @@ const Login = () => {
 		initialValues,
 		validationSchema,
 		onSubmit: values => {
-			dispatch(login(values, 'admin'))
+			dispatch(login(values))
 		}
 	})
 
@@ -102,8 +105,8 @@ const Login = () => {
 	}
 
 	useEffect(() => {
-		if (auth.isAuthenticatedAdmin) history.push('/admin')
-	}, [auth.isAuthenticatedAdmin, history])
+		if (auth.isAuthenticated && auth.user?.role === ADMIN) history.push('/admin')
+	}, [auth.isAuthenticated, auth.user?.role, history])
 
     return (
         <Container maxWidth="sm">
