@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import { useHistory, Link } from 'react-router-dom'
 import {
@@ -34,25 +34,19 @@ const useStyles = makeStyles(theme => ({
     appBar: {
         zIndex: theme.zIndex.drawer + 1,
         transition: theme.transitions.create(['width', 'margin'], {
-          easing: theme.transitions.easing.sharp,
-          duration: theme.transitions.duration.leavingScreen
+            easing: theme.transitions.easing.sharp,
+            duration: theme.transitions.duration.leavingScreen
         })
     },
     appBarShift: {
         marginLeft: drawerWidth,
         width: `calc(100% - ${drawerWidth}px)`,
-        transition: theme.transitions.create(['width', 'margin'], {
-          easing: theme.transitions.easing.sharp,
-          duration: theme.transitions.duration.enteringScreen
+        transition: theme.transitions.create(['width'], {
+            easing: theme.transitions.easing.sharp,
+            duration: theme.transitions.duration.enteringScreen
         })
     },
     appBarSpacer: theme.mixins.toolbar,
-    toolbar: {
-        paddingRight: 24, // keep right padding when drawer closed
-    },
-    menuButton: {
-        marginRight: 36,
-    },
     menuButtonHidden: {
         display: 'none',
     },
@@ -69,25 +63,32 @@ const LayoutAdmin = ({ children, maxWidth, ...rest }) => {
     const dispatch = useDispatch()
     const history = useHistory()
     const { ADMIN } = userRoles
-    const [open, setOpen] = useState(true);
+    const [open, setOpen] = useState(false);
 
     const handleDrawerOpen = () => {
+        localStorage.setItem('drawer', true)
         setOpen(true);
     }
 
     const handleDrawerClose = () => {
+        localStorage.setItem('drawer', false)
         setOpen(false);
     }
+
+    useEffect(() => {
+        let drawer = localStorage.getItem('drawer')
+        setOpen(drawer === 'true' ? true : false)
+    }, [])
 
     return (
         <Container className={classes.root}>
             <CssBaseline />
-            <AppBar position="absolute" className={clsx(classes.appBar, open && classes.appBarShift)}>
-                <Toolbar className={classes.toolbar}>
+            <AppBar position="absolute" className={clsx(classes.appBar, !open && classes.appBarShift)}>
+                <Toolbar>
                     <IconButton 
                         color="inherit"
-                        className={clsx(classes.menuButton, open && classes.menuButtonHidden)}
-                        onClick={handleDrawerOpen}
+                        className={clsx(!open && classes.menuButtonHidden)}
+                        onClick={handleDrawerClose}
                     >
                         <MenuIcon />
                     </IconButton>
@@ -107,7 +108,7 @@ const LayoutAdmin = ({ children, maxWidth, ...rest }) => {
             <SidebarAdmin
                 {...{
                     open,
-                    handleDrawerClose
+                    handleDrawerOpen
                 }}
             />
             <main className={classes.content}>

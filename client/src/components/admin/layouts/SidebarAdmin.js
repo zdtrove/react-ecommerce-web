@@ -39,17 +39,9 @@ const useStyles = makeStyles(theme => ({
     disabled: {
         pointerEvents: 'none'
     },
-    drawerPaper: {
-        position: 'relative',
-        whiteSpace: 'nowrap',
-        width: drawerWidth,
-        transition: theme.transitions.create('width', {
-          easing: theme.transitions.easing.sharp,
-          duration: theme.transitions.duration.enteringScreen
-        })
-    },
     drawerPaperClose: {
         overflowX: 'hidden',
+        position: 'relative',
         transition: theme.transitions.create('width', {
             easing: theme.transitions.easing.sharp,
             duration: theme.transitions.duration.leavingScreen
@@ -58,6 +50,15 @@ const useStyles = makeStyles(theme => ({
         [theme.breakpoints.up('sm')]: {
             width: theme.spacing(9),
         }
+    },
+    drawerPaper: {
+        position: 'relative',
+        whiteSpace: 'nowrap',
+        width: drawerWidth,
+        transition: theme.transitions.create('width', {
+            easing: theme.transitions.easing.sharp,
+            duration: theme.transitions.duration.enteringScreen
+        })
     },
     toolbarIcon: {
         display: 'flex',
@@ -85,7 +86,7 @@ const sidebars = [
     { name: 'Categories', pathname: '/admin/categories', icon: <CategoryRoundedIcon />},
 ]
 
-const Sidebar = ({ open, handleDrawerClose }) => {
+const Sidebar = ({ open, handleDrawerOpen }) => {
     const classes = useStyles()
     const location = useLocation()
     const { pathname } = location
@@ -94,12 +95,12 @@ const Sidebar = ({ open, handleDrawerClose }) => {
         <Drawer
             variant="permanent"
             classes={{
-                paper: clsx(classes.drawerPaper, !open && classes.drawerPaperClose),
+                paper: clsx(classes.drawerPaperClose, !open && classes.drawerPaper),
             }}
             open={open}
         >
             <div className={classes.toolbarIcon}>
-                <IconButton onClick={handleDrawerClose}>
+                <IconButton onClick={handleDrawerOpen}>
                     <ChevronLeftIcon />
                 </IconButton>
             </div>
