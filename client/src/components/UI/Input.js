@@ -1,5 +1,5 @@
 import React from 'react'
-import { TextField, InputAdornment } from '@material-ui/core'
+import { TextField, InputAdornment, useTheme, useMediaQuery } from '@material-ui/core'
 
 const Input = ({
 	variant,
@@ -11,6 +11,9 @@ const Input = ({
 	endIcon,
 	...rest
 }) => {
+	const theme = useTheme()
+    const matches = useMediaQuery(theme.breakpoints.up('sm'))
+
 	const adornment = () => {
 		const result = {}
 		result.startAdornment = startIcon && <InputAdornment position="start">
@@ -22,12 +25,14 @@ const Input = ({
 
 		return { InputProps: result }
 	}
+
 	return (
 		<TextField
 			variant={variant || "outlined"}
 			fullWidth={fullWidth || true}
 			margin={margin || "normal"}
 			type={type || "text"}
+			size={matches ? "medium" : "small"}
 			{...((startIcon || endIcon) && adornment())}
 			{...(error && { error: true, helperText: error })}
 			{...rest}

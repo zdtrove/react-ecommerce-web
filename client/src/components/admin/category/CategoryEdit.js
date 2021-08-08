@@ -2,6 +2,8 @@ import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import {
 	makeStyles,
+    useTheme,
+    useMediaQuery,
     DialogContent,
     DialogActions,
     Fab
@@ -23,8 +25,11 @@ const useStyles = makeStyles(theme => ({
         },
         '& img': {
             border: '1px solid #ccc',
-            maxWidth: 200,
-            height: 'auto'
+            maxWidth: 130,
+            height: 'auto',
+            [theme.breakpoints.up('sm')]: {
+                maxWidth: 200
+            }
         }
     }
 }))
@@ -41,6 +46,8 @@ const CategoryEdit = ({
     categoryRecord
 }) => {
     const classes = useStyles()
+    const theme = useTheme();
+    const matches = useMediaQuery(theme.breakpoints.up('sm'));
     const dispatch = useDispatch()
     const { _id, name, parentId, image } = categoryRecord
     const [categoryImg, setCategoryImg] = useState('')
@@ -112,7 +119,7 @@ const CategoryEdit = ({
                         <Fab
                             color="secondary"
                             variant="extended"
-                            size="medium"
+                            size={matches ? "medium" : "small"}
                             component="span"
                         >
                             <AddIcon /> {image ? 'Change image' : 'Add image'}

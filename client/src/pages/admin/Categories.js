@@ -44,10 +44,18 @@ const useStyles = makeStyles(theme => ({
 	    	margin: theme.spacing(.25)
 	    },
 	    '& .MuiTreeItem-label:hover': {
-	    	borderRadius: 20
+	    	borderRadius: 20,
+            width: 'max-content',
+            padding: `0 ${theme.spacing(.5)}px`
 	    },
+        '& .MuiTreeItem-content': {
+            width: 'max-content'
+        },
 	    '& .MuiTreeItem-root.Mui-selected > .MuiTreeItem-content .MuiTreeItem-label': {
-      		borderRadius: 20
+      		borderRadius: 20,
+            backgroundColor: 'rgba(63, 81, 181, 0.08) !important',
+            width: 'max-content',
+            padding: `0 ${theme.spacing(.5)}px`
     	},
     	'& .MuiButton-containedSizeSmall': {
     		padding: 2,
@@ -90,7 +98,7 @@ const useStyles = makeStyles(theme => ({
     labelRoot: {
     	display: 'flex',
     	alignItems: 'center',
-    	padding: theme.spacing(.5),
+    	padding: `${theme.spacing(.25)}px ${theme.spacing(.5)}px`,
     	margin: theme.spacing(.5)
     },
     labelIcon: {
@@ -103,6 +111,8 @@ const useStyles = makeStyles(theme => ({
 	labelText: {
 	    fontWeight: 'inherit',
 	    flexGrow: 1,
+        marginRight: theme.spacing(2),
+        width: 'max-content'
 	},
 	btnHover: {
 		opacity: 0.3,
