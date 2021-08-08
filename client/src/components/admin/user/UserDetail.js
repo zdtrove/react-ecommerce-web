@@ -1,35 +1,15 @@
 import React from 'react'
 import {
 	makeStyles,
-    Dialog,
-    DialogTitle,
     DialogContent,
     DialogContentText,
-    Typography,
-    IconButton
+    Typography
 } from '@material-ui/core'
-import CloseIcon from '@material-ui/icons/Close';
-import { Button } from '../../../components/UI'
+import { Button, Dialog } from '../../../components/UI'
 
 const useStyles = makeStyles(theme => ({
-    root: {
-        minWidth: 500,
-        maxHeight: 500,
-        "& .MuiDialogContent-root::-webkit-scrollbar": {
-            display: 'none'
-        }
-    },
     marginBtn: {
         margin: theme.spacing(.5)
-    },
-    closeButton: {
-        position: 'absolute',
-        right: theme.spacing(1),
-        top: theme.spacing(1),
-        color: theme.palette.grey[500],
-    },
-    input: {
-        width: '100%'
     }
 }))
 
@@ -42,16 +22,11 @@ const UserDetail = ({
     const { fullname, email, phone, city, gender, payments, role } = userRecord
 
     return <>
-        <Dialog
-            classes={{ paper: classes.root }}
-            open={showUserDetail}
+        <Dialog 
+            show={showUserDetail}
+            setShow={setShowUserDetail}
+            title="USER DETAIL"
         >
-            <DialogTitle>
-                USER DETAIL
-                <IconButton aria-label="close" className={classes.closeButton} onClick={() => setShowUserDetail(false)}>
-                    <CloseIcon />
-                </IconButton>
-            </DialogTitle>
             <DialogContent dividers>
                 <Typography variant="h6">Full Name</Typography>
                 <DialogContentText>{fullname}</DialogContentText>

@@ -2,38 +2,17 @@ import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import {
 	makeStyles,
-    Dialog,
-    DialogTitle,
     DialogContent,
     DialogActions,
-    IconButton,
     Fab
 } from '@material-ui/core'
-import CloseIcon from '@material-ui/icons/Close';
 import AddIcon from '@material-ui/icons/Add';
-import { Input, Select, Button } from '../../../components/UI'
+import { Input, Select, Button, Dialog } from '../../../components/UI'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
 import { addCategory } from '../../../redux/actions/category.action';
 
 const useStyles = makeStyles(theme => ({
-    root: {
-        minWidth: 500,
-        maxWidth: 500,
-        maxHeight: 500,
-        "& .MuiDialogContent-root::-webkit-scrollbar": {
-            display: 'none'
-        }
-    },
-    marginBtn: {
-        margin: theme.spacing(.5)
-    },
-    closeButton: {
-        position: 'absolute',
-        right: theme.spacing(1),
-        top: theme.spacing(1),
-        color: theme.palette.grey[500],
-    },
     upload: {
         display: 'flex',
         alignItems: 'center',
@@ -104,15 +83,10 @@ const CategoryAdd = ({
     }
 
     return <Dialog
-        classes={{ paper: classes.root }}
-        open={showCategoryAdd}
+        show={showCategoryAdd}
+        setShow={setShowCategoryAdd}
+        title="CATEGORY ADD"
     >
-        <DialogTitle>
-            CATEGORY ADD
-            <IconButton aria-label="close" className={classes.closeButton} onClick={() => setShowCategoryAdd(false)}>
-                <CloseIcon />
-            </IconButton>
-        </DialogTitle>
         <DialogContent dividers>
             <form onSubmit={formik.handleSubmit}>
                 <Input

@@ -25,18 +25,23 @@ const useStyles = makeStyles(theme => ({
     root: {
         display: 'flex',
         padding: 0,
-        maxWidth: '100%'
+        maxWidth: '100%',
+        '& .MuiAppBar-root::-webkit-scrollbar': {
+            display: 'none'
+        }
     },
     title: {
         flexGrow: 1,
-        textDecoration: 'none'
+        textDecoration: 'none',
+        minWidth: 200
     },
     appBar: {
         zIndex: theme.zIndex.drawer + 1,
         transition: theme.transitions.create(['width', 'margin'], {
             easing: theme.transitions.easing.sharp,
             duration: theme.transitions.duration.leavingScreen
-        })
+        }),
+        overflow: 'scroll'
     },
     appBarShift: {
         marginLeft: drawerWidth,

@@ -2,8 +2,6 @@ import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import {
 	makeStyles,
-    Dialog,
-    DialogTitle,
     DialogContent,
     DialogActions,
     IconButton,
@@ -11,8 +9,7 @@ import {
     Zoom,
     Tooltip
 } from '@material-ui/core'
-import CloseIcon from '@material-ui/icons/Close';
-import { Input, RadioGroup, Select, Checkboxes, Button } from '../../../components/UI'
+import { Input, RadioGroup, Select, Checkboxes, Button, Dialog } from '../../../components/UI'
 import { userConst } from '../../../constants'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
@@ -27,22 +24,8 @@ import EmailRoundedIcon from '@material-ui/icons/EmailRounded';
 const { GENDER, CITY, PAYMENT_METHODS, ROLES } = userConst
 
 const useStyles = makeStyles(theme => ({
-    root: {
-        minWidth: 500,
-        maxWidth: 500,
-        maxHeight: 500,
-        "& .MuiDialogContent-root::-webkit-scrollbar": {
-            display: 'none'
-        }
-    },
-    marginBtn: {
-        margin: theme.spacing(.5)
-    },
-    closeButton: {
-        position: 'absolute',
-        right: theme.spacing(1),
-        top: theme.spacing(1),
-        color: theme.palette.grey[500],
+    tooltip: {
+        margin: '7px 0'
     }
 }))
 
@@ -123,15 +106,10 @@ const UserAdd = ({
     }
 
     return <Dialog
-            classes={{ paper: classes.root }}
-            open={showUserAdd}
+            show={showUserAdd}
+            setShow={setShowUserAdd}
+            title="USER EDIT"
         >
-            <DialogTitle>
-                USER EDIT
-                <IconButton aria-label="close" className={classes.closeButton} onClick={() => setShowUserAdd(false)}>
-                    <CloseIcon />
-                </IconButton>
-            </DialogTitle>
             <DialogContent dividers>
                 <form onSubmit={formik.handleSubmit}>
                     <Input

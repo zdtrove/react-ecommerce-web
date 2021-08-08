@@ -8,7 +8,6 @@ import {
 	Card, 
 	Typography, 
 	Toolbar,
-	Dialog,
 	DialogContent,
 	DialogContentText,
 	DialogActions
@@ -19,7 +18,7 @@ import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import AddIcon from '@material-ui/icons/Add';
 import TreeItem from '@material-ui/lab/TreeItem';
 import CategoryRoundedIcon from '@material-ui/icons/CategoryRounded';
-import { Button } from '../../components/UI'
+import { Button, Dialog } from '../../components/UI'
 import CategoryEdit from '../../components/admin/category/CategoryEdit'
 import CategoryAdd from '../../components/admin/category/CategoryAdd'
 import { userRoles } from '../../constants'
@@ -27,6 +26,15 @@ import { userRoles } from '../../constants'
 const { ADMIN } = userRoles
 
 const useStyles = makeStyles(theme => ({
+    root: {
+        '& .MuiPaper-root::-webkit-scrollbar': {
+            display: 'none'
+        }
+    },
+    rootTree: {
+        minWidth: 240,
+        overflow: 'scroll'
+    },
   	treeview: {
 	    height: 'max-content',
 	    padding: theme.spacing(2),
@@ -51,11 +59,20 @@ const useStyles = makeStyles(theme => ({
     		display: 'block'
     	},
 		'& .MuiTreeItem-group': {
-			marginLeft: theme.spacing(5)
+			marginLeft: theme.spacing(2.5),
+            [theme.breakpoints.up('sm')]: {
+                marginLeft: theme.spacing(5)
+            }
 		}
   	},
+    rootHeader: {
+        minWidth: 240
+    },
     header: {
-        padding: theme.spacing(4),
+        padding: theme.spacing(2),
+        [theme.breakpoints.up('sm')]: {
+            padding: theme.spacing(4)
+        },
         display: 'flex',
         marginBottom: theme.spacing(3)
     },
@@ -167,67 +184,73 @@ const Categories = () => {
 
     return (
         <LayoutAdmin>
-        	<Paper>
-                <div className={classes.header}>
-                    <Card className={classes.headerIcon}>
-                        <CategoryRoundedIcon />
-                    </Card>
-                    <div className={classes.headerTitle}>
-                        <Typography variant="h6" component="div">Categories</Typography>
-                        <Typography variant="subtitle2" component="div">List Categories</Typography>
+        	<div className={classes.root}>
+                <Paper className={classes.rootHeader}>
+                    <div className={classes.header}>
+                        <Card className={classes.headerIcon}>
+                            <CategoryRoundedIcon />
+                        </Card>
+                        <div className={classes.headerTitle}>
+                            <Typography variant="h6" component="div">Categories</Typography>
+                            <Typography variant="subtitle2" component="div">List Categories</Typography>
+                        </div>
                     </div>
-                </div>
-            </Paper>
-            <Paper>
-				<Toolbar>
-					<Button
-						onClick={() => setShowCategoryAdd(true)}
-						variant="outlined"
-						startIcon={<AddIcon />}
-						className={classes.newButton}
-						text="ADD NEW"
-					/>
-				</Toolbar>
-            	<TreeView
-			      	className={classes.treeview}
-			      	defaultCollapseIcon={<ExpandMoreIcon />}
-			      	defaultExpandIcon={<ChevronRightIcon />}
-			      	expanded={expanded}
-				    selected={selected}
-				    onNodeToggle={handleToggle}
-				    onNodeSelect={handleSelect}
-			    >
-			      	{categories.length > 0 && renderTree(categories)}
-			    </TreeView>
-            </Paper>
-            {showCategoryEdit && (
-                <CategoryEdit
-                    {...{
-                        categories,
-                        categoryRecord,
-                        showCategoryEdit,
-                        setShowCategoryEdit
-                    }}
-                />
-            )}
-			{showCategoryAdd && (
-                <CategoryAdd
-                    {...{
-                        categories,
-                        showCategoryAdd,
-                        setShowCategoryAdd
-                    }}
-                />
-            )}
-			{showCategoryDelete && <Dialog open={showCategoryDelete}>
-                <DialogContent>
-                    <DialogContentText>Are you sure to delete <strong>{categoryRecord.name}</strong>?</DialogContentText>
-                </DialogContent>
-                <DialogActions className={classes.dialogActions}>
-                    <Button onClick={() => handleDelete(categoryRecord._id)} color="secondary" text="DELETE" />
-                    <Button onClick={() => setShowCategoryDelete(false)} color="default" text="CANCEL" />
-                </DialogActions>
-            </Dialog>}
+                </Paper>
+                <Paper className={classes.rootTree}>
+                    <Toolbar>
+                        <Button
+                            onClick={() => setShowCategoryAdd(true)}
+                            variant="outlined"
+                            startIcon={<AddIcon />}
+                            className={classes.newButton}
+                            text="ADD NEW"
+                        />
+                    </Toolbar>
+                    <TreeView
+                        className={classes.treeview}
+                        defaultCollapseIcon={<ExpandMoreIcon />}
+                        defaultExpandIcon={<ChevronRightIcon />}
+                        expanded={expanded}
+                        selected={selected}
+                        onNodeToggle={handleToggle}
+                        onNodeSelect={handleSelect}
+                    >
+                        {categories.length > 0 && renderTree(categories)}
+                    </TreeView>
+                </Paper>
+                {showCategoryEdit && (
+                    <CategoryEdit
+                        {...{
+                            categories,
+                            categoryRecord,
+                            showCategoryEdit,
+                            setShowCategoryEdit
+                        }}
+                    />
+                )}
+                {showCategoryAdd && (
+                    <CategoryAdd
+                        {...{
+                            categories,
+                            showCategoryAdd,
+                            setShowCategoryAdd
+                        }}
+                    />
+                )}
+                {showCategoryDelete && <Dialog 
+                    show={showCategoryDelete}
+                    setShow={setShowCategoryDelete}
+                    title="DELETE CATEGORY"
+                >
+                    <DialogContent>
+                        <DialogContentText>Are you sure to delete <strong>{categoryRecord.name}</strong>?</DialogContentText>
+                    </DialogContent>
+                    <DialogActions className={classes.dialogActions}>
+                        <Button onClick={() => handleDelete(categoryRecord._id)} color="secondary" text="DELETE" />
+                        <Button onClick={() => setShowCategoryDelete(false)} color="default" text="CANCEL" />
+                    </DialogActions>
+                </Dialog>}
+            </div>
         </LayoutAdmin>
     )
 }

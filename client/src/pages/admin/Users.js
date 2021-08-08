@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import LayoutAdmin from '../../components/admin/layouts/LayoutAdmin'
-import { Input, Button } from '../../components/UI'
+import { Input, Button, Dialog } from '../../components/UI'
 import { getUsers, deleteUser } from '../../redux/actions/user.action'
 import {
 	makeStyles,
@@ -17,7 +17,6 @@ import {
     Card,
     Typography,
     Toolbar,
-    Dialog,
     DialogContent,
     DialogContentText,
     DialogActions,
@@ -35,8 +34,14 @@ import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
 import LastPageIcon from '@material-ui/icons/LastPage';
 
 const useStyles = makeStyles(theme => ({
+    rootHeader: {
+        minWidth: 240
+    },
     header: {
-        padding: theme.spacing(4),
+        padding: theme.spacing(2),
+        [theme.breakpoints.up('sm')]: {
+            padding: theme.spacing(4)
+        },
         display: 'flex',
         marginBottom: theme.spacing(3)
     },
@@ -54,15 +59,34 @@ const useStyles = makeStyles(theme => ({
 	marginBtn: {
 		margin: theme.spacing(.5)
 	},
-    searchInput: {
-        width: '75%'
+    rootTable: {
+        minWidth: 240
     },
-    newButton: {
-        position: 'absolute',
-        right: '10px'
-    },
-    dialogActions: {
-        justifyContent: "center"
+    tableAction: {
+        display: 'flex',
+        justifyContent: 'space-between',
+        padding: theme.spacing(2),
+        flexDirection: 'column',
+        alignItems: 'baseline',
+        [theme.breakpoints.up('sm')]: {
+            flexDirection: 'row',
+            alignItems: 'center',
+        },
+        '& .MuiButtonBase-root': {
+            minWidth: 110,
+            padding: 5,
+            marginLeft: 0,
+            [theme.breakpoints.up('sm')]: {
+                padding: theme.spacing(1)
+            }
+        },
+        '& .MuiFormControl-root': {
+            maxWidth: 300
+        },
+        '& .MuiInputBase-input': {
+            padding: 11,
+            paddingLeft: 0
+        }
     }
 }))
 
@@ -171,7 +195,7 @@ const Users = () => {
 
     return (
         <LayoutAdmin>
-            <Paper>
+            <Paper className={classes.rootHeader}>
                 <div className={classes.header}>
                     <Card className={classes.headerIcon}>
                         <PeopleOutlineTwoToneIcon />
@@ -182,20 +206,19 @@ const Users = () => {
                     </div>
                 </div>
             </Paper>
-            <Paper>
+            <Paper className={classes.rootTable}>
                 {allUsers && <TableContainer>
-                    <Toolbar>
+                    <Toolbar className={classes.tableAction}>
                         <Input
                             label="Search Users"
-                            className={classes.searchInput}
                             startIcon={<SearchIcon />}
                             onChange={handleSearch}
+                            margin="none"
                         />
                         <Button
                             onClick={() => setShowUserAdd(true)}
                             variant="outlined"
                             startIcon={<AddIcon />}
-                            className={classes.newButton}
                             text="ADD NEW"
                         />
                     </Toolbar>
@@ -273,11 +296,15 @@ const Users = () => {
                 setShowUserEdit,
                 userRecord
             }} />}
-            {showUserDelete && <Dialog open={showUserDelete}>
+            {showUserDelete && <Dialog 
+                show={showUserDelete}
+                setShow={setShowUserDelete}
+                title="DELETE USER"
+            >
                 <DialogContent>
                     <DialogContentText>Are you sure to delete <strong>{userRecord.fullname}</strong>?</DialogContentText>
                 </DialogContent>
-                <DialogActions className={classes.dialogActions}>
+                <DialogActions>
                     <Button onClick={() => handleDeleteUser(userRecord._id)} color="secondary" text="DELETE" />
                     <Button onClick={() => setShowUserDelete(false)} color="default" text="CANCEL" />
                 </DialogActions>

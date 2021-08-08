@@ -76,7 +76,10 @@ const useStyles = makeStyles(theme => ({
         },
         '& .MuiListItemIcon-root': {
             justifyContent: 'center',
-            minWidth: 72
+            minWidth: 56,
+            [theme.breakpoints.up('sm')]: {
+                width: theme.spacing(9),
+            }
         }
     }
 }))
