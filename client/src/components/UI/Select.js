@@ -9,6 +9,23 @@ import {
 } from '@material-ui/core'
 
 const useStyles = makeStyles(theme => ({
+    root: {
+        '& .MuiSelect-root': {
+            padding: `${theme.spacing(1.3)}px ${theme.spacing(1.8)}px`,
+            [theme.breakpoints.up('sm')]: {
+                padding: `${theme.spacing(2.25)}px ${theme.spacing(1.8)}px`
+            }
+        },
+        '& .MuiInputLabel-outlined': {
+            transform: `translate(9px, 13px) scale(1)`,
+            [theme.breakpoints.up('sm')]: {
+                transform: `translate(14px, 20px) scale(1)`
+            }
+        },
+        '& .MuiInputLabel-outlined.MuiInputLabel-shrink': {
+            transform: `translate(14px, -6px) scale(0.75)`
+        }
+    },
     paddingLv2: {
         paddingLeft: 50
     },
@@ -38,6 +55,7 @@ const Select = ({
             fullWidth
             variant="outlined"
             {...(error && { error: true })}
+            className={classes.root}
         >
             <InputLabel>{label}</InputLabel>
             <MuiSelect

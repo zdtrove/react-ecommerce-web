@@ -30,7 +30,7 @@ const Input = ({
 		<TextField
 			variant={variant || "outlined"}
 			fullWidth={fullWidth || true}
-			margin={margin || "normal"}
+			margin={margin ? margin : (matches ? "normal" : "dense")}
 			type={type || "text"}
 			size={matches ? "medium" : "small"}
 			{...((startIcon || endIcon) && adornment())}
