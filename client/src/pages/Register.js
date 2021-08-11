@@ -279,8 +279,17 @@ const Register = () => {
 								{...formik.getFieldProps('agree')}
 							/>
 	            			<div className={classes.buttons}>
-	            				<Button disabled={!(formik.isValid && formik.dirty)} type="submit" text="REGISTER" />
-	            				<Button onClick={() => formik.resetForm()} color="secondary" text="RESET" />
+	            				<Button 
+	            					disabled={!(formik.isValid && formik.dirty)} 
+	            					type="submit" 
+	            					text="REGISTER" 
+	            				/>
+	            				<Button 
+	            					disabled={!formik.dirty} 
+	            					onClick={() => formik.resetForm()} 
+	            					color="secondary" 
+	            					text="RESET" 
+	            				/>
 	            			</div>
 	            		</Grid>
 	            	</Grid>

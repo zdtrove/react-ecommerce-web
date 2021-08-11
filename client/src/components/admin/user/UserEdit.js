@@ -128,8 +128,17 @@ const UserEdit = ({
             </form>
         </DialogContent>
         <DialogActions>
-            <Button disabled={!(formik.isValid && formik.dirty)} onClick={() => formik.submitForm()} text="SAVE" />
-            <Button onClick={() => formik.resetForm()} color="secondary" text="RESET" />
+            <Button 
+                disabled={!(formik.isValid && formik.dirty)} 
+                onClick={() => formik.submitForm()} 
+                text="SAVE" 
+            />
+            <Button
+                disabled={!formik.dirty}
+                onClick={() => formik.resetForm()} 
+                color="secondary" 
+                text="RESET" 
+            />
         </DialogActions>
     </Dialog>
 }

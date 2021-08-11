@@ -135,12 +135,21 @@ const CategoryAdd = ({
             </form>
         </DialogContent>
         <DialogActions>
-            <Button disabled={!(formik.isValid && formik.dirty)} onClick={() => formik.submitForm()} text="ADD" />
-            <Button onClick={() => {
-                formik.resetForm()
-                setCategoryImg('')
-                setCategoryImgReset('')
-            }} color="secondary" text="RESET" />
+            <Button 
+                disabled={!(formik.isValid && formik.dirty)} 
+                onClick={() => formik.submitForm()} 
+                text="ADD" 
+            />
+            <Button 
+                disabled={!formik.dirty} 
+                onClick={() => {
+                    formik.resetForm()
+                    setCategoryImg('')
+                    setCategoryImgReset('')
+                }} 
+                color="secondary" 
+                text="RESET" 
+            />
         </DialogActions>
     </Dialog>
 }
