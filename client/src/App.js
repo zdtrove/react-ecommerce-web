@@ -16,6 +16,7 @@ import { getLoggedUser } from './redux/actions/auth.action'
 
 function App() {
   const dispatch = useDispatch()
+  console.log('app');
 
   useEffect(() => {
     dispatch(getLoggedUser())
