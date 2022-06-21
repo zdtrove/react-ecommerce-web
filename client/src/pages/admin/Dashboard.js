@@ -1,12 +1,8 @@
-import React from 'react'
-import LayoutAdmin from 'components/admin/layouts/LayoutAdmin'
+import React from 'react';
+import LayoutAdmin from 'components/admin/layouts/LayoutAdmin';
 
 const Dashboard = () => {
-    return (
-        <LayoutAdmin>
-        	
-        </LayoutAdmin>
-    )
-}
+  return <LayoutAdmin></LayoutAdmin>;
+};
 
-export default Dashboard
+export default Dashboard;

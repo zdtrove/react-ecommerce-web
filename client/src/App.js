@@ -1,7 +1,7 @@
-import { useEffect } from 'react'
-import { useDispatch } from 'react-redux'
+import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 import 'App.css';
-import { BrowserRouter as Router, Switch, Route} from 'react-router-dom'
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import Login from 'pages/Login';
 import LoginAdmin from 'pages/admin/Login';
 import CategoriesAdmin from 'pages/admin/Categories';
@@ -9,19 +9,19 @@ import UsersAdmin from 'pages/admin/Users';
 import NotFound from 'pages/NotFound';
 import Home from 'pages/Home';
 import Register from 'pages/Register';
-import { Snackbar, Backdrop } from 'components/UI'
+import { Snackbar, Backdrop } from 'components/UI';
 import Dashboard from 'pages/admin/Dashboard';
 import PrivateRoute from 'components/PrivateRoute';
-import { getLoggedUser } from 'redux/actions/auth.action'
+import { getLoggedUser } from 'redux/actions/auth.action';
 import { ROUTES } from 'constants';
 
 function App() {
-  const dispatch = useDispatch()
-  console.log('app--update');
+  const dispatch = useDispatch();
+  console.log(`Latest update: ${new Date('2022-06-21')}`);
 
   useEffect(() => {
-    dispatch(getLoggedUser())
-  }, [dispatch])
+    dispatch(getLoggedUser());
+  }, [dispatch]);
 
   return (
     <Router>

@@ -1,22 +1,22 @@
-import { productTypes } from 'redux/types'
+import { productTypes } from 'redux/types';
 
-const { GET_PRODUCTS } = productTypes
+const { GET_PRODUCTS } = productTypes;
 
 const initialState = {
-	products: []
-}
+  products: []
+};
 
 const productReducer = (state = initialState, { type, payload }) => {
-	switch (type) {
-		case GET_PRODUCTS: {
-			return {
-				...state,
-				products: payload.products
-			}
-		}
-		default:
-			return state
-	}
-}
+  switch (type) {
+    case GET_PRODUCTS: {
+      return {
+        ...state,
+        products: payload.products
+      };
+    }
+    default:
+      return state;
+  }
+};
 
-export default productReducer
+export default productReducer;
