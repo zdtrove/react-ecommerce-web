@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
-import Layout from '../components/layouts/Layout'
+import Layout from 'components/layouts/Layout'
 import {
 	makeStyles,
 	Toolbar,
@@ -15,7 +15,7 @@ import {
 	Avatar
 } from '@material-ui/core'
 import { green } from '@material-ui/core/colors'
-import { Input, RadioGroup, Select, Checkbox, Checkboxes, Button } from '../components/UI'
+import { Input, RadioGroup, Select, Checkbox, Checkboxes, Button } from 'components/UI'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
 import AccountCircleRoundedIcon from '@material-ui/icons/AccountCircleRounded';
@@ -24,8 +24,8 @@ import PhoneAndroidRoundedIcon from '@material-ui/icons/PhoneAndroidRounded';
 import LockRoundedIcon from '@material-ui/icons/LockRounded';
 import VisibilityRoundedIcon from '@material-ui/icons/VisibilityRounded';
 import VisibilityOffRoundedIcon from '@material-ui/icons/VisibilityOffRounded';
-import { register } from '../redux/actions/auth.action'
-import { userConst } from '../constants'
+import { register } from 'redux/actions/auth.action'
+import { userConst } from 'constants'
 
 const { GENDER, CITY, PAYMENT_METHODS } = userConst
 

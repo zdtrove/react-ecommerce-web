@@ -1,4 +1,4 @@
-import { categoryTypes } from '../types'
+import { categoryTypes } from 'redux/types'
 
 const { GET_CATEGORIES } = categoryTypes
 

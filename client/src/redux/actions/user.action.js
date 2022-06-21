@@ -1,11 +1,12 @@
-import axios from '../../utils/axios'
-import { userTypes } from '../../redux/types'
+import axios from 'utils/axios'
+import { userTypes } from 'redux/types'
+import { ENDPOINTS } from 'constants'
 
 const { GET_USERS, ADD_USER, UPDATE_USER, DELETE_USER } = userTypes
 
 export const getUsers = () => async dispatch => {
 	try {
-		const res = await axios.get('/api/users')
+		const res = await axios.get(ENDPOINTS.users.getAll)
 		const { status, data } = res
 		if (status === 200) {
 			dispatch({ type: GET_USERS, payload: data })
@@ -16,7 +17,7 @@ export const getUsers = () => async dispatch => {
 
 export const addUser = user => async dispatch => {
 	try {
-		const res = await axios.post('/api/users', user)
+		const res = await axios.post(ENDPOINTS.users.getAll, user)
 		const { status, data } = res
 		if (status === 201) {
 			dispatch({ type: ADD_USER, payload: data })
@@ -28,7 +29,7 @@ export const addUser = user => async dispatch => {
 
 export const updateUser = user => async dispatch => {
 	try {
-		const res = await axios.patch(`/api/user/${user._id}`, user)
+		const res = await axios.patch(`${ENDPOINTS.users.getOne}/${user._id}`, user)
 		const { status, data } = res
 		if (status === 200) {
 			dispatch({ type: UPDATE_USER, payload: data })
@@ -38,7 +39,7 @@ export const updateUser = user => async dispatch => {
 
 export const deleteUser = id => async dispatch => {
 	try {
-		const res = await axios.delete(`/api/user/${id}`)
+		const res = await axios.delete(`${ENDPOINTS.users.getOne}/${id}`)
 		const { status, data } = res
 		if (status === 200) {
 			dispatch({ type: DELETE_USER, payload: data })

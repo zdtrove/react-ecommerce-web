@@ -13,9 +13,9 @@ import {
     Menu as MenuIcon
 } from '@material-ui/icons'
 import { Link } from 'react-router-dom'
-import { logout } from '../../redux/actions/auth.action'
+import { logout } from 'redux/actions/auth.action'
 import { useHistory } from 'react-router-dom'
-import { Button } from '../../components/UI'
+import { Button } from 'components/UI'
 
 const useStyles = makeStyles(theme => ({
     title: {

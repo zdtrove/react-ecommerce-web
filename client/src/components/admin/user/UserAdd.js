@@ -9,11 +9,11 @@ import {
     Zoom,
     Tooltip
 } from '@material-ui/core'
-import { Input, RadioGroup, Select, Checkboxes, Button, Dialog } from '../../../components/UI'
-import { userConst } from '../../../constants'
+import { Input, RadioGroup, Select, Checkboxes, Button, Dialog } from 'components/UI'
+import { userConst } from 'constants'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
-import { addUser } from '../../../redux/actions/user.action'
+import { addUser } from 'redux/actions/user.action'
 import AccountCircleRoundedIcon from '@material-ui/icons/AccountCircleRounded';
 import PhoneAndroidRoundedIcon from '@material-ui/icons/PhoneAndroidRounded';
 import LockRoundedIcon from '@material-ui/icons/LockRounded';

@@ -9,10 +9,10 @@ import {
     Fab
 } from '@material-ui/core'
 import AddIcon from '@material-ui/icons/Add';
-import { Input, Select, Button, Dialog } from '../../../components/UI'
+import { Input, Select, Button, Dialog } from 'components/UI'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
-import { updateCategory } from '../../../redux/actions/category.action';
+import { updateCategory } from 'redux/actions/category.action';
 
 const useStyles = makeStyles(theme => ({
     upload: {

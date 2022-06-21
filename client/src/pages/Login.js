@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useHistory } from 'react-router-dom'
-import Layout from '../components/layouts/Layout'
+import Layout from 'components/layouts/Layout'
 import {
 	makeStyles,
 	Toolbar,
@@ -16,14 +16,15 @@ import {
 	Avatar
 } from '@material-ui/core'
 import { green } from '@material-ui/core/colors'
-import { Input, Button } from '../components/UI'
+import { Input, Button } from 'components/UI'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
 import EmailRoundedIcon from '@material-ui/icons/EmailRounded';
 import LockRoundedIcon from '@material-ui/icons/LockRounded';
 import VisibilityRoundedIcon from '@material-ui/icons/VisibilityRounded';
 import VisibilityOffRoundedIcon from '@material-ui/icons/VisibilityOffRounded';
-import { login } from '../redux/actions/auth.action'
+import { login } from 'redux/actions/auth.action'
+import { ROUTES } from 'constants'
 
 const initialValues = {
 	email: '',
@@ -102,7 +103,7 @@ const Login = () => {
 	}
 
 	useEffect(() => {
-		if (auth.isAuthenticated) history.push('/')
+		if (auth.isAuthenticated) history.push(ROUTES.home.index)
 	}, [auth.isAuthenticated, history])
 
     return (

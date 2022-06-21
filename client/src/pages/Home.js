@@ -1,9 +1,9 @@
 import React from 'react'
 import { useDispatch } from 'react-redux'
-import { getUsers } from '../redux/actions/user.action'
-import { getCategories } from '../redux/actions/category.action'
+import { getUsers } from 'redux/actions/user.action'
+import { getCategories } from 'redux/actions/category.action'
 import { Toolbar, Button } from '@material-ui/core'
-import Layout from '../components/layouts/Layout'
+import Layout from 'components/layouts/Layout'
 
 const Home = () => {
 	const dispatch = useDispatch()

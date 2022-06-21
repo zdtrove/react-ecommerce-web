@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import LayoutAdmin from '../../components/admin/layouts/LayoutAdmin'
-import { Input, Button, Dialog } from '../../components/UI'
-import { getUsers, deleteUser } from '../../redux/actions/user.action'
+import LayoutAdmin from 'components/admin/layouts/LayoutAdmin'
+import { Input, Button, Dialog } from 'components/UI'
+import { getUsers, deleteUser } from 'redux/actions/user.action'
 import {
 	makeStyles,
     useTheme,
@@ -25,9 +25,9 @@ import {
 import PeopleOutlineTwoToneIcon from '@material-ui/icons/PeopleOutlineTwoTone'
 import AddIcon from '@material-ui/icons/Add'
 import SearchIcon from '@material-ui/icons/Search'
-import UserDetail from '../../components/admin/user/UserDetail'
-import UserEdit from '../../components/admin/user/UserEdit'
-import UserAdd from '../../components/admin/user/UserAdd'
+import UserDetail from 'components/admin/user/UserDetail'
+import UserEdit from 'components/admin/user/UserEdit'
+import UserAdd from 'components/admin/user/UserAdd'
 import FirstPageIcon from '@material-ui/icons/FirstPage';
 import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
 import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';

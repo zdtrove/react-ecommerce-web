@@ -1,4 +1,4 @@
-import { userTypes } from '../types'
+import { userTypes } from 'redux/types'
 
 const { GET_USERS, ADD_USER, UPDATE_USER, DELETE_USER } = userTypes
 

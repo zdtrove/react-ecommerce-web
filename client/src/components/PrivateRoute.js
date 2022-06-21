@@ -1,6 +1,6 @@
 import React from 'react'
 import { Route, Redirect } from 'react-router-dom'
-import { jwtConst, userRoles } from '../constants'
+import { jwtConst, userRoles } from 'constants'
 import jwtDecode from 'jwt-decode'
 
 const { ACCESS_TOKEN } = jwtConst

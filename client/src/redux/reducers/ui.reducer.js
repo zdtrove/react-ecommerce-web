@@ -1,4 +1,4 @@
-import { uiTypes } from '../types'
+import { uiTypes } from 'redux/types'
 
 const initialState = {
 	snackbar: {

@@ -1,5 +1,5 @@
 import axios from './axios'
-import { uploadConst } from '../constants'
+import { uploadConst } from 'constants'
 
 const { CLOUDINARY_URL, CLOUDINARY_UPLOAD_PRESET } = uploadConst
 

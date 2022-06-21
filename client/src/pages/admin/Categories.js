@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import LayoutAdmin from '../../components/admin/layouts/LayoutAdmin'
-import { deleteCategory, getCategories } from '../../redux/actions/category.action'
+import LayoutAdmin from 'components/admin/layouts/LayoutAdmin'
+import { deleteCategory, getCategories } from 'redux/actions/category.action'
 import { 
 	makeStyles, 
 	Paper, 
@@ -18,10 +18,10 @@ import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import AddIcon from '@material-ui/icons/Add';
 import TreeItem from '@material-ui/lab/TreeItem';
 import CategoryRoundedIcon from '@material-ui/icons/CategoryRounded';
-import { Button, Dialog } from '../../components/UI'
-import CategoryEdit from '../../components/admin/category/CategoryEdit'
-import CategoryAdd from '../../components/admin/category/CategoryAdd'
-import { userRoles } from '../../constants'
+import { Button, Dialog } from 'components/UI'
+import CategoryEdit from 'components/admin/category/CategoryEdit'
+import CategoryAdd from 'components/admin/category/CategoryAdd'
+import { userRoles } from 'constants'
 
 const { ADMIN } = userRoles
 

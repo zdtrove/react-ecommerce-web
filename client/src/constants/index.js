@@ -25,3 +25,35 @@ export const uploadConst = {
 	CLOUDINARY_URL: 'https://api.cloudinary.com/v1_1/dj7zmqrth/upload',
 	CLOUDINARY_UPLOAD_PRESET: 'uyg8yabv'
 }
+
+export const ROUTES = {
+	home: {
+		index: '/',
+		login: '/login',
+		register: '/register',
+	},
+	admin: {
+		index: '/admin',
+		login: '/admin/login',
+		categories: '/admin/categories',
+		users: '/admin/users'
+	},
+}
+
+export const ENDPOINTS = {
+	auth: {
+		register: '/api/auth/register',
+		login: '/api/auth/login',
+		getLoggedUser: '/api/auth/get_logged_user',
+		refreshToken: '/api/auth/refresh_token',
+		logout: '/api/auth/logout',
+	},
+	users: {
+		getAll: '/api/users',
+		getOne: '/api/user',
+	},
+	categories: {
+		getAll: '/api/categories',
+		getOne: '/api/category',
+	},
+}

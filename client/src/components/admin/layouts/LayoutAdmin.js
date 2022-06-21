@@ -13,10 +13,10 @@ import {
 import {
     Menu as MenuIcon
 } from '@material-ui/icons'
-import { logout } from '../../../redux/actions/auth.action'
-import { userRoles } from '../../../constants'
+import { logout } from 'redux/actions/auth.action'
+import { userRoles } from 'constants'
 import SidebarAdmin from './SidebarAdmin'
-import { Button } from '../../../components/UI'
+import { Button } from 'components/UI'
 import clsx from 'clsx'
 
 const drawerWidth = 240;

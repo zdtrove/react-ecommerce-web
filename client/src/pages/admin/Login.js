@@ -16,15 +16,15 @@ import {
     Container
 } from '@material-ui/core'
 import { green } from '@material-ui/core/colors'
-import { Input, Button } from '../../components/UI'
+import { Input, Button } from 'components/UI'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
 import EmailRoundedIcon from '@material-ui/icons/EmailRounded';
 import LockRoundedIcon from '@material-ui/icons/LockRounded';
 import VisibilityRoundedIcon from '@material-ui/icons/VisibilityRounded';
 import VisibilityOffRoundedIcon from '@material-ui/icons/VisibilityOffRounded';
-import { login } from '../../redux/actions/auth.action'
-import { userRoles } from '../../constants'
+import { login } from 'redux/actions/auth.action'
+import { ROUTES, userRoles } from 'constants'
 
 const { ADMIN } = userRoles
 
@@ -105,7 +105,7 @@ const Login = () => {
 	}
 
 	useEffect(() => {
-		if (auth.isAuthenticated && auth.user?.role === ADMIN) history.push('/admin')
+		if (auth.isAuthenticated && auth.user?.role === ADMIN) history.push(ROUTES.admin.index)
 	}, [auth.isAuthenticated, auth.user?.role, history])
 
     return (

@@ -1,8 +1,8 @@
 import axiosPackage from 'axios'
-import store from '../redux/store'
-import { uiTypes, authTypes } from '../redux/types'
-import { snackbar, userRoles, jwtConst, uploadConst } from '../constants'
-import { refreshToken } from '../redux/actions/auth.action'
+import store from 'redux/store'
+import { uiTypes, authTypes } from 'redux/types'
+import { snackbar, userRoles, jwtConst, uploadConst } from 'constants'
+import { refreshToken } from 'redux/actions/auth.action'
 
 const { LOGOUT_SUCCESS } = authTypes
 const { SHOW_SNACKBAR, SHOW_BACKDROP, HIDE_BACKDROP } = uiTypes

@@ -1,4 +1,4 @@
-import { productTypes } from '../types'
+import { productTypes } from 'redux/types'
 
 const { GET_PRODUCTS } = productTypes
 

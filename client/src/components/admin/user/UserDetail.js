@@ -5,7 +5,7 @@ import {
     DialogContentText,
     Typography
 } from '@material-ui/core'
-import { Button, Dialog } from '../../../components/UI'
+import { Button, Dialog } from 'components/UI'
 
 const useStyles = makeStyles(theme => ({
     marginBtn: {
