@@ -34,8 +34,7 @@ const Snackbar = () => {
         vertical: 'top',
         horizontal: 'right'
       }}
-      onClose={handleClose}
-    >
+      onClose={handleClose}>
       <Alert severity={status} onClose={handleClose}>
         {message}
       </Alert>

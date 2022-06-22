@@ -150,8 +150,7 @@ const Login = () => {
                         TransitionComponent={Zoom}
                         arrow
                         title={`${showPass ? 'Hide Password' : 'Show Password'}`}
-                        placement="top"
-                      >
+                        placement="top">
                         <IconButton size="medium">
                           {showPass ? <VisibilityOffRoundedIcon /> : <VisibilityRoundedIcon />}
                         </IconButton>

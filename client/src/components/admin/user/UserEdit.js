@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
 import { DialogContent, DialogActions } from '@material-ui/core';
 import { Input, RadioGroup, Select, Checkboxes, Button, Dialog } from 'components/UI';
@@ -121,6 +122,21 @@ const UserEdit = ({ showUserEdit, setShowUserEdit, userRecord }) => {
       </DialogActions>
     </Dialog>
   );
+};
+
+UserEdit.propTypes = {
+  showUserEdit: PropTypes.bool,
+  setShowUserEdit: PropTypes.bool,
+  userRecord: PropTypes.shape({
+    _id: PropTypes.number,
+    email: PropTypes.string,
+    fullname: PropTypes.string,
+    phone: PropTypes.string,
+    gender: PropTypes.string,
+    city: PropTypes.string,
+    payments: PropTypes.array,
+    role: PropTypes.string
+  })
 };
 
 export default UserEdit;

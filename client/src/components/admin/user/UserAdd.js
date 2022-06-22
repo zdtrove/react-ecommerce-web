@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
 import {
   makeStyles,
@@ -23,7 +24,7 @@ import EmailRoundedIcon from '@material-ui/icons/EmailRounded';
 
 const { GENDER, CITY, PAYMENT_METHODS, ROLES } = userConst;
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   tooltip: {
     margin: '7px 0'
   }
@@ -177,8 +178,7 @@ const UserAdd = ({ showUserAdd, setShowUserAdd }) => {
                     TransitionComponent={Zoom}
                     arrow
                     title={`${showPass ? 'Hide Password' : 'Show Password'}`}
-                    placement="top"
-                  >
+                    placement="top">
                     <IconButton size="medium">
                       {showPass ? <VisibilityOffRoundedIcon /> : <VisibilityRoundedIcon />}
                     </IconButton>
@@ -207,8 +207,7 @@ const UserAdd = ({ showUserAdd, setShowUserAdd }) => {
                     TransitionComponent={Zoom}
                     arrow
                     title={`${showPassCf ? 'Hide Password' : 'Show Password'}`}
-                    placement="top"
-                  >
+                    placement="top">
                     <IconButton size="medium">
                       {showPassCf ? <VisibilityOffRoundedIcon /> : <VisibilityRoundedIcon />}
                     </IconButton>
@@ -234,6 +233,11 @@ const UserAdd = ({ showUserAdd, setShowUserAdd }) => {
       </DialogActions>
     </Dialog>
   );
+};
+
+UserAdd.propTypes = {
+  showUserAdd: PropTypes.bool,
+  setShowUserAdd: PropTypes.bool
 };
 
 export default UserAdd;

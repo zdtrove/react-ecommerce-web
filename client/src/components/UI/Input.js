@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { TextField, InputAdornment, useTheme, useMediaQuery } from '@material-ui/core';
 
 const Input = ({ variant, fullWidth, margin, type, error, startIcon, endIcon, ...rest }) => {
@@ -27,6 +28,17 @@ const Input = ({ variant, fullWidth, margin, type, error, startIcon, endIcon, ..
       {...rest}
     />
   );
+};
+
+Input.propTypes = {
+  variant: PropTypes.string,
+  fullWidth: PropTypes.bool,
+  margin: PropTypes.string,
+  type: PropTypes.string,
+  size: PropTypes.string,
+  error: PropTypes.bool,
+  startIcon: PropTypes.element,
+  endIcon: PropTypes.element
 };
 
 export default Input;

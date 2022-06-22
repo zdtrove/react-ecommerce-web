@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   makeStyles,
@@ -16,14 +17,14 @@ import { useHistory } from 'react-router-dom';
 import { Button } from 'components/UI';
 import { ROUTES } from 'constants';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   title: {
     flexGrow: 1,
     textDecoration: 'none'
   }
 }));
 
-const Layout = ({ children, maxWidth, ...rest }) => {
+const Layout = ({ children, maxWidth }) => {
   const classes = useStyles();
   const { auth } = useSelector((state) => state);
   const dispatch = useDispatch();
@@ -76,8 +77,7 @@ const Layout = ({ children, maxWidth, ...rest }) => {
             color="inherit"
             className={classes.title}
             to={ROUTES.admin.index}
-            component={Link}
-          >
+            component={Link}>
             Go to Admin
           </Typography>
           {renderAuthBtn()}
@@ -86,6 +86,11 @@ const Layout = ({ children, maxWidth, ...rest }) => {
       {children}
     </Container>
   );
+};
+
+Layout.propTypes = {
+  children: PropTypes.node,
+  maxWidth: PropTypes.number
 };
 
 export default Layout;

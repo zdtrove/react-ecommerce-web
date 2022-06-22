@@ -12,7 +12,9 @@ export const getUsers = () => async (dispatch) => {
       dispatch({ type: GET_USERS, payload: data });
       return data.users;
     }
-  } catch (err) {}
+  } catch (err) {
+    console.log(err);
+  }
 };
 
 export const addUser = (user) => async (dispatch) => {
@@ -22,7 +24,9 @@ export const addUser = (user) => async (dispatch) => {
     if (status === 201) {
       dispatch({ type: ADD_USER, payload: data });
     }
-  } catch (err) {}
+  } catch (err) {
+    console.log(err);
+  }
 };
 
 export const updateUser = (user) => async (dispatch) => {
@@ -32,7 +36,9 @@ export const updateUser = (user) => async (dispatch) => {
     if (status === 200) {
       dispatch({ type: UPDATE_USER, payload: data });
     }
-  } catch (err) {}
+  } catch (err) {
+    console.log(err);
+  }
 };
 
 export const deleteUser = (id) => async (dispatch) => {
@@ -42,5 +48,7 @@ export const deleteUser = (id) => async (dispatch) => {
     if (status === 200) {
       dispatch({ type: DELETE_USER, payload: data });
     }
-  } catch (err) {}
+  } catch (err) {
+    console.log(err);
+  }
 };

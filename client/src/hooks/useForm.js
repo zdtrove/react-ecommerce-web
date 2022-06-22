@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 
 export const useForm = (initialValues) => {
   const [values, setValues] = useState(initialValues);
@@ -29,4 +30,8 @@ export const Form = ({ children, ...rest }) => {
       {children}
     </form>
   );
+};
+
+Form.propTypes = {
+  children: PropTypes.node
 };

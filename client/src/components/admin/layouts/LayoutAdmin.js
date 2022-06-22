@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
 import { useHistory, Link } from 'react-router-dom';
 import {
@@ -64,7 +65,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const LayoutAdmin = ({ children, maxWidth, ...rest }) => {
+const LayoutAdmin = ({ children }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const history = useHistory();
@@ -94,8 +95,7 @@ const LayoutAdmin = ({ children, maxWidth, ...rest }) => {
           <IconButton
             color="inherit"
             className={clsx(!open && classes.menuButtonHidden)}
-            onClick={handleDrawerClose}
-          >
+            onClick={handleDrawerClose}>
             <MenuIcon />
           </IconButton>
           <Typography
@@ -103,8 +103,7 @@ const LayoutAdmin = ({ children, maxWidth, ...rest }) => {
             color="inherit"
             className={classes.title}
             to="/"
-            component={Link}
-          >
+            component={Link}>
             Go to website
           </Typography>
           <Button
@@ -129,6 +128,10 @@ const LayoutAdmin = ({ children, maxWidth, ...rest }) => {
       </main>
     </Container>
   );
+};
+
+LayoutAdmin.propTypes = {
+  children: PropTypes.node
 };
 
 export default LayoutAdmin;

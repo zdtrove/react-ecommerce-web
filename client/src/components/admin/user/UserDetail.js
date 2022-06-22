@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { makeStyles, DialogContent, DialogContentText, Typography } from '@material-ui/core';
 import { Button, Dialog } from 'components/UI';
 
@@ -38,6 +39,20 @@ const UserDetail = ({ showUserDetail, setShowUserDetail, userRecord }) => {
       </Dialog>
     </>
   );
+};
+
+UserDetail.propTypes = {
+  showUserDetail: PropTypes.bool,
+  setShowUserDetail: PropTypes.bool,
+  userRecord: PropTypes.shape({
+    fullname: PropTypes.string,
+    email: PropTypes.string,
+    phone: PropTypes.string,
+    city: PropTypes.string,
+    gender: PropTypes.string,
+    payments: PropTypes.array,
+    role: PropTypes.string
+  })
 };
 
 export default UserDetail;

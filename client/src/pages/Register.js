@@ -218,8 +218,7 @@ const Register = () => {
                         TransitionComponent={Zoom}
                         arrow
                         title={`${showPass ? 'Hide Password' : 'Show Password'}`}
-                        placement="top"
-                      >
+                        placement="top">
                         <IconButton size="medium">
                           {showPass ? <VisibilityOffRoundedIcon /> : <VisibilityRoundedIcon />}
                         </IconButton>
@@ -248,8 +247,7 @@ const Register = () => {
                         TransitionComponent={Zoom}
                         arrow
                         title={`${showPassCf ? 'Hide Password' : 'Show Password'}`}
-                        placement="top"
-                      >
+                        placement="top">
                         <IconButton size="medium">
                           {showPassCf ? <VisibilityOffRoundedIcon /> : <VisibilityRoundedIcon />}
                         </IconButton>

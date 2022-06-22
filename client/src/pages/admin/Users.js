@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import LayoutAdmin from 'components/admin/layouts/LayoutAdmin';
 import { Input, Button, Dialog } from 'components/UI';
@@ -123,8 +124,7 @@ const TablePaginationActions = (props) => {
       <IconButton
         onClick={handleFirstPageButtonClick}
         disabled={page === 0}
-        aria-label="first page"
-      >
+        aria-label="first page">
         {theme.direction === 'rtl' ? <LastPageIcon /> : <FirstPageIcon />}
       </IconButton>
       <IconButton onClick={handleBackButtonClick} disabled={page === 0} aria-label="previous page">
@@ -133,19 +133,24 @@ const TablePaginationActions = (props) => {
       <IconButton
         onClick={handleNextButtonClick}
         disabled={page >= Math.ceil(count / rowsPerPage) - 1}
-        aria-label="next page"
-      >
+        aria-label="next page">
         {theme.direction === 'rtl' ? <KeyboardArrowLeft /> : <KeyboardArrowRight />}
       </IconButton>
       <IconButton
         onClick={handleLastPageButtonClick}
         disabled={page >= Math.ceil(count / rowsPerPage) - 1}
-        aria-label="last page"
-      >
+        aria-label="last page">
         {theme.direction === 'rtl' ? <FirstPageIcon /> : <LastPageIcon />}
       </IconButton>
     </div>
   );
+};
+
+TablePaginationActions.propTypes = {
+  count: PropTypes.number,
+  page: PropTypes.number,
+  rowsPerPage: PropTypes.number,
+  onPageChange: PropTypes.func
 };
 
 const Users = () => {

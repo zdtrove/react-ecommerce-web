@@ -7,13 +7,16 @@ const { AUTH, LOGOUT_SUCCESS, REFRESH_TOKEN } = authTypes;
 const { USER } = userRoles;
 const { ACCESS_TOKEN } = jwtConst;
 
-export const register = (user) => async (dispatch) => {
+export const register = (user) => async () => {
   try {
     const res = await axios.post(ENDPOINTS.auth.register, user);
     const { status } = res;
     if (status === 201) {
+      console.log(status);
     }
-  } catch (err) {}
+  } catch (err) {
+    console.log(err);
+  }
 };
 
 export const login = (user) => async (dispatch) => {
@@ -24,7 +27,9 @@ export const login = (user) => async (dispatch) => {
       dispatch({ type: AUTH, payload: data });
       localStorage.setItem(ACCESS_TOKEN, `Bearer ${data.accessToken}`);
     }
-  } catch (err) {}
+  } catch (err) {
+    console.log(err);
+  }
 };
 
 export const getLoggedUser = () => async (dispatch) => {
@@ -39,7 +44,9 @@ export const getLoggedUser = () => async (dispatch) => {
         dispatch({ type: AUTH, payload: data });
       }
     }
-  } catch (err) {}
+  } catch (err) {
+    console.log(err);
+  }
 };
 
 export const refreshToken = () => async (dispatch) => {
@@ -57,7 +64,9 @@ export const refreshToken = () => async (dispatch) => {
         localStorage.setItem(ACCESS_TOKEN, `Bearer ${data.accessToken}`);
       }
     }
-  } catch (err) {}
+  } catch (err) {
+    console.log(err);
+  }
 };
 
 export const logout =
@@ -77,5 +86,7 @@ export const logout =
           history.push(ROUTES.admin.login);
         }
       }
-    } catch (err) {}
+    } catch (err) {
+      console.log(err);
+    }
   };

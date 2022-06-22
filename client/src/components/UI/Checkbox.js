@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import {
   FormControl,
   FormControlLabel,
@@ -13,6 +14,11 @@ const Checkbox = ({ label, error, ...rest }) => {
       <FormHelperText>{error}</FormHelperText>
     </FormControl>
   );
+};
+
+Checkbox.propTypes = {
+  label: PropTypes.string,
+  error: PropTypes.string
 };
 
 export default Checkbox;

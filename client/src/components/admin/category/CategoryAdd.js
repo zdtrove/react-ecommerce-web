@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
 import {
   makeStyles,
@@ -109,8 +110,7 @@ const CategoryAdd = ({ categories, showCategoryAdd, setShowCategoryAdd }) => {
                 color="secondary"
                 variant="extended"
                 size={matches ? 'medium' : 'small'}
-                component="span"
-              >
+                component="span">
                 <AddIcon /> Add image
               </Fab>
             </label>
@@ -155,6 +155,19 @@ const CategoryAdd = ({ categories, showCategoryAdd, setShowCategoryAdd }) => {
       </DialogActions>
     </Dialog>
   );
+};
+
+CategoryAdd.propTypes = {
+  categories: PropTypes.arrayOf(
+    PropTypes.shape({
+      _id: PropTypes.number,
+      name: PropTypes.string,
+      parentId: PropTypes.number,
+      image: PropTypes.string
+    })
+  ),
+  showCategoryAdd: PropTypes.bool,
+  setShowCategoryAdd: PropTypes.bool
 };
 
 export default CategoryAdd;

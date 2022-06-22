@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import {
   FormGroup,
   FormControl,
@@ -27,6 +28,14 @@ const Checkboxes = ({ label, name, items, formikValue, error, ...rest }) => {
       <FormHelperText>{error}</FormHelperText>
     </FormControl>
   );
+};
+
+Checkboxes.propTypes = {
+  label: PropTypes.string,
+  name: PropTypes.string,
+  items: PropTypes.arrayOf(PropTypes.string),
+  formikValue: PropTypes.arrayOf(PropTypes.string),
+  error: PropTypes.string
 };
 
 export default Checkboxes;

@@ -189,8 +189,7 @@ const Categories = () => {
                 </>
               )}
             </div>
-          }
-        >
+          }>
           {Array.isArray(category.children) && category.children.length > 0
             ? renderTree(category.children)
             : null}
@@ -240,8 +239,7 @@ const Categories = () => {
             expanded={expanded}
             selected={selected}
             onNodeToggle={handleToggle}
-            onNodeSelect={handleSelect}
-          >
+            onNodeSelect={handleSelect}>
             {categories.length > 0 && renderTree(categories)}
           </TreeView>
         </Paper>

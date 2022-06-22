@@ -12,7 +12,9 @@ export const getCategories = (role) => async (dispatch) => {
     if (status === 200) {
       dispatch({ type: GET_CATEGORIES, payload: data });
     }
-  } catch (err) {}
+  } catch (err) {
+    console.log(err);
+  }
 };
 
 export const addCategory = (category) => async (dispatch) => {
@@ -23,7 +25,9 @@ export const addCategory = (category) => async (dispatch) => {
     if (res.status === 201) {
       dispatch(getCategories());
     }
-  } catch (err) {}
+  } catch (err) {
+    console.log(err);
+  }
 };
 
 export const updateCategory = (category) => async (dispatch) => {
@@ -34,7 +38,9 @@ export const updateCategory = (category) => async (dispatch) => {
     if (res.status === 200) {
       dispatch(getCategories());
     }
-  } catch (err) {}
+  } catch (err) {
+    console.log(err);
+  }
 };
 
 export const deleteCategory = (id) => async (dispatch) => {
@@ -43,5 +49,7 @@ export const deleteCategory = (id) => async (dispatch) => {
     if (res.status === 200) {
       dispatch(getCategories());
     }
-  } catch (err) {}
+  } catch (err) {
+    console.log(err);
+  }
 };

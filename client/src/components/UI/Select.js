@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import {
   makeStyles,
   FormControl,
@@ -49,8 +50,7 @@ const Select = ({ label, error, items, isObject, ...rest }) => {
       fullWidth
       variant="outlined"
       {...(error && { error: true })}
-      className={classes.root}
-    >
+      className={classes.root}>
       <InputLabel>{label}</InputLabel>
       <MuiSelect label={label} {...rest}>
         {isObject
@@ -77,6 +77,19 @@ const Select = ({ label, error, items, isObject, ...rest }) => {
       {error && <FormHelperText>{error}</FormHelperText>}
     </FormControl>
   );
+};
+
+Select.propTypes = {
+  label: PropTypes.string,
+  error: PropTypes.bool,
+  items: PropTypes.arrayOf(
+    PropTypes.shape({
+      level: PropTypes.string,
+      name: PropTypes.string,
+      id: PropTypes.number
+    })
+  ),
+  isObject: PropTypes.bool
 };
 
 export default Select;

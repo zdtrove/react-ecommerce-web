@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import {
   FormControl,
   FormLabel,
@@ -24,6 +25,11 @@ const RadioGroup = ({ label, items, ...rest }) => {
       </MuiRadioGroup>
     </FormControl>
   );
+};
+
+RadioGroup.propTypes = {
+  label: PropTypes.string,
+  items: PropTypes.arrayOf(PropTypes.string)
 };
 
 export default RadioGroup;

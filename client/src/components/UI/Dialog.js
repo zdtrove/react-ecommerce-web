@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { makeStyles, Dialog, DialogTitle, IconButton } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
 
@@ -27,7 +28,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const MuiDialog = ({ show, setShow, title, children, ...rest }) => {
+const MuiDialog = ({ show, setShow, title, children }) => {
   const classes = useStyles();
 
   return (
@@ -41,6 +42,13 @@ const MuiDialog = ({ show, setShow, title, children, ...rest }) => {
       {children}
     </Dialog>
   );
+};
+
+MuiDialog.propTypes = {
+  show: PropTypes.bool,
+  setShow: PropTypes.bool,
+  title: PropTypes.string,
+  children: PropTypes.node
 };
 
 export default MuiDialog;

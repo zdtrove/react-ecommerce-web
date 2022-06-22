@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
 import {
   makeStyles,
@@ -71,7 +72,7 @@ const CategoryEdit = ({ categories, showCategoryEdit, setShowCategoryEdit, categ
 
   const createCategoryList = (categories, options = [], level = 1) => {
     categories &&
-      categories.forEach((cat, index, array) => {
+      categories.forEach((cat) => {
         if (cat._id !== _id) {
           options.push({
             name: cat.name,
@@ -112,8 +113,7 @@ const CategoryEdit = ({ categories, showCategoryEdit, setShowCategoryEdit, categ
                 color="secondary"
                 variant="extended"
                 size={matches ? 'medium' : 'small'}
-                component="span"
-              >
+                component="span">
                 <AddIcon /> {image ? 'Change image' : 'Add image'}
               </Fab>
             </label>
@@ -157,6 +157,25 @@ const CategoryEdit = ({ categories, showCategoryEdit, setShowCategoryEdit, categ
       </DialogActions>
     </Dialog>
   );
+};
+
+CategoryEdit.propTypes = {
+  categories: PropTypes.arrayOf(
+    PropTypes.shape({
+      _id: PropTypes.number,
+      name: PropTypes.string,
+      parentId: PropTypes.number,
+      image: PropTypes.string
+    })
+  ),
+  showCategoryEdit: PropTypes.bool,
+  setShowCategoryEdit: PropTypes.bool,
+  categoryRecord: PropTypes.shape({
+    _id: PropTypes.number,
+    name: PropTypes.string,
+    parentId: PropTypes.number,
+    image: PropTypes.string
+  })
 };
 
 export default CategoryEdit;

@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import {
   makeStyles,
   Paper,
@@ -100,8 +101,7 @@ const Sidebar = ({ open, handleDrawerOpen }) => {
       classes={{
         paper: clsx(classes.drawerPaperClose, !open && classes.drawerPaper)
       }}
-      open={open}
-    >
+      open={open}>
       <div className={classes.toolbarIcon}>
         <IconButton onClick={handleDrawerOpen}>
           <ChevronLeftIcon />
@@ -121,8 +121,7 @@ const Sidebar = ({ open, handleDrawerOpen }) => {
               button
               component={Link}
               to={sidebar.pathname}
-              disableGutters
-            >
+              disableGutters>
               <ListItemIcon>{sidebar.icon}</ListItemIcon>
               <ListItemText primary={sidebar.name} />
             </ListItem>
@@ -131,6 +130,11 @@ const Sidebar = ({ open, handleDrawerOpen }) => {
       </Paper>
     </Drawer>
   );
+};
+
+Sidebar.propTypes = {
+  open: PropTypes.bool,
+  handleDrawerOpen: PropTypes.func
 };
 
 export default Sidebar;
