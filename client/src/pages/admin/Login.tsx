@@ -106,8 +106,8 @@ const Login = () => {
   };
 
   useEffect(() => {
-    if (auth.isAuthenticated && auth.user?.role === ADMIN) history.push(ROUTES.admin.index);
-  }, [auth.isAuthenticated, auth.user?.role, history]);
+    if (auth.isLoggedIn && auth.user?.role === ADMIN) history.push(ROUTES.admin.index);
+  }, [auth.isLoggedIn, auth.user?.role, history]);
 
   return (
     <Container maxWidth="sm">

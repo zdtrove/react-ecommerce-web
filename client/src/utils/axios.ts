@@ -1,5 +1,5 @@
 import axiosPackage from 'axios';
-import store from 'redux/store';
+import { store } from 'redux/store';
 import { uiTypes, authTypes } from 'redux/types';
 import { snackbar, userRoles, jwtConst, uploadConst } from 'constants/index';
 // import { refreshToken } from 'redux/actions/auth.action';
@@ -16,7 +16,6 @@ const axios = axiosPackage.create({});
 
 axios.interceptors.request.use(
   function (config) {
-    console.log(config);
     if (config.url !== CLOUDINARY_URL) {
       Object.assign(config.headers, {
         Authorization: localStorage.getItem(ACCESS_TOKEN)
@@ -51,7 +50,6 @@ axios.interceptors.response.use(
   },
   async function (error) {
     const { data, config } = error.response;
-    console.log(error.response);
     if (data.name === JWT_INVALID) {
       store.dispatch({ type: LOGOUT_SUCCESS, payload: null });
       localStorage.removeItem(ACCESS_TOKEN);

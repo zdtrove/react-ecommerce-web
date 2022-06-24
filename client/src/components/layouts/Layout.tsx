@@ -35,7 +35,7 @@ const Layout = ({ children }: LayoutProps) => {
   const history = useHistory();
 
   const renderAuthBtn = () => {
-    return auth.isAuthenticated ? (
+    return auth.isLoggedIn ? (
       <Button
         variant="text"
         size="medium"
@@ -60,7 +60,7 @@ const Layout = ({ children }: LayoutProps) => {
           size="medium"
           disableRipple
           color="inherit"
-          to={ROUTES.home.register}
+          to={ROUTES.home.signUp}
           component={Link}
           text="REGISTER"
         />

@@ -1,5 +1,4 @@
 import { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
 import 'App.css';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import Login from 'pages/Login';
@@ -8,15 +7,16 @@ import CategoriesAdmin from 'pages/admin/Categories';
 import UsersAdmin from 'pages/admin/Users';
 import NotFound from 'pages/NotFound';
 import Home from 'pages/Home';
-import Register from 'pages/Register';
-import { Snackbar, Backdrop } from 'components/UI';
+import Register from 'pages/Signup';
+// import { Snackbar, Backdrop } from 'components/UI';
 import Dashboard from 'pages/admin/Dashboard';
 import PrivateRoute from 'components/PrivateRoute';
 import { getLoggedUser } from 'redux/actions/auth.action';
 import { ROUTES } from 'constants/index';
+import { useAppDispatch } from 'redux/hook';
 
 function App() {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   console.log(`Latest update: ${new Date('2022-06-21')}`);
 
   useEffect(() => {
@@ -29,7 +29,7 @@ function App() {
         {/* User */}
         <PrivateRoute exact path={ROUTES.home.index} component={Home} />
         <Route path={ROUTES.home.login} component={Login} />
-        <Route path={ROUTES.home.register} component={Register} />
+        <Route path={ROUTES.home.signUp} component={Register} />
         {/* Admin */}
         <PrivateRoute admin exact path={ROUTES.admin.index} component={Dashboard} />
         <PrivateRoute admin exact path={ROUTES.admin.categories} component={CategoriesAdmin} />
@@ -38,8 +38,8 @@ function App() {
         {/* Not Found */}
         <Route component={NotFound} />
       </Switch>
-      <Snackbar />
-      <Backdrop />
+      {/* <Snackbar />
+      <Backdrop /> */}
     </Router>
   );
 }

@@ -23,9 +23,9 @@ import EmailRoundedIcon from '@material-ui/icons/EmailRounded';
 import LockRoundedIcon from '@material-ui/icons/LockRounded';
 import VisibilityRoundedIcon from '@material-ui/icons/VisibilityRounded';
 import VisibilityOffRoundedIcon from '@material-ui/icons/VisibilityOffRounded';
-import { login } from 'redux/actions/auth.action';
 import { ROUTES } from 'constants/index';
 import { RootState } from 'redux/reducers/root.reducer';
+import { authActions } from 'redux/features/auth/authSlice';
 
 const initialValues = {
   email: '',
@@ -94,7 +94,7 @@ const Login = () => {
     initialValues,
     validationSchema,
     onSubmit: (values) => {
-      dispatch(login(values));
+      dispatch(authActions.login(values));
     }
   });
 
@@ -104,8 +104,8 @@ const Login = () => {
   };
 
   useEffect(() => {
-    if (auth.isAuthenticated) history.push(ROUTES.home.index);
-  }, [auth.isAuthenticated, history]);
+    if (auth.isLoggedIn) history.push(ROUTES.home.index);
+  }, [auth.isLoggedIn, history]);
 
   return (
     <Layout>

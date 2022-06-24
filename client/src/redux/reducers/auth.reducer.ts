@@ -3,7 +3,7 @@ import { authTypes } from 'redux/types';
 const { AUTH, LOGOUT_SUCCESS, REFRESH_TOKEN } = authTypes;
 
 const initialState = {
-  isAuthenticated: false,
+  isLoggedIn: false,
   user: null
 };
 
@@ -13,13 +13,13 @@ const authReducer = (state = initialState, { type, payload }: { type: string; pa
     case REFRESH_TOKEN:
       return {
         ...state,
-        isAuthenticated: true,
+        isLoggedIn: true,
         user: payload.user
       };
     case LOGOUT_SUCCESS:
       return {
         ...state,
-        isAuthenticated: false,
+        isLoggedIn: false,
         user: null
       };
     default:

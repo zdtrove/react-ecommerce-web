@@ -30,7 +30,7 @@ export const ROUTES = {
   home: {
     index: '/',
     login: '/login',
-    register: '/register'
+    signUp: '/sign-up'
   },
   admin: {
     index: '/admin',
@@ -42,7 +42,7 @@ export const ROUTES = {
 
 export const ENDPOINTS = {
   auth: {
-    register: '/api/auth/register',
+    signUp: '/api/auth/register',
     login: '/api/auth/login',
     getLoggedUser: '/api/auth/get_logged_user',
     refreshToken: '/api/auth/refresh_token',

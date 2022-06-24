@@ -99,7 +99,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const Register = () => {
+const SignUp = () => {
   const dispatch = useDispatch();
   const classes = useStyles();
   const [showPass, setShowPass] = useState(false);
@@ -246,7 +246,7 @@ const Register = () => {
                 {...formik.getFieldProps('agree')}
               />
               <div className={classes.buttons}>
-                <Button disabled={!(formik.isValid && formik.dirty)} text="REGISTER" />
+                <Button disabled={!(formik.isValid && formik.dirty)} text="SIGN UP" />
                 <Button
                   disabled={!formik.dirty}
                   onClick={() => formik.resetForm()}
@@ -262,4 +262,4 @@ const Register = () => {
   );
 };
 
-export default Register;
+export default SignUp;

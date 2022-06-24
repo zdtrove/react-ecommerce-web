@@ -10,7 +10,7 @@ const { ACCESS_TOKEN } = jwtConst;
 
 export const register = (data: any) => async () => {
   try {
-    const res = await axios.post(ENDPOINTS.auth.register, data);
+    const res = await axios.post(ENDPOINTS.auth.signUp, data);
     const { status } = res;
     if (status === 201) {
       console.log(status);
