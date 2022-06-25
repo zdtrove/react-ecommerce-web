@@ -11,16 +11,16 @@ import Register from 'pages/Signup';
 // import { Snackbar, Backdrop } from 'components/UI';
 import Dashboard from 'pages/admin/Dashboard';
 import PrivateRoute from 'components/PrivateRoute';
-import { getLoggedUser } from 'redux/actions/auth.action';
 import { ROUTES } from 'constants/index';
 import { useAppDispatch } from 'redux/hook';
+import { authActions } from 'redux/features/auth/authSlice';
 
 function App() {
   const dispatch = useAppDispatch();
-  console.log(`Latest update: ${new Date('2022-06-21')}`);
+  console.log(`Last Updated: ${new Date('2022-06-21')}`);
 
   useEffect(() => {
-    dispatch(getLoggedUser());
+    dispatch(authActions.getLoggedUser());
   }, [dispatch]);
 
   return (

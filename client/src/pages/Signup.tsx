@@ -24,7 +24,7 @@ import PhoneAndroidRoundedIcon from '@material-ui/icons/PhoneAndroidRounded';
 import LockRoundedIcon from '@material-ui/icons/LockRounded';
 import VisibilityRoundedIcon from '@material-ui/icons/VisibilityRounded';
 import VisibilityOffRoundedIcon from '@material-ui/icons/VisibilityOffRounded';
-import { register } from 'redux/actions/auth.action';
+import { authActions } from 'redux/features/auth/authSlice';
 import { userConst } from 'constants/index';
 
 const { GENDER, CITY, PAYMENT_METHODS } = userConst;
@@ -111,7 +111,7 @@ const SignUp = () => {
     initialValues,
     validationSchema,
     onSubmit: (values) => {
-      dispatch(register(values));
+      dispatch(authActions.signUp(values));
     }
   });
 
@@ -246,7 +246,11 @@ const SignUp = () => {
                 {...formik.getFieldProps('agree')}
               />
               <div className={classes.buttons}>
-                <Button disabled={!(formik.isValid && formik.dirty)} text="SIGN UP" />
+                <Button
+                  onClick={formik.handleSubmit}
+                  disabled={!(formik.isValid && formik.dirty)}
+                  text="SIGN UP"
+                />
                 <Button
                   disabled={!formik.dirty}
                   onClick={() => formik.resetForm()}

@@ -94,7 +94,7 @@ Select.propTypes = {
       level: PropTypes.string,
       name: PropTypes.string,
       id: PropTypes.number
-    })
+    }) || PropTypes.string
   ),
   isObject: PropTypes.bool
 };
