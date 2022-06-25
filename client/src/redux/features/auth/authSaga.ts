@@ -33,7 +33,7 @@ function* signUpSaga({ payload }: any): any {
 function* getLoggedUserSaga(): any {
   try {
     const res = yield call(getLoggedUserApi);
-    const { status, data } = res;
+    const { status, data } = res || {};
     if (status === 200) {
       yield put(authActions.getLoggedUserSuccess(data));
     }

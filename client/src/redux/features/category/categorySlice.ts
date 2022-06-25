@@ -2,12 +2,12 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 export interface CategoryState {
   categories: any[];
-  isLoading: boolean;
+  loading: boolean;
 }
 
 const initialState: CategoryState = {
   categories: [],
-  isLoading: false
+  loading: false
 };
 
 const categorySlice = createSlice({
@@ -15,11 +15,18 @@ const categorySlice = createSlice({
   initialState,
   reducers: {
     getCategories(state) {
-      state.isLoading = true;
+      state.loading = true;
     },
     getCategoriesSuccess(state, action: PayloadAction<any>) {
-      state.isLoading = false;
-      state.categories = action.payload;
+      state.loading = false;
+      state.categories = action.payload.categories;
+    },
+    // eslint-disable-next-line no-unused-vars
+    updateCategory(state, action: PayloadAction<any>) {
+      state.loading = true;
+    },
+    updateCategorySuccess(state) {
+      state.loading = false;
     }
   }
 });
@@ -29,7 +36,7 @@ export const categoryActions = categorySlice.actions;
 
 // Selectors
 export const selectCategories = (state: any) => state.category.categories;
-export const selectIsLoading = (state: any) => state.category.isLoading;
+export const selectLoadingCategory = (state: any) => state.category.loading;
 
 // Reducer
 const categoryReducer = categorySlice.reducer;

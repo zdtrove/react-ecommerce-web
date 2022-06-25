@@ -3,22 +3,14 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 export interface AuthState {
   isLoggedIn?: boolean;
-  isLogin?: boolean;
+  loading?: boolean;
   user?: User | null;
-  isSignUp?: boolean;
-  isGetLoggedUser?: boolean;
-  isRefreshToken?: boolean;
-  isLogout?: boolean;
 }
 
 const initialState: AuthState = {
-  isLogin: false,
+  loading: false,
   isLoggedIn: false,
-  user: null,
-  isSignUp: false,
-  isGetLoggedUser: false,
-  isRefreshToken: false,
-  isLogout: false
+  user: null
 };
 
 const authSlice = createSlice({
@@ -27,46 +19,46 @@ const authSlice = createSlice({
   reducers: {
     // eslint-disable-next-line no-unused-vars
     login(state, action: PayloadAction<any>) {
-      state.isLogin = true;
+      state.loading = true;
     },
     loginSuccess(state, action: PayloadAction<any>) {
       state.isLoggedIn = true;
-      state.isLogin = false;
+      state.loading = false;
       state.user = action.payload;
     },
     loginFail(state) {
-      state.isLogin = false;
+      state.loading = false;
     },
     getLoggedUser(state) {
-      state.isGetLoggedUser = true;
+      state.loading = true;
     },
     getLoggedUserSuccess(state, action: PayloadAction<any>) {
-      state.isGetLoggedUser = false;
+      state.loading = false;
       state.user = action.payload;
     },
     // eslint-disable-next-line no-unused-vars
     signUp(state, action: PayloadAction<any>) {
-      state.isSignUp = true;
+      state.loading = true;
     },
     signUpSuccess(state) {
-      state.isSignUp = false;
+      state.loading = false;
     },
     signUpFail(state) {
-      state.isSignUp = false;
+      state.loading = false;
     },
     refreshToken(state) {
-      state.isRefreshToken = true;
+      state.loading = true;
     },
     refreshTokenSuccess(state, action: PayloadAction<any>) {
-      state.isRefreshToken = false;
+      state.loading = false;
       state.isLoggedIn = true;
       state.user = action.payload;
     },
     logout(state) {
-      state.isLogout = true;
+      state.loading = true;
     },
     logoutSuccess(state) {
-      state.isLogout = false;
+      state.loading = false;
       state.isLoggedIn = false;
       state.user = null;
     }
@@ -78,7 +70,7 @@ export const authActions = authSlice.actions;
 
 // Selectors
 export const selectIsLoggedIn = (state: any) => state.auth.isLoggedIn;
-export const selectIsLogging = (state: any) => state.auth.logging;
+export const selectLoadingAuth = (state: any) => state.auth.loading;
 
 // Reducer
 const authReducer = authSlice.reducer;

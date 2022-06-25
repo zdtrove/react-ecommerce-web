@@ -1,9 +1,6 @@
 import { ENDPOINTS } from 'constants/index';
 import axios from 'utils/axios';
-import { categoryTypes } from 'redux/types';
 import { imageUpload } from 'utils/upload';
-
-const { GET_CATEGORIES } = categoryTypes;
 
 export const getCategoriesApi = async () => {
   try {

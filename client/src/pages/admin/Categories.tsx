@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
 import LayoutAdmin from 'components/admin/layouts/LayoutAdmin';
-import { deleteCategory, getCategories } from 'redux/actions/category.action';
+import { deleteCategory } from 'redux/actions/category.action';
 import {
   makeStyles,
   Paper,
@@ -21,7 +20,12 @@ import CategoryRoundedIcon from '@material-ui/icons/CategoryRounded';
 import { Button, Dialog } from 'components/UI';
 import CategoryEdit from 'components/admin/category/CategoryEdit';
 import CategoryAdd from 'components/admin/category/CategoryAdd';
-import { RootState } from 'redux/reducers/root.reducer';
+import {
+  categoryActions,
+  selectCategories,
+  selectLoadingCategory
+} from 'redux/features/category/categorySlice';
+import { useAppSelector, useAppDispatch } from 'redux/hook';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -126,9 +130,9 @@ const useStyles = makeStyles((theme) => ({
 
 const Categories = () => {
   const classes = useStyles();
-  const { category } = useSelector((state: RootState) => state);
-  const dispatch = useDispatch();
-  const { categories } = category;
+  const categories = useAppSelector(selectCategories);
+  const loading = useAppSelector(selectLoadingCategory);
+  const dispatch = useAppDispatch();
   const [selected, setSelected] = useState<string[]>([]);
   const [expanded, setExpanded] = useState<string[]>([]);
   const [showCategoryEdit, setShowCategoryEdit] = useState(false);
@@ -200,7 +204,7 @@ const Categories = () => {
   };
 
   useEffect(() => {
-    dispatch(getCategories());
+    dispatch(categoryActions.getCategories());
   }, [dispatch]);
 
   return (
@@ -221,6 +225,7 @@ const Categories = () => {
             </div>
           </div>
         </Paper>
+        {loading && <p>LOADING-----------------------</p>}
         <Paper className={classes.rootTree}>
           <Toolbar>
             <Button

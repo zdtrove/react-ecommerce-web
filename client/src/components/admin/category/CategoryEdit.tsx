@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import PropTypes from 'prop-types';
-import { useDispatch } from 'react-redux';
+import { useAppDispatch } from 'redux/hook';
 import {
   makeStyles,
   useTheme,
@@ -13,7 +13,7 @@ import AddIcon from '@material-ui/icons/Add';
 import { Input, Select, Button, Dialog } from 'components/UI';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import { updateCategory } from 'redux/actions/category.action';
+import { categoryActions } from 'redux/features/category/categorySlice';
 
 const useStyles = makeStyles((theme) => ({
   upload: {
@@ -56,7 +56,7 @@ const CategoryEdit = ({
   const classes = useStyles();
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.up('sm'));
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const { _id, name, parentId, image } = categoryRecord;
   const [categoryImg, setCategoryImg] = useState<Blob | MediaSource | null>(null);
   const [categoryImgReset, setCategoryImgReset] = useState('');
@@ -71,7 +71,7 @@ const CategoryEdit = ({
     initialValues,
     validationSchema,
     onSubmit: async (values) => {
-      await dispatch(updateCategory({ id: _id, ...values }));
+      await dispatch(categoryActions.updateCategory({ id: _id, ...values }));
       setShowCategoryEdit(false);
     }
   });
