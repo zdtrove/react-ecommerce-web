@@ -25,7 +25,7 @@ import VisibilityRoundedIcon from '@material-ui/icons/VisibilityRounded';
 import VisibilityOffRoundedIcon from '@material-ui/icons/VisibilityOffRounded';
 import { login } from 'redux/actions/auth.action';
 import { ROUTES, userRoles } from 'constants/index';
-import { RootState } from 'redux/reducers/root.reducer';
+import { AppState } from 'redux/reducers/root.reducer';
 
 const { ADMIN } = userRoles;
 
@@ -86,7 +86,7 @@ const useStyles = makeStyles((theme) => ({
 
 const Login = () => {
   const classes = useStyles();
-  const { auth } = useSelector((state: RootState) => state);
+  const { auth } = useSelector((state: AppState) => state);
   const dispatch = useDispatch();
   const history = useHistory();
   const [showPass, setShowPass] = useState(false);

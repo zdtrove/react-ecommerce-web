@@ -15,7 +15,7 @@ import { logout } from 'redux/actions/auth.action';
 import { useHistory } from 'react-router-dom';
 import { Button } from 'components/UI';
 import { ROUTES } from 'constants/index';
-import { RootState } from 'redux/reducers/root.reducer';
+import { AppState } from 'redux/reducers/root.reducer';
 
 const useStyles = makeStyles(() => ({
   title: {
@@ -30,7 +30,7 @@ type LayoutProps = {
 
 const Layout = ({ children }: LayoutProps) => {
   const classes = useStyles();
-  const { auth } = useSelector((state: RootState) => state);
+  const { auth } = useSelector((state: AppState) => state);
   const dispatch = useDispatch();
   const history = useHistory();
 

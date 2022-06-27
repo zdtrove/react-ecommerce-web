@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { useDispatch, useSelector } from 'react-redux';
+import { useAppDispatch, useAppSelector } from 'redux/hook';
 import LayoutAdmin from 'components/admin/layouts/LayoutAdmin';
 import { Input, Button, Dialog } from 'components/UI';
 import { deleteUser } from 'redux/actions/user.action';
@@ -33,8 +33,8 @@ import FirstPageIcon from '@material-ui/icons/FirstPage';
 import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
 import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
 import LastPageIcon from '@material-ui/icons/LastPage';
-import { RootState } from 'redux/reducers/root.reducer';
 import { User } from 'constants/types';
+import { userActions, selectUsers } from 'redux/features/user/userSlice';
 
 const useStyles = makeStyles((theme) => ({
   rootHeader: {
@@ -171,13 +171,11 @@ TablePaginationActions.propTypes = {
 };
 
 const Users = () => {
-  const { user } = useSelector((state: RootState) => state);
-  const { users } = user;
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const classes = useStyles();
+  const users = useAppSelector(selectUsers);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(3);
-  const [allUsers, setAllUsers] = useState<User[]>([]);
   const [showUserDetail, setShowUserDetail] = useState(false);
   const [showUserEdit, setShowUserEdit] = useState(false);
   const [showUserDelete, setShowUserDelete] = useState(false);
@@ -185,7 +183,7 @@ const Users = () => {
   const [userRecord, setUserRecord] = useState<User>({} as User);
 
   useEffect(() => {
-    // dispatch(getUsers()).then((users: User[]) => setAllUsers(users));
+    dispatch(userActions.getUsers());
   }, [dispatch]);
 
   const onPageChange = (e: unknown, nextPage: number) => {
@@ -198,16 +196,15 @@ const Users = () => {
   };
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { value } = e.target;
-    let usersFilter;
+    console.log(e);
+    // const { value } = e.target;
+    // let usersFilter;
 
-    if (value) {
-      usersFilter = allUsers.filter((user) => user.fullname.toLowerCase().includes(value));
-    } else {
-      usersFilter = users;
-    }
-
-    setAllUsers(usersFilter);
+    // if (value) {
+    //   usersFilter = users.filter((user: User) => user.fullname.toLowerCase().includes(value));
+    // } else {
+    //   usersFilter = users;
+    // }
   };
 
   const handleDeleteUser = async (id: string) => {
@@ -233,86 +230,84 @@ const Users = () => {
         </div>
       </Paper>
       <Paper className={classes.rootTable}>
-        {allUsers && (
-          <TableContainer>
-            <Toolbar className={classes.tableAction}>
-              <Input
-                label="Search Users"
-                startIcon={<SearchIcon />}
-                onChange={handleSearch}
-                margin="none"
-                value={''}
-              />
-              <Button
-                onClick={() => setShowUserAdd(true)}
-                variant="outlined"
-                startIcon={<AddIcon />}
-                text="ADD NEW"
-              />
-            </Toolbar>
-            <Table>
-              <TableHead>
-                <TableRow>
-                  <TableCell>Full Name</TableCell>
-                  <TableCell>Email</TableCell>
-                  <TableCell>Phone</TableCell>
-                  <TableCell>Role</TableCell>
-                  <TableCell>Actions</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {allUsers
-                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                  .map((user, idx) => (
-                    <TableRow key={idx}>
-                      <TableCell>{user.fullname}</TableCell>
-                      <TableCell>{user.email}</TableCell>
-                      <TableCell>{user.phone}</TableCell>
-                      <TableCell>{user.role}</TableCell>
-                      <TableCell>
-                        <Button
-                          onClick={() => {
-                            setUserRecord(user);
-                            setShowUserDetail(true);
-                          }}
-                          className={classes.marginBtn}
-                          text="DETAIL"
-                          color="default"
-                        />
-                        <Button
-                          onClick={() => {
-                            setUserRecord(user);
-                            setShowUserEdit(true);
-                          }}
-                          className={classes.marginBtn}
-                          text="EDIT"
-                        />
-                        <Button
-                          className={classes.marginBtn}
-                          color="secondary"
-                          text="DELETE"
-                          onClick={() => {
-                            setUserRecord(user);
-                            setShowUserDelete(true);
-                          }}
-                        />
-                      </TableCell>
-                    </TableRow>
-                  ))}
-              </TableBody>
-            </Table>
-            <TablePagination
-              rowsPerPageOptions={[3, 6, 10, 25, 50]}
-              component="div"
-              count={allUsers.length}
-              rowsPerPage={rowsPerPage}
-              page={page}
-              onPageChange={onPageChange}
-              onRowsPerPageChange={onRowsPerPageChange}
-              ActionsComponent={TablePaginationActions}
+        <TableContainer>
+          <Toolbar className={classes.tableAction}>
+            <Input
+              label="Search Users"
+              startIcon={<SearchIcon />}
+              onChange={handleSearch}
+              margin="none"
+              value={''}
             />
-          </TableContainer>
-        )}
+            <Button
+              onClick={() => setShowUserAdd(true)}
+              variant="outlined"
+              startIcon={<AddIcon />}
+              text="ADD NEW"
+            />
+          </Toolbar>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>Full Name</TableCell>
+                <TableCell>Email</TableCell>
+                <TableCell>Phone</TableCell>
+                <TableCell>Role</TableCell>
+                <TableCell>Actions</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {users
+                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                .map((user: User, idx: number) => (
+                  <TableRow key={idx}>
+                    <TableCell>{user.fullname}</TableCell>
+                    <TableCell>{user.email}</TableCell>
+                    <TableCell>{user.phone}</TableCell>
+                    <TableCell>{user.role}</TableCell>
+                    <TableCell>
+                      <Button
+                        onClick={() => {
+                          setUserRecord(user);
+                          setShowUserDetail(true);
+                        }}
+                        className={classes.marginBtn}
+                        text="DETAIL"
+                        color="default"
+                      />
+                      <Button
+                        onClick={() => {
+                          setUserRecord(user);
+                          setShowUserEdit(true);
+                        }}
+                        className={classes.marginBtn}
+                        text="EDIT"
+                      />
+                      <Button
+                        className={classes.marginBtn}
+                        color="secondary"
+                        text="DELETE"
+                        onClick={() => {
+                          setUserRecord(user);
+                          setShowUserDelete(true);
+                        }}
+                      />
+                    </TableCell>
+                  </TableRow>
+                ))}
+            </TableBody>
+          </Table>
+          <TablePagination
+            rowsPerPageOptions={[3, 6, 10, 25, 50]}
+            component="div"
+            count={users.length}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            onPageChange={onPageChange}
+            onRowsPerPageChange={onRowsPerPageChange}
+            ActionsComponent={TablePaginationActions}
+          />
+        </TableContainer>
       </Paper>
       {showUserAdd && (
         <UserAdd

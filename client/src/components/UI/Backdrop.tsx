@@ -1,6 +1,6 @@
-import { useSelector } from 'react-redux';
 import { makeStyles, Backdrop as MuiBackdrop, CircularProgress } from '@material-ui/core';
-import { RootState } from 'redux/reducers/root.reducer';
+import { useAppSelector } from 'redux/hook';
+import { selectBackdrop } from 'redux/features/ui/uiSlice';
 
 const useStyles = makeStyles((theme) => ({
   backdrop: {
@@ -9,9 +9,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Backdrop = () => {
-  const {
-    ui: { backdrop }
-  } = useSelector((state: RootState) => state);
+  const backdrop = useAppSelector(selectBackdrop);
   const classes = useStyles();
 
   return (

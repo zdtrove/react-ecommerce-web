@@ -8,7 +8,7 @@ import UsersAdmin from 'pages/admin/Users';
 import NotFound from 'pages/NotFound';
 import Home from 'pages/Home';
 import Register from 'pages/Signup';
-// import { Snackbar, Backdrop } from 'components/UI';
+import { Snackbar, Backdrop } from 'components/UI';
 import Dashboard from 'pages/admin/Dashboard';
 import PrivateRoute from 'components/PrivateRoute';
 import { ROUTES } from 'constants/index';
@@ -38,8 +38,8 @@ function App() {
         {/* Not Found */}
         <Route component={NotFound} />
       </Switch>
-      {/* <Snackbar />
-      <Backdrop /> */}
+      <Snackbar />
+      <Backdrop />
     </Router>
   );
 }

@@ -14,6 +14,7 @@ import { Input, Select, Button, Dialog } from 'components/UI';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { categoryActions } from 'redux/features/category/categorySlice';
+import { Category } from 'types/category';
 
 const useStyles = makeStyles((theme) => ({
   upload: {
@@ -40,7 +41,7 @@ const validationSchema = Yup.object().shape({
 });
 
 type CategoryAddProps = {
-  categories: any[];
+  categories: Category[];
   showCategoryAdd: boolean;
   // eslint-disable-next-line no-unused-vars
   setShowCategoryAdd: (params: boolean) => void;
@@ -76,9 +77,9 @@ const CategoryAdd = ({ categories, showCategoryAdd, setShowCategoryAdd }: Catego
     formik.setFieldValue('image', file);
   };
 
-  const createCategoryList = (categories: any[], options: any[] = [], level = 1) => {
+  const createCategoryList = (categories: Category[], options: any[] = [], level = 1) => {
     categories &&
-      categories.forEach((cat: any) => {
+      categories.forEach((cat) => {
         options.push({
           name: cat.name,
           id: cat._id,

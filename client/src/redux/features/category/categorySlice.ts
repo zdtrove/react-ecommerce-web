@@ -1,7 +1,9 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { AppState } from 'redux/store';
+import { Category } from 'types/category';
 
 export interface CategoryState {
-  categories: any[];
+  categories: Category[];
   loading: boolean;
 }
 
@@ -52,8 +54,8 @@ const categorySlice = createSlice({
 export const categoryActions = categorySlice.actions;
 
 // Selectors
-export const selectCategories = (state: any) => state.category.categories;
-export const selectLoadingCategory = (state: any) => state.category.loading;
+export const selectCategories = (state: AppState) => state.category.categories;
+export const selectLoadingCategory = (state: AppState) => state.category.loading;
 
 // Reducer
 const categoryReducer = categorySlice.reducer;

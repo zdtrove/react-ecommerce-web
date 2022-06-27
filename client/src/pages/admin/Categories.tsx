@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import LayoutAdmin from 'components/admin/layouts/LayoutAdmin';
+import { useAppSelector, useAppDispatch } from 'redux/hook';
 import {
   makeStyles,
   Paper,
@@ -16,6 +16,7 @@ import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import AddIcon from '@material-ui/icons/Add';
 import TreeItem from '@material-ui/lab/TreeItem';
 import CategoryRoundedIcon from '@material-ui/icons/CategoryRounded';
+import LayoutAdmin from 'components/admin/layouts/LayoutAdmin';
 import { Button, Dialog } from 'components/UI';
 import CategoryEdit from 'components/admin/category/CategoryEdit';
 import CategoryAdd from 'components/admin/category/CategoryAdd';
@@ -24,7 +25,7 @@ import {
   selectCategories,
   selectLoadingCategory
 } from 'redux/features/category/categorySlice';
-import { useAppSelector, useAppDispatch } from 'redux/hook';
+import { Category } from 'types/category';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -132,7 +133,7 @@ const Categories = () => {
   const categories = useAppSelector(selectCategories);
   const loading = useAppSelector(selectLoadingCategory);
   const dispatch = useAppDispatch();
-  const [selected, setSelected] = useState<string[]>([]);
+  const [selected, setSelected] = useState<string>('');
   const [expanded, setExpanded] = useState<string[]>([]);
   const [showCategoryEdit, setShowCategoryEdit] = useState(false);
   const [showCategoryAdd, setShowCategoryAdd] = useState(false);
@@ -143,7 +144,7 @@ const Categories = () => {
     setExpanded(nodeIds);
   };
 
-  const handleSelect = (event: React.ChangeEvent<{}>, nodeIds: string[]) => {
+  const handleSelect = (event: React.ChangeEvent<{}>, nodeIds: string) => {
     setSelected(nodeIds);
   };
 
@@ -158,20 +159,20 @@ const Categories = () => {
     setShowCategoryDelete(false);
   };
 
-  const renderTree = (categories: any[]) => {
-    let categoryList: any[] = [];
+  const renderTree = (categories: Category[]) => {
+    let categoryList: React.ReactElement[] = [];
     categories.forEach((category) =>
       categoryList.push(
         <TreeItem
           key={category._id}
-          nodeId={category._id}
+          nodeId={category._id || ''}
           label={
             <div className={classes.labelRoot}>
               {category.image && (
                 <img className={classes.labelIcon} src={category.image} alt={category.name} />
               )}
               <Typography className={classes.labelText}>{category.name}</Typography>
-              {selected === category._id ? (
+              {selected === (category._id || '') ? (
                 <>
                   <Button onClick={(e: React.ChangeEvent) => handleEdit(e, category)} text="EDIT" />
                   <Button

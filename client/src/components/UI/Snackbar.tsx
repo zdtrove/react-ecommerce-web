@@ -1,8 +1,7 @@
-import { useSelector, useDispatch } from 'react-redux';
-import { uiTypes } from 'redux/types';
 import { makeStyles, Snackbar as MuiSnackbar, SnackbarCloseReason } from '@material-ui/core';
 import { Alert } from '@material-ui/lab';
-import { RootState } from 'redux/reducers/root.reducer';
+import { useAppDispatch, useAppSelector } from 'redux/hook';
+import { selectSnackbar, uiActions } from 'redux/features/ui/uiSlice';
 
 const useStyles = makeStyles((theme) => ({
   snackbar: {
@@ -13,16 +12,12 @@ const useStyles = makeStyles((theme) => ({
 
 const Snackbar = () => {
   const classes = useStyles();
-  const {
-    ui: {
-      snackbar: { isShow, message, status }
-    }
-  } = useSelector((state: RootState) => state);
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
+  const { isShow, message, status } = useAppSelector(selectSnackbar);
 
   const handleClose = (event: React.SyntheticEvent<any, Event>, reason?: SnackbarCloseReason) => {
     if (reason === 'clickaway') return;
-    dispatch({ type: uiTypes.HIDE_SNACKBAR });
+    dispatch({ type: uiActions.hideSnackbar });
   };
 
   return (

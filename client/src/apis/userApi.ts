@@ -1,9 +1,6 @@
 import axios from 'utils/axios';
 import { ENDPOINTS } from 'constants/index';
-import { userTypes } from 'redux/types';
 import { User } from 'constants/types';
-
-const { GET_USERS, ADD_USER, UPDATE_USER, DELETE_USER } = userTypes;
 
 export const getUsersApi = async () => {
   try {
@@ -23,7 +20,7 @@ export const addUserApi = async (user: User) => {
 
 export const updateUserApi = async (user: User) => {
   try {
-    const res = await axios.patch(`${ENDPOINTS.users.getOne}/${user._id}`, user);
+    return await axios.patch(`${ENDPOINTS.users.getOne}/${user._id}`, user);
   } catch (err) {
     return err;
   }

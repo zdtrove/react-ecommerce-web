@@ -14,6 +14,7 @@ import { Input, Select, Button, Dialog } from 'components/UI';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { categoryActions } from 'redux/features/category/categorySlice';
+import { Category } from 'types/category';
 
 const useStyles = makeStyles((theme) => ({
   upload: {
@@ -40,11 +41,11 @@ const validationSchema = Yup.object().shape({
 });
 
 type CategoryEditProps = {
-  categories: any[];
+  categories: Category[];
   showCategoryEdit: boolean;
   // eslint-disable-next-line no-unused-vars
   setShowCategoryEdit: (params: boolean) => void;
-  categoryRecord: any;
+  categoryRecord: Category;
 };
 
 const CategoryEdit = ({
@@ -76,17 +77,16 @@ const CategoryEdit = ({
     }
   });
 
-  const changeImage = (e: React.ChangeEvent) => {
-    const target = e.target as HTMLInputElement;
-    const file: File = (target.files as FileList)[0];
+  const changeImage = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file: File = (e.target.files as FileList)[0];
     setCategoryImgReset('');
     setCategoryImg(file);
     formik.setFieldValue('image', file);
   };
 
-  const createCategoryList = (categories: any[], options: any[] = [], level = 1) => {
+  const createCategoryList = (categories: Category[], options: any[] = [], level = 1) => {
     categories &&
-      categories.forEach((cat: any) => {
+      categories.forEach((cat) => {
         if (cat._id !== _id) {
           options.push({
             name: cat.name,
@@ -136,7 +136,7 @@ const CategoryEdit = ({
                   ? categoryImgReset
                   : categoryImg
                   ? URL.createObjectURL(categoryImg)
-                  : image
+                  : image || ''
               }
               alt=""
             />
@@ -160,7 +160,7 @@ const CategoryEdit = ({
           disabled={!formik.dirty}
           onClick={() => {
             formik.resetForm();
-            setCategoryImgReset(image);
+            setCategoryImgReset(image || '');
           }}
           color="secondary"
           text="RESET"

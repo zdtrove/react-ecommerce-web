@@ -1,5 +1,6 @@
 import { User } from 'types/user';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { AppState } from 'redux/store';
 
 export interface AuthState {
   isLoggedIn?: boolean;
@@ -69,8 +70,8 @@ const authSlice = createSlice({
 export const authActions = authSlice.actions;
 
 // Selectors
-export const selectIsLoggedIn = (state: any) => state.auth.isLoggedIn;
-export const selectLoadingAuth = (state: any) => state.auth.loading;
+export const selectIsLoggedIn = (state: AppState) => state.auth.isLoggedIn;
+export const selectLoadingAuth = (state: AppState) => state.auth.loading;
 
 // Reducer
 const authReducer = authSlice.reducer;

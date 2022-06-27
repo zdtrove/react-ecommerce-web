@@ -3,10 +3,14 @@ import createSagaMiddleware from 'redux-saga';
 import rootSaga from './rootSaga';
 import authReducer from './features/auth/authSlice';
 import categoryReducer from './features/category/categorySlice';
+import userReducer from './features/user/userSlice';
+import uiReducer from './features/ui/uiSlice';
 
 const rootReducer = combineReducers({
   auth: authReducer,
-  category: categoryReducer
+  category: categoryReducer,
+  user: userReducer,
+  ui: uiReducer
 });
 
 const sagaMiddleware = createSagaMiddleware();
@@ -19,4 +23,4 @@ export const store = configureStore({
 sagaMiddleware.run(rootSaga);
 
 export type AppDispatch = typeof store.dispatch;
-export type RootState = ReturnType<typeof store.getState>;
+export type AppState = ReturnType<typeof store.getState>;
