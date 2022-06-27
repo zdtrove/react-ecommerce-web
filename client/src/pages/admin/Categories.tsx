@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import LayoutAdmin from 'components/admin/layouts/LayoutAdmin';
-import { deleteCategory } from 'redux/actions/category.action';
 import {
   makeStyles,
   Paper,
@@ -155,7 +154,7 @@ const Categories = () => {
   };
 
   const handleDelete = async (id: number) => {
-    await dispatch(deleteCategory(id));
+    await dispatch(categoryActions.deleteCategory(id));
     setShowCategoryDelete(false);
   };
 

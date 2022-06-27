@@ -21,11 +21,28 @@ const categorySlice = createSlice({
       state.loading = false;
       state.categories = action.payload.categories;
     },
+    getCategoriesFail(state) {
+      state.loading = false;
+    },
     // eslint-disable-next-line no-unused-vars
     updateCategory(state, action: PayloadAction<any>) {
       state.loading = true;
     },
-    updateCategorySuccess(state) {
+    updateCategoryFail(state) {
+      state.loading = false;
+    },
+    // eslint-disable-next-line no-unused-vars
+    addCategory(state, action: PayloadAction<any>) {
+      state.loading = true;
+    },
+    addCategoryFail(state) {
+      state.loading = false;
+    },
+    // eslint-disable-next-line no-unused-vars
+    deleteCategory(state, action: PayloadAction<any>) {
+      state.loading = true;
+    },
+    deleteCategoryFail(state) {
       state.loading = false;
     }
   }
