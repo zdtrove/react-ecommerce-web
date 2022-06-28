@@ -1,14 +1,15 @@
 import { loginApi, signUpApi, getLoggedUserApi, refreshTokenApi, logoutApi } from 'apis/authApi';
 import { call, all, put, takeEvery } from 'redux-saga/effects';
-import { authActions } from './authSlice';
+import { authActions, LoginPayload, SignUpPayload } from './authSlice';
 import { jwtConst, userRoles, ROUTES } from 'constants/index';
+import { PayloadAction } from '@reduxjs/toolkit';
 
 const { ACCESS_TOKEN } = jwtConst;
 const { USER } = userRoles;
 
-function* loginSaga({ payload }: any): any {
+function* loginSaga(action: PayloadAction<LoginPayload>): any {
   try {
-    const res = yield call(loginApi, payload);
+    const res = yield call(loginApi, action.payload);
     const { status, data } = res;
     if (status === 200) {
       localStorage.setItem(jwtConst.ACCESS_TOKEN, `Bearer ${data.accessToken}`);
@@ -20,9 +21,9 @@ function* loginSaga({ payload }: any): any {
   }
 }
 
-function* signUpSaga({ payload }: any): any {
+function* signUpSaga(action: PayloadAction<SignUpPayload>): any {
   try {
-    const res = yield call(signUpApi, payload);
+    const res = yield call(signUpApi, action.payload);
     const { status } = res;
     if (status === 201) {
       yield put(authActions.signUpSuccess());

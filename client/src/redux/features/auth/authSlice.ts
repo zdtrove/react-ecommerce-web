@@ -2,11 +2,28 @@ import { User } from 'types/user';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { AppState } from 'redux/store';
 
-export interface AuthState {
+export type AuthState = {
   isLoggedIn?: boolean;
   loading?: boolean;
   user?: User | null;
-}
+};
+
+export type LoginPayload = {
+  email: string;
+  password: string;
+};
+
+export type SignUpPayload = {
+  fullname: string;
+  email: string;
+  phone: string;
+  gender: string;
+  city: string;
+  payments: string[];
+  password: string;
+  passwordConfirm: string;
+  agree: boolean;
+};
 
 const initialState: AuthState = {
   loading: false,
@@ -19,10 +36,10 @@ const authSlice = createSlice({
   initialState,
   reducers: {
     // eslint-disable-next-line no-unused-vars
-    login(state, action: PayloadAction<any>) {
+    login(state, action: PayloadAction<LoginPayload>) {
       state.loading = true;
     },
-    loginSuccess(state, action: PayloadAction<any>) {
+    loginSuccess(state, action: PayloadAction<User>) {
       state.isLoggedIn = true;
       state.loading = false;
       state.user = action.payload;
@@ -33,13 +50,13 @@ const authSlice = createSlice({
     getLoggedUser(state) {
       state.loading = true;
     },
-    getLoggedUserSuccess(state, action: PayloadAction<any>) {
+    getLoggedUserSuccess(state, action: PayloadAction<User>) {
       state.loading = false;
       state.isLoggedIn = true;
       state.user = action.payload;
     },
     // eslint-disable-next-line no-unused-vars
-    signUp(state, action: PayloadAction<any>) {
+    signUp(state, action: PayloadAction<SignUpPayload>) {
       state.loading = true;
     },
     signUpSuccess(state) {
@@ -51,7 +68,7 @@ const authSlice = createSlice({
     refreshToken(state) {
       state.loading = true;
     },
-    refreshTokenSuccess(state, action: PayloadAction<any>) {
+    refreshTokenSuccess(state, action: PayloadAction<User>) {
       state.loading = false;
       state.isLoggedIn = true;
       state.user = action.payload;

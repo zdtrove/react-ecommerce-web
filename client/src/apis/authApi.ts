@@ -1,20 +1,20 @@
 import { ENDPOINTS, jwtConst, userRoles } from 'constants/index';
 import axios from 'utils/axios';
 import jwtDecode from 'jwt-decode';
+import { LoginPayload, SignUpPayload } from 'redux/features/auth/authSlice';
 
 const { USER } = userRoles;
 const { ACCESS_TOKEN } = jwtConst;
 
-export const signUpApi = async (dataSignUp: any) => {
+export const signUpApi = async (dataSignUp: SignUpPayload) => {
   try {
-    console.log(dataSignUp);
     return await axios.post(ENDPOINTS.auth.signUp, dataSignUp);
   } catch (err) {
     return err;
   }
 };
 
-export const loginApi = async (dataLogin: any) => {
+export const loginApi = async (dataLogin: LoginPayload) => {
   try {
     return await axios.post(ENDPOINTS.auth.login, dataLogin);
   } catch (err) {

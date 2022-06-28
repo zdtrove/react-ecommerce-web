@@ -24,12 +24,12 @@ import PhoneAndroidRoundedIcon from '@material-ui/icons/PhoneAndroidRounded';
 import LockRoundedIcon from '@material-ui/icons/LockRounded';
 import VisibilityRoundedIcon from '@material-ui/icons/VisibilityRounded';
 import VisibilityOffRoundedIcon from '@material-ui/icons/VisibilityOffRounded';
-import { authActions } from 'redux/features/auth/authSlice';
+import { authActions, SignUpPayload } from 'redux/features/auth/authSlice';
 import { userConst } from 'constants/index';
 
 const { GENDER, CITY, PAYMENT_METHODS } = userConst;
 
-const initialValues = {
+const initialValues: SignUpPayload = {
   fullname: '',
   email: '',
   phone: '',
