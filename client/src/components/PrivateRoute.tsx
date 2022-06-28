@@ -14,7 +14,7 @@ type PrivateRouteProps = {
   component: React.FC;
 };
 
-type decodedType = {
+export type decodedType = {
   role: string;
 };
 

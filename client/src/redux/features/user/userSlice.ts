@@ -24,6 +24,27 @@ const userSlice = createSlice({
     },
     getUsersFail(state) {
       state.loading = false;
+    },
+    // eslint-disable-next-line no-unused-vars
+    addUser(state, action: PayloadAction<any>) {
+      state.loading = true;
+    },
+    addUserFail(state) {
+      state.loading = false;
+    },
+    // eslint-disable-next-line no-unused-vars
+    updateUser(state, action: PayloadAction<any>) {
+      state.loading = true;
+    },
+    updateUserFail(state) {
+      state.loading = false;
+    },
+    // eslint-disable-next-line no-unused-vars
+    deleteUser(state, action: PayloadAction<any>) {
+      state.loading = true;
+    },
+    deleteUserFail(state) {
+      state.loading = false;
     }
   }
 });

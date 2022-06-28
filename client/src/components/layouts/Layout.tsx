@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { useDispatch, useSelector } from 'react-redux';
+import { useAppDispatch, useAppSelector } from 'redux/hook';
 import {
   makeStyles,
   Container,
@@ -10,12 +10,12 @@ import {
   CssBaseline
 } from '@material-ui/core';
 import { Menu as MenuIcon } from '@material-ui/icons';
-import { Link } from 'react-router-dom';
-import { logout } from 'redux/actions/auth.action';
-import { useHistory } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { Button } from 'components/UI';
-import { ROUTES } from 'constants/index';
-import { AppState } from 'redux/reducers/root.reducer';
+import { ROUTES, userRoles } from 'constants/index';
+import { authActions, selectIsLoggedIn } from 'redux/features/auth/authSlice';
+
+const { USER } = userRoles;
 
 const useStyles = makeStyles(() => ({
   title: {
@@ -30,17 +30,17 @@ type LayoutProps = {
 
 const Layout = ({ children }: LayoutProps) => {
   const classes = useStyles();
-  const { auth } = useSelector((state: AppState) => state);
-  const dispatch = useDispatch();
+  const isLoggedIn = useAppSelector(selectIsLoggedIn);
+  const dispatch = useAppDispatch();
   const history = useHistory();
 
   const renderAuthBtn = () => {
-    return auth.isLoggedIn ? (
+    return isLoggedIn ? (
       <Button
         variant="text"
         size="medium"
         text="LOGOUT"
-        onClick={() => dispatch(logout(history))}
+        onClick={() => dispatch(authActions.logout({ history, role: USER }))}
         disableRipple
         color="inherit"
       />

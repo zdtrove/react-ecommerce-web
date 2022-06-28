@@ -17,7 +17,7 @@ import { authActions } from 'redux/features/auth/authSlice';
 
 function App() {
   const dispatch = useAppDispatch();
-  console.log(`Last Updated: ${new Date('2022-06-21')}`);
+  console.log(`Last Updated: ${new Date('2022-06-28')}`);
 
   useEffect(() => {
     dispatch(authActions.getLoggedUser());

@@ -1,14 +1,14 @@
 import PropTypes from 'prop-types';
-import { useDispatch } from 'react-redux';
+import { useAppDispatch } from 'redux/hook';
 import { DialogContent, DialogActions } from '@material-ui/core';
 import { Input, RadioGroup, Select, Checkboxes, Button, Dialog } from 'components/UI';
 import { userConst } from 'constants/index';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import { updateUser } from 'redux/actions/user.action';
 import AccountCircleRoundedIcon from '@material-ui/icons/AccountCircleRounded';
 import PhoneAndroidRoundedIcon from '@material-ui/icons/PhoneAndroidRounded';
 import { User } from 'constants/types';
+import { userActions } from 'redux/features/user/userSlice';
 
 const { GENDER, CITY, PAYMENT_METHODS, ROLES } = userConst;
 
@@ -26,7 +26,7 @@ type UserEditProps = {
 };
 
 const UserEdit = ({ showUserEdit, setShowUserEdit, userRecord }: UserEditProps) => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const { _id, email, fullname, phone, gender, city, payments, role } = userRecord;
 
   let initialValues = {
@@ -55,7 +55,7 @@ const UserEdit = ({ showUserEdit, setShowUserEdit, userRecord }: UserEditProps) 
     initialValues,
     validationSchema,
     onSubmit: async (values) => {
-      await dispatch(updateUser({ _id, ...values }));
+      await dispatch(userActions.updateUser({ _id, ...values }));
       setShowUserEdit(false);
     }
   });
@@ -115,7 +115,7 @@ UserEdit.propTypes = {
   showUserEdit: PropTypes.bool,
   setShowUserEdit: PropTypes.func,
   userRecord: PropTypes.shape({
-    _id: PropTypes.number,
+    _id: PropTypes.string,
     email: PropTypes.string,
     fullname: PropTypes.string,
     phone: PropTypes.string,

@@ -35,6 +35,7 @@ const authSlice = createSlice({
     },
     getLoggedUserSuccess(state, action: PayloadAction<any>) {
       state.loading = false;
+      state.isLoggedIn = true;
       state.user = action.payload;
     },
     // eslint-disable-next-line no-unused-vars
@@ -55,7 +56,8 @@ const authSlice = createSlice({
       state.isLoggedIn = true;
       state.user = action.payload;
     },
-    logout(state) {
+    // eslint-disable-next-line no-unused-vars
+    logout(state, action: PayloadAction<any>) {
       state.loading = true;
     },
     logoutSuccess(state) {
@@ -70,6 +72,7 @@ const authSlice = createSlice({
 export const authActions = authSlice.actions;
 
 // Selectors
+export const selectUser = (state: AppState) => state.auth.user;
 export const selectIsLoggedIn = (state: AppState) => state.auth.isLoggedIn;
 export const selectLoadingAuth = (state: AppState) => state.auth.loading;
 

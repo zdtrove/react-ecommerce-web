@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useAppDispatch } from 'redux/hook';
 import Layout from 'components/layouts/Layout';
 import {
   makeStyles,
@@ -100,7 +100,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const SignUp = () => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const classes = useStyles();
   const [showPass, setShowPass] = useState(false);
   const [showPassCf, setShowPassCf] = useState(false);

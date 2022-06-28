@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import Layout from 'components/layouts/Layout';
 import {
@@ -24,8 +23,8 @@ import LockRoundedIcon from '@material-ui/icons/LockRounded';
 import VisibilityRoundedIcon from '@material-ui/icons/VisibilityRounded';
 import VisibilityOffRoundedIcon from '@material-ui/icons/VisibilityOffRounded';
 import { ROUTES } from 'constants/index';
-import { AppState } from 'redux/reducers/root.reducer';
-import { authActions } from 'redux/features/auth/authSlice';
+import { authActions, selectIsLoggedIn } from 'redux/features/auth/authSlice';
+import { useAppDispatch, useAppSelector } from 'redux/hook';
 
 const initialValues = {
   email: '',
@@ -84,8 +83,8 @@ const useStyles = makeStyles((theme) => ({
 
 const Login = () => {
   const classes = useStyles();
-  const { auth } = useSelector((state: AppState) => state);
-  const dispatch = useDispatch();
+  const isLoggedIn = useAppSelector(selectIsLoggedIn);
+  const dispatch = useAppDispatch();
   const history = useHistory();
   const [showPass, setShowPass] = useState(false);
   const [typePass, setTypePass] = useState('password');
@@ -104,8 +103,8 @@ const Login = () => {
   };
 
   useEffect(() => {
-    if (auth.isLoggedIn) history.push(ROUTES.home.index);
-  }, [auth.isLoggedIn, history]);
+    if (isLoggedIn) history.push(ROUTES.home.index);
+  }, [isLoggedIn, history]);
 
   return (
     <Layout>

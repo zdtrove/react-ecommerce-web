@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useAppDispatch, useAppSelector } from 'redux/hook';
 import { useHistory } from 'react-router-dom';
 import {
   makeStyles,
@@ -23,9 +23,8 @@ import EmailRoundedIcon from '@material-ui/icons/EmailRounded';
 import LockRoundedIcon from '@material-ui/icons/LockRounded';
 import VisibilityRoundedIcon from '@material-ui/icons/VisibilityRounded';
 import VisibilityOffRoundedIcon from '@material-ui/icons/VisibilityOffRounded';
-import { login } from 'redux/actions/auth.action';
 import { ROUTES, userRoles } from 'constants/index';
-import { AppState } from 'redux/reducers/root.reducer';
+import { authActions, selectIsLoggedIn, selectUser } from 'redux/features/auth/authSlice';
 
 const { ADMIN } = userRoles;
 
@@ -86,8 +85,9 @@ const useStyles = makeStyles((theme) => ({
 
 const Login = () => {
   const classes = useStyles();
-  const { auth } = useSelector((state: AppState) => state);
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
+  const isLoggedIn = useAppSelector(selectIsLoggedIn);
+  const user = useAppSelector(selectUser);
   const history = useHistory();
   const [showPass, setShowPass] = useState(false);
   const [typePass, setTypePass] = useState('password');
@@ -96,7 +96,7 @@ const Login = () => {
     initialValues,
     validationSchema,
     onSubmit: (values) => {
-      dispatch(login(values));
+      dispatch(authActions.login(values));
     }
   });
 
@@ -106,8 +106,8 @@ const Login = () => {
   };
 
   useEffect(() => {
-    if (auth.isLoggedIn && auth.user?.role === ADMIN) history.push(ROUTES.admin.index);
-  }, [auth.isLoggedIn, auth.user?.role, history]);
+    if (isLoggedIn && user?.role === ADMIN) history.push(ROUTES.admin.index);
+  }, [isLoggedIn, user?.role, history]);
 
   return (
     <Container maxWidth="sm">

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import PropTypes from 'prop-types';
-import { useDispatch } from 'react-redux';
+import { useAppDispatch } from 'redux/hook';
 import {
   makeStyles,
   DialogContent,
@@ -14,13 +14,13 @@ import { Input, RadioGroup, Select, Checkboxes, Button, Dialog } from 'component
 import { userConst } from 'constants/index';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import { addUser } from 'redux/actions/user.action';
 import AccountCircleRoundedIcon from '@material-ui/icons/AccountCircleRounded';
 import PhoneAndroidRoundedIcon from '@material-ui/icons/PhoneAndroidRounded';
 import LockRoundedIcon from '@material-ui/icons/LockRounded';
 import VisibilityRoundedIcon from '@material-ui/icons/VisibilityRounded';
 import VisibilityOffRoundedIcon from '@material-ui/icons/VisibilityOffRounded';
 import EmailRoundedIcon from '@material-ui/icons/EmailRounded';
+import { userActions } from 'redux/features/user/userSlice';
 
 const { GENDER, CITY, PAYMENT_METHODS, ROLES } = userConst;
 
@@ -67,7 +67,7 @@ type UserAddProps = {
 
 const UserAdd = ({ showUserAdd, setShowUserAdd }: UserAddProps) => {
   const classes = useStyles();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const [showPass, setShowPass] = useState(false);
   const [showPassCf, setShowPassCf] = useState(false);
   const [typePass, setTypePass] = useState('password');
@@ -89,7 +89,7 @@ const UserAdd = ({ showUserAdd, setShowUserAdd }: UserAddProps) => {
     initialValues,
     validationSchema,
     onSubmit: async (values) => {
-      await dispatch(addUser(values));
+      await dispatch(userActions.addUser(values));
       setShowUserAdd(false);
     }
   });

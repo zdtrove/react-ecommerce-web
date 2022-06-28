@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { useDispatch } from 'react-redux';
-import { useHistory, Link } from 'react-router-dom';
+import { useAppDispatch } from 'redux/hook';
+import { Link, useHistory } from 'react-router-dom';
 import {
   makeStyles,
   Container,
@@ -12,13 +12,14 @@ import {
   CssBaseline
 } from '@material-ui/core';
 import { Menu as MenuIcon } from '@material-ui/icons';
-import { logout } from 'redux/actions/auth.action';
-import { userRoles } from 'constants/index';
 import SidebarAdmin from './SidebarAdmin';
 import { Button } from 'components/UI';
 import clsx from 'clsx';
+import { authActions } from 'redux/features/auth/authSlice';
+import { userRoles } from 'constants/index';
 
 const drawerWidth = 240;
+const { ADMIN } = userRoles;
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -71,9 +72,8 @@ type LayoutAdminProps = {
 
 const LayoutAdmin = ({ children }: LayoutAdminProps) => {
   const classes = useStyles();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const history = useHistory();
-  const { ADMIN } = userRoles;
   const [open, setOpen] = useState(false);
 
   const handleDrawerOpen = () => {
@@ -114,7 +114,7 @@ const LayoutAdmin = ({ children }: LayoutAdminProps) => {
           </Typography>
           <Button
             size="medium"
-            onClick={() => dispatch(logout(history, ADMIN))}
+            onClick={() => dispatch(authActions.logout({ history, role: ADMIN }))}
             disableRipple
             color="inherit"
             text="LOGOUT"

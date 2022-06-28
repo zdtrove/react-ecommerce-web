@@ -17,6 +17,7 @@ import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import classNames from 'classnames';
 import { Link, useLocation } from 'react-router-dom';
 import clsx from 'clsx';
+import { ROUTES } from 'constants/index';
 
 const drawerWidth = 240;
 
@@ -85,8 +86,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const sidebars = [
-  { name: 'Users', pathname: '/admin/users', icon: <GroupRoundedIcon /> },
-  { name: 'Categories', pathname: '/admin/categories', icon: <CategoryRoundedIcon /> }
+  { name: 'Users', pathname: ROUTES.admin.users, icon: <GroupRoundedIcon /> },
+  { name: 'Categories', pathname: ROUTES.admin.categories, icon: <CategoryRoundedIcon /> }
 ];
 
 type SidebarProps = {

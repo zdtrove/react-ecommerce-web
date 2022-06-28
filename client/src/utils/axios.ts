@@ -1,12 +1,10 @@
 import axiosPackage from 'axios';
 import { store } from 'redux/store';
-import { authTypes } from 'redux/types';
 import { snackbar, userRoles, jwtConst, uploadConst } from 'constants/index';
 import { authActions } from 'redux/features/auth/authSlice';
 import { ROUTES } from '../constants';
 import { uiActions } from 'redux/features/ui/uiSlice';
 
-const { LOGOUT_SUCCESS } = authTypes;
 const { SNACKBAR_STATUS_SUCCESS, SNACKBAR_STATUS_ERROR } = snackbar;
 const { ADMIN } = userRoles;
 const { JWT_EXPIRED, JWT_INVALID, ACCESS_TOKEN } = jwtConst;
@@ -51,7 +49,7 @@ axios.interceptors.response.use(
   async function (error) {
     const { data, config } = error.response;
     if (data.name === JWT_INVALID) {
-      store.dispatch({ type: LOGOUT_SUCCESS });
+      store.dispatch({ type: authActions.logoutSuccess.type });
       localStorage.removeItem(ACCESS_TOKEN);
       if (data.role) {
         window.location.href = data.role === ADMIN ? ROUTES.admin.login : ROUTES.home.login;

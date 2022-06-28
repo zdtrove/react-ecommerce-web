@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { useAppDispatch, useAppSelector } from 'redux/hook';
 import LayoutAdmin from 'components/admin/layouts/LayoutAdmin';
 import { Input, Button, Dialog } from 'components/UI';
-import { deleteUser } from 'redux/actions/user.action';
 import {
   makeStyles,
   useTheme,
@@ -208,7 +207,7 @@ const Users = () => {
   };
 
   const handleDeleteUser = async (id: string) => {
-    await dispatch(deleteUser(id));
+    await dispatch(userActions.deleteUser(id));
     setShowUserDelete(false);
   };
 
