@@ -1,3 +1,5 @@
+import { Category, DeleteCategoryResponse, UpdateCategoryResponse } from 'types/category';
+import { GetAllCategoryResponse } from 'types/category';
 import {
   getCategoriesApi,
   updateCategoryApi,
@@ -6,54 +8,55 @@ import {
 } from 'apis/categoryApi';
 import { call, all, put, takeEvery } from 'redux-saga/effects';
 import { categoryActions } from './categorySlice';
+import { PayloadAction } from '@reduxjs/toolkit';
 
-function* getCategoriesSaga(): any {
+function* getCategoriesSaga() {
   try {
-    const res = yield call(getCategoriesApi);
+    const res: GetAllCategoryResponse = yield call(getCategoriesApi);
     const { status, data } = res;
     if (status === 200) {
-      yield put(categoryActions.getCategoriesSuccess(data));
+      yield put(categoryActions.getCategoriesSuccess(data.categories));
     }
-  } catch (error: any) {
+  } catch (error) {
     console.log(error);
     yield put(categoryActions.getCategoriesFail());
   }
 }
 
-function* updateCategorySaga({ payload }: any): any {
+function* updateCategorySaga(action: PayloadAction<Category>) {
   try {
-    const res = yield call(updateCategoryApi, payload);
+    const res: UpdateCategoryResponse = yield call(updateCategoryApi, action.payload);
     const { status } = res;
     if (status === 200) {
       yield put(categoryActions.getCategories());
     }
-  } catch (error: any) {
+  } catch (error) {
     console.log(error);
     yield put(categoryActions.updateCategoryFail());
   }
 }
 
-function* addCategorySaga({ payload }: any): any {
+function* addCategorySaga(action: PayloadAction<Category>) {
   try {
-    const res = yield call(addCategoryApi, payload);
+    const res: UpdateCategoryResponse = yield call(addCategoryApi, action.payload);
     const { status } = res;
     if (status === 201) {
       yield put(categoryActions.getCategories());
     }
-  } catch (error: any) {
+  } catch (error) {
     console.log(error);
     yield put(categoryActions.addCategoryFail());
   }
 }
 
-function* deleteCategorySaga({ payload }: any): any {
+function* deleteCategorySaga(action: PayloadAction<string>) {
   try {
-    const res = yield call(deleteCategoryApi, payload);
+    const res: DeleteCategoryResponse = yield call(deleteCategoryApi, action.payload);
     const { status } = res;
     if (status === 200) {
       yield put(categoryActions.getCategories());
     }
-  } catch (error: any) {
+  } catch (error) {
     console.log(error);
     yield put(categoryActions.deleteCategoryFail());
   }

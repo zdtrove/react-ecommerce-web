@@ -3,7 +3,7 @@ import { uploadConst } from 'constants/index';
 
 const { CLOUDINARY_URL, CLOUDINARY_UPLOAD_PRESET } = uploadConst;
 
-export const checkImage = (file: any) => {
+export const checkImage = (file: File) => {
   let err = '';
   if (!file) return (err = 'File does not exist');
 

@@ -1,29 +1,7 @@
 import { User } from 'types/user';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { AppState } from 'redux/store';
-
-export type AuthState = {
-  isLoggedIn?: boolean;
-  loading?: boolean;
-  user?: User | null;
-};
-
-export type LoginPayload = {
-  email: string;
-  password: string;
-};
-
-export type SignUpPayload = {
-  fullname: string;
-  email: string;
-  phone: string;
-  gender: string;
-  city: string;
-  payments: string[];
-  password: string;
-  passwordConfirm: string;
-  agree: boolean;
-};
+import { AuthState, LoginPayload, SignUpPayload } from 'types/auth';
 
 const initialState: AuthState = {
   loading: false,

@@ -1,10 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { User } from 'types/user';
-
-export interface UserState {
-  users: User[];
-  loading: boolean;
-}
+import { AppState } from 'redux/store';
+import { User, UserState } from 'types/user';
 
 const initialState: UserState = {
   users: [],
@@ -18,29 +14,29 @@ const userSlice = createSlice({
     getUsers(state) {
       state.loading = true;
     },
-    getUsersSuccess(state, action: PayloadAction<any>) {
+    getUsersSuccess(state, action: PayloadAction<User[]>) {
       state.loading = false;
-      state.users = action.payload.users;
+      state.users = action.payload;
     },
     getUsersFail(state) {
       state.loading = false;
     },
     // eslint-disable-next-line no-unused-vars
-    addUser(state, action: PayloadAction<any>) {
+    addUser(state, action: PayloadAction<User>) {
       state.loading = true;
     },
     addUserFail(state) {
       state.loading = false;
     },
     // eslint-disable-next-line no-unused-vars
-    updateUser(state, action: PayloadAction<any>) {
+    updateUser(state, action: PayloadAction<User>) {
       state.loading = true;
     },
     updateUserFail(state) {
       state.loading = false;
     },
     // eslint-disable-next-line no-unused-vars
-    deleteUser(state, action: PayloadAction<any>) {
+    deleteUser(state, action: PayloadAction<string>) {
       state.loading = true;
     },
     deleteUserFail(state) {
@@ -53,8 +49,8 @@ const userSlice = createSlice({
 export const userActions = userSlice.actions;
 
 // Selectors
-export const selectUsers = (state: any) => state.user.users;
-export const selectLoadingUser = (state: any) => state.user.loading;
+export const selectUsers = (state: AppState) => state.user.users;
+export const selectLoadingUser = (state: AppState) => state.user.loading;
 
 // Reducer
 const userReducer = userSlice.reducer;

@@ -23,8 +23,9 @@ import LockRoundedIcon from '@material-ui/icons/LockRounded';
 import VisibilityRoundedIcon from '@material-ui/icons/VisibilityRounded';
 import VisibilityOffRoundedIcon from '@material-ui/icons/VisibilityOffRounded';
 import { ROUTES } from 'constants/index';
-import { authActions, LoginPayload, selectIsLoggedIn } from 'redux/features/auth/authSlice';
+import { authActions, selectIsLoggedIn } from 'redux/features/auth/authSlice';
 import { useAppDispatch, useAppSelector } from 'redux/hook';
+import { LoginPayload } from 'types/auth';
 
 const initialValues: LoginPayload = {
   email: '',

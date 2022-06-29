@@ -24,8 +24,9 @@ import PhoneAndroidRoundedIcon from '@material-ui/icons/PhoneAndroidRounded';
 import LockRoundedIcon from '@material-ui/icons/LockRounded';
 import VisibilityRoundedIcon from '@material-ui/icons/VisibilityRounded';
 import VisibilityOffRoundedIcon from '@material-ui/icons/VisibilityOffRounded';
-import { authActions, SignUpPayload } from 'redux/features/auth/authSlice';
+import { authActions } from 'redux/features/auth/authSlice';
 import { userConst } from 'constants/index';
+import { SignUpPayload } from 'types/auth';
 
 const { GENDER, CITY, PAYMENT_METHODS } = userConst;
 
@@ -127,14 +128,12 @@ const SignUp = () => {
 
   const handlePayments = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { checked, value } = e.target;
-    if (checked) {
-      formik.setFieldValue('payments', [...formik.values.payments, value]);
-    } else {
-      formik.setFieldValue(
-        'payments',
-        formik.values.payments.filter((v) => v !== value)
-      );
-    }
+    checked
+      ? formik.setFieldValue('payments', [...formik.values.payments, value])
+      : formik.setFieldValue(
+          'payments',
+          formik.values.payments.filter((v) => v !== value)
+        );
   };
 
   return (

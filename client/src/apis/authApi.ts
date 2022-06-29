@@ -1,7 +1,7 @@
 import { ENDPOINTS, jwtConst, userRoles } from 'constants/index';
 import axios from 'utils/axios';
 import jwtDecode from 'jwt-decode';
-import { LoginPayload, SignUpPayload } from 'redux/features/auth/authSlice';
+import { LoginPayload, SignUpPayload } from 'types/auth';
 
 const { USER } = userRoles;
 const { ACCESS_TOKEN } = jwtConst;

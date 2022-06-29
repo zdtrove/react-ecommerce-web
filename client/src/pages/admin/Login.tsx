@@ -25,10 +25,11 @@ import VisibilityRoundedIcon from '@material-ui/icons/VisibilityRounded';
 import VisibilityOffRoundedIcon from '@material-ui/icons/VisibilityOffRounded';
 import { ROUTES, userRoles } from 'constants/index';
 import { authActions, selectIsLoggedIn, selectUser } from 'redux/features/auth/authSlice';
+import { LoginPayload } from 'types/auth';
 
 const { ADMIN } = userRoles;
 
-const initialValues = {
+const initialValues: LoginPayload = {
   email: '',
   password: ''
 };

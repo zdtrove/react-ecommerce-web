@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import { makeStyles, DialogContent, DialogContentText, Typography } from '@material-ui/core';
 import { Button, Dialog } from 'components/UI';
-import { User } from 'constants/types';
+import { User } from 'types/user';
 
 const useStyles = makeStyles((theme) => ({
   marginBtn: {

@@ -1,11 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { AppState } from 'redux/store';
-import { Category } from 'types/category';
-
-export interface CategoryState {
-  categories: Category[];
-  loading: boolean;
-}
+import { Category, CategoryState } from 'types/category';
 
 const initialState: CategoryState = {
   categories: [],
@@ -19,29 +14,29 @@ const categorySlice = createSlice({
     getCategories(state) {
       state.loading = true;
     },
-    getCategoriesSuccess(state, action: PayloadAction<any>) {
+    getCategoriesSuccess(state, action: PayloadAction<Category[]>) {
       state.loading = false;
-      state.categories = action.payload.categories;
+      state.categories = action.payload;
     },
     getCategoriesFail(state) {
       state.loading = false;
     },
     // eslint-disable-next-line no-unused-vars
-    updateCategory(state, action: PayloadAction<any>) {
+    updateCategory(state, action: PayloadAction<Category>) {
       state.loading = true;
     },
     updateCategoryFail(state) {
       state.loading = false;
     },
     // eslint-disable-next-line no-unused-vars
-    addCategory(state, action: PayloadAction<any>) {
+    addCategory(state, action: PayloadAction<Category>) {
       state.loading = true;
     },
     addCategoryFail(state) {
       state.loading = false;
     },
     // eslint-disable-next-line no-unused-vars
-    deleteCategory(state, action: PayloadAction<any>) {
+    deleteCategory(state, action: PayloadAction<string>) {
       state.loading = true;
     },
     deleteCategoryFail(state) {

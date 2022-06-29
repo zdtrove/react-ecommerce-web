@@ -3,6 +3,7 @@ import { Route, Redirect } from 'react-router-dom';
 import { jwtConst, userRoles } from 'constants/index';
 import jwtDecode from 'jwt-decode';
 import { ROUTES } from 'constants/index';
+import { decodedType } from 'types/common';
 
 const { ACCESS_TOKEN } = jwtConst;
 const { ADMIN } = userRoles;
@@ -12,10 +13,6 @@ type PrivateRouteProps = {
   exact?: boolean;
   path: string;
   component: React.FC;
-};
-
-export type decodedType = {
-  role: string;
 };
 
 const PrivateRoute = ({ admin, ...rest }: PrivateRouteProps) => {

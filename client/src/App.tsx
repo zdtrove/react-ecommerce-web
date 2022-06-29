@@ -17,11 +17,15 @@ import { authActions } from 'redux/features/auth/authSlice';
 
 function App() {
   const dispatch = useAppDispatch();
-  console.log(`Last Updated: ${new Date('2022-06-28')}`);
 
   useEffect(() => {
     dispatch(authActions.getLoggedUser());
   }, [dispatch]);
+
+  useEffect(() => {
+    document.title = 'E-commerce website';
+    console.log(`Last Updated: ${new Date('2022-06-28')}`);
+  }, []);
 
   return (
     <Router>

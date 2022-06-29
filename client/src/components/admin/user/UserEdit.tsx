@@ -7,7 +7,7 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import AccountCircleRoundedIcon from '@material-ui/icons/AccountCircleRounded';
 import PhoneAndroidRoundedIcon from '@material-ui/icons/PhoneAndroidRounded';
-import { User } from 'constants/types';
+import { User } from 'types/user';
 import { userActions } from 'redux/features/user/userSlice';
 
 const { GENDER, CITY, PAYMENT_METHODS, ROLES } = userConst;

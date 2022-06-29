@@ -1,54 +1,56 @@
+import { PayloadAction } from '@reduxjs/toolkit';
 import { getUsersApi, addUserApi, updateUserApi, deleteUserApi } from 'apis/userApi';
 import { call, all, put, takeEvery } from 'redux-saga/effects';
+import { AddOrUpdateUserResponse, DeleteUserResponse, GetAllUsersResponse, User } from 'types/user';
 import { userActions } from './userSlice';
 
-function* getUsersSaga(): any {
+function* getUsersSaga() {
   try {
-    const res = yield call(getUsersApi);
+    const res: GetAllUsersResponse = yield call(getUsersApi);
     const { status, data } = res;
     if (status === 200) {
-      yield put(userActions.getUsersSuccess(data));
+      yield put(userActions.getUsersSuccess(data.users));
     }
-  } catch (error: any) {
+  } catch (error) {
     console.log(error);
     yield put(userActions.getUsersFail());
   }
 }
 
-function* addUserSaga({ payload }: any): any {
+function* addUserSaga(action: PayloadAction<User>) {
   try {
-    const res = yield call(addUserApi, payload);
+    const res: AddOrUpdateUserResponse = yield call(addUserApi, action.payload);
     const { status } = res;
     if (status === 201) {
       yield put(userActions.getUsers());
     }
-  } catch (error: any) {
+  } catch (error) {
     console.log(error);
     yield put(userActions.addUserFail());
   }
 }
 
-function* updateUserSaga({ payload }: any): any {
+function* updateUserSaga(action: PayloadAction<User>) {
   try {
-    const res = yield call(updateUserApi, payload);
+    const res: AddOrUpdateUserResponse = yield call(updateUserApi, action.payload);
     const { status } = res;
     if (status === 200) {
       yield put(userActions.getUsers());
     }
-  } catch (error: any) {
+  } catch (error) {
     console.log(error);
     yield put(userActions.updateUserFail());
   }
 }
 
-function* deleteUserSaga({ payload }: any): any {
+function* deleteUserSaga(action: PayloadAction<string>) {
   try {
-    const res = yield call(deleteUserApi, payload);
+    const res: DeleteUserResponse = yield call(deleteUserApi, action.payload);
     const { status } = res;
     if (status === 200) {
       yield put(userActions.getUsers());
     }
-  } catch (error: any) {
+  } catch (error) {
     console.log(error);
     yield put(userActions.deleteUserFail());
   }

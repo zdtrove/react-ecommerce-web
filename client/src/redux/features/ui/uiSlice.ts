@@ -1,15 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { AppState } from 'redux/store';
-import type { Color } from '@material-ui/lab/Alert';
-
-export interface UiState {
-  snackbar: {
-    isShow: boolean;
-    message: string | null;
-    status: Color;
-  };
-  backdrop: boolean;
-}
+import { UiState } from 'types/common';
 
 const initialState: UiState = {
   snackbar: {

@@ -1,4 +1,5 @@
 import { ENDPOINTS } from 'constants/index';
+import { Category } from 'types/category';
 import axios from 'utils/axios';
 import { imageUpload } from 'utils/upload';
 
@@ -10,7 +11,7 @@ export const getCategoriesApi = async () => {
   }
 };
 
-export const addCategoryApi = async (category: any) => {
+export const addCategoryApi = async (category: Category) => {
   try {
     const image = await imageUpload(category.image);
     category.image = image.url;
@@ -20,17 +21,17 @@ export const addCategoryApi = async (category: any) => {
   }
 };
 
-export const updateCategoryApi = async (category: any) => {
+export const updateCategoryApi = async (category: Category) => {
   try {
     const image = await imageUpload(category.image);
     category.image = image.url;
-    return await axios.patch(`${ENDPOINTS.categories.getOne}/${category.id}`, category);
+    return await axios.patch(`${ENDPOINTS.categories.getOne}/${category._id}`, category);
   } catch (err) {
     return err;
   }
 };
 
-export const deleteCategoryApi = async (id: number) => {
+export const deleteCategoryApi = async (id: string) => {
   try {
     return await axios.delete(`${ENDPOINTS.categories.getOne}/${id}`);
   } catch (err) {

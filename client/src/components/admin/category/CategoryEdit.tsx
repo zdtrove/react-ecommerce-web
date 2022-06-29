@@ -72,7 +72,7 @@ const CategoryEdit = ({
     initialValues,
     validationSchema,
     onSubmit: async (values) => {
-      await dispatch(categoryActions.updateCategory({ id: _id, ...values }));
+      await dispatch(categoryActions.updateCategory({ _id, ...values }));
       setShowCategoryEdit(false);
     }
   });

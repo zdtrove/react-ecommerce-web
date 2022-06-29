@@ -138,7 +138,7 @@ const Categories = () => {
   const [showCategoryEdit, setShowCategoryEdit] = useState(false);
   const [showCategoryAdd, setShowCategoryAdd] = useState(false);
   const [showCategoryDelete, setShowCategoryDelete] = useState(false);
-  const [categoryRecord, setCategoryRecord] = useState<any>(null);
+  const [categoryRecord, setCategoryRecord] = useState<Category>({} as Category);
 
   const handleToggle = (event: React.ChangeEvent<{}>, nodeIds: string[]) => {
     setExpanded(nodeIds);
@@ -148,13 +148,13 @@ const Categories = () => {
     setSelected(nodeIds);
   };
 
-  const handleEdit = (e: React.ChangeEvent, category: any) => {
+  const handleEdit = (e: React.ChangeEvent, category: Category) => {
     setCategoryRecord(category);
     setShowCategoryEdit(true);
     e.stopPropagation();
   };
 
-  const handleDelete = async (id: number) => {
+  const handleDelete = async (id: string) => {
     await dispatch(categoryActions.deleteCategory(id));
     setShowCategoryDelete(false);
   };
@@ -276,7 +276,7 @@ const Categories = () => {
             </DialogContent>
             <DialogActions>
               <Button
-                onClick={() => handleDelete(categoryRecord._id)}
+                onClick={() => handleDelete(categoryRecord._id || '')}
                 color="secondary"
                 text="DELETE"
               />

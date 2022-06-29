@@ -32,7 +32,7 @@ import FirstPageIcon from '@material-ui/icons/FirstPage';
 import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
 import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
 import LastPageIcon from '@material-ui/icons/LastPage';
-import { User } from 'constants/types';
+import { User } from 'types/user';
 import { userActions, selectUsers } from 'redux/features/user/userSlice';
 
 const useStyles = makeStyles((theme) => ({

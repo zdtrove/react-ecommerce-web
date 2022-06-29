@@ -1,6 +1,6 @@
 import axios from 'utils/axios';
 import { ENDPOINTS } from 'constants/index';
-import { User } from 'constants/types';
+import { User } from 'types/user';
 
 export const getUsersApi = async () => {
   try {

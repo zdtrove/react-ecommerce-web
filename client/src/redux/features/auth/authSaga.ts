@@ -1,75 +1,82 @@
 import { loginApi, signUpApi, getLoggedUserApi, refreshTokenApi, logoutApi } from 'apis/authApi';
 import { call, all, put, takeEvery } from 'redux-saga/effects';
-import { authActions, LoginPayload, SignUpPayload } from './authSlice';
+import { authActions } from './authSlice';
 import { jwtConst, userRoles, ROUTES } from 'constants/index';
 import { PayloadAction } from '@reduxjs/toolkit';
+import {
+  LoginPayload,
+  LoginResponse,
+  LogoutResponse,
+  SignUpPayload,
+  SignUpResponse
+} from 'types/auth';
 
 const { ACCESS_TOKEN } = jwtConst;
 const { USER } = userRoles;
 
-function* loginSaga(action: PayloadAction<LoginPayload>): any {
+function* loginSaga(action: PayloadAction<LoginPayload>) {
   try {
-    const res = yield call(loginApi, action.payload);
+    const res: LoginResponse = yield call(loginApi, action.payload);
     const { status, data } = res;
     if (status === 200) {
       localStorage.setItem(jwtConst.ACCESS_TOKEN, `Bearer ${data.accessToken}`);
-      yield put(authActions.loginSuccess(data));
+      yield put(authActions.loginSuccess(data.user));
     }
-  } catch (error: any) {
+  } catch (error) {
     console.log(error);
     yield put(authActions.loginFail());
   }
 }
 
-function* signUpSaga(action: PayloadAction<SignUpPayload>): any {
+function* signUpSaga(action: PayloadAction<SignUpPayload>) {
   try {
-    const res = yield call(signUpApi, action.payload);
+    const res: SignUpResponse = yield call(signUpApi, action.payload);
     const { status } = res;
     if (status === 201) {
       yield put(authActions.signUpSuccess());
     }
-  } catch (error: any) {
+  } catch (error) {
     console.log(error);
     yield put(authActions.signUpFail());
   }
 }
 
-function* getLoggedUserSaga(): any {
+function* getLoggedUserSaga() {
   try {
-    const res = yield call(getLoggedUserApi);
-    const { status, data } = res || {};
-    if (status === 200) {
-      yield put(authActions.getLoggedUserSuccess(data));
-    }
-  } catch (error: any) {
-    console.log(error);
-  }
-}
-
-function* refreshTokenSaga(): any {
-  try {
-    const res = yield call(refreshTokenApi);
+    const res: LoginResponse = yield call(getLoggedUserApi);
     const { status, data } = res;
     if (status === 200) {
-      yield put(authActions.refreshTokenSuccess(data));
-      localStorage.setItem(ACCESS_TOKEN, `Bearer ${data.accessToken}`);
+      yield put(authActions.getLoggedUserSuccess(data.user));
     }
-  } catch (error: any) {
+  } catch (error) {
     console.log(error);
   }
 }
 
-function* logoutSaga({ payload }: any): any {
+function* refreshTokenSaga() {
   try {
-    const res = yield call(logoutApi);
+    const res: LoginResponse = yield call(refreshTokenApi);
+    const { status, data } = res;
+    if (status === 200) {
+      yield put(authActions.refreshTokenSuccess(data.user));
+      localStorage.setItem(ACCESS_TOKEN, `Bearer ${data.accessToken}`);
+    }
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+function* logoutSaga(action: PayloadAction<any>) {
+  try {
+    const res: LogoutResponse = yield call(logoutApi);
     const { status } = res;
     if (status === 200) {
       yield put(authActions.logoutSuccess());
-      const { history, role } = payload;
+      const { history, role } = action.payload;
       history.push(role === USER ? ROUTES.home.login : ROUTES.admin.login);
       localStorage.removeItem(ACCESS_TOKEN);
     }
-  } catch (error: any) {
+  } catch (error) {
     console.log(error);
   }
 }
