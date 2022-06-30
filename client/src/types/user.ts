@@ -5,7 +5,7 @@ export type UserState = {
 
 export type User = {
   _id?: string;
-  fullname: string;
+  fullName: string;
   email: string;
   phone: string;
   city: string;

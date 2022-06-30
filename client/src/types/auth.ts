@@ -12,7 +12,7 @@ export type LoginPayload = {
 };
 
 export type SignUpPayload = {
-  fullname: string;
+  fullName: string;
   email: string;
   phone: string;
   gender: string;

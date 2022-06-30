@@ -44,9 +44,11 @@ function* signUpSaga(action: PayloadAction<SignUpPayload>) {
 function* getLoggedUserSaga() {
   try {
     const res: LoginResponse = yield call(getLoggedUserApi);
-    const { status, data } = res;
-    if (status === 200) {
-      yield put(authActions.getLoggedUserSuccess(data.user));
+    if (res) {
+      const { status, data } = res;
+      if (status === 200) {
+        yield put(authActions.getLoggedUserSuccess(data.user));
+      }
     }
   } catch (error) {
     console.log(error);

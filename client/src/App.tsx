@@ -1,5 +1,4 @@
 import { useEffect } from 'react';
-import 'App.css';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import Login from 'pages/Login';
 import LoginAdmin from 'pages/admin/Login';
@@ -23,7 +22,6 @@ function App() {
   }, [dispatch]);
 
   useEffect(() => {
-    document.title = 'E-commerce website';
     console.log(`Last Updated: ${new Date('2022-06-28')}`);
   }, []);
 

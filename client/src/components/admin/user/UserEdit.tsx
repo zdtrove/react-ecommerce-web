@@ -13,7 +13,7 @@ import { userActions } from 'redux/features/user/userSlice';
 const { GENDER, CITY, PAYMENT_METHODS, ROLES } = userConst;
 
 const validationSchema = Yup.object().shape({
-  fullname: Yup.string().required('Full Name is required').max(24, 'Full Name max length is 24'),
+  fullName: Yup.string().required('Full Name is required').max(24, 'Full Name max length is 24'),
   phone: Yup.string().required('Phone is required').max(10, 'Phone max length is 10'),
   city: Yup.string().required('City is required')
 });
@@ -27,11 +27,11 @@ type UserEditProps = {
 
 const UserEdit = ({ showUserEdit, setShowUserEdit, userRecord }: UserEditProps) => {
   const dispatch = useAppDispatch();
-  const { _id, email, fullname, phone, gender, city, payments, role } = userRecord;
+  const { _id, email, fullName, phone, gender, city, payments, role } = userRecord;
 
   let initialValues = {
     email,
-    fullname,
+    fullName,
     phone,
     gender,
     city,
@@ -67,8 +67,8 @@ const UserEdit = ({ showUserEdit, setShowUserEdit, userRecord }: UserEditProps) 
           <Input name="email" label="Email" type="email" value={formik.values.email} disabled />
           <Input
             label="Full Name"
-            {...formik.getFieldProps('fullname')}
-            error={formik.touched.fullname && formik.errors.fullname}
+            {...formik.getFieldProps('fullName')}
+            error={formik.touched.fullName && formik.errors.fullName}
             startIcon={<AccountCircleRoundedIcon />}
           />
           <Input
@@ -117,7 +117,7 @@ UserEdit.propTypes = {
   userRecord: PropTypes.shape({
     _id: PropTypes.string,
     email: PropTypes.string,
-    fullname: PropTypes.string,
+    fullName: PropTypes.string,
     phone: PropTypes.string,
     gender: PropTypes.string,
     city: PropTypes.string,

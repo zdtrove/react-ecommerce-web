@@ -180,10 +180,8 @@ const Users = () => {
   const [showUserDelete, setShowUserDelete] = useState(false);
   const [showUserAdd, setShowUserAdd] = useState(false);
   const [userRecord, setUserRecord] = useState<User>({} as User);
-
-  useEffect(() => {
-    dispatch(userActions.getUsers());
-  }, [dispatch]);
+  const [userList, setUserList] = useState<User[]>([]);
+  const [searchValue, setSearchValue] = useState('');
 
   const onPageChange = (e: unknown, nextPage: number) => {
     setPage(nextPage);
@@ -194,22 +192,23 @@ const Users = () => {
     setPage(0);
   };
 
-  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-    console.log(e);
-    // const { value } = e.target;
-    // let usersFilter;
-
-    // if (value) {
-    //   usersFilter = users.filter((user: User) => user.fullname.toLowerCase().includes(value));
-    // } else {
-    //   usersFilter = users;
-    // }
-  };
-
   const handleDeleteUser = async (id: string) => {
     await dispatch(userActions.deleteUser(id));
     setShowUserDelete(false);
   };
+
+  useEffect(() => {
+    setUserList(users);
+  }, [users]);
+
+  useEffect(() => {
+    dispatch(userActions.getUsers());
+  }, [dispatch]);
+
+  useEffect(() => {
+    setPage(0);
+    setUserList(users.filter((user: User) => user.fullName.toLowerCase().includes(searchValue)));
+  }, [searchValue]);
 
   return (
     <LayoutAdmin>
@@ -234,9 +233,9 @@ const Users = () => {
             <Input
               label="Search Users"
               startIcon={<SearchIcon />}
-              onChange={handleSearch}
+              onChange={(e) => setSearchValue(e.target.value)}
               margin="none"
-              value={''}
+              value={searchValue}
             />
             <Button
               onClick={() => setShowUserAdd(true)}
@@ -256,11 +255,11 @@ const Users = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {users
+              {userList
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((user: User, idx: number) => (
                   <TableRow key={idx}>
-                    <TableCell>{user.fullname}</TableCell>
+                    <TableCell>{user.fullName}</TableCell>
                     <TableCell>{user.email}</TableCell>
                     <TableCell>{user.phone}</TableCell>
                     <TableCell>{user.role}</TableCell>
@@ -299,7 +298,7 @@ const Users = () => {
           <TablePagination
             rowsPerPageOptions={[3, 6, 10, 25, 50]}
             component="div"
-            count={users.length}
+            count={userList.length}
             rowsPerPage={rowsPerPage}
             page={page}
             onPageChange={onPageChange}
@@ -338,7 +337,7 @@ const Users = () => {
         <Dialog show={showUserDelete} setShow={setShowUserDelete} title="DELETE USER">
           <DialogContent>
             <DialogContentText>
-              Are you sure to delete <strong>{userRecord?.fullname}</strong>?
+              Are you sure to delete <strong>{userRecord?.fullName}</strong>?
             </DialogContentText>
           </DialogContent>
           <DialogActions>

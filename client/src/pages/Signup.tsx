@@ -31,7 +31,7 @@ import { SignUpPayload } from 'types/auth';
 const { GENDER, CITY, PAYMENT_METHODS } = userConst;
 
 const initialValues: SignUpPayload = {
-  fullname: '',
+  fullName: '',
   email: '',
   phone: '',
   gender: 'Male',
@@ -43,7 +43,7 @@ const initialValues: SignUpPayload = {
 };
 
 const validationSchema = Yup.object().shape({
-  fullname: Yup.string().required('Full Name is required').max(24, 'Full Name max length is 24'),
+  fullName: Yup.string().required('Full Name is required').max(24, 'Full Name max length is 24'),
   email: Yup.string()
     .email('Email format incorrect')
     .required('Email is required')
@@ -151,8 +151,8 @@ const SignUp = () => {
             <Grid item sm={12}>
               <Input
                 label="Full Name"
-                {...formik.getFieldProps('fullname')}
-                error={formik.touched.fullname && formik.errors.fullname}
+                {...formik.getFieldProps('fullName')}
+                error={formik.touched.fullName && formik.errors.fullName}
                 startIcon={<AccountCircleRoundedIcon />}
               />
               <Input

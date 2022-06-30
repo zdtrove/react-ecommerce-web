@@ -59,7 +59,7 @@ axios.interceptors.response.use(
     }
 
     if (data.name === JWT_EXPIRED) {
-      await store.dispatch(authActions.refreshToken());
+      await store.dispatch({ type: authActions.refreshToken.type });
       config._retry = true;
       config.headers['Authorization'] = localStorage.getItem(ACCESS_TOKEN);
 

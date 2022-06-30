@@ -31,7 +31,7 @@ const useStyles = makeStyles(() => ({
 }));
 
 const validationSchema = Yup.object().shape({
-  fullname: Yup.string().required('Full Name is required').max(24, 'Full Name max length is 24'),
+  fullName: Yup.string().required('Full Name is required').max(24, 'Full Name max length is 24'),
   email: Yup.string()
     .email('Email format incorrect')
     .required('Email is required')
@@ -48,7 +48,7 @@ const validationSchema = Yup.object().shape({
 });
 
 const initialValues = {
-  fullname: '',
+  fullName: '',
   email: '',
   phone: '',
   gender: 'Male',
@@ -117,8 +117,8 @@ const UserAdd = ({ showUserAdd, setShowUserAdd }: UserAddProps) => {
           />
           <Input
             label="Full Name"
-            {...formik.getFieldProps('fullname')}
-            error={formik.touched.fullname && formik.errors.fullname}
+            {...formik.getFieldProps('fullName')}
+            error={formik.touched.fullName && formik.errors.fullName}
             startIcon={<AccountCircleRoundedIcon />}
           />
           <Input

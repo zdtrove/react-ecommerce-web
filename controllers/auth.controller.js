@@ -4,6 +4,7 @@ const jwt = require('jsonwebtoken')
 
 const createAccessToken = payload => {
     return jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '2h'})
+    // return jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '30s'})
 }
 
 const createRefreshToken = payload => {
@@ -13,7 +14,7 @@ const createRefreshToken = payload => {
 
 exports.register = async (req, res) => {
     try {
-        const { fullname, email, phone, gender, city, payments, password, agree } = req.body
+        const { fullName, email, phone, gender, city, payments, password, agree } = req.body
 
         const emailExist = await User.findOne({ email })
         if (emailExist) return res.status(400).json({ message: "Email already exists"})
@@ -21,7 +22,7 @@ exports.register = async (req, res) => {
         const passwordHash = await bcrypt.hash(password, 12)
 
         const newUser = new User({
-            fullname, email, phone, gender, city, payments, password: passwordHash, agree
+            fullName, email, phone, gender, city, payments, password: passwordHash, agree
         })
 
         await newUser.save((err, data) => {

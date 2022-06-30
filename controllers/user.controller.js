@@ -13,7 +13,7 @@ exports.getUsers = async (req, res) => {
 
 exports.addUser = async (req, res) => {
 	try {
-		const { fullname, email, phone, gender, city, payments, password } = req.body
+		const { fullName, email, phone, gender, city, payments, password } = req.body
 
         const emailExist = await User.findOne({ email })
         if (emailExist) return res.status(400).json({ message: "Email already exists"})
@@ -21,7 +21,7 @@ exports.addUser = async (req, res) => {
         const passwordHash = await bcrypt.hash(password, 12)
 
         const newUser = new User({
-            fullname, email, phone, gender, city, payments, password: passwordHash
+            fullName, email, phone, gender, city, payments, password: passwordHash
         })
 
         await newUser.save((err, data) => {
@@ -38,12 +38,12 @@ exports.addUser = async (req, res) => {
 
 exports.updateUser = async (req, res) => {
 	try {
-		const { fullname, phone, gender, city, payments } = req.body
+		const { fullName, phone, gender, city, payments } = req.body
 		const user = await User.findOneAndUpdate({ _id: req.params.id }, {
-			fullname, phone, gender, city, payments
+			fullName, phone, gender, city, payments
 		})
 
-		const newUser = { ...user._doc, fullname, phone, gender, city, payments }
+		const newUser = { ...user._doc, fullName, phone, gender, city, payments }
 		delete newUser.password
 		res.status(200).json({
 			message: "Update user success",

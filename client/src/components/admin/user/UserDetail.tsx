@@ -18,14 +18,14 @@ type UserDetailProps = {
 
 const UserDetail = ({ showUserDetail, setShowUserDetail, userRecord }: UserDetailProps) => {
   const classes = useStyles();
-  const { fullname, email, phone, city, gender, payments, role } = userRecord;
+  const { fullName, email, phone, city, gender, payments, role } = userRecord;
 
   return (
     <>
       <Dialog show={showUserDetail} setShow={setShowUserDetail} title="USER DETAIL">
         <DialogContent dividers>
           <Typography variant="h6">Full Name</Typography>
-          <DialogContentText>{fullname}</DialogContentText>
+          <DialogContentText>{fullName}</DialogContentText>
           <Typography variant="h6">Email</Typography>
           <DialogContentText>{email}</DialogContentText>
           <Typography variant="h6">Phone</Typography>
@@ -52,7 +52,7 @@ UserDetail.propTypes = {
   showUserDetail: PropTypes.bool,
   setShowUserDetail: PropTypes.func,
   userRecord: PropTypes.shape({
-    fullname: PropTypes.string,
+    fullName: PropTypes.string,
     email: PropTypes.string,
     phone: PropTypes.string,
     city: PropTypes.string,

@@ -43,7 +43,7 @@ const useStyles = makeStyles((theme) => ({
 type MuiSelectProps = {
   label?: string;
   error?: any;
-  items?: any[];
+  items?: any[] | string[];
   isObject?: boolean;
 };
 
