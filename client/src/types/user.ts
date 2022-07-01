@@ -12,11 +12,13 @@ export type User = {
   gender: string;
   payments: string[];
   role: string;
+  password?: string;
+  passwordConfirm?: string;
 };
 
 export type AddOrUpdateUserResponse = {
   status: number;
-  newUser: User;
+  user: User;
 };
 
 export type DeleteUserResponse = {

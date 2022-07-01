@@ -21,6 +21,7 @@ import VisibilityRoundedIcon from '@material-ui/icons/VisibilityRounded';
 import VisibilityOffRoundedIcon from '@material-ui/icons/VisibilityOffRounded';
 import EmailRoundedIcon from '@material-ui/icons/EmailRounded';
 import { userActions } from 'redux/features/user/userSlice';
+import { User } from 'types/user';
 
 const { GENDER, CITY, PAYMENT_METHODS, ROLES } = userConst;
 
@@ -47,7 +48,7 @@ const validationSchema = Yup.object().shape({
     .oneOf([Yup.ref('password'), null], 'Password not matched')
 });
 
-const initialValues = {
+const initialValues: User = {
   fullName: '',
   email: '',
   phone: '',
@@ -76,20 +77,20 @@ const UserAdd = ({ showUserAdd, setShowUserAdd }: UserAddProps) => {
   const handlePayments = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { checked, value } = e.target;
     if (checked) {
-      formik.setFieldValue('payments', [...formik.values.payments, value]);
+      formIk.setFieldValue('payments', [...formIk.values.payments, value]);
     } else {
-      formik.setFieldValue(
+      formIk.setFieldValue(
         'payments',
-        formik.values.payments.filter((v) => v !== value)
+        formIk.values.payments.filter((v) => v !== value)
       );
     }
   };
 
-  const formik = useFormik({
+  const formIk = useFormik({
     initialValues,
     validationSchema,
-    onSubmit: async (values) => {
-      await dispatch(userActions.addUser(values));
+    onSubmit: (values) => {
+      dispatch(userActions.addUser(values));
       setShowUserAdd(false);
     }
   });
@@ -107,53 +108,53 @@ const UserAdd = ({ showUserAdd, setShowUserAdd }: UserAddProps) => {
   return (
     <Dialog show={showUserAdd} setShow={setShowUserAdd} title="USER EDIT">
       <DialogContent dividers>
-        <form onSubmit={formik.handleSubmit}>
+        <form onSubmit={formIk.handleSubmit}>
           <Input
             label="Email"
             type="email"
-            {...formik.getFieldProps('email')}
-            error={formik.touched.email && formik.errors.email}
+            {...formIk.getFieldProps('email')}
+            error={formIk.touched.email && formIk.errors.email}
             startIcon={<EmailRoundedIcon />}
           />
           <Input
             label="Full Name"
-            {...formik.getFieldProps('fullName')}
-            error={formik.touched.fullName && formik.errors.fullName}
+            {...formIk.getFieldProps('fullName')}
+            error={formIk.touched.fullName && formIk.errors.fullName}
             startIcon={<AccountCircleRoundedIcon />}
           />
           <Input
             label="Phone"
-            {...formik.getFieldProps('phone')}
-            error={formik.touched.phone && formik.errors.phone}
+            {...formIk.getFieldProps('phone')}
+            error={formIk.touched.phone && formIk.errors.phone}
             startIcon={<PhoneAndroidRoundedIcon />}
           />
-          <RadioGroup row label="Gender" {...formik.getFieldProps('gender')} items={GENDER} />
-          <RadioGroup row label="Role" {...formik.getFieldProps('role')} items={ROLES} />
+          <RadioGroup row label="Gender" {...formIk.getFieldProps('gender')} items={GENDER} />
+          <RadioGroup row label="Role" {...formIk.getFieldProps('role')} items={ROLES} />
           <Select
             label="City"
-            error={formik.touched.city && formik.errors.city}
-            {...formik.getFieldProps('city')}
+            error={formIk.touched.city && formIk.errors.city}
+            {...formIk.getFieldProps('city')}
             items={CITY}
           />
           <Checkboxes
             name="payments"
             label="Payment Methods"
             items={PAYMENT_METHODS}
-            formikValue={formik.values.payments}
+            formIkValue={formIk.values.payments}
             onChange={handlePayments}
           />
           <Input
             type={typePass}
             label="Password"
-            {...formik.getFieldProps('password')}
-            error={formik.touched.password && formik.errors.password}
+            {...formIk.getFieldProps('password')}
+            error={formIk.touched.password && formIk.errors.password}
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
                   <LockRoundedIcon />
                 </InputAdornment>
               ),
-              endAdornment: formik.values.password && (
+              endAdornment: formIk.values.password && (
                 <InputAdornment position="end" onClick={handleShowPass}>
                   <Tooltip
                     classes={{ tooltipPlacementTop: classes.tooltip }}
@@ -173,15 +174,15 @@ const UserAdd = ({ showUserAdd, setShowUserAdd }: UserAddProps) => {
           <Input
             type={typePassCf}
             label="Password Confirm"
-            {...formik.getFieldProps('passwordConfirm')}
-            error={formik.touched.passwordConfirm && formik.errors.passwordConfirm}
+            {...formIk.getFieldProps('passwordConfirm')}
+            error={formIk.touched.passwordConfirm && formIk.errors.passwordConfirm}
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
                   <LockRoundedIcon />
                 </InputAdornment>
               ),
-              endAdornment: formik.values.passwordConfirm && (
+              endAdornment: formIk.values.passwordConfirm && (
                 <InputAdornment position="end" onClick={handleShowPassCf}>
                   <Tooltip
                     classes={{ tooltipPlacementTop: classes.tooltip }}
@@ -202,13 +203,13 @@ const UserAdd = ({ showUserAdd, setShowUserAdd }: UserAddProps) => {
       </DialogContent>
       <DialogActions>
         <Button
-          disabled={!(formik.isValid && formik.dirty)}
-          onClick={() => formik.submitForm()}
+          disabled={!(formIk.isValid && formIk.dirty)}
+          onClick={() => formIk.submitForm()}
           text="SAVE"
         />
         <Button
-          disabled={!formik.dirty}
-          onClick={() => formik.resetForm()}
+          disabled={!formIk.dirty}
+          onClick={() => formIk.resetForm()}
           color="secondary"
           text="RESET"
         />

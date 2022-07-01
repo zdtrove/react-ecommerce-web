@@ -154,8 +154,8 @@ const Categories = () => {
     e.stopPropagation();
   };
 
-  const handleDelete = async (id: string) => {
-    await dispatch(categoryActions.deleteCategory(id));
+  const handleDelete = (id: string) => {
+    dispatch(categoryActions.deleteCategory(id));
     setShowCategoryDelete(false);
   };
 
@@ -176,9 +176,10 @@ const Categories = () => {
                 <>
                   <Button onClick={(e: React.ChangeEvent) => handleEdit(e, category)} text="EDIT" />
                   <Button
-                    onClick={() => {
+                    onClick={(e) => {
                       setCategoryRecord(category);
                       setShowCategoryDelete(true);
+                      e.stopPropagation();
                     }}
                     text="DELETE"
                     color="secondary"

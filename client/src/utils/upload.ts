@@ -25,3 +25,17 @@ export const imageUpload = async (image: any) => {
 
   return { public_id: data.public_id, url: data.secure_url };
 };
+
+export const imagesUpload = async (images: any[]) => {
+  let imgArr = [];
+  for (const image of images) {
+    const formData = new FormData();
+    formData.append('file', image);
+    formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
+
+    const res = await axios.post(CLOUDINARY_URL, formData);
+    const { data } = res;
+    imgArr.push({ public_id: data.public_id, url: data.secure_url });
+  }
+  return imgArr;
+};

@@ -5,10 +5,12 @@ import authReducer from './features/auth/authSlice';
 import categoryReducer from './features/category/categorySlice';
 import userReducer from './features/user/userSlice';
 import uiReducer from './features/ui/uiSlice';
+import productReducer from './features/product/productSlice';
 
 const rootReducer = combineReducers({
   auth: authReducer,
   category: categoryReducer,
+  product: productReducer,
   user: userReducer,
   ui: uiReducer
 });

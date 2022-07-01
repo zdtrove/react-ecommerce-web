@@ -21,6 +21,7 @@ mongoose.connect(process.env.MONGODB_URL, {
 
 app.use('/api', require('./routes/auth.route'))
 app.use('/api', require('./routes/category.route'))
+app.use('/api', require('./routes/product.route'))
 app.use('/api', require('./routes/user.route'))
 
 if (process.env.NODE_ENV === 'production') {

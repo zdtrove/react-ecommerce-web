@@ -93,7 +93,7 @@ const Login = () => {
   const [showPass, setShowPass] = useState(false);
   const [typePass, setTypePass] = useState('password');
 
-  const formik = useFormik({
+  const formIk = useFormik({
     initialValues,
     validationSchema,
     onSubmit: (values) => {
@@ -120,28 +120,28 @@ const Login = () => {
           </Avatar>
           <Typography variant="h4">Login</Typography>
         </Box>
-        <form onSubmit={formik.handleSubmit}>
+        <form onSubmit={formIk.handleSubmit}>
           <Grid container>
             <Grid item sm={12}>
               <Input
                 label="Email"
                 type="email"
-                {...formik.getFieldProps('email')}
-                error={formik.touched.email && formik.errors.email}
+                {...formIk.getFieldProps('email')}
+                error={formIk.touched.email && formIk.errors.email}
                 startIcon={<EmailRoundedIcon />}
               />
               <Input
                 label="Password"
                 type={typePass}
-                {...formik.getFieldProps('password')}
-                error={formik.touched.password && formik.errors.password}
+                {...formIk.getFieldProps('password')}
+                error={formIk.touched.password && formIk.errors.password}
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position="start">
                       <LockRoundedIcon />
                     </InputAdornment>
                   ),
-                  endAdornment: formik.values.password && (
+                  endAdornment: formIk.values.password && (
                     <InputAdornment position="end" onClick={handleShowPass}>
                       <Tooltip
                         classes={{ tooltipPlacementTop: classes.tooltip }}
@@ -159,10 +159,10 @@ const Login = () => {
                 }}
               />
               <div className={classes.buttons}>
-                <Button disabled={!(formik.isValid && formik.dirty)} text="LOGIN" />
+                <Button disabled={!(formIk.isValid && formIk.dirty)} text="LOGIN" />
                 <Button
-                  disabled={!formik.dirty}
-                  onClick={() => formik.resetForm()}
+                  disabled={!formIk.dirty}
+                  onClick={() => formIk.resetForm()}
                   color="secondary"
                   text="RESET"
                 />

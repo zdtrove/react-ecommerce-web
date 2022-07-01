@@ -1,39 +1,34 @@
-import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { useAppDispatch, useAppSelector } from 'redux/hook';
-import LayoutAdmin from 'components/admin/layouts/LayoutAdmin';
-import { Input, Button, Dialog } from 'components/UI';
 import {
-  makeStyles,
-  useTheme,
-  Paper,
-  TableContainer,
-  Table,
-  TableHead,
-  TableBody,
-  TableRow,
-  TableCell,
-  TablePagination,
   Card,
-  Typography,
+  IconButton,
+  makeStyles,
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TablePagination,
+  TableRow,
   Toolbar,
-  DialogContent,
-  DialogContentText,
-  DialogActions,
-  IconButton
+  Typography,
+  useTheme
 } from '@material-ui/core';
-import PeopleOutlineTwoToneIcon from '@material-ui/icons/PeopleOutlineTwoTone';
-import AddIcon from '@material-ui/icons/Add';
+import LayoutAdmin from 'components/admin/layouts/LayoutAdmin';
+import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import SearchIcon from '@material-ui/icons/Search';
-import UserDetail from 'components/admin/user/UserDetail';
-import UserEdit from 'components/admin/user/UserEdit';
-import UserAdd from 'components/admin/user/UserAdd';
+import AddIcon from '@material-ui/icons/Add';
 import FirstPageIcon from '@material-ui/icons/FirstPage';
 import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
 import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
 import LastPageIcon from '@material-ui/icons/LastPage';
-import { User } from 'types/user';
-import { userActions, selectUsers } from 'redux/features/user/userSlice';
+import { Button, Input } from 'components/UI';
+import { useEffect, useState } from 'react';
+import ProductAdd from 'components/admin/product/ProductAdd';
+import { Product } from 'types/product';
+import { productActions, selectProducts } from 'redux/features/product/productSlice';
+import { useAppDispatch, useAppSelector } from 'redux/hook';
 
 const useStyles = makeStyles((theme) => ({
   rootHeader: {
@@ -169,19 +164,19 @@ TablePaginationActions.propTypes = {
   onPageChange: PropTypes.any
 };
 
-const Users = () => {
+const Products = () => {
   const dispatch = useAppDispatch();
   const classes = useStyles();
-  const users = useAppSelector(selectUsers);
+  const products = useAppSelector(selectProducts);
+  const [searchValue, setSearchValue] = useState('');
+  const [showProductAdd, setShowProductAdd] = useState(false);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(3);
-  const [showUserDetail, setShowUserDetail] = useState(false);
-  const [showUserEdit, setShowUserEdit] = useState(false);
-  const [showUserDelete, setShowUserDelete] = useState(false);
-  const [showUserAdd, setShowUserAdd] = useState(false);
-  const [userRecord, setUserRecord] = useState<User>({} as User);
-  const [userList, setUserList] = useState<User[]>([]);
-  const [searchValue, setSearchValue] = useState('');
+  // const [showProductDetail, setShowProductDetail] = useState(false);
+  // const [showProductEdit, setShowProductEdit] = useState(false);
+  // const [showProductDelete, setShowProductDelete] = useState(false);
+  // const [productRecord, setProductRecord] = useState<Product>({} as Product);
+  const [productList, setProductList] = useState<Product[]>([]);
 
   const onPageChange = (e: unknown, nextPage: number) => {
     setPage(nextPage);
@@ -192,22 +187,19 @@ const Users = () => {
     setPage(0);
   };
 
-  const handleDeleteUser = (id: string) => {
-    dispatch(userActions.deleteUser(id));
-    setShowUserDelete(false);
-  };
+  useEffect(() => {
+    setProductList(products);
+  }, [products]);
 
   useEffect(() => {
-    setUserList(users);
-  }, [users]);
-
-  useEffect(() => {
-    dispatch(userActions.getUsers());
+    dispatch(productActions.getProducts());
   }, [dispatch]);
 
   useEffect(() => {
     setPage(0);
-    setUserList(users.filter((user: User) => user.fullName.toLowerCase().includes(searchValue)));
+    setProductList(
+      products.filter((product: Product) => product.name.toLowerCase().includes(searchValue))
+    );
   }, [searchValue]);
 
   return (
@@ -215,14 +207,14 @@ const Users = () => {
       <Paper className={classes.rootHeader}>
         <div className={classes.header}>
           <Card className={classes.headerIcon}>
-            <PeopleOutlineTwoToneIcon />
+            <ShoppingCartIcon />
           </Card>
           <div className={classes.headerTitle}>
             <Typography variant="h6" component="div">
-              Users
+              Products
             </Typography>
             <Typography variant="subtitle2" component="div">
-              List Users
+              Products list
             </Typography>
           </div>
         </div>
@@ -231,14 +223,14 @@ const Users = () => {
         <TableContainer>
           <Toolbar className={classes.tableAction}>
             <Input
-              label="Search Users"
+              label="Search Products"
               startIcon={<SearchIcon />}
               onChange={(e) => setSearchValue(e.target.value)}
               margin="none"
               value={searchValue}
             />
             <Button
-              onClick={() => setShowUserAdd(true)}
+              onClick={() => setShowProductAdd(true)}
               variant="outlined"
               startIcon={<AddIcon />}
               text="ADD NEW"
@@ -247,27 +239,27 @@ const Users = () => {
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell>Full Name</TableCell>
-                <TableCell>Email</TableCell>
-                <TableCell>Phone</TableCell>
-                <TableCell>Role</TableCell>
+                <TableCell>Name</TableCell>
+                <TableCell>Description</TableCell>
+                <TableCell>Price</TableCell>
+                <TableCell>Images</TableCell>
                 <TableCell>Actions</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {userList
+              {productList
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((user: User, idx: number) => (
+                .map((product: Product, idx: number) => (
                   <TableRow key={idx}>
-                    <TableCell>{user.fullName}</TableCell>
-                    <TableCell>{user.email}</TableCell>
-                    <TableCell>{user.phone}</TableCell>
-                    <TableCell>{user.role}</TableCell>
+                    <TableCell>{product.name}</TableCell>
+                    <TableCell>{product.description}</TableCell>
+                    <TableCell>{product.price}</TableCell>
+                    <TableCell>{product.images}</TableCell>
                     <TableCell>
                       <Button
                         onClick={() => {
-                          setUserRecord(user);
-                          setShowUserDetail(true);
+                          // setProductRecord(product);
+                          // setShowProductDetail(true);
                         }}
                         className={classes.marginBtn}
                         text="DETAIL"
@@ -275,8 +267,8 @@ const Users = () => {
                       />
                       <Button
                         onClick={() => {
-                          setUserRecord(user);
-                          setShowUserEdit(true);
+                          // setProductRecord(product);
+                          // setShowProductEdit(true);
                         }}
                         className={classes.marginBtn}
                         text="EDIT"
@@ -286,8 +278,8 @@ const Users = () => {
                         color="secondary"
                         text="DELETE"
                         onClick={() => {
-                          setUserRecord(user);
-                          setShowUserDelete(true);
+                          // setProductRecord(product);
+                          // setShowProductDelete(true);
                         }}
                       />
                     </TableCell>
@@ -298,7 +290,7 @@ const Users = () => {
           <TablePagination
             rowsPerPageOptions={[3, 6, 10, 25, 50]}
             component="div"
-            count={userList.length}
+            count={productList.length}
             rowsPerPage={rowsPerPage}
             page={page}
             onPageChange={onPageChange}
@@ -307,51 +299,17 @@ const Users = () => {
           />
         </TableContainer>
       </Paper>
-      {showUserAdd && (
-        <UserAdd
+      {showProductAdd && (
+        <ProductAdd
           {...{
-            showUserAdd,
-            setShowUserAdd
+            products,
+            showProductAdd,
+            setShowProductAdd
           }}
         />
-      )}
-      {showUserDetail && (
-        <UserDetail
-          {...{
-            showUserDetail,
-            setShowUserDetail,
-            userRecord
-          }}
-        />
-      )}
-      {showUserEdit && (
-        <UserEdit
-          {...{
-            showUserEdit,
-            setShowUserEdit,
-            userRecord
-          }}
-        />
-      )}
-      {showUserDelete && (
-        <Dialog show={showUserDelete} setShow={setShowUserDelete} title="DELETE USER">
-          <DialogContent>
-            <DialogContentText>
-              Are you sure to delete <strong>{userRecord?.fullName}</strong>?
-            </DialogContentText>
-          </DialogContent>
-          <DialogActions>
-            <Button
-              onClick={() => handleDeleteUser(userRecord?._id || '')}
-              color="secondary"
-              text="DELETE"
-            />
-            <Button onClick={() => setShowUserDelete(false)} color="default" text="CANCEL" />
-          </DialogActions>
-        </Dialog>
       )}
     </LayoutAdmin>
   );
 };
 
-export default Users;
+export default Products;

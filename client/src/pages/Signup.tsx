@@ -108,7 +108,7 @@ const SignUp = () => {
   const [typePass, setTypePass] = useState('password');
   const [typePassCf, setTypePassCf] = useState('password');
 
-  const formik = useFormik({
+  const formIk = useFormik({
     initialValues,
     validationSchema,
     onSubmit: (values) => {
@@ -129,10 +129,10 @@ const SignUp = () => {
   const handlePayments = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { checked, value } = e.target;
     checked
-      ? formik.setFieldValue('payments', [...formik.values.payments, value])
-      : formik.setFieldValue(
+      ? formIk.setFieldValue('payments', [...formIk.values.payments, value])
+      : formIk.setFieldValue(
           'payments',
-          formik.values.payments.filter((v) => v !== value)
+          formIk.values.payments.filter((v) => v !== value)
         );
   };
 
@@ -146,54 +146,54 @@ const SignUp = () => {
           </Avatar>
           <Typography variant="h4">Register</Typography>
         </Box>
-        <form onSubmit={formik.handleSubmit}>
+        <form onSubmit={formIk.handleSubmit}>
           <Grid container>
             <Grid item sm={12}>
               <Input
                 label="Full Name"
-                {...formik.getFieldProps('fullName')}
-                error={formik.touched.fullName && formik.errors.fullName}
+                {...formIk.getFieldProps('fullName')}
+                error={formIk.touched.fullName && formIk.errors.fullName}
                 startIcon={<AccountCircleRoundedIcon />}
               />
               <Input
                 label="Email"
-                {...formik.getFieldProps('email')}
-                error={formik.touched.email && formik.errors.email}
+                {...formIk.getFieldProps('email')}
+                error={formIk.touched.email && formIk.errors.email}
                 startIcon={<EmailRoundedIcon />}
               />
               <Input
                 label="Phone"
-                {...formik.getFieldProps('phone')}
-                error={formik.touched.phone && formik.errors.phone}
+                {...formIk.getFieldProps('phone')}
+                error={formIk.touched.phone && formIk.errors.phone}
                 startIcon={<PhoneAndroidRoundedIcon />}
               />
-              <RadioGroup row label="Gender" {...formik.getFieldProps('gender')} items={GENDER} />
+              <RadioGroup row label="Gender" {...formIk.getFieldProps('gender')} items={GENDER} />
               <Select
                 label="City"
-                error={formik.touched.city && formik.errors.city}
-                {...formik.getFieldProps('city')}
+                error={formIk.touched.city && formIk.errors.city}
+                {...formIk.getFieldProps('city')}
                 items={CITY}
               />
               <Checkboxes
                 name="payments"
                 label="Payment Methods"
                 items={PAYMENT_METHODS}
-                formikValue={formik.values.payments}
+                formIkValue={formIk.values.payments}
                 onChange={handlePayments}
               />
 
               <Input
                 type={typePass}
                 label="Password"
-                {...formik.getFieldProps('password')}
-                error={formik.touched.password && formik.errors.password}
+                {...formIk.getFieldProps('password')}
+                error={formIk.touched.password && formIk.errors.password}
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position="start">
                       <LockRoundedIcon />
                     </InputAdornment>
                   ),
-                  endAdornment: formik.values.password && (
+                  endAdornment: formIk.values.password && (
                     <InputAdornment position="end" onClick={handleShowPass}>
                       <Tooltip
                         classes={{ tooltipPlacementTop: classes.tooltip }}
@@ -213,15 +213,15 @@ const SignUp = () => {
               <Input
                 type={typePassCf}
                 label="Password Confirm"
-                {...formik.getFieldProps('passwordConfirm')}
-                error={formik.touched.passwordConfirm && formik.errors.passwordConfirm}
+                {...formIk.getFieldProps('passwordConfirm')}
+                error={formIk.touched.passwordConfirm && formIk.errors.passwordConfirm}
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position="start">
                       <LockRoundedIcon />
                     </InputAdornment>
                   ),
-                  endAdornment: formik.values.passwordConfirm && (
+                  endAdornment: formIk.values.passwordConfirm && (
                     <InputAdornment position="end" onClick={handleShowPassCf}>
                       <Tooltip
                         classes={{ tooltipPlacementTop: classes.tooltip }}
@@ -240,19 +240,19 @@ const SignUp = () => {
               />
               <Checkbox
                 label="Agree our terms"
-                checked={formik.values.agree}
-                error={formik.touched.agree && formik.errors.agree}
-                {...formik.getFieldProps('agree')}
+                checked={formIk.values.agree}
+                error={formIk.touched.agree && formIk.errors.agree}
+                {...formIk.getFieldProps('agree')}
               />
               <div className={classes.buttons}>
                 <Button
-                  onClick={formik.handleSubmit}
-                  disabled={!(formik.isValid && formik.dirty)}
+                  onClick={formIk.handleSubmit}
+                  disabled={!(formIk.isValid && formIk.dirty)}
                   text="SIGN UP"
                 />
                 <Button
-                  disabled={!formik.dirty}
-                  onClick={() => formik.resetForm()}
+                  disabled={!formIk.dirty}
+                  onClick={() => formIk.resetForm()}
                   color="secondary"
                   text="RESET"
                 />

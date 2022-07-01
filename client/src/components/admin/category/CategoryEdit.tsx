@@ -15,6 +15,7 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { categoryActions } from 'redux/features/category/categorySlice';
 import { Category } from 'types/category';
+import { createCategoryList } from 'utils/functions';
 
 const useStyles = makeStyles((theme) => ({
   upload: {
@@ -62,17 +63,17 @@ const CategoryEdit = ({
   const [categoryImg, setCategoryImg] = useState<Blob | MediaSource | null>(null);
   const [categoryImgReset, setCategoryImgReset] = useState('');
 
-  const initialValues = {
+  const initialValues: Category = {
     name,
     parentId: parentId ? parentId : '',
     image
   };
 
-  const formik = useFormik({
+  const formIk = useFormik({
     initialValues,
     validationSchema,
-    onSubmit: async (values) => {
-      await dispatch(categoryActions.updateCategory({ _id, ...values }));
+    onSubmit: (values) => {
+      dispatch(categoryActions.updateCategory({ _id, ...values }));
       setShowCategoryEdit(false);
     }
   });
@@ -81,36 +82,17 @@ const CategoryEdit = ({
     const file: File = (e.target.files as FileList)[0];
     setCategoryImgReset('');
     setCategoryImg(file);
-    formik.setFieldValue('image', file);
-  };
-
-  const createCategoryList = (categories: Category[], options: any[] = [], level = 1) => {
-    categories &&
-      categories.forEach((cat) => {
-        if (cat._id !== _id) {
-          options.push({
-            name: cat.name,
-            id: cat._id,
-            level
-          });
-        }
-
-        if (cat.children && cat.children.length > 0) {
-          createCategoryList(cat.children, options, level + 1);
-        }
-      });
-
-    return options;
+    formIk.setFieldValue('image', file);
   };
 
   return (
     <Dialog show={showCategoryEdit} setShow={setShowCategoryEdit} title="CATEGORY EDIT">
       <DialogContent dividers>
-        <form onSubmit={formik.handleSubmit}>
+        <form onSubmit={formIk.handleSubmit}>
           <Input
             label="Name"
-            {...formik.getFieldProps('name')}
-            error={formik.touched.name && formik.errors.name}
+            {...formIk.getFieldProps('name')}
+            error={formIk.touched.name && formIk.errors.name}
           />
           <div className={classes.upload}>
             <label htmlFor="upload">
@@ -143,23 +125,23 @@ const CategoryEdit = ({
           </div>
           <Select
             label="Parent Category"
-            error={formik.touched.parentId && formik.errors.parentId}
-            {...formik.getFieldProps('parentId')}
-            items={createCategoryList(categories)}
+            error={formIk.touched.parentId && formIk.errors.parentId}
+            {...formIk.getFieldProps('parentId')}
+            items={createCategoryList(categories, [], 1, _id)}
             isObject
           />
         </form>
       </DialogContent>
       <DialogActions>
         <Button
-          disabled={!(formik.isValid && formik.dirty)}
-          onClick={() => formik.submitForm()}
+          disabled={!(formIk.isValid && formIk.dirty)}
+          onClick={() => formIk.submitForm()}
           text="SAVE"
         />
         <Button
-          disabled={!formik.dirty}
+          disabled={!formIk.dirty}
           onClick={() => {
-            formik.resetForm();
+            formIk.resetForm();
             setCategoryImgReset(image || '');
           }}
           color="secondary"

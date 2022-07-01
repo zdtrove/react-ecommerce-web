@@ -3,11 +3,11 @@ const { addCategory, getCategories, updateCategory, deleteCategory } = require('
 const { auth, onlyAdmin } = require('../middleware/auth.middleware')
 
 router.route('/categories')
-    .get(auth, getCategories)
+    .get(auth, onlyAdmin, getCategories)
     .post(auth, onlyAdmin, addCategory)
 
 router.route('/category/:id')
-    .patch(auth, updateCategory)
-    .delete(auth, deleteCategory)
+    .patch(auth, onlyAdmin, updateCategory)
+    .delete(auth, onlyAdmin, deleteCategory)
 
 module.exports = router

@@ -8,6 +8,8 @@ import {
 } from '@material-ui/core';
 
 type InputProps = {
+  multiline?: TextFieldProps['multiline'];
+  minRows?: TextFieldProps['minRows'];
   name?: TextFieldProps['name'];
   variant?: TextFieldProps['variant'];
   fullWidth?: TextFieldProps['fullWidth'];
@@ -30,6 +32,8 @@ type AdornmentType = {
 };
 
 const Input = ({
+  multiline,
+  minRows,
   variant,
   fullWidth,
   margin,
@@ -59,6 +63,8 @@ const Input = ({
       margin={margin ? margin : matches ? 'normal' : 'dense'}
       type={type || 'text'}
       size={matches ? 'medium' : 'small'}
+      multiline={multiline ? true : false}
+      {...(minRows && { minRows })}
       {...((startIcon || endIcon) && adornment())}
       {...(error && { error: true, helperText: error })}
       {...rest}

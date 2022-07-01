@@ -28,3 +28,9 @@ export type DeleteCategoryResponse = {
   message: string;
   status: number;
 };
+
+export type CategoryOption = {
+  level: number;
+  name: string;
+  id: string | undefined;
+};

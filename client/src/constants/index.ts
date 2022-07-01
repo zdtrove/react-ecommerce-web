@@ -36,7 +36,8 @@ export const ROUTES = {
     index: '/admin',
     login: '/admin/login',
     categories: '/admin/categories',
-    users: '/admin/users'
+    users: '/admin/users',
+    products: '/admin/products'
   }
 };
 
@@ -54,6 +55,10 @@ export const ENDPOINTS = {
   },
   categories: {
     getAll: '/api/categories',
+    getOne: '/api/category'
+  },
+  products: {
+    getAll: '/api/products',
     getOne: '/api/category'
   }
 };

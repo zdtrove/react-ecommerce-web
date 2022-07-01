@@ -29,7 +29,7 @@ const UserEdit = ({ showUserEdit, setShowUserEdit, userRecord }: UserEditProps) 
   const dispatch = useAppDispatch();
   const { _id, email, fullName, phone, gender, city, payments, role } = userRecord;
 
-  let initialValues = {
+  let initialValues: User = {
     email,
     fullName,
     phone,
@@ -42,20 +42,20 @@ const UserEdit = ({ showUserEdit, setShowUserEdit, userRecord }: UserEditProps) 
   const handlePayments = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { checked, value } = e.target;
     if (checked) {
-      formik.setFieldValue('payments', [...formik.values.payments, value]);
+      formIk.setFieldValue('payments', [...formIk.values.payments, value]);
     } else {
-      formik.setFieldValue(
+      formIk.setFieldValue(
         'payments',
-        formik.values.payments.filter((v) => v !== value)
+        formIk.values.payments.filter((v) => v !== value)
       );
     }
   };
 
-  const formik = useFormik({
+  const formIk = useFormik({
     initialValues,
     validationSchema,
-    onSubmit: async (values) => {
-      await dispatch(userActions.updateUser({ _id, ...values }));
+    onSubmit: (values) => {
+      dispatch(userActions.updateUser({ _id, ...values }));
       setShowUserEdit(false);
     }
   });
@@ -63,46 +63,46 @@ const UserEdit = ({ showUserEdit, setShowUserEdit, userRecord }: UserEditProps) 
   return (
     <Dialog show={showUserEdit} setShow={setShowUserEdit} title="USER EDIT">
       <DialogContent dividers>
-        <form onSubmit={formik.handleSubmit}>
-          <Input name="email" label="Email" type="email" value={formik.values.email} disabled />
+        <form onSubmit={formIk.handleSubmit}>
+          <Input name="email" label="Email" type="email" value={formIk.values.email} disabled />
           <Input
             label="Full Name"
-            {...formik.getFieldProps('fullName')}
-            error={formik.touched.fullName && formik.errors.fullName}
+            {...formIk.getFieldProps('fullName')}
+            error={formIk.touched.fullName && formIk.errors.fullName}
             startIcon={<AccountCircleRoundedIcon />}
           />
           <Input
             label="Phone"
-            {...formik.getFieldProps('phone')}
-            error={formik.touched.phone && formik.errors.phone}
+            {...formIk.getFieldProps('phone')}
+            error={formIk.touched.phone && formIk.errors.phone}
             startIcon={<PhoneAndroidRoundedIcon />}
           />
-          <RadioGroup row label="Gender" {...formik.getFieldProps('gender')} items={GENDER} />
-          <RadioGroup row label="Role" {...formik.getFieldProps('role')} items={ROLES} />
+          <RadioGroup row label="Gender" {...formIk.getFieldProps('gender')} items={GENDER} />
+          <RadioGroup row label="Role" {...formIk.getFieldProps('role')} items={ROLES} />
           <Select
             label="City"
-            error={formik.touched.city && formik.errors.city}
-            {...formik.getFieldProps('city')}
+            error={formIk.touched.city && formIk.errors.city}
+            {...formIk.getFieldProps('city')}
             items={CITY}
           />
           <Checkboxes
             name="payments"
             label="Payment Methods"
             items={PAYMENT_METHODS}
-            formikValue={formik.values.payments}
+            formIkValue={formIk.values.payments}
             onChange={handlePayments}
           />
         </form>
       </DialogContent>
       <DialogActions>
         <Button
-          disabled={!(formik.isValid && formik.dirty)}
-          onClick={() => formik.submitForm()}
+          disabled={!(formIk.isValid && formIk.dirty)}
+          onClick={() => formIk.submitForm()}
           text="SAVE"
         />
         <Button
-          disabled={!formik.dirty}
-          onClick={() => formik.resetForm()}
+          disabled={!formIk.dirty}
+          onClick={() => formIk.resetForm()}
           color="secondary"
           text="RESET"
         />

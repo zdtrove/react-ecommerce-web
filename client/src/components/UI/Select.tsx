@@ -89,13 +89,7 @@ const Select = ({ label, error, items, isObject, ...rest }: MuiSelectProps) => {
 Select.propTypes = {
   label: PropTypes.string,
   error: PropTypes.any,
-  items: PropTypes.arrayOf(
-    PropTypes.shape({
-      level: PropTypes.string,
-      name: PropTypes.string,
-      id: PropTypes.number
-    }) || PropTypes.string
-  ),
+  items: PropTypes.arrayOf(PropTypes.any),
   isObject: PropTypes.bool
 };
 
