@@ -1,17 +1,70 @@
 import PropTypes from 'prop-types';
 import { useAppDispatch, useAppSelector } from 'redux/hook';
-import { DialogContent, DialogActions } from '@material-ui/core';
+import {
+  DialogContent,
+  DialogActions,
+  Fab,
+  useMediaQuery,
+  makeStyles,
+  useTheme
+} from '@material-ui/core';
 import { Input, Button, Dialog, Select } from 'components/UI';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import MessageIcon from '@material-ui/icons/Message';
 import LocalAtmIcon from '@material-ui/icons/LocalAtm';
+import AddIcon from '@material-ui/icons/Add';
 import { productActions } from 'redux/features/product/productSlice';
 import { createCategoryList, imageShow } from 'utils/functions';
 import { selectCategories } from 'redux/features/category/categorySlice';
 import { Product } from 'types/product';
 import React, { useState } from 'react';
+
+const useStyles = makeStyles(() => ({
+  upload: {
+    '& #upload': {
+      display: 'none'
+    }
+  },
+  imageList: {
+    display: 'flex',
+    alignItems: 'center',
+    columnGap: 15,
+    rowGap: 15,
+    flexWrap: 'wrap',
+    padding: 10,
+    marginTop: 10
+  },
+  imageItem: {
+    position: 'relative',
+    maxWidth: 100,
+    '& img': {
+      border: '1px solid #ddd',
+      padding: 10,
+      width: '100%'
+    },
+    '& span': {
+      position: 'absolute',
+      top: -10,
+      right: -10,
+      borderRadius: '50%',
+      border: '1px solid #ddd',
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      width: 20,
+      height: 20,
+      backgroundColor: 'white',
+      cursor: 'pointer',
+      fontWeight: 'bold'
+    },
+    '& span:hover': {
+      backgroundColor: 'black',
+      color: 'white'
+    }
+  }
+}));
 
 const validationSchema = Yup.object().shape({
   name: Yup.string().required('Name is required').max(64, 'Name max length is 64'),
@@ -36,9 +89,11 @@ type ProductAddProps = {
 
 const ProductAdd = ({ showProductAdd, setShowProductAdd }: ProductAddProps) => {
   const dispatch = useAppDispatch();
+  const classes = useStyles();
+  const theme = useTheme();
+  const matches = useMediaQuery(theme.breakpoints.up('sm'));
   const categories = useAppSelector(selectCategories);
   const [images, setImages] = useState<any[]>([]);
-  console.log(images);
 
   const handleChangeImage = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || []);
@@ -46,8 +101,8 @@ const ProductAdd = ({ showProductAdd, setShowProductAdd }: ProductAddProps) => {
     let newImages: any[] = [];
     files.forEach((file) => {
       if (!file) return (err = 'File does not exist');
-      if (file.size > 1024 * 1024 * 5) {
-        return (err = 'The image/video largest is 5mb');
+      if (file.size > 1024 * 1024 * 2) {
+        return (err = 'The image largest is 2mb');
       }
       return newImages.push(file);
     });
@@ -65,7 +120,7 @@ const ProductAdd = ({ showProductAdd, setShowProductAdd }: ProductAddProps) => {
     initialValues,
     validationSchema,
     onSubmit: (values) => {
-      dispatch(productActions.addProduct(values));
+      dispatch(productActions.addProduct({ ...values, images }));
       setShowProductAdd(false);
     }
   });
@@ -102,17 +157,30 @@ const ProductAdd = ({ showProductAdd, setShowProductAdd }: ProductAddProps) => {
             items={createCategoryList(categories, [], 1, '')}
             isObject
           />
-          <input
-            name="images"
-            value={formIk.values.images}
-            onChange={handleChangeImage}
-            type="file"
-            multiple
-            accept="image/*"
-          />
-          <div className="show-images">
+          <div className={classes.upload}>
+            <label htmlFor="upload">
+              <input
+                id="upload"
+                name="images"
+                type="file"
+                accept="image/*"
+                multiple
+                value={formIk.values.images}
+                onChange={handleChangeImage}
+              />
+              <Fab
+                color="secondary"
+                variant="extended"
+                size={matches ? 'medium' : 'small'}
+                component="span"
+              >
+                <AddIcon /> Add images
+              </Fab>
+            </label>
+          </div>
+          <div className={classes.imageList}>
             {images.map((img, index) => (
-              <div key={index} id="file-img">
+              <div className={classes.imageItem} key={index}>
                 {imageShow(URL.createObjectURL(img))}
                 <span onClick={() => deleteImages(index)}>&times;</span>
               </div>

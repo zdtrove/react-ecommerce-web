@@ -1,9 +1,12 @@
 export type Product = {
+  _id?: string;
   name: string;
-  description: string;
+  description?: string;
   categoryId: string;
   price: number | string;
-  images: string[];
+  images?: any[];
+  sold?: number;
+  star?: number;
 };
 
 export type ProductState = {

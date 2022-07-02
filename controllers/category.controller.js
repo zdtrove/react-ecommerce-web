@@ -60,16 +60,14 @@ exports.getCategories = async (req, res) => {
 exports.updateCategory = async (req, res) => {
     try {
         const { name, parentId, image } = req.body
-
         const category = await Category.findOneAndUpdate({ _id: req.params.id }, {
             name, parentId, image
-        })
-
-        const newCategory = { ...category, name, parentId, image }
+        });
+        const newCategory = { ...category._doc };
 
         res.status(200).json({
             message: "Update category success",
-            newCategory
+            category: newCategory
         })
     } catch (err) {
         res.status(500).json({ message: err.message })

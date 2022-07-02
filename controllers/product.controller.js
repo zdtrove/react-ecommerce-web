@@ -43,31 +43,32 @@ exports.getProducts = async (req, res) => {
     }
 }
 
-// exports.updateProduct = async (req, res) => {
-//     try {
-//         const { name, parentId, image } = req.body
+exports.updateProduct = async (req, res) => {
+    try {
+        const { name, description, price, categoryId, images } = req.body
+        const productUpdate = { name, description, price, categoryId };
+        if (images.length > 0) {
+            productUpdate.images = images;
+        }
 
-//         const product = await Product.findOneAndUpdate({ _id: req.params.id }, {
-//             name, parentId, image
-//         })
+        const product = await Product.findOneAndUpdate({ _id: req.params.id }, productUpdate);
+        const newProduct = { ...product._doc };
 
-//         const newProduct = { ...product, name, parentId, image }
+        res.status(200).json({
+            message: "Update product success",
+            product: newProduct
+        })
+    } catch (err) {
+        res.status(500).json({ message: err.message })
+    }
+}
 
-//         res.status(200).json({
-//             message: "Update product success",
-//             product: newProduct
-//         })
-//     } catch (err) {
-//         res.status(500).json({ message: err.message })
-//     }
-// }
+exports.deleteProduct = async (req, res) => {
+    try {
+        const product = await Product.findOneAndDelete({ _id: req.params.id })
 
-// exports.deleteProduct = async (req, res) => {
-//     try {
-//         const product = await Product.findOneAndDelete({ _id: req.params.id })
-
-// 		return res.status(200).json({ message: "Delete product success", product })
-//     } catch (err) {
-//         res.status(500).json({ message: err.message })
-//     }
-// }
+		return res.status(200).json({ message: "Delete product success", product })
+    } catch (err) {
+        res.status(500).json({ message: err.message })
+    }
+}

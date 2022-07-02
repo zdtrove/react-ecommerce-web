@@ -207,7 +207,9 @@ const Users = () => {
 
   useEffect(() => {
     setPage(0);
-    setUserList(users.filter((user: User) => user.fullName.toLowerCase().includes(searchValue)));
+    setUserList(
+      users.filter((user: User) => user.fullName.toLowerCase().includes(searchValue.toLowerCase()))
+    );
   }, [searchValue]);
 
   return (

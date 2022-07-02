@@ -26,6 +26,7 @@ import LastPageIcon from '@material-ui/icons/LastPage';
 import { Button, Input } from 'components/UI';
 import { useEffect, useState } from 'react';
 import ProductAdd from 'components/admin/product/ProductAdd';
+import ProductDetail from 'components/admin/product/ProductDetail';
 import { Product } from 'types/product';
 import { productActions, selectProducts } from 'redux/features/product/productSlice';
 import { useAppDispatch, useAppSelector } from 'redux/hook';
@@ -172,10 +173,10 @@ const Products = () => {
   const [showProductAdd, setShowProductAdd] = useState(false);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(3);
-  // const [showProductDetail, setShowProductDetail] = useState(false);
+  const [showProductDetail, setShowProductDetail] = useState(false);
   // const [showProductEdit, setShowProductEdit] = useState(false);
   // const [showProductDelete, setShowProductDelete] = useState(false);
-  // const [productRecord, setProductRecord] = useState<Product>({} as Product);
+  const [productRecord, setProductRecord] = useState<Product>({} as Product);
   const [productList, setProductList] = useState<Product[]>([]);
 
   const onPageChange = (e: unknown, nextPage: number) => {
@@ -198,7 +199,9 @@ const Products = () => {
   useEffect(() => {
     setPage(0);
     setProductList(
-      products.filter((product: Product) => product.name.toLowerCase().includes(searchValue))
+      products.filter((product: Product) =>
+        product.name.toLowerCase().includes(searchValue.toLowerCase())
+      )
     );
   }, [searchValue]);
 
@@ -242,7 +245,6 @@ const Products = () => {
                 <TableCell>Name</TableCell>
                 <TableCell>Description</TableCell>
                 <TableCell>Price</TableCell>
-                <TableCell>Images</TableCell>
                 <TableCell>Actions</TableCell>
               </TableRow>
             </TableHead>
@@ -254,12 +256,11 @@ const Products = () => {
                     <TableCell>{product.name}</TableCell>
                     <TableCell>{product.description}</TableCell>
                     <TableCell>{product.price}</TableCell>
-                    <TableCell>{product.images}</TableCell>
                     <TableCell>
                       <Button
                         onClick={() => {
-                          // setProductRecord(product);
-                          // setShowProductDetail(true);
+                          setProductRecord(product);
+                          setShowProductDetail(true);
                         }}
                         className={classes.marginBtn}
                         text="DETAIL"
@@ -305,6 +306,15 @@ const Products = () => {
             products,
             showProductAdd,
             setShowProductAdd
+          }}
+        />
+      )}
+      {showProductDetail && (
+        <ProductDetail
+          {...{
+            showProductDetail,
+            setShowProductDetail,
+            productRecord
           }}
         />
       )}

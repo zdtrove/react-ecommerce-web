@@ -27,6 +27,20 @@ const productSlice = createSlice({
     },
     addProductFail(state) {
       state.loading = false;
+    },
+    // eslint-disable-next-line no-unused-vars
+    updateProduct(state, action: PayloadAction<Product>) {
+      state.loading = true;
+    },
+    updateProductFail(state) {
+      state.loading = false;
+    },
+    // eslint-disable-next-line no-unused-vars
+    deleteProduct(state, action: PayloadAction<string>) {
+      state.loading = true;
+    },
+    deleteProductFail(state) {
+      state.loading = false;
     }
   }
 });
