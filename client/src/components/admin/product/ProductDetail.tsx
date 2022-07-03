@@ -1,8 +1,12 @@
+import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
+import { useAppSelector } from 'redux/hook';
 import { makeStyles, DialogContent, DialogContentText, Typography } from '@material-ui/core';
 import { Dialog } from 'components/UI';
 import { Product } from 'types/product';
-import { imageShow } from 'utils/functions';
+import { imageShow, findCategoryById } from 'utils/functions';
+import { selectCategories } from 'redux/features/category/categorySlice';
+import { Category } from 'types/category';
 
 const useStyles = makeStyles(() => ({
   imageList: {
@@ -36,7 +40,13 @@ const ProductDetail = ({
   productRecord
 }: ProductDetailProps) => {
   const classes = useStyles();
+  const categories = useAppSelector(selectCategories);
   const { name, description, categoryId, price, sold, star, images } = productRecord;
+  const [category, setCategory] = useState<Category>({} as Category);
+
+  useEffect(() => {
+    setCategory(findCategoryById(categories, categoryId, category));
+  }, []);
 
   return (
     <>
@@ -47,7 +57,8 @@ const ProductDetail = ({
           <Typography variant="h6">Email</Typography>
           <DialogContentText>{description}</DialogContentText>
           <Typography variant="h6">Category</Typography>
-          <DialogContentText>{categoryId}</DialogContentText>
+          <DialogContentText>{category.name}</DialogContentText>
+          <img style={{ border: '1px solid #ddd' }} src={category.image || ''} alt="" />
           <Typography variant="h6">Price</Typography>
           <DialogContentText>{price}</DialogContentText>
           <Typography variant="h6">Sold</Typography>

@@ -59,6 +59,6 @@ export const ENDPOINTS = {
   },
   products: {
     getAll: '/api/products',
-    getOne: '/api/category'
+    getOne: '/api/product'
   }
 };

@@ -5,6 +5,8 @@ export type Product = {
   categoryId: string;
   price: number | string;
   images?: any[];
+  imagesOld?: any[];
+  imagesNew?: any[];
   sold?: number;
   star?: number;
 };
@@ -23,5 +25,9 @@ export type GetAllProductResponse = {
 
 export type UpdateProductResponse = {
   data: Product;
+  status: number;
+};
+
+export type DeleteProductResponse = {
   status: number;
 };

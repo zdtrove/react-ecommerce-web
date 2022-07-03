@@ -24,6 +24,20 @@ export const createCategoryList = (
   return options;
 };
 
+export const findCategoryById = (categories: Category[], id: string, category: Category): any => {
+  categories &&
+    categories.forEach((cat) => {
+      if (cat._id === id) {
+        category.name = cat.name;
+        category.image = cat.image;
+      }
+      if (cat.children && cat.children.length > 0) {
+        findCategoryById(cat.children, id, category);
+      }
+    });
+  return category;
+};
+
 export const imageShow = (src: any) => {
   return <img className="img-thumbnail" src={src} alt="images" />;
 };

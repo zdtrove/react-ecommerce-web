@@ -27,12 +27,14 @@ export const addProductApi = async (product: Product) => {
 
 export const updateProductApi = async (product: Product) => {
   try {
-    if (product.images) {
-      const images = await imagesUpload(product.images);
-      product.images = images;
+    let imagesNew: any[] = [];
+    let imagesOld: any[] = product.imagesOld || [];
+    if (product.imagesNew) {
+      imagesNew = await imagesUpload(product.imagesNew);
     }
+    product.images = [...imagesOld, ...imagesNew];
 
-    return await axios.patch(`${ENDPOINTS.categories.getOne}/${product._id}`, product);
+    return await axios.patch(`${ENDPOINTS.products.getOne}/${product._id}`, product);
   } catch (err) {
     return err;
   }
@@ -40,7 +42,7 @@ export const updateProductApi = async (product: Product) => {
 
 export const deleteProductApi = async (id: string) => {
   try {
-    return await axios.delete(`${ENDPOINTS.categories.getOne}/${id}`);
+    return await axios.delete(`${ENDPOINTS.products.getOne}/${id}`);
   } catch (err) {
     return err;
   }

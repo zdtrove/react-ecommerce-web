@@ -13,7 +13,10 @@ import {
   TableRow,
   Toolbar,
   Typography,
-  useTheme
+  useTheme,
+  DialogContent,
+  DialogContentText,
+  DialogActions
 } from '@material-ui/core';
 import LayoutAdmin from 'components/admin/layouts/LayoutAdmin';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
@@ -23,10 +26,11 @@ import FirstPageIcon from '@material-ui/icons/FirstPage';
 import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
 import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
 import LastPageIcon from '@material-ui/icons/LastPage';
-import { Button, Input } from 'components/UI';
+import { Button, Input, Dialog } from 'components/UI';
 import { useEffect, useState } from 'react';
 import ProductAdd from 'components/admin/product/ProductAdd';
 import ProductDetail from 'components/admin/product/ProductDetail';
+import ProductEdit from 'components/admin/product/ProductEdit';
 import { Product } from 'types/product';
 import { productActions, selectProducts } from 'redux/features/product/productSlice';
 import { useAppDispatch, useAppSelector } from 'redux/hook';
@@ -174,8 +178,8 @@ const Products = () => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(3);
   const [showProductDetail, setShowProductDetail] = useState(false);
-  // const [showProductEdit, setShowProductEdit] = useState(false);
-  // const [showProductDelete, setShowProductDelete] = useState(false);
+  const [showProductEdit, setShowProductEdit] = useState(false);
+  const [showProductDelete, setShowProductDelete] = useState(false);
   const [productRecord, setProductRecord] = useState<Product>({} as Product);
   const [productList, setProductList] = useState<Product[]>([]);
 
@@ -186,6 +190,11 @@ const Products = () => {
   const onRowsPerPageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setRowsPerPage(Number(e.target.value));
     setPage(0);
+  };
+
+  const handleDeleteProduct = (id: string) => {
+    dispatch(productActions.deleteProduct(id));
+    setShowProductDelete(false);
   };
 
   useEffect(() => {
@@ -268,8 +277,8 @@ const Products = () => {
                       />
                       <Button
                         onClick={() => {
-                          // setProductRecord(product);
-                          // setShowProductEdit(true);
+                          setProductRecord(product);
+                          setShowProductEdit(true);
                         }}
                         className={classes.marginBtn}
                         text="EDIT"
@@ -279,8 +288,8 @@ const Products = () => {
                         color="secondary"
                         text="DELETE"
                         onClick={() => {
-                          // setProductRecord(product);
-                          // setShowProductDelete(true);
+                          setProductRecord(product);
+                          setShowProductDelete(true);
                         }}
                       />
                     </TableCell>
@@ -317,6 +326,32 @@ const Products = () => {
             productRecord
           }}
         />
+      )}
+      {showProductEdit && (
+        <ProductEdit
+          {...{
+            showProductEdit,
+            setShowProductEdit,
+            productRecord
+          }}
+        />
+      )}
+      {showProductDelete && (
+        <Dialog show={showProductDelete} setShow={setShowProductDelete} title="DELETE PRODUCT">
+          <DialogContent>
+            <DialogContentText>
+              Are you sure to delete <strong>{productRecord?.name}</strong>?
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button
+              onClick={() => handleDeleteProduct(productRecord?._id || '')}
+              color="secondary"
+              text="DELETE"
+            />
+            <Button onClick={() => setShowProductDelete(false)} color="default" text="CANCEL" />
+          </DialogActions>
+        </Dialog>
       )}
     </LayoutAdmin>
   );

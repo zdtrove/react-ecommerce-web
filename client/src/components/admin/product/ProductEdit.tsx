@@ -9,17 +9,17 @@ import {
   makeStyles,
   useTheme
 } from '@material-ui/core';
-import { Input, Button, Dialog, Select } from 'components/UI';
+import { Input, Select, Button, Dialog } from 'components/UI';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import MessageIcon from '@material-ui/icons/Message';
 import LocalAtmIcon from '@material-ui/icons/LocalAtm';
 import AddIcon from '@material-ui/icons/Add';
+import { Product } from 'types/product';
 import { productActions } from 'redux/features/product/productSlice';
 import { createCategoryList, imageShow } from 'utils/functions';
 import { selectCategories } from 'redux/features/category/categorySlice';
-import { Product } from 'types/product';
 
 const useStyles = makeStyles(() => ({
   upload: {
@@ -73,60 +73,74 @@ const validationSchema = Yup.object().shape({
   categoryId: Yup.string().required('Category is required')
 });
 
-const initialValues: Product = {
-  name: '',
-  description: '',
-  price: '',
-  images: [],
-  categoryId: ''
-};
-
-type ProductAddProps = {
-  showProductAdd: boolean;
+type ProductEditProps = {
+  showProductEdit: boolean;
   // eslint-disable-next-line no-unused-vars
-  setShowProductAdd: (param: boolean) => void;
+  setShowProductEdit: (param: boolean) => void;
+  productRecord: Product;
 };
 
-const ProductAdd = ({ showProductAdd, setShowProductAdd }: ProductAddProps) => {
+const ProductEdit = ({ showProductEdit, setShowProductEdit, productRecord }: ProductEditProps) => {
   const dispatch = useAppDispatch();
   const classes = useStyles();
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.up('sm'));
+  const { _id, name, description, categoryId, price, images } = productRecord;
   const categories = useAppSelector(selectCategories);
-  const [images, setImages] = useState<any[]>([]);
+  const [imagesNew, setImagesChange] = useState<any[]>([]);
+  const [imagesOld, setImagesOld] = useState<any[]>(images || []);
 
-  const handleChangeImage = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = Array.from(e.target.files || []);
-    let err = '';
-    let newImages: any[] = [];
-    files.forEach((file) => {
-      if (!file) return (err = 'File does not exist');
-      if (file.size > 1024 * 1024 * 2) {
-        return (err = 'The image largest is 2mb');
-      }
-      return newImages.push(file);
-    });
-    if (err) console.log(err);
-    setImages([...images, ...newImages]);
-  };
-
-  const deleteImages = (index: number) => {
-    const newArr = [...images];
-    newArr.splice(index, 1);
-    setImages(newArr);
+  let initialValues: Product = {
+    name,
+    description,
+    price,
+    imagesOld: productRecord.images,
+    imagesNew: [],
+    categoryId
   };
 
   const formIk = useFormik({
     initialValues,
     validationSchema,
     onSubmit: (values) => {
-      dispatch(productActions.addProduct({ ...values, images }));
-      setShowProductAdd(false);
+      dispatch(productActions.updateProduct({ _id, ...values }));
+      setShowProductEdit(false);
     }
   });
 
+  const handleChangeImage = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files || []);
+    let err = '';
+    let imagesNewChoose: any[] = [];
+    files.forEach((file) => {
+      if (!file) return (err = 'File does not exist');
+      if (file.size > 1024 * 1024 * 2) {
+        return (err = 'The image largest is 2mb');
+      }
+      return imagesNewChoose.push(file);
+    });
+    if (err) console.log(err);
+    setImagesChange([...imagesNew, ...imagesNewChoose]);
+    formIk.setFieldValue('imagesNew', [...imagesNew, ...imagesNewChoose]);
+    formIk.setFieldValue('imagesOld', imagesOld);
+  };
+
+  const deleteNewImages = (index: number) => {
+    const imagesNewChoose = [...imagesNew];
+    imagesNewChoose.splice(index, 1);
+    setImagesChange(imagesNewChoose);
+    formIk.setFieldValue('imagesNew', imagesNewChoose);
+  };
+
+  const deleteOldImages = (index: number) => {
+    const imagesNewChoose = [...imagesOld];
+    imagesNewChoose.splice(index, 1);
+    setImagesOld(imagesNewChoose);
+    formIk.setFieldValue('imagesOld', imagesNewChoose);
+  };
+
   return (
-    <Dialog show={showProductAdd} setShow={setShowProductAdd} title="PRODUCT ADD">
+    <Dialog show={showProductEdit} setShow={setShowProductEdit} title="PRODUCT EDIT">
       <DialogContent dividers>
         <form onSubmit={formIk.handleSubmit}>
           <Input
@@ -165,7 +179,6 @@ const ProductAdd = ({ showProductAdd, setShowProductAdd }: ProductAddProps) => {
                 type="file"
                 accept="image/*"
                 multiple
-                value={formIk.values.images}
                 onChange={handleChangeImage}
               />
               <Fab
@@ -179,12 +192,20 @@ const ProductAdd = ({ showProductAdd, setShowProductAdd }: ProductAddProps) => {
             </label>
           </div>
           <div className={classes.imageList}>
-            {images.map((img, index) => (
-              <div className={classes.imageItem} key={index}>
-                {imageShow(URL.createObjectURL(img))}
-                <span onClick={() => deleteImages(index)}>&times;</span>
-              </div>
-            ))}
+            {imagesOld &&
+              imagesOld.map((img, index) => (
+                <div className={classes.imageItem} key={index}>
+                  {imageShow(img.url)}
+                  <span onClick={() => deleteOldImages(index)}>&times;</span>
+                </div>
+              ))}
+            {imagesNew &&
+              imagesNew.map((img, index) => (
+                <div className={classes.imageItem} key={index}>
+                  {imageShow(URL.createObjectURL(img))}
+                  <span onClick={() => deleteNewImages(index)}>&times;</span>
+                </div>
+              ))}
           </div>
         </form>
       </DialogContent>
@@ -205,9 +226,19 @@ const ProductAdd = ({ showProductAdd, setShowProductAdd }: ProductAddProps) => {
   );
 };
 
-ProductAdd.propTypes = {
-  showProductAdd: PropTypes.bool,
-  setShowProductAdd: PropTypes.func
+ProductEdit.propTypes = {
+  showProductEdit: PropTypes.bool,
+  setShowProductEdit: PropTypes.func,
+  productRecord: PropTypes.shape({
+    _id: PropTypes.string,
+    name: PropTypes.string,
+    description: PropTypes.string,
+    categoryId: PropTypes.string,
+    price: PropTypes.number,
+    sold: PropTypes.number,
+    star: PropTypes.number,
+    images: PropTypes.arrayOf(PropTypes.any)
+  })
 };
 
-export default ProductAdd;
+export default ProductEdit;
