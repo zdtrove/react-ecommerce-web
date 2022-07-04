@@ -11,10 +11,32 @@ const productSchema = new mongoose.Schema({
         type: String,
         maxLength: [1000, "Product description is up to 1000 chars long"]
     },
+    shortDescription: {
+        type: String,
+        maxLength: [100, "Product short description is up to 100 chars long"]
+    },
+    gift: {
+        text: {
+            type: String,
+            default: ''
+        },
+        price: {
+            type: Number,
+            default: 0
+        }
+    },
     price: {
         type: Number,
         trim: true,
         required: true,
+    },
+    salePrice: {
+        type: Number,
+        default: 0
+    },
+    isSale: {
+        type: Boolean,
+        default: false
     },
     slug: {
         type: String,
@@ -34,8 +56,118 @@ const productSchema = new mongoose.Schema({
         default: 0
     },
     star: {
-        type: Number,
-        default: 0
+        average: {
+            type: Number,
+            default: 0
+        },
+        list: [{
+            userId: String,
+            star: Number
+        }]
+    },
+    configuration: {
+        screen: {
+            type: String,
+            default: ''
+        },
+        os: {
+            type: String,
+            default: ''
+        },
+        camera: {
+            rear: {
+                type: String,
+                default: ''
+            },
+            front: {
+                type: String,
+                default: ''
+            }
+        },
+        cpu: {
+            type: String,
+            default: ''
+        },
+        ram: {
+            type: String,
+            default: ''
+        },
+        memory: {
+            type: String,
+            default: ''
+        },
+        sim: {
+            type: String,
+            default: ''
+        },
+        battery: {
+            type: String,
+            default: ''
+        },
+        resolution: {
+            type: String,
+            default: ''
+        },
+        dimensions: {
+            type: String,
+            default: ''
+        },
+        gps: {
+            type: String,
+            default: ''
+        },
+        bluetooth: {
+            type: String,
+            default: ''
+        },
+        wifi: {
+            type: String,
+            default: ''
+        },
+        hardDrive: {
+            type: String,
+            default: ''
+        },
+        graphic: {
+            type: String,
+            default: ''
+        },
+        connector: {
+            type: String,
+            default: ''
+        },
+        type: {
+            type: String,
+            default: ''
+        },
+        capacity: {
+            type: String,
+            default: ''
+        },
+        energySavingTechnology: {
+            type: String,
+            default: ''
+        }
+    },
+    releaseDate: {
+        type: String,
+        default: ''
+    },
+    manufacture: {
+        type: String,
+        default: ''
+    },
+    eventId: {
+        type: Array,
+        default: []
+    },
+    installment: {
+        type: Boolean,
+        default: false
+    },
+    new: {
+        type: Boolean,
+        default: false
     }
 }, { timestamps: true })
 

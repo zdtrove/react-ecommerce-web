@@ -1,11 +1,8 @@
-import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { useAppSelector } from 'redux/hook';
 import { makeStyles, DialogContent, DialogContentText, Typography } from '@material-ui/core';
 import { Dialog } from 'components/UI';
 import { Product } from 'types/product';
-import { imageShow, findCategoryById } from 'utils/functions';
-import { selectCategories } from 'redux/features/category/categorySlice';
+import { imageShow } from 'utils/functions';
 import { Category } from 'types/category';
 
 const useStyles = makeStyles(() => ({
@@ -28,6 +25,7 @@ const useStyles = makeStyles(() => ({
 }));
 
 type ProductDetailProps = {
+  category: Category;
   showProductDetail: boolean;
   // eslint-disable-next-line no-unused-vars
   setShowProductDetail: (param: boolean) => void;
@@ -35,18 +33,13 @@ type ProductDetailProps = {
 };
 
 const ProductDetail = ({
+  category,
   showProductDetail,
   setShowProductDetail,
   productRecord
 }: ProductDetailProps) => {
   const classes = useStyles();
-  const categories = useAppSelector(selectCategories);
-  const { name, description, categoryId, price, sold, star, images } = productRecord;
-  const [category, setCategory] = useState<Category>({} as Category);
-
-  useEffect(() => {
-    setCategory(findCategoryById(categories, categoryId, category));
-  }, []);
+  const { name, description, price, sold, star, images } = productRecord;
 
   return (
     <>
@@ -64,7 +57,7 @@ const ProductDetail = ({
           <Typography variant="h6">Sold</Typography>
           <DialogContentText>{sold}</DialogContentText>
           <Typography variant="h6">Star</Typography>
-          <DialogContentText>{star}</DialogContentText>
+          <DialogContentText>{star?.average}</DialogContentText>
           <Typography variant="h6">Images</Typography>
           <div className={classes.imageList}>
             {images &&

@@ -16,6 +16,7 @@ import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import MessageIcon from '@material-ui/icons/Message';
 import LocalAtmIcon from '@material-ui/icons/LocalAtm';
 import AddIcon from '@material-ui/icons/Add';
+import HighlightOffIcon from '@material-ui/icons/HighlightOff';
 import { Product } from 'types/product';
 import { productActions } from 'redux/features/product/productSlice';
 import { createCategoryList, imageShow } from 'utils/functions';
@@ -48,13 +49,9 @@ const useStyles = makeStyles(() => ({
       position: 'absolute',
       top: -10,
       right: -10,
+      width: 24,
+      height: 24,
       borderRadius: '50%',
-      border: '1px solid #ddd',
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-      width: 20,
-      height: 20,
       backgroundColor: 'white',
       cursor: 'pointer',
       fontWeight: 'bold'
@@ -196,14 +193,18 @@ const ProductEdit = ({ showProductEdit, setShowProductEdit, productRecord }: Pro
               imagesOld.map((img, index) => (
                 <div className={classes.imageItem} key={index}>
                   {imageShow(img.url)}
-                  <span onClick={() => deleteOldImages(index)}>&times;</span>
+                  <span onClick={() => deleteOldImages(index)}>
+                    <HighlightOffIcon />
+                  </span>
                 </div>
               ))}
             {imagesNew &&
               imagesNew.map((img, index) => (
                 <div className={classes.imageItem} key={index}>
                   {imageShow(URL.createObjectURL(img))}
-                  <span onClick={() => deleteNewImages(index)}>&times;</span>
+                  <span onClick={() => deleteNewImages(index)}>
+                    <HighlightOffIcon />
+                  </span>
                 </div>
               ))}
           </div>

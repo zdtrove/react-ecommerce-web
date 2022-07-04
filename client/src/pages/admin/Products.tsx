@@ -34,6 +34,9 @@ import ProductEdit from 'components/admin/product/ProductEdit';
 import { Product } from 'types/product';
 import { productActions, selectProducts } from 'redux/features/product/productSlice';
 import { useAppDispatch, useAppSelector } from 'redux/hook';
+import { findCategoryById } from 'utils/functions';
+import { selectCategories } from 'redux/features/category/categorySlice';
+import { Category } from 'types/category';
 
 const useStyles = makeStyles((theme) => ({
   rootHeader: {
@@ -173,6 +176,7 @@ const Products = () => {
   const dispatch = useAppDispatch();
   const classes = useStyles();
   const products = useAppSelector(selectProducts);
+  const categories = useAppSelector(selectCategories);
   const [searchValue, setSearchValue] = useState('');
   const [showProductAdd, setShowProductAdd] = useState(false);
   const [page, setPage] = useState(0);
@@ -182,6 +186,7 @@ const Products = () => {
   const [showProductDelete, setShowProductDelete] = useState(false);
   const [productRecord, setProductRecord] = useState<Product>({} as Product);
   const [productList, setProductList] = useState<Product[]>([]);
+  const [category, setCategory] = useState<Category>({} as Category);
 
   const onPageChange = (e: unknown, nextPage: number) => {
     setPage(nextPage);
@@ -268,6 +273,7 @@ const Products = () => {
                     <TableCell>
                       <Button
                         onClick={() => {
+                          setCategory(findCategoryById(categories, product.categoryId, category));
                           setProductRecord(product);
                           setShowProductDetail(true);
                         }}
@@ -321,6 +327,7 @@ const Products = () => {
       {showProductDetail && (
         <ProductDetail
           {...{
+            category,
             showProductDetail,
             setShowProductDetail,
             productRecord

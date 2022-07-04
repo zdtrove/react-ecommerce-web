@@ -16,6 +16,7 @@ import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import MessageIcon from '@material-ui/icons/Message';
 import LocalAtmIcon from '@material-ui/icons/LocalAtm';
 import AddIcon from '@material-ui/icons/Add';
+import HighlightOffIcon from '@material-ui/icons/HighlightOff';
 import { productActions } from 'redux/features/product/productSlice';
 import { createCategoryList, imageShow } from 'utils/functions';
 import { selectCategories } from 'redux/features/category/categorySlice';
@@ -48,13 +49,9 @@ const useStyles = makeStyles(() => ({
       position: 'absolute',
       top: -10,
       right: -10,
+      width: 24,
+      height: 24,
       borderRadius: '50%',
-      border: '1px solid #ddd',
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-      width: 20,
-      height: 20,
       backgroundColor: 'white',
       cursor: 'pointer',
       fontWeight: 'bold'
@@ -182,7 +179,9 @@ const ProductAdd = ({ showProductAdd, setShowProductAdd }: ProductAddProps) => {
             {images.map((img, index) => (
               <div className={classes.imageItem} key={index}>
                 {imageShow(URL.createObjectURL(img))}
-                <span onClick={() => deleteImages(index)}>&times;</span>
+                <span onClick={() => deleteImages(index)}>
+                  <HighlightOffIcon />
+                </span>
               </div>
             ))}
           </div>

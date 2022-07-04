@@ -62,3 +62,10 @@ export const ENDPOINTS = {
     getOne: '/api/product'
   }
 };
+
+export const CONFIGURATION = {
+  manufacturer: ['Việt Nam', 'Thái Lan', 'Trung Quốc'],
+  memory: ['32 GB', '64 GB', '128 GB', '256 GB', '512 GB'],
+  ram: ['1 GB', '2 GB', '3 GB', '4 GB', '6 GB', '8 GB', '12 GB'],
+  hardDrive: ['SSD 2 TB', 'SSD 1 TB', 'SSD 512 GB', 'SSD 256 GB', 'SSD 128 GB']
+};

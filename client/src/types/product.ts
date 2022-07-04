@@ -8,7 +8,12 @@ export type Product = {
   imagesOld?: any[];
   imagesNew?: any[];
   sold?: number;
-  star?: number;
+  star?: Star;
+};
+
+export type Star = {
+  average: number;
+  list: any[];
 };
 
 export type ProductState = {

@@ -14,7 +14,8 @@ import { Input, Select, Button, Dialog } from 'components/UI';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { categoryActions } from 'redux/features/category/categorySlice';
-import { Category, CategoryOption } from 'types/category';
+import { Category } from 'types/category';
+import { createCategoryList } from 'utils/functions';
 
 const useStyles = makeStyles((theme) => ({
   upload: {
@@ -77,27 +78,6 @@ const CategoryAdd = ({ categories, showCategoryAdd, setShowCategoryAdd }: Catego
     formIk.setFieldValue('image', file);
   };
 
-  const createCategoryList = (
-    categories: Category[],
-    options: CategoryOption[] = [],
-    level = 1
-  ) => {
-    categories &&
-      categories.forEach((cat) => {
-        options.push({
-          name: cat.name,
-          id: cat._id,
-          level
-        });
-
-        if (cat.children && cat.children.length > 0) {
-          createCategoryList(cat.children, options, level + 1);
-        }
-      });
-
-    return options;
-  };
-
   return (
     <Dialog show={showCategoryAdd} setShow={setShowCategoryAdd} title="CATEGORY ADD">
       <DialogContent dividers>
@@ -141,7 +121,7 @@ const CategoryAdd = ({ categories, showCategoryAdd, setShowCategoryAdd }: Catego
             label="Parent Category"
             error={formIk.touched.parentId && formIk.errors.parentId}
             {...formIk.getFieldProps('parentId')}
-            items={createCategoryList(categories)}
+            items={createCategoryList(categories, [], 1)}
             isObject
           />
         </form>
