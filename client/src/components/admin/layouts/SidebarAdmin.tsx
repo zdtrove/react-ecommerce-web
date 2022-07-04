@@ -19,6 +19,8 @@ import { Link, useLocation } from 'react-router-dom';
 import clsx from 'clsx';
 import { ROUTES } from 'constants/index';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
+import StoreMallDirectoryIcon from '@material-ui/icons/StoreMallDirectory';
+import EventNoteIcon from '@material-ui/icons/EventNote';
 
 const drawerWidth = 240;
 
@@ -89,7 +91,9 @@ const useStyles = makeStyles((theme) => ({
 const sidebars = [
   { name: 'Users', pathname: ROUTES.admin.users, icon: <GroupRoundedIcon /> },
   { name: 'Categories', pathname: ROUTES.admin.categories, icon: <CategoryRoundedIcon /> },
-  { name: 'Products', pathname: ROUTES.admin.products, icon: <ShoppingCartIcon /> }
+  { name: 'Products', pathname: ROUTES.admin.products, icon: <ShoppingCartIcon /> },
+  { name: 'Events', pathname: ROUTES.admin.events, icon: <EventNoteIcon /> },
+  { name: 'Stores', pathname: ROUTES.admin.stores, icon: <StoreMallDirectoryIcon /> }
 ];
 
 type SidebarProps = {

@@ -37,7 +37,9 @@ export const ROUTES = {
     login: '/admin/login',
     categories: '/admin/categories',
     users: '/admin/users',
-    products: '/admin/products'
+    products: '/admin/products',
+    events: '/admin/events',
+    stores: '/admin/stores'
   }
 };
 

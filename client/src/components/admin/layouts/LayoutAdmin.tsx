@@ -9,9 +9,13 @@ import {
   Toolbar,
   IconButton,
   Typography,
-  CssBaseline
+  CssBaseline,
+  Badge
 } from '@material-ui/core';
 import { Menu as MenuIcon } from '@material-ui/icons';
+import AccountCircle from '@material-ui/icons/AccountCircle';
+import MailIcon from '@material-ui/icons/Mail';
+import NotificationsIcon from '@material-ui/icons/Notifications';
 import SidebarAdmin from './SidebarAdmin';
 import { Button } from 'components/UI';
 import clsx from 'clsx';
@@ -63,6 +67,12 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.up('sm')]: {
       padding: theme.spacing(2)
     }
+  },
+  sectionDesktop: {
+    display: 'none',
+    [theme.breakpoints.up('md')]: {
+      display: 'flex'
+    }
   }
 }));
 
@@ -112,6 +122,26 @@ const LayoutAdmin = ({ children }: LayoutAdminProps) => {
           >
             Go to website
           </Typography>
+          <div className={classes.sectionDesktop}>
+            <IconButton aria-label="show 4 new mails" color="inherit">
+              <Badge badgeContent={4} color="secondary">
+                <MailIcon />
+              </Badge>
+            </IconButton>
+            <IconButton aria-label="show 17 new notifications" color="inherit">
+              <Badge badgeContent={17} color="secondary">
+                <NotificationsIcon />
+              </Badge>
+            </IconButton>
+            <IconButton
+              edge="end"
+              aria-label="account of current user"
+              aria-haspopup="true"
+              color="inherit"
+            >
+              <AccountCircle />
+            </IconButton>
+          </div>
           <Button
             size="medium"
             onClick={() => dispatch(authActions.logout({ history, role: ADMIN }))}
