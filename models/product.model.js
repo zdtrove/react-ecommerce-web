@@ -157,7 +157,7 @@ const productSchema = new mongoose.Schema({
         type: String,
         default: ''
     },
-    eventId: {
+    eventIds: {
         type: Array,
         default: []
     },
@@ -168,6 +168,10 @@ const productSchema = new mongoose.Schema({
     new: {
         type: Boolean,
         default: false
+    },
+    storeIds: {
+        type: Array,
+        default: []
     }
 }, { timestamps: true })
 
