@@ -34,6 +34,10 @@ const productSchema = new mongoose.Schema({
         type: Number,
         default: 0
     },
+    inventory: {
+        type: Number,
+        default: 1
+    },
     isSale: {
         type: Boolean,
         default: false

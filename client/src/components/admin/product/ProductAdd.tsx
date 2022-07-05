@@ -13,7 +13,6 @@ import { Input, Button, Dialog, Select } from 'components/UI';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
-import MessageIcon from '@material-ui/icons/Message';
 import LocalAtmIcon from '@material-ui/icons/LocalAtm';
 import AddIcon from '@material-ui/icons/Add';
 import HighlightOffIcon from '@material-ui/icons/HighlightOff';
@@ -136,7 +135,6 @@ const ProductAdd = ({ showProductAdd, setShowProductAdd }: ProductAddProps) => {
             label="Description"
             {...formIk.getFieldProps('description')}
             error={formIk.touched.description && formIk.errors.description}
-            startIcon={<MessageIcon />}
             multiline
             minRows={4}
           />

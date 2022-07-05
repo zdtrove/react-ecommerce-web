@@ -29,3 +29,30 @@ exports.addStore = async (req, res) => {
 		return res.status(500).json({ message: err.message })
 	}
 }
+
+exports.updateStore = async (req, res) => {
+	try {
+		const { name, address, region } = req.body
+		const store = await Store.findOneAndUpdate({ _id: req.params.id }, {
+			name, address, region
+		})
+
+		const newStore = { ...store._doc }
+		res.status(200).json({
+			message: "Update store success",
+			store: newStore
+		})
+	} catch (err) {
+		return res.status(500).json({ message: err.message })
+	}
+}
+
+exports.deleteStore = async (req, res) => {
+	try {
+		const store = await Store.findOneAndDelete({ _id: req.params.id })
+
+		return res.status(200).json({ message: "Delete store success", storeDelete: store })
+	} catch (err) {
+		return res.status(500).json({ message: err.message })
+	}
+}

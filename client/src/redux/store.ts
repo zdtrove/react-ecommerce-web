@@ -6,11 +6,15 @@ import categoryReducer from './features/category/categorySlice';
 import userReducer from './features/user/userSlice';
 import uiReducer from './features/ui/uiSlice';
 import productReducer from './features/product/productSlice';
+import eventReducer from './features/event/eventSlice';
+import storeReducer from './features/store/storeSlice';
 
 const rootReducer = combineReducers({
   auth: authReducer,
   category: categoryReducer,
   product: productReducer,
+  event: eventReducer,
+  store: storeReducer,
   user: userReducer,
   ui: uiReducer
 });

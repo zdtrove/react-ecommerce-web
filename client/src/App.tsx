@@ -5,6 +5,8 @@ import LoginAdmin from 'pages/admin/Login';
 import CategoriesAdmin from 'pages/admin/Categories';
 import UsersAdmin from 'pages/admin/Users';
 import ProductsAdmin from 'pages/admin/Products';
+import EventsAdmin from 'pages/admin/Events';
+import StoresAdmin from 'pages/admin/Stores';
 import NotFound from 'pages/NotFound';
 import Home from 'pages/Home';
 import Register from 'pages/Signup';
@@ -38,6 +40,8 @@ function App() {
         <PrivateRoute admin exact path={ROUTES.admin.categories} component={CategoriesAdmin} />
         <PrivateRoute admin exact path={ROUTES.admin.users} component={UsersAdmin} />
         <PrivateRoute admin exact path={ROUTES.admin.products} component={ProductsAdmin} />
+        <PrivateRoute admin exact path={ROUTES.admin.events} component={EventsAdmin} />
+        <PrivateRoute admin exact path={ROUTES.admin.stores} component={StoresAdmin} />
         <Route path={ROUTES.admin.login} component={LoginAdmin} />
         {/* Not Found */}
         <Route component={NotFound} />

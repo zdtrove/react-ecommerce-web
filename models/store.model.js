@@ -18,6 +18,28 @@ const storeSchema = new mongoose.Schema({
         required: true,
         trim: true,
         maxlength: 32
+    },
+    map: {
+        title: {
+            type: String,
+            default: ''
+        },
+        lat: {
+            type: Number,
+            default: 0
+        },
+        lng: {
+            type: Number,
+            default: 0
+        }
+    },
+    openingHour: {
+        type: String,
+        default: ''
+    },
+    closingHour: {
+        type: String,
+        default: ''
     }
 }, {
     timestamps: true

@@ -29,3 +29,30 @@ exports.addEvent = async (req, res) => {
 		return res.status(500).json({ message: err.message })
 	}
 }
+
+exports.updateEvent = async (req, res) => {
+	try {
+		const { name, description, startDate, endDate } = req.body
+		const event = await Event.findOneAndUpdate({ _id: req.params.id }, {
+			name, description, startDate, endDate
+		})
+
+		const newEvent = { ...event._doc }
+		res.status(200).json({
+			message: "Update event success",
+			event: newEvent
+		})
+	} catch (err) {
+		return res.status(500).json({ message: err.message })
+	}
+}
+
+exports.deleteEvent = async (req, res) => {
+	try {
+		const event = await Event.findOneAndDelete({ _id: req.params.id })
+
+		return res.status(200).json({ message: "Delete event success", eventDelete: event })
+	} catch (err) {
+		return res.status(500).json({ message: err.message })
+	}
+}

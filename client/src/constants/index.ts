@@ -62,6 +62,14 @@ export const ENDPOINTS = {
   products: {
     getAll: '/api/products',
     getOne: '/api/product'
+  },
+  events: {
+    getAll: '/api/events',
+    getOne: '/api/event'
+  },
+  stores: {
+    getAll: '/api/stores',
+    getOne: '/api/store'
   }
 };
 
