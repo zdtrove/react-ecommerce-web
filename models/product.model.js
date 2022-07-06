@@ -154,7 +154,7 @@ const productSchema = new mongoose.Schema({
         }
     },
     releaseDate: {
-        type: String,
+        type: Date,
         default: ''
     },
     manufacture: {

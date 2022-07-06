@@ -1,20 +1,17 @@
 import { PayloadAction } from '@reduxjs/toolkit';
-import { getEventsApi, addEventApi, updateEventApi, deleteEventApi } from 'apis/eventApi';
+import { addDataApi, deleteDataApi, getAllDataApi, updateDataApi } from 'apis/commonApi';
+import { ENDPOINTS } from 'constants/index';
 import { call, all, put, takeEvery } from 'redux-saga/effects';
-import {
-  AddOrUpdateEventResponse,
-  DeleteEventResponse,
-  GetAllEventsResponse,
-  Event
-} from 'types/event';
+import { AddOrUpdateResponse, DeleteResponse, ListResponse } from 'types/common';
+import { Event } from 'types/event';
 import { eventActions } from './eventSlice';
 
 function* getEventsSaga() {
   try {
-    const res: GetAllEventsResponse = yield call(getEventsApi);
+    const res: ListResponse<Event> = yield call(getAllDataApi, ENDPOINTS.events.getAll);
     const { status, data } = res;
     if (status === 200) {
-      yield put(eventActions.getEventsSuccess(data.events));
+      yield put(eventActions.getEventsSuccess(data));
     }
   } catch (error) {
     console.log(error);
@@ -24,7 +21,11 @@ function* getEventsSaga() {
 
 function* addEventSaga(action: PayloadAction<Event>) {
   try {
-    const res: AddOrUpdateEventResponse = yield call(addEventApi, action.payload);
+    const res: AddOrUpdateResponse<Event> = yield call(
+      addDataApi,
+      ENDPOINTS.events.getOne,
+      action.payload
+    );
     const { status } = res;
     if (status === 201) {
       yield put(eventActions.getEvents());
@@ -37,7 +38,11 @@ function* addEventSaga(action: PayloadAction<Event>) {
 
 function* updateEventSaga(action: PayloadAction<Event>) {
   try {
-    const res: AddOrUpdateEventResponse = yield call(updateEventApi, action.payload);
+    const res: AddOrUpdateResponse<Event> = yield call(
+      updateDataApi,
+      ENDPOINTS.events.getOne,
+      action.payload
+    );
     const { status } = res;
     if (status === 200) {
       yield put(eventActions.getEvents());
@@ -50,7 +55,11 @@ function* updateEventSaga(action: PayloadAction<Event>) {
 
 function* deleteEventSaga(action: PayloadAction<string>) {
   try {
-    const res: DeleteEventResponse = yield call(deleteEventApi, action.payload);
+    const res: DeleteResponse<Event> = yield call(
+      deleteDataApi,
+      ENDPOINTS.events.getOne,
+      action.payload
+    );
     const { status } = res;
     if (status === 200) {
       yield put(eventActions.getEvents());

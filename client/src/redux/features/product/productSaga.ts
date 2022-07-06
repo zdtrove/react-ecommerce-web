@@ -1,16 +1,23 @@
 import { Product } from 'types/product';
-import { GetAllProductResponse, UpdateProductResponse, DeleteProductResponse } from 'types/product';
-import { getProductsApi, addProductApi, updateProductApi, deleteProductApi } from 'apis/productApi';
 import { call, all, put, takeEvery } from 'redux-saga/effects';
 import { productActions } from './productSlice';
 import { PayloadAction } from '@reduxjs/toolkit';
+import {
+  AddOrUpdateResponse,
+  DeleteResponse,
+  cloudinaryImageType,
+  ListResponse
+} from 'types/common';
+import { addDataApi, deleteDataApi, getAllDataApi, updateDataApi } from 'apis/commonApi';
+import { ENDPOINTS } from 'constants/index';
+import { imagesUpload } from 'utils/upload';
 
 function* getProductsSaga() {
   try {
-    const res: GetAllProductResponse = yield call(getProductsApi);
+    const res: ListResponse<Product> = yield call(getAllDataApi, ENDPOINTS.products.getAll);
     const { status, data } = res;
     if (status === 200) {
-      yield put(productActions.getProductsSuccess(data.products));
+      yield put(productActions.getProductsSuccess(data));
     }
   } catch (error) {
     console.log(error);
@@ -20,7 +27,15 @@ function* getProductsSaga() {
 
 function* addProductSaga(action: PayloadAction<Product>) {
   try {
-    const res: UpdateProductResponse = yield call(addProductApi, action.payload);
+    if (action.payload.images) {
+      const images: cloudinaryImageType[] = yield call(imagesUpload, action.payload.images);
+      action.payload.images = images;
+    }
+    const res: AddOrUpdateResponse<Product> = yield call(
+      addDataApi,
+      ENDPOINTS.products.getAll,
+      action.payload
+    );
     const { status } = res;
     if (status === 201) {
       yield put(productActions.getProducts());
@@ -33,7 +48,17 @@ function* addProductSaga(action: PayloadAction<Product>) {
 
 function* updateProductSaga(action: PayloadAction<Product>) {
   try {
-    const res: UpdateProductResponse = yield call(updateProductApi, action.payload);
+    let imagesNew: cloudinaryImageType[] = [];
+    let imagesOld: cloudinaryImageType[] = action.payload.imagesOld || [];
+    if (action.payload.imagesNew) {
+      imagesNew = yield call(imagesUpload, action.payload.imagesNew);
+    }
+    action.payload.images = [...imagesOld, ...imagesNew];
+    const res: AddOrUpdateResponse<Product> = yield call(
+      updateDataApi,
+      ENDPOINTS.products.getOne,
+      action.payload
+    );
     const { status } = res;
     if (status === 200) {
       yield put(productActions.getProducts());
@@ -46,7 +71,11 @@ function* updateProductSaga(action: PayloadAction<Product>) {
 
 function* deleteProductSaga(action: PayloadAction<string>) {
   try {
-    const res: DeleteProductResponse = yield call(deleteProductApi, action.payload);
+    const res: DeleteResponse<Product> = yield call(
+      deleteDataApi,
+      ENDPOINTS.products.getOne,
+      action.payload
+    );
     const { status } = res;
     if (status === 200) {
       yield put(productActions.getProducts());

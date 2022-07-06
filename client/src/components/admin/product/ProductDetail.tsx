@@ -82,7 +82,10 @@ ProductDetail.propTypes = {
     categoryId: PropTypes.string,
     price: PropTypes.number,
     sold: PropTypes.number,
-    star: PropTypes.number,
+    star: PropTypes.shape({
+      average: PropTypes.number,
+      list: PropTypes.arrayOf(PropTypes.any)
+    }),
     images: PropTypes.arrayOf(PropTypes.any)
   })
 };

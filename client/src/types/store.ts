@@ -3,25 +3,18 @@ export type Store = {
   name: string;
   address: string;
   region: string;
+  openingHour?: string;
+  closingHour?: string;
+  map?: Map;
+};
+
+export type Map = {
+  title?: string;
+  lat?: number;
+  lng?: number;
 };
 
 export type StoreState = {
   stores: Store[];
   loading: boolean;
-};
-
-export type AddOrUpdateStoreResponse = {
-  status: number;
-  store: Store;
-};
-
-export type DeleteStoreResponse = {
-  status: number;
-};
-
-export type GetAllStoresResponse = {
-  data: {
-    stores: Store[];
-  };
-  status: number;
 };

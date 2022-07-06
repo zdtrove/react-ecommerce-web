@@ -12,23 +12,6 @@ export type Category = {
   children?: Category[];
 };
 
-export type GetAllCategoryResponse = {
-  data: {
-    categories: Category[];
-  };
-  status: number;
-};
-
-export type UpdateCategoryResponse = {
-  data: Category;
-  status: number;
-};
-
-export type DeleteCategoryResponse = {
-  message: string;
-  status: number;
-};
-
 export type CategoryOption = {
   level: number;
   name: string;

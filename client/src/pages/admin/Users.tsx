@@ -344,7 +344,7 @@ const Users = () => {
           </DialogContent>
           <DialogActions>
             <Button
-              onClick={() => handleDeleteUser(userRecord?._id || '')}
+              onClick={() => handleDeleteUser(userRecord?._id!)}
               color="secondary"
               text="DELETE"
             />

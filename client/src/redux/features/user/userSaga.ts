@@ -1,15 +1,18 @@
+import { AddOrUpdateResponse } from 'types/common';
 import { PayloadAction } from '@reduxjs/toolkit';
-import { getUsersApi, addUserApi, updateUserApi, deleteUserApi } from 'apis/userApi';
 import { call, all, put, takeEvery } from 'redux-saga/effects';
-import { AddOrUpdateUserResponse, DeleteUserResponse, GetAllUsersResponse, User } from 'types/user';
+import { DeleteResponse, ListResponse } from 'types/common';
+import { User } from 'types/user';
 import { userActions } from './userSlice';
+import { addDataApi, deleteDataApi, getAllDataApi, updateDataApi } from 'apis/commonApi';
+import { ENDPOINTS } from 'constants/index';
 
 function* getUsersSaga() {
   try {
-    const res: GetAllUsersResponse = yield call(getUsersApi);
+    const res: ListResponse<User> = yield call(getAllDataApi, ENDPOINTS.users.getAll);
     const { status, data } = res;
     if (status === 200) {
-      yield put(userActions.getUsersSuccess(data.users));
+      yield put(userActions.getUsersSuccess(data));
     }
   } catch (error) {
     console.log(error);
@@ -19,7 +22,11 @@ function* getUsersSaga() {
 
 function* addUserSaga(action: PayloadAction<User>) {
   try {
-    const res: AddOrUpdateUserResponse = yield call(addUserApi, action.payload);
+    const res: AddOrUpdateResponse<User> = yield call(
+      addDataApi,
+      ENDPOINTS.users.getOne,
+      action.payload
+    );
     const { status } = res;
     if (status === 201) {
       yield put(userActions.getUsers());
@@ -32,7 +39,11 @@ function* addUserSaga(action: PayloadAction<User>) {
 
 function* updateUserSaga(action: PayloadAction<User>) {
   try {
-    const res: AddOrUpdateUserResponse = yield call(updateUserApi, action.payload);
+    const res: AddOrUpdateResponse<User> = yield call(
+      updateDataApi,
+      ENDPOINTS.users.getOne,
+      action.payload
+    );
     const { status } = res;
     if (status === 200) {
       yield put(userActions.getUsers());
@@ -45,7 +56,11 @@ function* updateUserSaga(action: PayloadAction<User>) {
 
 function* deleteUserSaga(action: PayloadAction<string>) {
   try {
-    const res: DeleteUserResponse = yield call(deleteUserApi, action.payload);
+    const res: DeleteResponse<User> = yield call(
+      deleteDataApi,
+      ENDPOINTS.users.getOne,
+      action.payload
+    );
     const { status } = res;
     if (status === 200) {
       yield put(userActions.getUsers());

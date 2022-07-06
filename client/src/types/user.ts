@@ -15,19 +15,3 @@ export type User = {
   password?: string;
   passwordConfirm?: string;
 };
-
-export type AddOrUpdateUserResponse = {
-  status: number;
-  user: User;
-};
-
-export type DeleteUserResponse = {
-  status: number;
-};
-
-export type GetAllUsersResponse = {
-  data: {
-    users: User[];
-  };
-  status: number;
-};

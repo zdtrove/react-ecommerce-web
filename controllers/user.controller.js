@@ -5,7 +5,7 @@ exports.getUsers = async (req, res) => {
 	try {
 		const users = await User.find({}).select("-password")
 
-		return res.status(200).json({ users })
+		return res.status(200).json(users)
 	} catch (err) {
 		return res.status(500).json({ message: err.message })
 	}
@@ -27,8 +27,8 @@ exports.addUser = async (req, res) => {
         await newUser.save((err, data) => {
             if (err) res.status(400).json(err)
             if (data) res.status(201).json({
-                message: "Add new user success",
-                user: data
+                message: "Add user success",
+                data
             })
         })
 	} catch (err) {
@@ -45,9 +45,10 @@ exports.updateUser = async (req, res) => {
 
 		const newUser = { ...user._doc }
 		delete newUser.password
+
 		res.status(200).json({
 			message: "Update user success",
-			user: newUser
+			data: newUser
 		})
 	} catch (err) {
 		return res.status(500).json({ message: err.message })
@@ -58,7 +59,7 @@ exports.deleteUser = async (req, res) => {
 	try {
 		const user = await User.findOneAndDelete({ _id: req.params.id })
 
-		return res.status(200).json({ message: "Delete user success", userDelete: user })
+		return res.status(200).json({ message: "Delete user success", data: user })
 	} catch (err) {
 		return res.status(500).json({ message: err.message })
 	}

@@ -4,7 +4,7 @@ exports.getEvents = async (req, res) => {
 	try {
 		const events = await Event.find({})
 
-		return res.status(200).json({ events })
+		return res.status(200).json(events)
 	} catch (err) {
 		return res.status(500).json({ message: err.message })
 	}
@@ -21,8 +21,8 @@ exports.addEvent = async (req, res) => {
         await newEvent.save((err, data) => {
             if (err) res.status(400).json(err)
             if (data) res.status(201).json({
-                message: "Add new event success",
-                event: data
+                message: "Add event success",
+                data
             })
         })
 	} catch (err) {
@@ -37,10 +37,9 @@ exports.updateEvent = async (req, res) => {
 			name, description, startDate, endDate
 		})
 
-		const newEvent = { ...event._doc }
 		res.status(200).json({
 			message: "Update event success",
-			event: newEvent
+			data: { ...event._doc }
 		})
 	} catch (err) {
 		return res.status(500).json({ message: err.message })
@@ -51,7 +50,7 @@ exports.deleteEvent = async (req, res) => {
 	try {
 		const event = await Event.findOneAndDelete({ _id: req.params.id })
 
-		return res.status(200).json({ message: "Delete event success", eventDelete: event })
+		return res.status(200).json({ message: "Delete event success", data: event })
 	} catch (err) {
 		return res.status(500).json({ message: err.message })
 	}

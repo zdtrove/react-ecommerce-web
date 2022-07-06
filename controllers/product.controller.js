@@ -19,8 +19,8 @@ exports.addProduct = async (req, res) => {
         await product.save()
 
         res.status(201).json({
-            message: "Create Product Success",
-            product
+            message: "Add product success",
+            data: product
         })
     } catch (err) {
         let errMsg
@@ -37,7 +37,7 @@ exports.getProducts = async (req, res) => {
     try {
         const products = await Product.find()
 
-        return res.status(200).json({ products })
+        return res.status(200).json(products)
     } catch (err) {
         res.status(500).json({ message: err.message })
     }
@@ -52,11 +52,10 @@ exports.updateProduct = async (req, res) => {
         }
 
         const product = await Product.findOneAndUpdate({ _id: req.params.id }, productUpdate);
-        const newProduct = { ...product._doc };
 
         res.status(200).json({
             message: "Update product success",
-            product: newProduct
+            product: { ...product._doc }
         })
     } catch (err) {
         res.status(500).json({ message: err.message })
@@ -67,7 +66,7 @@ exports.deleteProduct = async (req, res) => {
     try {
         const product = await Product.findOneAndDelete({ _id: req.params.id })
 
-		return res.status(200).json({ message: "Delete product success", product })
+		return res.status(200).json({ message: "Delete product success", data: product })
     } catch (err) {
         res.status(500).json({ message: err.message })
     }

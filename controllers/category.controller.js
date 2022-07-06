@@ -33,8 +33,8 @@ exports.addCategory = async (req, res) => {
         await category.save()
 
         res.status(201).json({
-            message: "Create Category Success",
-            category
+            message: "Add category Success",
+            data: category
         })
     } catch (err) {
         let errMsg
@@ -51,7 +51,7 @@ exports.getCategories = async (req, res) => {
     try {
         const categories = await Category.find()
 
-        return res.status(200).json({ categories: createCategories(categories) })
+        return res.status(200).json(createCategories(categories))
     } catch (err) {
         res.status(500).json({ message: err.message })
     }
@@ -63,11 +63,10 @@ exports.updateCategory = async (req, res) => {
         const category = await Category.findOneAndUpdate({ _id: req.params.id }, {
             name, parentId, image
         });
-        const newCategory = { ...category._doc };
 
         res.status(200).json({
             message: "Update category success",
-            category: newCategory
+            data: { ...category._doc }
         })
     } catch (err) {
         res.status(500).json({ message: err.message })
@@ -78,7 +77,7 @@ exports.deleteCategory = async (req, res) => {
     try {
         const category = await Category.findOneAndDelete({ _id: req.params.id })
 
-		return res.status(200).json({ message: "Delete category success", categoryDelete: category })
+		return res.status(200).json({ message: "Delete category success", data: category })
     } catch (err) {
         res.status(500).json({ message: err.message })
     }

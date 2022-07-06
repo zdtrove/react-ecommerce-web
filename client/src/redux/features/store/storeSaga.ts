@@ -1,20 +1,17 @@
 import { PayloadAction } from '@reduxjs/toolkit';
-import { getStoresApi, addStoreApi, updateStoreApi, deleteStoreApi } from 'apis/storeApi';
+import { addDataApi, deleteDataApi, getAllDataApi, updateDataApi } from 'apis/commonApi';
+import { ENDPOINTS } from 'constants/index';
 import { call, all, put, takeEvery } from 'redux-saga/effects';
-import {
-  AddOrUpdateStoreResponse,
-  DeleteStoreResponse,
-  GetAllStoresResponse,
-  Store
-} from 'types/store';
+import { AddOrUpdateResponse, DeleteResponse, ListResponse } from 'types/common';
+import { Store } from 'types/store';
 import { storeActions } from './storeSlice';
 
 function* getStoresSaga() {
   try {
-    const res: GetAllStoresResponse = yield call(getStoresApi);
+    const res: ListResponse<Store> = yield call(getAllDataApi, ENDPOINTS.stores.getAll);
     const { status, data } = res;
     if (status === 200) {
-      yield put(storeActions.getStoresSuccess(data.stores));
+      yield put(storeActions.getStoresSuccess(data));
     }
   } catch (error) {
     console.log(error);
@@ -24,7 +21,11 @@ function* getStoresSaga() {
 
 function* addStoreSaga(action: PayloadAction<Store>) {
   try {
-    const res: AddOrUpdateStoreResponse = yield call(addStoreApi, action.payload);
+    const res: AddOrUpdateResponse<Store> = yield call(
+      addDataApi,
+      ENDPOINTS.stores.getOne,
+      action.payload
+    );
     const { status } = res;
     if (status === 201) {
       yield put(storeActions.getStores());
@@ -37,7 +38,11 @@ function* addStoreSaga(action: PayloadAction<Store>) {
 
 function* updateStoreSaga(action: PayloadAction<Store>) {
   try {
-    const res: AddOrUpdateStoreResponse = yield call(updateStoreApi, action.payload);
+    const res: AddOrUpdateResponse<Store> = yield call(
+      updateDataApi,
+      ENDPOINTS.stores.getOne,
+      action.payload
+    );
     const { status } = res;
     if (status === 200) {
       yield put(storeActions.getStores());
@@ -50,7 +55,11 @@ function* updateStoreSaga(action: PayloadAction<Store>) {
 
 function* deleteStoreSaga(action: PayloadAction<string>) {
   try {
-    const res: DeleteStoreResponse = yield call(deleteStoreApi, action.payload);
+    const res: DeleteResponse<Store> = yield call(
+      deleteDataApi,
+      ENDPOINTS.stores.getOne,
+      action.payload
+    );
     const { status } = res;
     if (status === 200) {
       yield put(storeActions.getStores());

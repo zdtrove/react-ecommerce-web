@@ -1,21 +1,23 @@
-import { Category, DeleteCategoryResponse, UpdateCategoryResponse } from 'types/category';
-import { GetAllCategoryResponse } from 'types/category';
-import {
-  getCategoriesApi,
-  updateCategoryApi,
-  addCategoryApi,
-  deleteCategoryApi
-} from 'apis/categoryApi';
+import { Category } from 'types/category';
 import { call, all, put, takeEvery } from 'redux-saga/effects';
 import { categoryActions } from './categorySlice';
 import { PayloadAction } from '@reduxjs/toolkit';
+import {
+  AddOrUpdateResponse,
+  cloudinaryImageType,
+  DeleteResponse,
+  ListResponse
+} from 'types/common';
+import { addDataApi, deleteDataApi, getAllDataApi, updateDataApi } from 'apis/commonApi';
+import { ENDPOINTS } from 'constants/index';
+import { imageUpload } from 'utils/upload';
 
 function* getCategoriesSaga() {
   try {
-    const res: GetAllCategoryResponse = yield call(getCategoriesApi);
+    const res: ListResponse<Category> = yield call(getAllDataApi, ENDPOINTS.categories.getAll);
     const { status, data } = res;
     if (status === 200) {
-      yield put(categoryActions.getCategoriesSuccess(data.categories));
+      yield put(categoryActions.getCategoriesSuccess(data));
     }
   } catch (error) {
     console.log(error);
@@ -25,7 +27,15 @@ function* getCategoriesSaga() {
 
 function* updateCategorySaga(action: PayloadAction<Category>) {
   try {
-    const res: UpdateCategoryResponse = yield call(updateCategoryApi, action.payload);
+    if (action.payload.image) {
+      const image: cloudinaryImageType = yield call(imageUpload, action.payload.image);
+      action.payload.image = image.url;
+    }
+    const res: AddOrUpdateResponse<Category> = yield call(
+      updateDataApi,
+      ENDPOINTS.categories.getOne,
+      action.payload
+    );
     const { status } = res;
     if (status === 200) {
       yield put(categoryActions.getCategories());
@@ -38,7 +48,15 @@ function* updateCategorySaga(action: PayloadAction<Category>) {
 
 function* addCategorySaga(action: PayloadAction<Category>) {
   try {
-    const res: UpdateCategoryResponse = yield call(addCategoryApi, action.payload);
+    if (action.payload.image) {
+      const image: cloudinaryImageType = yield call(imageUpload, action.payload.image);
+      action.payload.image = image.url;
+    }
+    const res: AddOrUpdateResponse<Category> = yield call(
+      addDataApi,
+      ENDPOINTS.categories.getAll,
+      action.payload
+    );
     const { status } = res;
     if (status === 201) {
       yield put(categoryActions.getCategories());
@@ -51,7 +69,11 @@ function* addCategorySaga(action: PayloadAction<Category>) {
 
 function* deleteCategorySaga(action: PayloadAction<string>) {
   try {
-    const res: DeleteCategoryResponse = yield call(deleteCategoryApi, action.payload);
+    const res: DeleteResponse<Category> = yield call(
+      deleteDataApi,
+      ENDPOINTS.categories.getOne,
+      action.payload
+    );
     const { status } = res;
     if (status === 200) {
       yield put(categoryActions.getCategories());
