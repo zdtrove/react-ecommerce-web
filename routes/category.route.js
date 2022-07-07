@@ -3,7 +3,7 @@ const { addCategory, getCategories, updateCategory, deleteCategory } = require('
 const { auth, onlyAdmin } = require('../middleware/auth.middleware')
 
 router.route('/categories')
-    .get(auth, onlyAdmin, getCategories)
+    .get(auth, getCategories)
     .post(auth, onlyAdmin, addCategory)
 
 router.route('/category/:id')

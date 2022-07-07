@@ -60,13 +60,13 @@ const initialValues: User = {
   role: 'user'
 };
 
-type UserAddProps = {
+type Props = {
   showUserAdd: boolean;
   // eslint-disable-next-line no-unused-vars
   setShowUserAdd: (param: boolean) => void;
 };
 
-const UserAdd = ({ showUserAdd, setShowUserAdd }: UserAddProps) => {
+const UserAdd = ({ showUserAdd, setShowUserAdd }: Props) => {
   const classes = useStyles();
   const dispatch = useAppDispatch();
   const [showPass, setShowPass] = useState(false);

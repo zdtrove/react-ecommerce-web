@@ -8,7 +8,7 @@ import {
   Checkbox
 } from '@material-ui/core';
 
-type CheckboxesProps = {
+type Props = {
   label?: string;
   name?: string;
   items?: any[];
@@ -18,7 +18,7 @@ type CheckboxesProps = {
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 };
 
-const Checkboxes = ({ label, name, items, formIkValue, error, ...rest }: CheckboxesProps) => {
+const Checkboxes = ({ label, name, items, formIkValue, error, ...rest }: Props) => {
   return (
     <FormControl margin="normal">
       <FormLabel>{label}</FormLabel>

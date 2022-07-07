@@ -16,14 +16,14 @@ const validationSchema = Yup.object().shape({
   region: Yup.string().required('Region is required').max(64, 'Region max length is 64')
 });
 
-type StoreEditProps = {
+type Props = {
   showStoreEdit: boolean;
   // eslint-disable-next-line no-unused-vars
   setShowStoreEdit: (param: boolean) => void;
   storeRecord: Store;
 };
 
-const StoreEdit = ({ showStoreEdit, setShowStoreEdit, storeRecord }: StoreEditProps) => {
+const StoreEdit = ({ showStoreEdit, setShowStoreEdit, storeRecord }: Props) => {
   const dispatch = useAppDispatch();
   const { _id, name, address, region } = storeRecord;
 

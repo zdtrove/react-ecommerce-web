@@ -102,7 +102,7 @@ const useStyles1 = makeStyles((theme) => ({
   }
 }));
 
-type TablePaginationActionsProps = {
+type Props = {
   count: number;
   page: number;
   rowsPerPage: number;
@@ -110,12 +110,7 @@ type TablePaginationActionsProps = {
   onPageChange: (event: React.MouseEvent<HTMLButtonElement>, newPage: number) => void;
 };
 
-const TablePaginationActions = ({
-  count,
-  page,
-  rowsPerPage,
-  onPageChange
-}: TablePaginationActionsProps) => {
+const TablePaginationActions = ({ count, page, rowsPerPage, onPageChange }: Props) => {
   const classes = useStyles1();
   const theme = useTheme();
 

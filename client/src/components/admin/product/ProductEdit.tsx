@@ -69,14 +69,14 @@ const validationSchema = Yup.object().shape({
   categoryId: Yup.string().required('Category is required')
 });
 
-type ProductEditProps = {
+type Props = {
   showProductEdit: boolean;
   // eslint-disable-next-line no-unused-vars
   setShowProductEdit: (param: boolean) => void;
   productRecord: Product;
 };
 
-const ProductEdit = ({ showProductEdit, setShowProductEdit, productRecord }: ProductEditProps) => {
+const ProductEdit = ({ showProductEdit, setShowProductEdit, productRecord }: Props) => {
   const dispatch = useAppDispatch();
   const classes = useStyles();
   const theme = useTheme();

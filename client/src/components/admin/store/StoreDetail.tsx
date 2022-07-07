@@ -3,14 +3,14 @@ import { DialogContent, DialogContentText, Typography } from '@material-ui/core'
 import { Dialog } from 'components/UI';
 import { Store } from 'types/store';
 
-type StoreDetailProps = {
+type Props = {
   showStoreDetail: boolean;
   // eslint-disable-next-line no-unused-vars
   setShowStoreDetail: (param: boolean) => void;
   storeRecord: Store;
 };
 
-const StoreDetail = ({ showStoreDetail, setShowStoreDetail, storeRecord }: StoreDetailProps) => {
+const StoreDetail = ({ showStoreDetail, setShowStoreDetail, storeRecord }: Props) => {
   const { name, address, region } = storeRecord;
 
   return (

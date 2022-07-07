@@ -7,32 +7,44 @@ import {
   Toolbar,
   IconButton,
   Typography,
-  CssBaseline
+  CssBaseline,
+  Badge
 } from '@material-ui/core';
 import { Menu as MenuIcon } from '@material-ui/icons';
 import { Link, useHistory } from 'react-router-dom';
 import { Button } from 'components/UI';
 import { ROUTES, userRoles } from 'constants/index';
 import { authActions, selectIsLoggedIn } from 'redux/features/auth/authSlice';
+import AddShoppingCartIcon from '@material-ui/icons/AddShoppingCart';
+import AccountCircle from '@material-ui/icons/AccountCircle';
+import { cartActions, selectCartTotalQuantity } from 'redux/features/cart/cartSlice';
 
 const { USER } = userRoles;
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
   title: {
     flexGrow: 1,
     textDecoration: 'none'
+  },
+  sectionDesktop: {
+    display: 'none',
+    [theme.breakpoints.up('md')]: {
+      display: 'flex'
+    }
   }
 }));
 
-type LayoutProps = {
+type Props = {
   children?: React.ReactNode;
 };
 
-const Layout = ({ children }: LayoutProps) => {
-  const classes = useStyles();
-  const isLoggedIn = useAppSelector(selectIsLoggedIn);
+const Layout = ({ children }: Props) => {
   const dispatch = useAppDispatch();
   const history = useHistory();
+  const classes = useStyles();
+  const isLoggedIn = useAppSelector(selectIsLoggedIn);
+  const cartTotalQuantity = useAppSelector(selectCartTotalQuantity);
+  const { openCart } = cartActions;
 
   const renderAuthBtn = () => {
     return isLoggedIn ? (
@@ -86,6 +98,21 @@ const Layout = ({ children }: LayoutProps) => {
             Go to Admin
           </Typography>
           {renderAuthBtn()}
+          <div className={classes.sectionDesktop}>
+            <IconButton onClick={() => dispatch(openCart())} color="inherit">
+              <Badge overlap="rectangular" badgeContent={cartTotalQuantity} color="secondary">
+                <AddShoppingCartIcon />
+              </Badge>
+            </IconButton>
+            <IconButton
+              edge="end"
+              aria-label="account of current user"
+              aria-haspopup="true"
+              color="inherit"
+            >
+              <AccountCircle />
+            </IconButton>
+          </div>
         </Toolbar>
       </AppBar>
       {children}

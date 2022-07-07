@@ -41,14 +41,14 @@ const validationSchema = Yup.object().shape({
   name: Yup.string().required('Name is required')
 });
 
-type CategoryAddProps = {
+type Props = {
   categories: Category[];
   showCategoryAdd: boolean;
   // eslint-disable-next-line no-unused-vars
   setShowCategoryAdd: (params: boolean) => void;
 };
 
-const CategoryAdd = ({ categories, showCategoryAdd, setShowCategoryAdd }: CategoryAddProps) => {
+const CategoryAdd = ({ categories, showCategoryAdd, setShowCategoryAdd }: Props) => {
   const classes = useStyles();
   const dispatch = useAppDispatch();
   const theme = useTheme();

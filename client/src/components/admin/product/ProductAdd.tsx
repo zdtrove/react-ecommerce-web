@@ -72,18 +72,18 @@ const validationSchema = Yup.object().shape({
 const initialValues: Product = {
   name: '',
   description: '',
-  price: '',
+  price: 0,
   images: [],
   categoryId: ''
 };
 
-type ProductAddProps = {
+type Props = {
   showProductAdd: boolean;
   // eslint-disable-next-line no-unused-vars
   setShowProductAdd: (param: boolean) => void;
 };
 
-const ProductAdd = ({ showProductAdd, setShowProductAdd }: ProductAddProps) => {
+const ProductAdd = ({ showProductAdd, setShowProductAdd }: Props) => {
   const dispatch = useAppDispatch();
   const classes = useStyles();
   const theme = useTheme();

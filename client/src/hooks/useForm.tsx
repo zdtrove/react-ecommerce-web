@@ -24,11 +24,11 @@ export const useForm = (initialValues: any) => {
   };
 };
 
-type FormProps = {
+type Props = {
   children: React.ReactNode;
 };
 
-export const Form = ({ children, ...rest }: FormProps) => {
+export const Form = ({ children, ...rest }: Props) => {
   return (
     <form autoComplete="off" {...rest}>
       {children}

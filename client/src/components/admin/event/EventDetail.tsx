@@ -3,14 +3,14 @@ import { DialogContent, DialogContentText, Typography } from '@material-ui/core'
 import { Dialog } from 'components/UI';
 import { Event } from 'types/event';
 
-type EventDetailProps = {
+type Props = {
   showEventDetail: boolean;
   // eslint-disable-next-line no-unused-vars
   setShowEventDetail: (param: boolean) => void;
   eventRecord: Event;
 };
 
-const EventDetail = ({ showEventDetail, setShowEventDetail, eventRecord }: EventDetailProps) => {
+const EventDetail = ({ showEventDetail, setShowEventDetail, eventRecord }: Props) => {
   const { name, description, startDate, endDate } = eventRecord;
 
   return (

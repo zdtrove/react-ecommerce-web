@@ -4,7 +4,7 @@ const { getUsers, updateUser, deleteUser, addUser } = require('../controllers/us
 
 router.route('/users')
 	.get(auth, onlyAdmin, getUsers)
-	.post(auth, addUser)
+	.post(auth, onlyAdmin, addUser)
 
 router.route('/user/:id')
 	.patch(auth, updateUser)

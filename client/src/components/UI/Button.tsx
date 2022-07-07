@@ -10,7 +10,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-type MuiButtonProps = {
+type Props = {
   text?: string;
   size?: ButtonProps['size'];
   color?: ButtonProps['color'];
@@ -25,7 +25,7 @@ type MuiButtonProps = {
   startIcon?: React.ReactElement;
 };
 
-const Button = ({ text, size, color, variant, onClick, ...rest }: MuiButtonProps) => {
+const Button = ({ text, size, color, variant, onClick, ...rest }: Props) => {
   const classes = useStyles();
   return (
     <MuiButton

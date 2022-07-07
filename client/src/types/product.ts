@@ -5,7 +5,7 @@ export type Product = {
   shortDescription?: string;
   gift?: Gift;
   categoryId: string;
-  price: number | string;
+  price: number;
   salePrice?: number;
   inventory?: number;
   isSale?: boolean;

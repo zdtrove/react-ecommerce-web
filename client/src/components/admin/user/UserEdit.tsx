@@ -18,14 +18,14 @@ const validationSchema = Yup.object().shape({
   city: Yup.string().required('City is required')
 });
 
-type UserEditProps = {
+type Props = {
   showUserEdit: boolean;
   // eslint-disable-next-line no-unused-vars
   setShowUserEdit: (param: boolean) => void;
   userRecord: User;
 };
 
-const UserEdit = ({ showUserEdit, setShowUserEdit, userRecord }: UserEditProps) => {
+const UserEdit = ({ showUserEdit, setShowUserEdit, userRecord }: Props) => {
   const dispatch = useAppDispatch();
   const { _id, email, fullName, phone, gender, city, payments, role } = userRecord;
 

@@ -39,3 +39,7 @@ export const findCategoryById = (categories: Category[], id: string, category: C
 export const imageShow = (src: any) => {
   return <img src={src} alt="images" />;
 };
+
+export const findIndex = (items: any[], payload: any) => {
+  return items.findIndex((item) => item._id === payload._id);
+};

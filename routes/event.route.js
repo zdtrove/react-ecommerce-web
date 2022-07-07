@@ -3,7 +3,7 @@ const { addEvent, getEvents, updateEvent, deleteEvent } = require('../controller
 const { auth, onlyAdmin } = require('../middleware/auth.middleware')
 
 router.route('/events')
-    .get(auth, onlyAdmin, getEvents)
+    .get(auth, getEvents)
     .post(auth, onlyAdmin, addEvent)
 
 router.route('/event/:id')

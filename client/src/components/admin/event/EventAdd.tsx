@@ -27,13 +27,13 @@ const initialValues: Event = {
   endDate: new Date()
 };
 
-type EventAddProps = {
+type Props = {
   showEventAdd: boolean;
   // eslint-disable-next-line no-unused-vars
   setShowEventAdd: (param: boolean) => void;
 };
 
-const EventAdd = ({ showEventAdd, setShowEventAdd }: EventAddProps) => {
+const EventAdd = ({ showEventAdd, setShowEventAdd }: Props) => {
   const dispatch = useAppDispatch();
   const [startDate, setStartDate] = useState<Date | null>(new Date());
   const [endDate, setEndDate] = useState<Date | null>(new Date());

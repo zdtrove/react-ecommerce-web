@@ -7,13 +7,13 @@ import {
   Radio
 } from '@material-ui/core';
 
-type RadioGroupProps = {
+type Props = {
   label?: string;
   items?: any[];
   row?: boolean;
 };
 
-const RadioGroup = ({ label, items, ...rest }: RadioGroupProps) => {
+const RadioGroup = ({ label, items, ...rest }: Props) => {
   return (
     <FormControl margin="normal" fullWidth>
       <FormLabel>{label}</FormLabel>

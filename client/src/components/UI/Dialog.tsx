@@ -27,7 +27,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-type MuiDialogProps = {
+type Props = {
   show: boolean;
   // eslint-disable-next-line no-unused-vars
   setShow: (params: boolean) => void;
@@ -35,7 +35,7 @@ type MuiDialogProps = {
   children: React.ReactNode;
 };
 
-const MuiDialog = ({ show, setShow, title, children }: MuiDialogProps) => {
+const MuiDialog = ({ show, setShow, title, children }: Props) => {
   const classes = useStyles();
 
   return (

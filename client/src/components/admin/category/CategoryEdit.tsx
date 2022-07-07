@@ -41,7 +41,7 @@ const validationSchema = Yup.object().shape({
   name: Yup.string().required('Name is required')
 });
 
-type CategoryEditProps = {
+type Props = {
   categories: Category[];
   showCategoryEdit: boolean;
   // eslint-disable-next-line no-unused-vars
@@ -54,7 +54,7 @@ const CategoryEdit = ({
   showCategoryEdit,
   setShowCategoryEdit,
   categoryRecord
-}: CategoryEditProps) => {
+}: Props) => {
   const classes = useStyles();
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.up('sm'));

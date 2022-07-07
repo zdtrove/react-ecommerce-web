@@ -7,7 +7,7 @@ import {
   TextFieldProps
 } from '@material-ui/core';
 
-type InputProps = {
+type Props = {
   multiline?: TextFieldProps['multiline'];
   minRows?: TextFieldProps['minRows'];
   name?: TextFieldProps['name'];
@@ -42,7 +42,7 @@ const Input = ({
   startIcon,
   endIcon,
   ...rest
-}: InputProps) => {
+}: Props) => {
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.up('sm'));
 

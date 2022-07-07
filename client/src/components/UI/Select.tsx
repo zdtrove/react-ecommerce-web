@@ -40,14 +40,14 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-type MuiSelectProps = {
+type Props = {
   label?: string;
   error?: any;
   items?: any[] | string[];
   isObject?: boolean;
 };
 
-const Select = ({ label, error, items, isObject, ...rest }: MuiSelectProps) => {
+const Select = ({ label, error, items, isObject, ...rest }: Props) => {
   const classes = useStyles();
 
   return (

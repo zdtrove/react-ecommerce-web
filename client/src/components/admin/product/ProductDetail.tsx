@@ -24,7 +24,7 @@ const useStyles = makeStyles(() => ({
   }
 }));
 
-type ProductDetailProps = {
+type Props = {
   category: Category;
   showProductDetail: boolean;
   // eslint-disable-next-line no-unused-vars
@@ -37,7 +37,7 @@ const ProductDetail = ({
   showProductDetail,
   setShowProductDetail,
   productRecord
-}: ProductDetailProps) => {
+}: Props) => {
   const classes = useStyles();
   const { name, description, price, sold, star, images } = productRecord;
 

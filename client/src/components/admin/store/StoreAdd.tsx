@@ -22,13 +22,13 @@ const initialValues: Store = {
   region: ''
 };
 
-type StoreAddProps = {
+type Props = {
   showStoreAdd: boolean;
   // eslint-disable-next-line no-unused-vars
   setShowStoreAdd: (param: boolean) => void;
 };
 
-const StoreAdd = ({ showStoreAdd, setShowStoreAdd }: StoreAddProps) => {
+const StoreAdd = ({ showStoreAdd, setShowStoreAdd }: Props) => {
   const dispatch = useAppDispatch();
 
   const formIk = useFormik({

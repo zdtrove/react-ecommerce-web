@@ -76,11 +76,11 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-type LayoutAdminProps = {
+type Props = {
   children?: React.ReactNode;
 };
 
-const LayoutAdmin = ({ children }: LayoutAdminProps) => {
+const LayoutAdmin = ({ children }: Props) => {
   const classes = useStyles();
   const dispatch = useAppDispatch();
   const history = useHistory();

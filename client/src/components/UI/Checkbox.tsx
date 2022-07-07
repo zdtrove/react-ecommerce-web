@@ -6,12 +6,12 @@ import {
   Checkbox as MuiCheckbox
 } from '@material-ui/core';
 
-type CheckboxProps = {
+type Props = {
   label?: string;
   error?: any;
 };
 
-const Checkbox = ({ label, error, ...rest }: CheckboxProps) => {
+const Checkbox = ({ label, error, ...rest }: Props) => {
   return (
     <FormControl {...(error && { error: true })}>
       <FormControlLabel control={<MuiCheckbox {...rest} />} label={label} />

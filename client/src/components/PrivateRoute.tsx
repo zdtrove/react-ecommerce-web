@@ -8,14 +8,14 @@ import { decodedType } from 'types/common';
 const { ACCESS_TOKEN } = jwtConst;
 const { ADMIN } = userRoles;
 
-type PrivateRouteProps = {
+type Props = {
   admin?: boolean;
   exact?: boolean;
   path: string;
   component: React.FC;
 };
 
-const PrivateRoute = ({ admin, ...rest }: PrivateRouteProps) => {
+const PrivateRoute = ({ admin, ...rest }: Props) => {
   try {
     const accessToken = localStorage.getItem(ACCESS_TOKEN);
 

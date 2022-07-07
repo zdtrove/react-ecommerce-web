@@ -20,14 +20,14 @@ const validationSchema = Yup.object().shape({
   endDate: Yup.string().required('End date is required')
 });
 
-type EventEditProps = {
+type Props = {
   showEventEdit: boolean;
   // eslint-disable-next-line no-unused-vars
   setShowEventEdit: (param: boolean) => void;
   eventRecord: Event;
 };
 
-const EventEdit = ({ showEventEdit, setShowEventEdit, eventRecord }: EventEditProps) => {
+const EventEdit = ({ showEventEdit, setShowEventEdit, eventRecord }: Props) => {
   const dispatch = useAppDispatch();
   const { _id, name, description, startDate, endDate } = eventRecord;
   const [startDateEdit, setStartDateEdit] = useState<Date | null>(startDate);

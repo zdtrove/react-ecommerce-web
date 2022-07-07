@@ -96,12 +96,12 @@ const sidebars = [
   { name: 'Stores', pathname: ROUTES.admin.stores, icon: <StoreMallDirectoryIcon /> }
 ];
 
-type SidebarProps = {
+type Props = {
   open: boolean;
   handleDrawerOpen: () => void;
 };
 
-const Sidebar = ({ open, handleDrawerOpen }: SidebarProps) => {
+const Sidebar = ({ open, handleDrawerOpen }: Props) => {
   const classes = useStyles();
   const location = useLocation();
   const { pathname } = location;

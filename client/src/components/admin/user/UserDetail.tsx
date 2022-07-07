@@ -9,14 +9,14 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-type UserDetailProps = {
+type Props = {
   showUserDetail: boolean;
   // eslint-disable-next-line no-unused-vars
   setShowUserDetail: (param: boolean) => void;
   userRecord: User;
 };
 
-const UserDetail = ({ showUserDetail, setShowUserDetail, userRecord }: UserDetailProps) => {
+const UserDetail = ({ showUserDetail, setShowUserDetail, userRecord }: Props) => {
   const classes = useStyles();
   const { fullName, email, phone, city, gender, payments, role } = userRecord;
 

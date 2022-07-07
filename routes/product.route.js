@@ -3,7 +3,7 @@ const { addProduct, getProducts, updateProduct, deleteProduct } = require('../co
 const { auth, onlyAdmin } = require('../middleware/auth.middleware')
 
 router.route('/products')
-    .get(auth, onlyAdmin, getProducts)
+    .get(auth, getProducts)
     .post(auth, onlyAdmin, addProduct)
 
 router.route('/product/:id')

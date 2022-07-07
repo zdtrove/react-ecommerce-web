@@ -8,6 +8,7 @@ import uiReducer from './features/ui/uiSlice';
 import productReducer from './features/product/productSlice';
 import eventReducer from './features/event/eventSlice';
 import storeReducer from './features/store/storeSlice';
+import cartReducer from './features/cart/cartSlice';
 
 const rootReducer = combineReducers({
   auth: authReducer,
@@ -16,7 +17,8 @@ const rootReducer = combineReducers({
   event: eventReducer,
   store: storeReducer,
   user: userReducer,
-  ui: uiReducer
+  ui: uiReducer,
+  cart: cartReducer
 });
 
 const sagaMiddleware = createSagaMiddleware();
