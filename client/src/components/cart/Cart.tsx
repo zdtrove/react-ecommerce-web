@@ -1,8 +1,8 @@
 import { Drawer } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import { Fragment } from 'react';
 import { cartActions, selectCartItems, selectOpenCart } from 'redux/features/cart/cartSlice';
 import { useAppDispatch, useAppSelector } from 'redux/hook';
+import CartItem from './CartItem';
 
 const useStyles = makeStyles({
   list: {
@@ -22,10 +22,7 @@ const Cart = () => {
       <Drawer anchor="right" open={open} onClose={() => dispatch(closeCart())}>
         <div className={classes.list} role="presentation">
           {cartItems.map((item) => (
-            <Fragment key={item._id}>
-              <p>{item.name}</p>
-              <p>{item.price}</p>
-            </Fragment>
+            <CartItem key={item._id} cartItem={item} />
           ))}
         </div>
       </Drawer>
