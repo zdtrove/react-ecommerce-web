@@ -21,13 +21,13 @@ const validationSchema = Yup.object().shape({
 });
 
 type Props = {
-  showEventEdit: boolean;
+  showEdit: boolean;
   // eslint-disable-next-line no-unused-vars
-  setShowEventEdit: (param: boolean) => void;
+  setShowEdit: (param: boolean) => void;
   eventRecord: Event;
 };
 
-const EventEdit = ({ showEventEdit, setShowEventEdit, eventRecord }: Props) => {
+const EventEdit = ({ showEdit, setShowEdit, eventRecord }: Props) => {
   const dispatch = useAppDispatch();
   const { _id, name, description, startDate, endDate } = eventRecord;
   const [startDateEdit, setStartDateEdit] = useState<Date | null>(startDate);
@@ -45,7 +45,7 @@ const EventEdit = ({ showEventEdit, setShowEventEdit, eventRecord }: Props) => {
     validationSchema,
     onSubmit: (values) => {
       dispatch(eventActions.updateEvent({ _id, ...values }));
-      setShowEventEdit(false);
+      setShowEdit(false);
     }
   });
 
@@ -60,7 +60,7 @@ const EventEdit = ({ showEventEdit, setShowEventEdit, eventRecord }: Props) => {
   };
 
   return (
-    <Dialog show={showEventEdit} setShow={setShowEventEdit} title="EVENT ADD">
+    <Dialog show={showEdit} setShow={setShowEdit} title="EVENT ADD">
       <DialogContent dividers>
         <form onSubmit={formIk.handleSubmit}>
           <Input
@@ -132,8 +132,8 @@ const EventEdit = ({ showEventEdit, setShowEventEdit, eventRecord }: Props) => {
 };
 
 EventEdit.propTypes = {
-  showEventEdit: PropTypes.bool,
-  setShowEventEdit: PropTypes.func
+  showEdit: PropTypes.bool,
+  setShowEdit: PropTypes.func
 };
 
 export default EventEdit;

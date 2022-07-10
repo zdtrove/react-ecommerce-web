@@ -70,18 +70,18 @@ const validationSchema = Yup.object().shape({
 });
 
 type Props = {
-  showProductEdit: boolean;
+  showEdit: boolean;
   // eslint-disable-next-line no-unused-vars
-  setShowProductEdit: (param: boolean) => void;
-  productRecord: Product;
+  setShowEdit: (param: boolean) => void;
+  product: Product;
 };
 
-const ProductEdit = ({ showProductEdit, setShowProductEdit, productRecord }: Props) => {
+const ProductEdit = ({ showEdit, setShowEdit, product }: Props) => {
   const dispatch = useAppDispatch();
   const classes = useStyles();
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.up('sm'));
-  const { _id, name, description, categoryId, price, images } = productRecord;
+  const { _id, name, description, categoryId, price, images } = product;
   const categories = useAppSelector(selectCategories);
   const [imagesNew, setImagesChange] = useState<any[]>([]);
   const [imagesOld, setImagesOld] = useState<any[]>(images || []);
@@ -90,7 +90,7 @@ const ProductEdit = ({ showProductEdit, setShowProductEdit, productRecord }: Pro
     name,
     description,
     price,
-    imagesOld: productRecord.images,
+    imagesOld: product.images,
     imagesNew: [],
     categoryId
   };
@@ -100,7 +100,7 @@ const ProductEdit = ({ showProductEdit, setShowProductEdit, productRecord }: Pro
     validationSchema,
     onSubmit: (values) => {
       dispatch(productActions.updateProduct({ _id, ...values }));
-      setShowProductEdit(false);
+      setShowEdit(false);
     }
   });
 
@@ -136,7 +136,7 @@ const ProductEdit = ({ showProductEdit, setShowProductEdit, productRecord }: Pro
   };
 
   return (
-    <Dialog show={showProductEdit} setShow={setShowProductEdit} title="PRODUCT EDIT">
+    <Dialog show={showEdit} setShow={setShowEdit} title="PRODUCT EDIT">
       <DialogContent dividers>
         <form onSubmit={formIk.handleSubmit}>
           <Input
@@ -226,9 +226,9 @@ const ProductEdit = ({ showProductEdit, setShowProductEdit, productRecord }: Pro
 };
 
 ProductEdit.propTypes = {
-  showProductEdit: PropTypes.bool,
-  setShowProductEdit: PropTypes.func,
-  productRecord: PropTypes.shape({
+  showEdit: PropTypes.bool,
+  setShowEdit: PropTypes.func,
+  product: PropTypes.shape({
     _id: PropTypes.string,
     name: PropTypes.string,
     description: PropTypes.string,

@@ -6,7 +6,7 @@ import CartItem from './CartItem';
 
 const useStyles = makeStyles({
   list: {
-    width: 450
+    width: 550
   }
 });
 

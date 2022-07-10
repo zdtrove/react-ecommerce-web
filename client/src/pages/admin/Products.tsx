@@ -173,13 +173,13 @@ const Products = () => {
   const products = useAppSelector(selectProducts);
   const categories = useAppSelector(selectCategories);
   const [searchValue, setSearchValue] = useState('');
-  const [showProductAdd, setShowProductAdd] = useState(false);
+  const [showAdd, setShowAdd] = useState(false);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(3);
-  const [showProductDetail, setShowProductDetail] = useState(false);
-  const [showProductEdit, setShowProductEdit] = useState(false);
-  const [showProductDelete, setShowProductDelete] = useState(false);
-  const [productRecord, setProductRecord] = useState<Product>({} as Product);
+  const [showDetail, setShowDetail] = useState(false);
+  const [showEdit, setShowEdit] = useState(false);
+  const [showDelete, setShowDelete] = useState(false);
+  const [product, setProduct] = useState<Product>({} as Product);
   const [productList, setProductList] = useState<Product[]>([]);
   const [category, setCategory] = useState<Category>({} as Category);
 
@@ -194,7 +194,7 @@ const Products = () => {
 
   const handleDeleteProduct = (id: string) => {
     dispatch(productActions.deleteProduct(id));
-    setShowProductDelete(false);
+    setShowDelete(false);
   };
 
   useEffect(() => {
@@ -242,7 +242,7 @@ const Products = () => {
               value={searchValue}
             />
             <Button
-              onClick={() => setShowProductAdd(true)}
+              onClick={() => setShowAdd(true)}
               variant="outlined"
               startIcon={<AddIcon />}
               text="ADD NEW"
@@ -260,17 +260,17 @@ const Products = () => {
             <TableBody>
               {productList
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((product: Product, idx: number) => (
+                .map((productItem: Product, idx: number) => (
                   <TableRow key={idx}>
-                    <TableCell>{product.name}</TableCell>
-                    <TableCell>{product.description}</TableCell>
-                    <TableCell>{product.price}</TableCell>
+                    <TableCell>{productItem.name}</TableCell>
+                    <TableCell>{productItem.description}</TableCell>
+                    <TableCell>{productItem.price}</TableCell>
                     <TableCell>
                       <Button
                         onClick={() => {
-                          setCategory(findCategoryById(categories, product.categoryId, category));
-                          setProductRecord(product);
-                          setShowProductDetail(true);
+                          setCategory(findCategoryById(categories, productItem.categoryId, category));
+                          setProduct(productItem);
+                          setShowDetail(true);
                         }}
                         className={classes.marginBtn}
                         text="DETAIL"
@@ -278,8 +278,8 @@ const Products = () => {
                       />
                       <Button
                         onClick={() => {
-                          setProductRecord(product);
-                          setShowProductEdit(true);
+                          setProduct(productItem);
+                          setShowEdit(true);
                         }}
                         className={classes.marginBtn}
                         text="EDIT"
@@ -289,8 +289,8 @@ const Products = () => {
                         color="secondary"
                         text="DELETE"
                         onClick={() => {
-                          setProductRecord(product);
-                          setShowProductDelete(true);
+                          setProduct(productItem);
+                          setShowDelete(true);
                         }}
                       />
                     </TableCell>
@@ -310,48 +310,48 @@ const Products = () => {
           />
         </TableContainer>
       </Paper>
-      {showProductAdd && (
+      {showAdd && (
         <ProductAdd
           {...{
             products,
-            showProductAdd,
-            setShowProductAdd
+            showAdd,
+            setShowAdd
           }}
         />
       )}
-      {showProductDetail && (
+      {showDetail && (
         <ProductDetail
           {...{
             category,
-            showProductDetail,
-            setShowProductDetail,
-            productRecord
+            showDetail,
+            setShowDetail,
+            product
           }}
         />
       )}
-      {showProductEdit && (
+      {showEdit && (
         <ProductEdit
           {...{
-            showProductEdit,
-            setShowProductEdit,
-            productRecord
+            showEdit,
+            setShowEdit,
+            product
           }}
         />
       )}
-      {showProductDelete && (
-        <Dialog show={showProductDelete} setShow={setShowProductDelete} title="DELETE PRODUCT">
+      {showDelete && (
+        <Dialog show={showDelete} setShow={setShowDelete} title="DELETE PRODUCT">
           <DialogContent>
             <DialogContentText>
-              Are you sure to delete <strong>{productRecord?.name}</strong>?
+              Are you sure to delete <strong>{product?.name}</strong>?
             </DialogContentText>
           </DialogContent>
           <DialogActions>
             <Button
-              onClick={() => handleDeleteProduct(productRecord?._id || '')}
+              onClick={() => handleDeleteProduct(product?._id || '')}
               color="secondary"
               text="DELETE"
             />
-            <Button onClick={() => setShowProductDelete(false)} color="default" text="CANCEL" />
+            <Button onClick={() => setShowDelete(false)} color="default" text="CANCEL" />
           </DialogActions>
         </Dialog>
       )}

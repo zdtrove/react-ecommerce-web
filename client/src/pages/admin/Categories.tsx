@@ -135,9 +135,9 @@ const Categories = () => {
   const dispatch = useAppDispatch();
   const [selected, setSelected] = useState<string>('');
   const [expanded, setExpanded] = useState<string[]>([]);
-  const [showCategoryEdit, setShowCategoryEdit] = useState(false);
-  const [showCategoryAdd, setShowCategoryAdd] = useState(false);
-  const [showCategoryDelete, setShowCategoryDelete] = useState(false);
+  const [showEdit, setShowEdit] = useState(false);
+  const [showAdd, setShowAdd] = useState(false);
+  const [showDelete, setShowDelete] = useState(false);
   const [categoryRecord, setCategoryRecord] = useState<Category>({} as Category);
 
   const handleToggle = (event: React.ChangeEvent<{}>, nodeIds: string[]) => {
@@ -150,13 +150,13 @@ const Categories = () => {
 
   const handleEdit = (e: React.ChangeEvent, category: Category) => {
     setCategoryRecord(category);
-    setShowCategoryEdit(true);
+    setShowEdit(true);
     e.stopPropagation();
   };
 
   const handleDelete = (id: string) => {
     dispatch(categoryActions.deleteCategory(id));
-    setShowCategoryDelete(false);
+    setShowDelete(false);
   };
 
   const renderTree = (categories: Category[]) => {
@@ -178,7 +178,7 @@ const Categories = () => {
                   <Button
                     onClick={(e) => {
                       setCategoryRecord(category);
-                      setShowCategoryDelete(true);
+                      setShowDelete(true);
                       e.stopPropagation();
                     }}
                     text="DELETE"
@@ -230,7 +230,7 @@ const Categories = () => {
         <Paper className={classes.rootTree}>
           <Toolbar>
             <Button
-              onClick={() => setShowCategoryAdd(true)}
+              onClick={() => setShowAdd(true)}
               variant="outlined"
               startIcon={<AddIcon />}
               className={classes.newButton}
@@ -249,27 +249,27 @@ const Categories = () => {
             {categories.length > 0 && renderTree(categories)}
           </TreeView>
         </Paper>
-        {showCategoryEdit && (
+        {showEdit && (
           <CategoryEdit
             {...{
               categories,
               categoryRecord,
-              showCategoryEdit,
-              setShowCategoryEdit
+              showEdit,
+              setShowEdit
             }}
           />
         )}
-        {showCategoryAdd && (
+        {showAdd && (
           <CategoryAdd
             {...{
               categories,
-              showCategoryAdd,
-              setShowCategoryAdd
+              showAdd,
+              setShowAdd
             }}
           />
         )}
-        {showCategoryDelete && (
-          <Dialog show={showCategoryDelete} setShow={setShowCategoryDelete} title="DELETE CATEGORY">
+        {showDelete && (
+          <Dialog show={showDelete} setShow={setShowDelete} title="DELETE CATEGORY">
             <DialogContent>
               <DialogContentText>
                 Are you sure to delete <strong>{categoryRecord && categoryRecord.name}</strong>?
@@ -281,7 +281,7 @@ const Categories = () => {
                 color="secondary"
                 text="DELETE"
               />
-              <Button onClick={() => setShowCategoryDelete(false)} color="default" text="CANCEL" />
+              <Button onClick={() => setShowDelete(false)} color="default" text="CANCEL" />
             </DialogActions>
           </Dialog>
         )}

@@ -43,12 +43,12 @@ const validationSchema = Yup.object().shape({
 
 type Props = {
   categories: Category[];
-  showCategoryAdd: boolean;
+  showAdd: boolean;
   // eslint-disable-next-line no-unused-vars
-  setShowCategoryAdd: (params: boolean) => void;
+  setShowAdd: (params: boolean) => void;
 };
 
-const CategoryAdd = ({ categories, showCategoryAdd, setShowCategoryAdd }: Props) => {
+const CategoryAdd = ({ categories, showAdd, setShowAdd }: Props) => {
   const classes = useStyles();
   const dispatch = useAppDispatch();
   const theme = useTheme();
@@ -67,7 +67,7 @@ const CategoryAdd = ({ categories, showCategoryAdd, setShowCategoryAdd }: Props)
     validationSchema,
     onSubmit: (values) => {
       dispatch(categoryActions.addCategory(values));
-      setShowCategoryAdd(false);
+      setShowAdd(false);
     }
   });
 
@@ -79,7 +79,7 @@ const CategoryAdd = ({ categories, showCategoryAdd, setShowCategoryAdd }: Props)
   };
 
   return (
-    <Dialog show={showCategoryAdd} setShow={setShowCategoryAdd} title="CATEGORY ADD">
+    <Dialog show={showAdd} setShow={setShowAdd} title="CATEGORY ADD">
       <DialogContent dividers>
         <form onSubmit={formIk.handleSubmit}>
           <Input
@@ -156,8 +156,8 @@ CategoryAdd.propTypes = {
       image: PropTypes.string
     })
   ),
-  showCategoryAdd: PropTypes.bool,
-  setShowCategoryAdd: PropTypes.func
+  showAdd: PropTypes.bool,
+  setShowAdd: PropTypes.func
 };
 
 export default CategoryAdd;

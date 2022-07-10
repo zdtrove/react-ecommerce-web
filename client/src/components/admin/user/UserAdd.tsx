@@ -61,12 +61,12 @@ const initialValues: User = {
 };
 
 type Props = {
-  showUserAdd: boolean;
+  showAdd: boolean;
   // eslint-disable-next-line no-unused-vars
-  setShowUserAdd: (param: boolean) => void;
+  setShowAdd: (param: boolean) => void;
 };
 
-const UserAdd = ({ showUserAdd, setShowUserAdd }: Props) => {
+const UserAdd = ({ showAdd, setShowAdd }: Props) => {
   const classes = useStyles();
   const dispatch = useAppDispatch();
   const [showPass, setShowPass] = useState(false);
@@ -91,7 +91,7 @@ const UserAdd = ({ showUserAdd, setShowUserAdd }: Props) => {
     validationSchema,
     onSubmit: (values) => {
       dispatch(userActions.addUser(values));
-      setShowUserAdd(false);
+      setShowAdd(false);
     }
   });
 
@@ -106,7 +106,7 @@ const UserAdd = ({ showUserAdd, setShowUserAdd }: Props) => {
   };
 
   return (
-    <Dialog show={showUserAdd} setShow={setShowUserAdd} title="USER EDIT">
+    <Dialog show={showAdd} setShow={setShowAdd} title="USER EDIT">
       <DialogContent dividers>
         <form onSubmit={formIk.handleSubmit}>
           <Input
@@ -219,8 +219,8 @@ const UserAdd = ({ showUserAdd, setShowUserAdd }: Props) => {
 };
 
 UserAdd.propTypes = {
-  showUserAdd: PropTypes.bool,
-  setShowUserAdd: PropTypes.func
+  showAdd: PropTypes.bool,
+  setShowAdd: PropTypes.func
 };
 
 export default UserAdd;

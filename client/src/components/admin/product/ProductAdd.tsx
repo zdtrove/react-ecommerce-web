@@ -78,12 +78,12 @@ const initialValues: Product = {
 };
 
 type Props = {
-  showProductAdd: boolean;
+  showAdd: boolean;
   // eslint-disable-next-line no-unused-vars
-  setShowProductAdd: (param: boolean) => void;
+  setShowAdd: (param: boolean) => void;
 };
 
-const ProductAdd = ({ showProductAdd, setShowProductAdd }: Props) => {
+const ProductAdd = ({ showAdd, setShowAdd }: Props) => {
   const dispatch = useAppDispatch();
   const classes = useStyles();
   const theme = useTheme();
@@ -117,12 +117,12 @@ const ProductAdd = ({ showProductAdd, setShowProductAdd }: Props) => {
     validationSchema,
     onSubmit: (values) => {
       dispatch(productActions.addProduct({ ...values, images }));
-      setShowProductAdd(false);
+      setShowAdd(false);
     }
   });
 
   return (
-    <Dialog show={showProductAdd} setShow={setShowProductAdd} title="PRODUCT ADD">
+    <Dialog show={showAdd} setShow={setShowAdd} title="PRODUCT ADD">
       <DialogContent dividers>
         <form onSubmit={formIk.handleSubmit}>
           <Input
@@ -203,8 +203,8 @@ const ProductAdd = ({ showProductAdd, setShowProductAdd }: Props) => {
 };
 
 ProductAdd.propTypes = {
-  showProductAdd: PropTypes.bool,
-  setShowProductAdd: PropTypes.func
+  showAdd: PropTypes.bool,
+  setShowAdd: PropTypes.func
 };
 
 export default ProductAdd;

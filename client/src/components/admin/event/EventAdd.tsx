@@ -28,12 +28,12 @@ const initialValues: Event = {
 };
 
 type Props = {
-  showEventAdd: boolean;
+  showAdd: boolean;
   // eslint-disable-next-line no-unused-vars
-  setShowEventAdd: (param: boolean) => void;
+  setShowAdd: (param: boolean) => void;
 };
 
-const EventAdd = ({ showEventAdd, setShowEventAdd }: Props) => {
+const EventAdd = ({ showAdd, setShowAdd }: Props) => {
   const dispatch = useAppDispatch();
   const [startDate, setStartDate] = useState<Date | null>(new Date());
   const [endDate, setEndDate] = useState<Date | null>(new Date());
@@ -43,7 +43,7 @@ const EventAdd = ({ showEventAdd, setShowEventAdd }: Props) => {
     validationSchema,
     onSubmit: (values) => {
       dispatch(eventActions.addEvent(values));
-      setShowEventAdd(false);
+      setShowAdd(false);
     }
   });
 
@@ -58,7 +58,7 @@ const EventAdd = ({ showEventAdd, setShowEventAdd }: Props) => {
   };
 
   return (
-    <Dialog show={showEventAdd} setShow={setShowEventAdd} title="EVENT ADD">
+    <Dialog show={showAdd} setShow={setShowAdd} title="EVENT ADD">
       <DialogContent dividers>
         <form onSubmit={formIk.handleSubmit}>
           <Input
@@ -130,8 +130,8 @@ const EventAdd = ({ showEventAdd, setShowEventAdd }: Props) => {
 };
 
 EventAdd.propTypes = {
-  showEventAdd: PropTypes.bool,
-  setShowEventAdd: PropTypes.func
+  showAdd: PropTypes.bool,
+  setShowAdd: PropTypes.func
 };
 
 export default EventAdd;

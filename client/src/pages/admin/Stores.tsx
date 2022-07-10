@@ -170,10 +170,10 @@ const Stores = () => {
   const stores = useAppSelector(selectStores);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(3);
-  const [showStoreDetail, setShowStoreDetail] = useState(false);
-  const [showStoreEdit, setShowStoreEdit] = useState(false);
-  const [showStoreDelete, setShowStoreDelete] = useState(false);
-  const [showStoreAdd, setShowStoreAdd] = useState(false);
+  const [showDetail, setShowDetail] = useState(false);
+  const [showEdit, setShowEdit] = useState(false);
+  const [showDelete, setShowDelete] = useState(false);
+  const [showAdd, setShowAdd] = useState(false);
   const [storeRecord, setStoreRecord] = useState<Store>({} as Store);
   const [storeList, setStoreList] = useState<Store[]>([]);
   const [searchValue, setSearchValue] = useState('');
@@ -189,7 +189,7 @@ const Stores = () => {
 
   const handleDeleteStore = (id: string) => {
     dispatch(storeActions.deleteStore(id));
-    setShowStoreDelete(false);
+    setShowDelete(false);
   };
 
   useEffect(() => {
@@ -235,7 +235,7 @@ const Stores = () => {
               value={searchValue}
             />
             <Button
-              onClick={() => setShowStoreAdd(true)}
+              onClick={() => setShowAdd(true)}
               variant="outlined"
               startIcon={<AddIcon />}
               text="ADD NEW"
@@ -262,7 +262,7 @@ const Stores = () => {
                       <Button
                         onClick={() => {
                           setStoreRecord(store);
-                          setShowStoreDetail(true);
+                          setShowDetail(true);
                         }}
                         className={classes.marginBtn}
                         text="DETAIL"
@@ -271,7 +271,7 @@ const Stores = () => {
                       <Button
                         onClick={() => {
                           setStoreRecord(store);
-                          setShowStoreEdit(true);
+                          setShowEdit(true);
                         }}
                         className={classes.marginBtn}
                         text="EDIT"
@@ -282,7 +282,7 @@ const Stores = () => {
                         text="DELETE"
                         onClick={() => {
                           setStoreRecord(store);
-                          setShowStoreDelete(true);
+                          setShowDelete(true);
                         }}
                       />
                     </TableCell>
@@ -302,34 +302,34 @@ const Stores = () => {
           />
         </TableContainer>
       </Paper>
-      {showStoreAdd && (
+      {showAdd && (
         <StoreAdd
           {...{
-            showStoreAdd,
-            setShowStoreAdd
+            showAdd,
+            setShowAdd
           }}
         />
       )}
-      {showStoreDetail && (
+      {showDetail && (
         <StoreDetail
           {...{
-            showStoreDetail,
-            setShowStoreDetail,
+            showDetail,
+            setShowDetail,
             storeRecord
           }}
         />
       )}
-      {showStoreEdit && (
+      {showEdit && (
         <StoreEdit
           {...{
-            showStoreEdit,
-            setShowStoreEdit,
+            showEdit,
+            setShowEdit,
             storeRecord
           }}
         />
       )}
-      {showStoreDelete && (
-        <Dialog show={showStoreDelete} setShow={setShowStoreDelete} title="DELETE EVENT">
+      {showDelete && (
+        <Dialog show={showDelete} setShow={setShowDelete} title="DELETE EVENT">
           <DialogContent>
             <DialogContentText>
               Are you sure to delete <strong>{storeRecord?.name}</strong>?
@@ -341,7 +341,7 @@ const Stores = () => {
               color="secondary"
               text="DELETE"
             />
-            <Button onClick={() => setShowStoreDelete(false)} color="default" text="CANCEL" />
+            <Button onClick={() => setShowDelete(false)} color="default" text="CANCEL" />
           </DialogActions>
         </Dialog>
       )}

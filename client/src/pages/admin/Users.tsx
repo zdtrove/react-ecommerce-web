@@ -170,10 +170,10 @@ const Users = () => {
   const users = useAppSelector(selectUsers);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(3);
-  const [showUserDetail, setShowUserDetail] = useState(false);
-  const [showUserEdit, setShowUserEdit] = useState(false);
-  const [showUserDelete, setShowUserDelete] = useState(false);
-  const [showUserAdd, setShowUserAdd] = useState(false);
+  const [showDetail, setShowDetail] = useState(false);
+  const [showEdit, setShowEdit] = useState(false);
+  const [showDelete, setShowDelete] = useState(false);
+  const [showAdd, setShowAdd] = useState(false);
   const [userRecord, setUserRecord] = useState<User>({} as User);
   const [userList, setUserList] = useState<User[]>([]);
   const [searchValue, setSearchValue] = useState('');
@@ -189,7 +189,7 @@ const Users = () => {
 
   const handleDeleteUser = (id: string) => {
     dispatch(userActions.deleteUser(id));
-    setShowUserDelete(false);
+    setShowDelete(false);
   };
 
   useEffect(() => {
@@ -235,7 +235,7 @@ const Users = () => {
               value={searchValue}
             />
             <Button
-              onClick={() => setShowUserAdd(true)}
+              onClick={() => setShowAdd(true)}
               variant="outlined"
               startIcon={<AddIcon />}
               text="ADD NEW"
@@ -264,7 +264,7 @@ const Users = () => {
                       <Button
                         onClick={() => {
                           setUserRecord(user);
-                          setShowUserDetail(true);
+                          setShowDetail(true);
                         }}
                         className={classes.marginBtn}
                         text="DETAIL"
@@ -273,7 +273,7 @@ const Users = () => {
                       <Button
                         onClick={() => {
                           setUserRecord(user);
-                          setShowUserEdit(true);
+                          setShowEdit(true);
                         }}
                         className={classes.marginBtn}
                         text="EDIT"
@@ -284,7 +284,7 @@ const Users = () => {
                         text="DELETE"
                         onClick={() => {
                           setUserRecord(user);
-                          setShowUserDelete(true);
+                          setShowDelete(true);
                         }}
                       />
                     </TableCell>
@@ -304,34 +304,34 @@ const Users = () => {
           />
         </TableContainer>
       </Paper>
-      {showUserAdd && (
+      {showAdd && (
         <UserAdd
           {...{
-            showUserAdd,
-            setShowUserAdd
+            showAdd,
+            setShowAdd
           }}
         />
       )}
-      {showUserDetail && (
+      {showDetail && (
         <UserDetail
           {...{
-            showUserDetail,
-            setShowUserDetail,
+            showDetail,
+            setShowDetail,
             userRecord
           }}
         />
       )}
-      {showUserEdit && (
+      {showEdit && (
         <UserEdit
           {...{
-            showUserEdit,
-            setShowUserEdit,
+            showEdit,
+            setShowEdit,
             userRecord
           }}
         />
       )}
-      {showUserDelete && (
-        <Dialog show={showUserDelete} setShow={setShowUserDelete} title="DELETE USER">
+      {showDelete && (
+        <Dialog show={showDelete} setShow={setShowDelete} title="DELETE USER">
           <DialogContent>
             <DialogContentText>
               Are you sure to delete <strong>{userRecord?.fullName}</strong>?
@@ -343,7 +343,7 @@ const Users = () => {
               color="secondary"
               text="DELETE"
             />
-            <Button onClick={() => setShowUserDelete(false)} color="default" text="CANCEL" />
+            <Button onClick={() => setShowDelete(false)} color="default" text="CANCEL" />
           </DialogActions>
         </Dialog>
       )}

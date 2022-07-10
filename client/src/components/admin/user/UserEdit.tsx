@@ -19,13 +19,13 @@ const validationSchema = Yup.object().shape({
 });
 
 type Props = {
-  showUserEdit: boolean;
+  showEdit: boolean;
   // eslint-disable-next-line no-unused-vars
-  setShowUserEdit: (param: boolean) => void;
+  setShowEdit: (param: boolean) => void;
   userRecord: User;
 };
 
-const UserEdit = ({ showUserEdit, setShowUserEdit, userRecord }: Props) => {
+const UserEdit = ({ showEdit, setShowEdit, userRecord }: Props) => {
   const dispatch = useAppDispatch();
   const { _id, email, fullName, phone, gender, city, payments, role } = userRecord;
 
@@ -56,12 +56,12 @@ const UserEdit = ({ showUserEdit, setShowUserEdit, userRecord }: Props) => {
     validationSchema,
     onSubmit: (values) => {
       dispatch(userActions.updateUser({ _id, ...values }));
-      setShowUserEdit(false);
+      setShowEdit(false);
     }
   });
 
   return (
-    <Dialog show={showUserEdit} setShow={setShowUserEdit} title="USER EDIT">
+    <Dialog show={showEdit} setShow={setShowEdit} title="USER EDIT">
       <DialogContent dividers>
         <form onSubmit={formIk.handleSubmit}>
           <Input name="email" label="Email" type="email" value={formIk.values.email} disabled />
@@ -112,8 +112,8 @@ const UserEdit = ({ showUserEdit, setShowUserEdit, userRecord }: Props) => {
 };
 
 UserEdit.propTypes = {
-  showUserEdit: PropTypes.bool,
-  setShowUserEdit: PropTypes.func,
+  showEdit: PropTypes.bool,
+  setShowEdit: PropTypes.func,
   userRecord: PropTypes.shape({
     _id: PropTypes.string,
     email: PropTypes.string,

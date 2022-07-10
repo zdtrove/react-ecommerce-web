@@ -17,13 +17,13 @@ const validationSchema = Yup.object().shape({
 });
 
 type Props = {
-  showStoreEdit: boolean;
+  showEdit: boolean;
   // eslint-disable-next-line no-unused-vars
-  setShowStoreEdit: (param: boolean) => void;
+  setShowEdit: (param: boolean) => void;
   storeRecord: Store;
 };
 
-const StoreEdit = ({ showStoreEdit, setShowStoreEdit, storeRecord }: Props) => {
+const StoreEdit = ({ showEdit, setShowEdit, storeRecord }: Props) => {
   const dispatch = useAppDispatch();
   const { _id, name, address, region } = storeRecord;
 
@@ -38,12 +38,12 @@ const StoreEdit = ({ showStoreEdit, setShowStoreEdit, storeRecord }: Props) => {
     validationSchema,
     onSubmit: (values) => {
       dispatch(storeActions.updateStore({ _id, ...values }));
-      setShowStoreEdit(false);
+      setShowEdit(false);
     }
   });
 
   return (
-    <Dialog show={showStoreEdit} setShow={setShowStoreEdit} title="STORE EDIT">
+    <Dialog show={showEdit} setShow={setShowEdit} title="STORE EDIT">
       <DialogContent dividers>
         <form onSubmit={formIk.handleSubmit}>
           <Input
@@ -84,8 +84,8 @@ const StoreEdit = ({ showStoreEdit, setShowStoreEdit, storeRecord }: Props) => {
 };
 
 StoreEdit.propTypes = {
-  showStoreEdit: PropTypes.bool,
-  setShowStoreEdit: PropTypes.func
+  showEdit: PropTypes.bool,
+  setShowEdit: PropTypes.func
 };
 
 export default StoreEdit;

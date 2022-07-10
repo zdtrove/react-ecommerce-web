@@ -10,19 +10,19 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 type Props = {
-  showUserDetail: boolean;
+  showDetail: boolean;
   // eslint-disable-next-line no-unused-vars
-  setShowUserDetail: (param: boolean) => void;
+  setShowDetail: (param: boolean) => void;
   userRecord: User;
 };
 
-const UserDetail = ({ showUserDetail, setShowUserDetail, userRecord }: Props) => {
+const UserDetail = ({ showDetail, setShowDetail, userRecord }: Props) => {
   const classes = useStyles();
   const { fullName, email, phone, city, gender, payments, role } = userRecord;
 
   return (
     <>
-      <Dialog show={showUserDetail} setShow={setShowUserDetail} title="USER DETAIL">
+      <Dialog show={showDetail} setShow={setShowDetail} title="USER DETAIL">
         <DialogContent dividers>
           <Typography variant="h6">Full Name</Typography>
           <DialogContentText>{fullName}</DialogContentText>
@@ -49,8 +49,8 @@ const UserDetail = ({ showUserDetail, setShowUserDetail, userRecord }: Props) =>
 };
 
 UserDetail.propTypes = {
-  showUserDetail: PropTypes.bool,
-  setShowUserDetail: PropTypes.func,
+  showDetail: PropTypes.bool,
+  setShowDetail: PropTypes.func,
   userRecord: PropTypes.shape({
     fullName: PropTypes.string,
     email: PropTypes.string,

@@ -4,18 +4,18 @@ import { Dialog } from 'components/UI';
 import { Event } from 'types/event';
 
 type Props = {
-  showEventDetail: boolean;
+  showDetail: boolean;
   // eslint-disable-next-line no-unused-vars
-  setShowEventDetail: (param: boolean) => void;
+  setShowDetail: (param: boolean) => void;
   eventRecord: Event;
 };
 
-const EventDetail = ({ showEventDetail, setShowEventDetail, eventRecord }: Props) => {
+const EventDetail = ({ showDetail, setShowDetail, eventRecord }: Props) => {
   const { name, description, startDate, endDate } = eventRecord;
 
   return (
     <>
-      <Dialog show={showEventDetail} setShow={setShowEventDetail} title="EVENT DETAIL">
+      <Dialog show={showDetail} setShow={setShowDetail} title="EVENT DETAIL">
         <DialogContent dividers>
           <Typography variant="h6">Name</Typography>
           <DialogContentText>{name}</DialogContentText>
@@ -32,8 +32,8 @@ const EventDetail = ({ showEventDetail, setShowEventDetail, eventRecord }: Props
 };
 
 EventDetail.propTypes = {
-  showEventDetail: PropTypes.bool,
-  setShowEventDetail: PropTypes.func,
+  showDetail: PropTypes.bool,
+  setShowDetail: PropTypes.func,
   eventRecord: PropTypes.shape({
     name: PropTypes.string,
     description: PropTypes.string,

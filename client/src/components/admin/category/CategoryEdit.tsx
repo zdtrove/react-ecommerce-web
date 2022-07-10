@@ -43,18 +43,13 @@ const validationSchema = Yup.object().shape({
 
 type Props = {
   categories: Category[];
-  showCategoryEdit: boolean;
+  showEdit: boolean;
   // eslint-disable-next-line no-unused-vars
-  setShowCategoryEdit: (params: boolean) => void;
+  setShowEdit: (params: boolean) => void;
   categoryRecord: Category;
 };
 
-const CategoryEdit = ({
-  categories,
-  showCategoryEdit,
-  setShowCategoryEdit,
-  categoryRecord
-}: Props) => {
+const CategoryEdit = ({ categories, showEdit, setShowEdit, categoryRecord }: Props) => {
   const classes = useStyles();
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.up('sm'));
@@ -74,7 +69,7 @@ const CategoryEdit = ({
     validationSchema,
     onSubmit: (values) => {
       dispatch(categoryActions.updateCategory({ _id, ...values }));
-      setShowCategoryEdit(false);
+      setShowEdit(false);
     }
   });
 
@@ -86,7 +81,7 @@ const CategoryEdit = ({
   };
 
   return (
-    <Dialog show={showCategoryEdit} setShow={setShowCategoryEdit} title="CATEGORY EDIT">
+    <Dialog show={showEdit} setShow={setShowEdit} title="CATEGORY EDIT">
       <DialogContent dividers>
         <form onSubmit={formIk.handleSubmit}>
           <Input
@@ -154,8 +149,8 @@ const CategoryEdit = ({
 
 CategoryEdit.propTypes = {
   categories: PropTypes.arrayOf(PropTypes.any),
-  showCategoryEdit: PropTypes.bool,
-  setShowCategoryEdit: PropTypes.func,
+  showEdit: PropTypes.bool,
+  setShowEdit: PropTypes.func,
   categoryRecord: PropTypes.any
 };
 

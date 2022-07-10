@@ -4,18 +4,18 @@ import { Dialog } from 'components/UI';
 import { Store } from 'types/store';
 
 type Props = {
-  showStoreDetail: boolean;
+  showDetail: boolean;
   // eslint-disable-next-line no-unused-vars
-  setShowStoreDetail: (param: boolean) => void;
+  setShowDetail: (param: boolean) => void;
   storeRecord: Store;
 };
 
-const StoreDetail = ({ showStoreDetail, setShowStoreDetail, storeRecord }: Props) => {
+const StoreDetail = ({ showDetail, setShowDetail, storeRecord }: Props) => {
   const { name, address, region } = storeRecord;
 
   return (
     <>
-      <Dialog show={showStoreDetail} setShow={setShowStoreDetail} title="STORE DETAIL">
+      <Dialog show={showDetail} setShow={setShowDetail} title="STORE DETAIL">
         <DialogContent dividers>
           <Typography variant="h6">Name</Typography>
           <DialogContentText>{name}</DialogContentText>
@@ -30,8 +30,8 @@ const StoreDetail = ({ showStoreDetail, setShowStoreDetail, storeRecord }: Props
 };
 
 StoreDetail.propTypes = {
-  showStoreDetail: PropTypes.bool,
-  setShowStoreDetail: PropTypes.func,
+  showDetail: PropTypes.bool,
+  setShowDetail: PropTypes.func,
   storeRecord: PropTypes.shape({
     name: PropTypes.string,
     address: PropTypes.string,

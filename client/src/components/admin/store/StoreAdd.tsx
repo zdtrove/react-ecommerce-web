@@ -23,12 +23,12 @@ const initialValues: Store = {
 };
 
 type Props = {
-  showStoreAdd: boolean;
+  showAdd: boolean;
   // eslint-disable-next-line no-unused-vars
-  setShowStoreAdd: (param: boolean) => void;
+  setShowAdd: (param: boolean) => void;
 };
 
-const StoreAdd = ({ showStoreAdd, setShowStoreAdd }: Props) => {
+const StoreAdd = ({ showAdd, setShowAdd }: Props) => {
   const dispatch = useAppDispatch();
 
   const formIk = useFormik({
@@ -36,12 +36,12 @@ const StoreAdd = ({ showStoreAdd, setShowStoreAdd }: Props) => {
     validationSchema,
     onSubmit: (values) => {
       dispatch(storeActions.addStore(values));
-      setShowStoreAdd(false);
+      setShowAdd(false);
     }
   });
 
   return (
-    <Dialog show={showStoreAdd} setShow={setShowStoreAdd} title="STORE ADD">
+    <Dialog show={showAdd} setShow={setShowAdd} title="STORE ADD">
       <DialogContent dividers>
         <form onSubmit={formIk.handleSubmit}>
           <Input
@@ -82,8 +82,8 @@ const StoreAdd = ({ showStoreAdd, setShowStoreAdd }: Props) => {
 };
 
 StoreAdd.propTypes = {
-  showStoreAdd: PropTypes.bool,
-  setShowStoreAdd: PropTypes.func
+  showAdd: PropTypes.bool,
+  setShowAdd: PropTypes.func
 };
 
 export default StoreAdd;

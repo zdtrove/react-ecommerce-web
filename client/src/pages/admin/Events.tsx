@@ -170,10 +170,10 @@ const Events = () => {
   const events = useAppSelector(selectEvents);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(3);
-  const [showEventDetail, setShowEventDetail] = useState(false);
-  const [showEventEdit, setShowEventEdit] = useState(false);
-  const [showEventDelete, setShowEventDelete] = useState(false);
-  const [showEventAdd, setShowEventAdd] = useState(false);
+  const [showDetail, setShowDetail] = useState(false);
+  const [showEdit, setShowEdit] = useState(false);
+  const [showDelete, setShowDelete] = useState(false);
+  const [showAdd, setShowAdd] = useState(false);
   const [eventRecord, setEventRecord] = useState<Event>({} as Event);
   const [eventList, setEventList] = useState<Event[]>([]);
   const [searchValue, setSearchValue] = useState('');
@@ -189,7 +189,7 @@ const Events = () => {
 
   const handleDeleteEvent = (id: string) => {
     dispatch(eventActions.deleteEvent(id));
-    setShowEventDelete(false);
+    setShowDelete(false);
   };
 
   useEffect(() => {
@@ -235,7 +235,7 @@ const Events = () => {
               value={searchValue}
             />
             <Button
-              onClick={() => setShowEventAdd(true)}
+              onClick={() => setShowAdd(true)}
               variant="outlined"
               startIcon={<AddIcon />}
               text="ADD NEW"
@@ -264,7 +264,7 @@ const Events = () => {
                       <Button
                         onClick={() => {
                           setEventRecord(event);
-                          setShowEventDetail(true);
+                          setShowDetail(true);
                         }}
                         className={classes.marginBtn}
                         text="DETAIL"
@@ -273,7 +273,7 @@ const Events = () => {
                       <Button
                         onClick={() => {
                           setEventRecord(event);
-                          setShowEventEdit(true);
+                          setShowEdit(true);
                         }}
                         className={classes.marginBtn}
                         text="EDIT"
@@ -284,7 +284,7 @@ const Events = () => {
                         text="DELETE"
                         onClick={() => {
                           setEventRecord(event);
-                          setShowEventDelete(true);
+                          setShowDelete(true);
                         }}
                       />
                     </TableCell>
@@ -304,34 +304,34 @@ const Events = () => {
           />
         </TableContainer>
       </Paper>
-      {showEventAdd && (
+      {showAdd && (
         <EventAdd
           {...{
-            showEventAdd,
-            setShowEventAdd
+            showAdd,
+            setShowAdd
           }}
         />
       )}
-      {showEventDetail && (
+      {showDetail && (
         <EventDetail
           {...{
-            showEventDetail,
-            setShowEventDetail,
+            showDetail,
+            setShowDetail,
             eventRecord
           }}
         />
       )}
-      {showEventEdit && (
+      {showEdit && (
         <EventEdit
           {...{
-            showEventEdit,
-            setShowEventEdit,
+            showEdit,
+            setShowEdit,
             eventRecord
           }}
         />
       )}
-      {showEventDelete && (
-        <Dialog show={showEventDelete} setShow={setShowEventDelete} title="DELETE EVENT">
+      {showDelete && (
+        <Dialog show={showDelete} setShow={setShowDelete} title="DELETE EVENT">
           <DialogContent>
             <DialogContentText>
               Are you sure to delete <strong>{eventRecord?.name}</strong>?
@@ -343,7 +343,7 @@ const Events = () => {
               color="secondary"
               text="DELETE"
             />
-            <Button onClick={() => setShowEventDelete(false)} color="default" text="CANCEL" />
+            <Button onClick={() => setShowDelete(false)} color="default" text="CANCEL" />
           </DialogActions>
         </Dialog>
       )}
