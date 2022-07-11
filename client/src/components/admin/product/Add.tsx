@@ -16,9 +16,9 @@ import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import LocalAtmIcon from '@material-ui/icons/LocalAtm';
 import AddIcon from '@material-ui/icons/Add';
 import HighlightOffIcon from '@material-ui/icons/HighlightOff';
-import { productActions } from 'redux/features/product/productSlice';
+import { productActions } from 'redux/features/product/slice';
 import { createCategoryList, imageShow } from 'utils/functions';
-import { selectCategories } from 'redux/features/category/categorySlice';
+import { selectCategories } from 'redux/features/category/slice';
 import { Product } from 'types/product';
 
 const useStyles = makeStyles(() => ({
@@ -83,7 +83,7 @@ type Props = {
   setShowAdd: (param: boolean) => void;
 };
 
-const ProductAdd = ({ showAdd, setShowAdd }: Props) => {
+const Add = ({ showAdd, setShowAdd }: Props) => {
   const dispatch = useAppDispatch();
   const classes = useStyles();
   const theme = useTheme();
@@ -202,9 +202,9 @@ const ProductAdd = ({ showAdd, setShowAdd }: Props) => {
   );
 };
 
-ProductAdd.propTypes = {
+Add.propTypes = {
   showAdd: PropTypes.bool,
   setShowAdd: PropTypes.func
 };
 
-export default ProductAdd;
+export default Add;

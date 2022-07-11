@@ -36,14 +36,18 @@ const cartSlice = createSlice({
       }
       state.cartTotalQuantity += 1;
     },
-    increment(state, action: PayloadAction<Product>) {
+    // eslint-disable-next-line no-unused-vars
+    increment(state, action: PayloadAction<Product>) {},
+    incrementSuccess(state, action: PayloadAction<Product>) {
       const itemIndex = findIndex(state.cartItems, action.payload);
       if (itemIndex >= 0) {
         state.cartItems[itemIndex].quantity += 1;
         state.cartItems[itemIndex].totalAmount += state.cartItems[itemIndex].price;
       }
     },
-    decrement(state, action: PayloadAction<Product>) {
+    // eslint-disable-next-line no-unused-vars
+    decrement(state, action: PayloadAction<Product>) {},
+    decrementSuccess(state, action: PayloadAction<Product>) {
       const itemIndex = findIndex(state.cartItems, action.payload);
       if (itemIndex >= 0) {
         state.cartItems[itemIndex].quantity -= 1;

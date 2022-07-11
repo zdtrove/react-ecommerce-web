@@ -1,7 +1,7 @@
 import { makeStyles, Snackbar as MuiSnackbar, SnackbarCloseReason } from '@material-ui/core';
 import { Alert } from '@material-ui/lab';
 import { useAppDispatch, useAppSelector } from 'redux/hook';
-import { selectSnackbar, uiActions } from 'redux/features/ui/uiSlice';
+import { selectSnackbar, uiActions } from 'redux/features/ui/slice';
 
 const useStyles = makeStyles((theme) => ({
   snackbar: {

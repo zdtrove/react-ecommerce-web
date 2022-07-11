@@ -8,7 +8,7 @@ import * as Yup from 'yup';
 import AccountCircleRoundedIcon from '@material-ui/icons/AccountCircleRounded';
 import PhoneAndroidRoundedIcon from '@material-ui/icons/PhoneAndroidRounded';
 import { User } from 'types/user';
-import { userActions } from 'redux/features/user/userSlice';
+import { userActions } from 'redux/features/user/slice';
 
 const { GENDER, CITY, PAYMENT_METHODS, ROLES } = userConst;
 
@@ -25,7 +25,7 @@ type Props = {
   userRecord: User;
 };
 
-const UserEdit = ({ showEdit, setShowEdit, userRecord }: Props) => {
+const Edit = ({ showEdit, setShowEdit, userRecord }: Props) => {
   const dispatch = useAppDispatch();
   const { _id, email, fullName, phone, gender, city, payments, role } = userRecord;
 
@@ -111,7 +111,7 @@ const UserEdit = ({ showEdit, setShowEdit, userRecord }: Props) => {
   );
 };
 
-UserEdit.propTypes = {
+Edit.propTypes = {
   showEdit: PropTypes.bool,
   setShowEdit: PropTypes.func,
   userRecord: PropTypes.shape({
@@ -126,4 +126,4 @@ UserEdit.propTypes = {
   })
 };
 
-export default UserEdit;
+export default Edit;

@@ -6,7 +6,7 @@ import { Input, Button, Dialog } from 'components/UI';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import EventNoteIcon from '@material-ui/icons/EventNote';
-import { eventActions } from 'redux/features/event/eventSlice';
+import { eventActions } from 'redux/features/event/slice';
 import { Event } from 'types/event';
 import DateFnsUtils from '@date-io/date-fns';
 import { MuiPickersUtilsProvider, KeyboardDatePicker } from '@material-ui/pickers';
@@ -20,47 +20,45 @@ const validationSchema = Yup.object().shape({
   endDate: Yup.string().required('End date is required')
 });
 
-type Props = {
-  showEdit: boolean;
-  // eslint-disable-next-line no-unused-vars
-  setShowEdit: (param: boolean) => void;
-  eventRecord: Event;
+const initialValues: Event = {
+  name: '',
+  description: '',
+  startDate: new Date(),
+  endDate: new Date()
 };
 
-const EventEdit = ({ showEdit, setShowEdit, eventRecord }: Props) => {
-  const dispatch = useAppDispatch();
-  const { _id, name, description, startDate, endDate } = eventRecord;
-  const [startDateEdit, setStartDateEdit] = useState<Date | null>(startDate);
-  const [endDateEdit, setEndDateEdit] = useState<Date | null>(endDate);
+type Props = {
+  showAdd: boolean;
+  // eslint-disable-next-line no-unused-vars
+  setShowAdd: (param: boolean) => void;
+};
 
-  const initialValues: Event = {
-    name,
-    description,
-    startDate,
-    endDate
-  };
+const Add = ({ showAdd, setShowAdd }: Props) => {
+  const dispatch = useAppDispatch();
+  const [startDate, setStartDate] = useState<Date | null>(new Date());
+  const [endDate, setEndDate] = useState<Date | null>(new Date());
 
   const formIk = useFormik({
     initialValues,
     validationSchema,
     onSubmit: (values) => {
-      dispatch(eventActions.updateEvent({ _id, ...values }));
-      setShowEdit(false);
+      dispatch(eventActions.addEvent(values));
+      setShowAdd(false);
     }
   });
 
   const handleStartDateChange = (date: Date | null) => {
-    setStartDateEdit(date);
+    setStartDate(date);
     formIk.setFieldValue('startDate', date);
   };
 
   const handleEndDateChange = (date: Date | null) => {
-    setEndDateEdit(date);
+    setEndDate(date);
     formIk.setFieldValue('endDate', date);
   };
 
   return (
-    <Dialog show={showEdit} setShow={setShowEdit} title="EVENT ADD">
+    <Dialog show={showAdd} setShow={setShowAdd} title="EVENT ADD">
       <DialogContent dividers>
         <form onSubmit={formIk.handleSubmit}>
           <Input
@@ -84,7 +82,7 @@ const EventEdit = ({ showEdit, setShowEdit, eventRecord }: Props) => {
               label="Start date"
               margin="normal"
               id="date-picker-inline"
-              value={startDateEdit}
+              value={startDate}
               onChange={handleStartDateChange}
               KeyboardButtonProps={{
                 'aria-label': 'change date'
@@ -101,7 +99,7 @@ const EventEdit = ({ showEdit, setShowEdit, eventRecord }: Props) => {
               label="End date"
               margin="normal"
               id="date-picker-inline"
-              value={endDateEdit}
+              value={endDate}
               onChange={handleEndDateChange}
               KeyboardButtonProps={{
                 'aria-label': 'change date'
@@ -131,9 +129,9 @@ const EventEdit = ({ showEdit, setShowEdit, eventRecord }: Props) => {
   );
 };
 
-EventEdit.propTypes = {
-  showEdit: PropTypes.bool,
-  setShowEdit: PropTypes.func
+Add.propTypes = {
+  showAdd: PropTypes.bool,
+  setShowAdd: PropTypes.func
 };
 
-export default EventEdit;
+export default Add;

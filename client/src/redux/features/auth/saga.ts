@@ -1,6 +1,6 @@
 import { loginApi, signUpApi, getLoggedUserApi, refreshTokenApi, logoutApi } from 'apis/authApi';
 import { call, all, put, takeEvery } from 'redux-saga/effects';
-import { authActions } from './authSlice';
+import { authActions } from './slice';
 import { jwtConst, userRoles, ROUTES } from 'constants/index';
 import { PayloadAction } from '@reduxjs/toolkit';
 import {

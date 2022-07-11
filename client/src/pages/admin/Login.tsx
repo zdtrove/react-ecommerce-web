@@ -24,7 +24,7 @@ import LockRoundedIcon from '@material-ui/icons/LockRounded';
 import VisibilityRoundedIcon from '@material-ui/icons/VisibilityRounded';
 import VisibilityOffRoundedIcon from '@material-ui/icons/VisibilityOffRounded';
 import { ROUTES, userRoles } from 'constants/index';
-import { authActions, selectIsLoggedIn, selectUser } from 'redux/features/auth/authSlice';
+import { authActions, selectIsLoggedIn, selectUser } from 'redux/features/auth/slice';
 import { LoginPayload } from 'types/auth';
 
 const { ADMIN } = userRoles;

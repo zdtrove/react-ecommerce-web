@@ -1,9 +1,9 @@
 import axiosPackage from 'axios';
 import { store } from 'redux/store';
 import { snackbar, userRoles, jwtConst, uploadConst } from 'constants/index';
-import { authActions } from 'redux/features/auth/authSlice';
+import { authActions } from 'redux/features/auth/slice';
 import { ROUTES } from '../constants';
-import { uiActions } from 'redux/features/ui/uiSlice';
+import { uiActions } from 'redux/features/ui/slice';
 
 const { SNACKBAR_STATUS_SUCCESS, SNACKBAR_STATUS_ERROR } = snackbar;
 const { ADMIN } = userRoles;

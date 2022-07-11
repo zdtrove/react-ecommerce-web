@@ -3,7 +3,7 @@ import { PayloadAction } from '@reduxjs/toolkit';
 import { call, all, put, takeEvery } from 'redux-saga/effects';
 import { DeleteResponse, ListResponse } from 'types/common';
 import { User } from 'types/user';
-import { userActions } from './userSlice';
+import { userActions } from './slice';
 import { addDataApi, deleteDataApi, getAllDataApi, updateDataApi } from 'apis/commonApi';
 import { ENDPOINTS } from 'constants/index';
 

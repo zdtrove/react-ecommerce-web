@@ -15,7 +15,7 @@ import Dashboard from 'pages/admin/Dashboard';
 import PrivateRoute from 'components/PrivateRoute';
 import { ROUTES } from 'constants/index';
 import { useAppDispatch } from 'redux/hook';
-import { authActions } from 'redux/features/auth/authSlice';
+import { authActions } from 'redux/features/auth/slice';
 
 function App() {
   const dispatch = useAppDispatch();

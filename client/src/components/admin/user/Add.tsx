@@ -20,7 +20,7 @@ import LockRoundedIcon from '@material-ui/icons/LockRounded';
 import VisibilityRoundedIcon from '@material-ui/icons/VisibilityRounded';
 import VisibilityOffRoundedIcon from '@material-ui/icons/VisibilityOffRounded';
 import EmailRoundedIcon from '@material-ui/icons/EmailRounded';
-import { userActions } from 'redux/features/user/userSlice';
+import { userActions } from 'redux/features/user/slice';
 import { User } from 'types/user';
 
 const { GENDER, CITY, PAYMENT_METHODS, ROLES } = userConst;
@@ -66,7 +66,7 @@ type Props = {
   setShowAdd: (param: boolean) => void;
 };
 
-const UserAdd = ({ showAdd, setShowAdd }: Props) => {
+const Add = ({ showAdd, setShowAdd }: Props) => {
   const classes = useStyles();
   const dispatch = useAppDispatch();
   const [showPass, setShowPass] = useState(false);
@@ -218,9 +218,9 @@ const UserAdd = ({ showAdd, setShowAdd }: Props) => {
   );
 };
 
-UserAdd.propTypes = {
+Add.propTypes = {
   showAdd: PropTypes.bool,
   setShowAdd: PropTypes.func
 };
 
-export default UserAdd;
+export default Add;

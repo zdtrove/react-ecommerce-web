@@ -19,7 +19,7 @@ import NotificationsIcon from '@material-ui/icons/Notifications';
 import SidebarAdmin from './SidebarAdmin';
 import { Button } from 'components/UI';
 import clsx from 'clsx';
-import { authActions } from 'redux/features/auth/authSlice';
+import { authActions } from 'redux/features/auth/slice';
 import { userRoles } from 'constants/index';
 
 const drawerWidth = 240;

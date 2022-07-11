@@ -10,7 +10,7 @@ type Props = {
   eventRecord: Event;
 };
 
-const EventDetail = ({ showDetail, setShowDetail, eventRecord }: Props) => {
+const Detail = ({ showDetail, setShowDetail, eventRecord }: Props) => {
   const { name, description, startDate, endDate } = eventRecord;
 
   return (
@@ -31,7 +31,7 @@ const EventDetail = ({ showDetail, setShowDetail, eventRecord }: Props) => {
   );
 };
 
-EventDetail.propTypes = {
+Detail.propTypes = {
   showDetail: PropTypes.bool,
   setShowDetail: PropTypes.func,
   eventRecord: PropTypes.shape({
@@ -42,4 +42,4 @@ EventDetail.propTypes = {
   })
 };
 
-export default EventDetail;
+export default Detail;

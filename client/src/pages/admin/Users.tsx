@@ -25,15 +25,15 @@ import {
 import PeopleOutlineTwoToneIcon from '@material-ui/icons/PeopleOutlineTwoTone';
 import AddIcon from '@material-ui/icons/Add';
 import SearchIcon from '@material-ui/icons/Search';
-import UserDetail from 'components/admin/user/UserDetail';
-import UserEdit from 'components/admin/user/UserEdit';
-import UserAdd from 'components/admin/user/UserAdd';
+import Detail from 'components/admin/user/Detail';
+import Edit from 'components/admin/user/Edit';
+import Add from 'components/admin/user/Add';
 import FirstPageIcon from '@material-ui/icons/FirstPage';
 import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
 import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
 import LastPageIcon from '@material-ui/icons/LastPage';
 import { User } from 'types/user';
-import { userActions, selectUsers } from 'redux/features/user/userSlice';
+import { userActions, selectUsers } from 'redux/features/user/slice';
 
 const useStyles = makeStyles((theme) => ({
   rootHeader: {
@@ -305,7 +305,7 @@ const Users = () => {
         </TableContainer>
       </Paper>
       {showAdd && (
-        <UserAdd
+        <Add
           {...{
             showAdd,
             setShowAdd
@@ -313,7 +313,7 @@ const Users = () => {
         />
       )}
       {showDetail && (
-        <UserDetail
+        <Detail
           {...{
             showDetail,
             setShowDetail,
@@ -322,7 +322,7 @@ const Users = () => {
         />
       )}
       {showEdit && (
-        <UserEdit
+        <Edit
           {...{
             showEdit,
             setShowEdit,

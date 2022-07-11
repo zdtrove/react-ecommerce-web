@@ -1,6 +1,6 @@
 import { makeStyles, Backdrop as MuiBackdrop, CircularProgress } from '@material-ui/core';
 import { useAppSelector } from 'redux/hook';
-import { selectBackdrop } from 'redux/features/ui/uiSlice';
+import { selectBackdrop } from 'redux/features/ui/slice';
 
 const useStyles = makeStyles((theme) => ({
   backdrop: {

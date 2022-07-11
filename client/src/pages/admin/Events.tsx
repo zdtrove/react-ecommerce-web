@@ -25,15 +25,15 @@ import {
 import PeopleOutlineTwoToneIcon from '@material-ui/icons/PeopleOutlineTwoTone';
 import AddIcon from '@material-ui/icons/Add';
 import SearchIcon from '@material-ui/icons/Search';
-import EventDetail from 'components/admin/event/EventDetail';
-import EventEdit from 'components/admin/event/EventEdit';
-import EventAdd from 'components/admin/event/EventAdd';
+import Detail from 'components/admin/event/Detail';
+import Edit from 'components/admin/event/Edit';
+import Add from 'components/admin/event/Add';
 import FirstPageIcon from '@material-ui/icons/FirstPage';
 import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
 import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
 import LastPageIcon from '@material-ui/icons/LastPage';
 import { Event } from 'types/event';
-import { eventActions, selectEvents } from 'redux/features/event/eventSlice';
+import { eventActions, selectEvents } from 'redux/features/event/slice';
 
 const useStyles = makeStyles((theme) => ({
   rootHeader: {
@@ -305,7 +305,7 @@ const Events = () => {
         </TableContainer>
       </Paper>
       {showAdd && (
-        <EventAdd
+        <Add
           {...{
             showAdd,
             setShowAdd
@@ -313,7 +313,7 @@ const Events = () => {
         />
       )}
       {showDetail && (
-        <EventDetail
+        <Detail
           {...{
             showDetail,
             setShowDetail,
@@ -322,7 +322,7 @@ const Events = () => {
         />
       )}
       {showEdit && (
-        <EventEdit
+        <Edit
           {...{
             showEdit,
             setShowEdit,

@@ -25,15 +25,15 @@ import {
 import PeopleOutlineTwoToneIcon from '@material-ui/icons/PeopleOutlineTwoTone';
 import AddIcon from '@material-ui/icons/Add';
 import SearchIcon from '@material-ui/icons/Search';
-import StoreDetail from 'components/admin/store/StoreDetail';
-import StoreEdit from 'components/admin/store/StoreEdit';
-import StoreAdd from 'components/admin/store/StoreAdd';
+import Detail from 'components/admin/store/Detail';
+import Edit from 'components/admin/store/Edit';
+import Add from 'components/admin/store/Add';
 import FirstPageIcon from '@material-ui/icons/FirstPage';
 import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
 import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
 import LastPageIcon from '@material-ui/icons/LastPage';
 import { Store } from 'types/store';
-import { storeActions, selectStores } from 'redux/features/store/storeSlice';
+import { storeActions, selectStores } from 'redux/features/store/slice';
 
 const useStyles = makeStyles((theme) => ({
   rootHeader: {
@@ -303,7 +303,7 @@ const Stores = () => {
         </TableContainer>
       </Paper>
       {showAdd && (
-        <StoreAdd
+        <Add
           {...{
             showAdd,
             setShowAdd
@@ -311,7 +311,7 @@ const Stores = () => {
         />
       )}
       {showDetail && (
-        <StoreDetail
+        <Detail
           {...{
             showDetail,
             setShowDetail,
@@ -320,7 +320,7 @@ const Stores = () => {
         />
       )}
       {showEdit && (
-        <StoreEdit
+        <Edit
           {...{
             showEdit,
             setShowEdit,

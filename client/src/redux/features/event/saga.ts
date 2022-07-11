@@ -4,7 +4,7 @@ import { ENDPOINTS } from 'constants/index';
 import { call, all, put, takeEvery } from 'redux-saga/effects';
 import { AddOrUpdateResponse, DeleteResponse, ListResponse } from 'types/common';
 import { Event } from 'types/event';
-import { eventActions } from './eventSlice';
+import { eventActions } from './slice';
 
 function* getEventsSaga() {
   try {

@@ -1,8 +1,8 @@
 import { Drawer } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import { cartActions, selectCartItems, selectOpenCart } from 'redux/features/cart/cartSlice';
+import { cartActions, selectCartItems, selectOpenCart } from 'redux/features/cart/slice';
 import { useAppDispatch, useAppSelector } from 'redux/hook';
-import CartItem from './CartItem';
+import CartItem from './Item';
 
 const useStyles = makeStyles({
   list: {

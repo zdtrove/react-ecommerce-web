@@ -10,7 +10,7 @@ type Props = {
   storeRecord: Store;
 };
 
-const StoreDetail = ({ showDetail, setShowDetail, storeRecord }: Props) => {
+const Detail = ({ showDetail, setShowDetail, storeRecord }: Props) => {
   const { name, address, region } = storeRecord;
 
   return (
@@ -29,7 +29,7 @@ const StoreDetail = ({ showDetail, setShowDetail, storeRecord }: Props) => {
   );
 };
 
-StoreDetail.propTypes = {
+Detail.propTypes = {
   showDetail: PropTypes.bool,
   setShowDetail: PropTypes.func,
   storeRecord: PropTypes.shape({
@@ -39,4 +39,4 @@ StoreDetail.propTypes = {
   })
 };
 
-export default StoreDetail;
+export default Detail;

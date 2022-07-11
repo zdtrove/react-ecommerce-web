@@ -1,6 +1,6 @@
 import { Category } from 'types/category';
 import { call, all, put, takeEvery } from 'redux-saga/effects';
-import { categoryActions } from './categorySlice';
+import { categoryActions } from './slice';
 import { PayloadAction } from '@reduxjs/toolkit';
 import {
   AddOrUpdateResponse,

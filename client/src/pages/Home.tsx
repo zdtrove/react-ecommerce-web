@@ -1,11 +1,11 @@
 import { Fragment, useEffect } from 'react';
 import { Toolbar } from '@material-ui/core';
-import Cart from 'components/cart/Cart';
+import Cart from 'components/cart';
 import Layout from 'components/layouts/Layout';
-import { productActions, selectProducts } from 'redux/features/product/productSlice';
+import { productActions, selectProducts } from 'redux/features/product/slice';
 import { useAppDispatch, useAppSelector } from 'redux/hook';
 import { Button } from 'components/UI';
-import { cartActions } from 'redux/features/cart/cartSlice';
+import { cartActions } from 'redux/features/cart/slice';
 
 const Home = () => {
   const dispatch = useAppDispatch();

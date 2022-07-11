@@ -6,14 +6,16 @@ import {
   ListItem,
   ListItemAvatar,
   ListItemSecondaryAction,
-  ListItemText
+  ListItemText,
+  Typography
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { CartItemType } from 'types/cart';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import RemoveCircleOutlineIcon from '@material-ui/icons/RemoveCircleOutline';
 import { Button } from 'components/UI';
-import { cartActions } from 'redux/features/cart/cartSlice';
+import { cartActions } from 'redux/features/cart/slice';
+import { formatNumber } from 'utils/functions';
 
 type Props = {
   cartItem: CartItemType;
@@ -58,10 +60,14 @@ const CartItem = ({ cartItem }: Props) => {
         <ListItemText
           primary={cartItem.name}
           secondary={
-            <Button onClick={() => dispatch(remove(cartItem))} text="Remove" size="small" />
+            <>
+              <Typography variant="caption">{formatNumber(cartItem.price)}</Typography>
+              <br />
+              <Button onClick={() => dispatch(remove(cartItem))} text="Remove" size="small" />
+            </>
           }
         />
-        <ListItemText primary={`${cartItem.totalAmount}$`} />
+        <ListItemText primary={`${formatNumber(cartItem.totalAmount)}`} />
         <ListItemSecondaryAction className={classes.action}>
           <IconButton onClick={() => dispatch(decrement(cartItem))}>
             <RemoveCircleOutlineIcon />

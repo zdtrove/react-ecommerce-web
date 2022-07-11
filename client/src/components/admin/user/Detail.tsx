@@ -16,7 +16,7 @@ type Props = {
   userRecord: User;
 };
 
-const UserDetail = ({ showDetail, setShowDetail, userRecord }: Props) => {
+const Detail = ({ showDetail, setShowDetail, userRecord }: Props) => {
   const classes = useStyles();
   const { fullName, email, phone, city, gender, payments, role } = userRecord;
 
@@ -48,7 +48,7 @@ const UserDetail = ({ showDetail, setShowDetail, userRecord }: Props) => {
   );
 };
 
-UserDetail.propTypes = {
+Detail.propTypes = {
   showDetail: PropTypes.bool,
   setShowDetail: PropTypes.func,
   userRecord: PropTypes.shape({
@@ -62,4 +62,4 @@ UserDetail.propTypes = {
   })
 };
 
-export default UserDetail;
+export default Detail;

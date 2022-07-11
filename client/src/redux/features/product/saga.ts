@@ -1,6 +1,6 @@
 import { Product } from 'types/product';
 import { call, all, put, takeEvery } from 'redux-saga/effects';
-import { productActions } from './productSlice';
+import { productActions } from './slice';
 import { PayloadAction } from '@reduxjs/toolkit';
 import {
   AddOrUpdateResponse,

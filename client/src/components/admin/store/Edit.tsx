@@ -7,7 +7,7 @@ import * as Yup from 'yup';
 import StorefrontIcon from '@material-ui/icons/Storefront';
 import HomeIcon from '@material-ui/icons/Home';
 import PersonPinCircleIcon from '@material-ui/icons/PersonPinCircle';
-import { storeActions } from 'redux/features/store/storeSlice';
+import { storeActions } from 'redux/features/store/slice';
 import { Store } from 'types/store';
 
 const validationSchema = Yup.object().shape({
@@ -23,7 +23,7 @@ type Props = {
   storeRecord: Store;
 };
 
-const StoreEdit = ({ showEdit, setShowEdit, storeRecord }: Props) => {
+const Edit = ({ showEdit, setShowEdit, storeRecord }: Props) => {
   const dispatch = useAppDispatch();
   const { _id, name, address, region } = storeRecord;
 
@@ -83,9 +83,9 @@ const StoreEdit = ({ showEdit, setShowEdit, storeRecord }: Props) => {
   );
 };
 
-StoreEdit.propTypes = {
+Edit.propTypes = {
   showEdit: PropTypes.bool,
   setShowEdit: PropTypes.func
 };
 
-export default StoreEdit;
+export default Edit;

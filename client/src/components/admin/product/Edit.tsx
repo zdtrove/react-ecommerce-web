@@ -17,9 +17,9 @@ import LocalAtmIcon from '@material-ui/icons/LocalAtm';
 import AddIcon from '@material-ui/icons/Add';
 import HighlightOffIcon from '@material-ui/icons/HighlightOff';
 import { Product } from 'types/product';
-import { productActions } from 'redux/features/product/productSlice';
+import { productActions } from 'redux/features/product/slice';
 import { createCategoryList, imageShow } from 'utils/functions';
-import { selectCategories } from 'redux/features/category/categorySlice';
+import { selectCategories } from 'redux/features/category/slice';
 
 const useStyles = makeStyles(() => ({
   upload: {
@@ -76,7 +76,7 @@ type Props = {
   product: Product;
 };
 
-const ProductEdit = ({ showEdit, setShowEdit, product }: Props) => {
+const Edit = ({ showEdit, setShowEdit, product }: Props) => {
   const dispatch = useAppDispatch();
   const classes = useStyles();
   const theme = useTheme();
@@ -225,7 +225,7 @@ const ProductEdit = ({ showEdit, setShowEdit, product }: Props) => {
   );
 };
 
-ProductEdit.propTypes = {
+Edit.propTypes = {
   showEdit: PropTypes.bool,
   setShowEdit: PropTypes.func,
   product: PropTypes.shape({
@@ -240,4 +240,4 @@ ProductEdit.propTypes = {
   })
 };
 
-export default ProductEdit;
+export default Edit;

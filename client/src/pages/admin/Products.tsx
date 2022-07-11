@@ -28,14 +28,14 @@ import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
 import LastPageIcon from '@material-ui/icons/LastPage';
 import { Button, Input, Dialog } from 'components/UI';
 import { useEffect, useState } from 'react';
-import ProductAdd from 'components/admin/product/ProductAdd';
-import ProductDetail from 'components/admin/product/ProductDetail';
-import ProductEdit from 'components/admin/product/ProductEdit';
+import Add from 'components/admin/product/Add';
+import Detail from 'components/admin/product/Detail';
+import Edit from 'components/admin/product/Edit';
 import { Product } from 'types/product';
-import { productActions, selectProducts } from 'redux/features/product/productSlice';
+import { productActions, selectProducts } from 'redux/features/product/slice';
 import { useAppDispatch, useAppSelector } from 'redux/hook';
 import { findCategoryById } from 'utils/functions';
-import { selectCategories } from 'redux/features/category/categorySlice';
+import { selectCategories } from 'redux/features/category/slice';
 import { Category } from 'types/category';
 
 const useStyles = makeStyles((theme) => ({
@@ -268,7 +268,9 @@ const Products = () => {
                     <TableCell>
                       <Button
                         onClick={() => {
-                          setCategory(findCategoryById(categories, productItem.categoryId, category));
+                          setCategory(
+                            findCategoryById(categories, productItem.categoryId, category)
+                          );
                           setProduct(productItem);
                           setShowDetail(true);
                         }}
@@ -311,7 +313,7 @@ const Products = () => {
         </TableContainer>
       </Paper>
       {showAdd && (
-        <ProductAdd
+        <Add
           {...{
             products,
             showAdd,
@@ -320,7 +322,7 @@ const Products = () => {
         />
       )}
       {showDetail && (
-        <ProductDetail
+        <Detail
           {...{
             category,
             showDetail,
@@ -330,7 +332,7 @@ const Products = () => {
         />
       )}
       {showEdit && (
-        <ProductEdit
+        <Edit
           {...{
             showEdit,
             setShowEdit,

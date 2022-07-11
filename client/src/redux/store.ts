@@ -1,14 +1,14 @@
 import { configureStore, combineReducers } from '@reduxjs/toolkit';
 import createSagaMiddleware from 'redux-saga';
 import rootSaga from './rootSaga';
-import authReducer from './features/auth/authSlice';
-import categoryReducer from './features/category/categorySlice';
-import userReducer from './features/user/userSlice';
-import uiReducer from './features/ui/uiSlice';
-import productReducer from './features/product/productSlice';
-import eventReducer from './features/event/eventSlice';
-import storeReducer from './features/store/storeSlice';
-import cartReducer from './features/cart/cartSlice';
+import authReducer from './features/auth/slice';
+import categoryReducer from './features/category/slice';
+import userReducer from './features/user/slice';
+import uiReducer from './features/ui/slice';
+import productReducer from './features/product/slice';
+import eventReducer from './features/event/slice';
+import storeReducer from './features/store/slice';
+import cartReducer from './features/cart/slice';
 
 const rootReducer = combineReducers({
   auth: authReducer,

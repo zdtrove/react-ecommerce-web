@@ -43,3 +43,9 @@ export const imageShow = (src: any) => {
 export const findIndex = (items: any[], payload: any) => {
   return items.findIndex((item) => item._id === payload._id);
 };
+
+export const formatNumber = (value: number) => {
+  const parts = value.toString().split('.');
+  parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  return parts.join('.');
+};

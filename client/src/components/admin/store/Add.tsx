@@ -7,7 +7,7 @@ import * as Yup from 'yup';
 import StorefrontIcon from '@material-ui/icons/Storefront';
 import HomeIcon from '@material-ui/icons/Home';
 import PersonPinCircleIcon from '@material-ui/icons/PersonPinCircle';
-import { storeActions } from 'redux/features/store/storeSlice';
+import { storeActions } from 'redux/features/store/slice';
 import { Store } from 'types/store';
 
 const validationSchema = Yup.object().shape({
@@ -28,7 +28,7 @@ type Props = {
   setShowAdd: (param: boolean) => void;
 };
 
-const StoreAdd = ({ showAdd, setShowAdd }: Props) => {
+const Add = ({ showAdd, setShowAdd }: Props) => {
   const dispatch = useAppDispatch();
 
   const formIk = useFormik({
@@ -81,9 +81,9 @@ const StoreAdd = ({ showAdd, setShowAdd }: Props) => {
   );
 };
 
-StoreAdd.propTypes = {
+Add.propTypes = {
   showAdd: PropTypes.bool,
   setShowAdd: PropTypes.func
 };
 
-export default StoreAdd;
+export default Add;

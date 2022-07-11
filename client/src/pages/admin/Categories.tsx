@@ -18,13 +18,9 @@ import TreeItem from '@material-ui/lab/TreeItem';
 import CategoryRoundedIcon from '@material-ui/icons/CategoryRounded';
 import LayoutAdmin from 'components/admin/layouts/LayoutAdmin';
 import { Button, Dialog } from 'components/UI';
-import CategoryEdit from 'components/admin/category/CategoryEdit';
-import CategoryAdd from 'components/admin/category/CategoryAdd';
-import {
-  categoryActions,
-  selectCategories,
-  selectLoadingCategory
-} from 'redux/features/category/categorySlice';
+import Edit from 'components/admin/category/Edit';
+import Add from 'components/admin/category/Add';
+import { categoryActions, selectCategories } from 'redux/features/category/slice';
 import { Category } from 'types/category';
 
 const useStyles = makeStyles((theme) => ({
@@ -131,7 +127,6 @@ const useStyles = makeStyles((theme) => ({
 const Categories = () => {
   const classes = useStyles();
   const categories = useAppSelector(selectCategories);
-  const loading = useAppSelector(selectLoadingCategory);
   const dispatch = useAppDispatch();
   const [selected, setSelected] = useState<string>('');
   const [expanded, setExpanded] = useState<string[]>([]);
@@ -226,7 +221,6 @@ const Categories = () => {
             </div>
           </div>
         </Paper>
-        {loading && <p>LOADING-----------------------</p>}
         <Paper className={classes.rootTree}>
           <Toolbar>
             <Button
@@ -250,7 +244,7 @@ const Categories = () => {
           </TreeView>
         </Paper>
         {showEdit && (
-          <CategoryEdit
+          <Edit
             {...{
               categories,
               categoryRecord,
@@ -260,7 +254,7 @@ const Categories = () => {
           />
         )}
         {showAdd && (
-          <CategoryAdd
+          <Add
             {...{
               categories,
               showAdd,

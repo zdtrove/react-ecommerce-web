@@ -14,10 +14,10 @@ import { Menu as MenuIcon } from '@material-ui/icons';
 import { Link, useHistory } from 'react-router-dom';
 import { Button } from 'components/UI';
 import { ROUTES, userRoles } from 'constants/index';
-import { authActions, selectIsLoggedIn } from 'redux/features/auth/authSlice';
+import { authActions, selectIsLoggedIn } from 'redux/features/auth/slice';
 import AddShoppingCartIcon from '@material-ui/icons/AddShoppingCart';
 import AccountCircle from '@material-ui/icons/AccountCircle';
-import { cartActions, selectCartTotalQuantity } from 'redux/features/cart/cartSlice';
+import { cartActions, selectCartTotalQuantity } from 'redux/features/cart/slice';
 
 const { USER } = userRoles;
 

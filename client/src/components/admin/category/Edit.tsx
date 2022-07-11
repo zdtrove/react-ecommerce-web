@@ -13,7 +13,7 @@ import AddIcon from '@material-ui/icons/Add';
 import { Input, Select, Button, Dialog } from 'components/UI';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import { categoryActions } from 'redux/features/category/categorySlice';
+import { categoryActions } from 'redux/features/category/slice';
 import { Category } from 'types/category';
 import { createCategoryList } from 'utils/functions';
 
@@ -43,31 +43,33 @@ const validationSchema = Yup.object().shape({
 
 type Props = {
   categories: Category[];
-  showAdd: boolean;
+  showEdit: boolean;
   // eslint-disable-next-line no-unused-vars
-  setShowAdd: (params: boolean) => void;
+  setShowEdit: (params: boolean) => void;
+  categoryRecord: Category;
 };
 
-const CategoryAdd = ({ categories, showAdd, setShowAdd }: Props) => {
+const CategoryEdit = ({ categories, showEdit, setShowEdit, categoryRecord }: Props) => {
   const classes = useStyles();
-  const dispatch = useAppDispatch();
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.up('sm'));
+  const dispatch = useAppDispatch();
+  const { _id, name, parentId, image } = categoryRecord;
   const [categoryImg, setCategoryImg] = useState<Blob | MediaSource | null>(null);
   const [categoryImgReset, setCategoryImgReset] = useState('');
 
   const initialValues: Category = {
-    name: '',
-    parentId: '',
-    image: ''
+    name,
+    parentId: parentId ? parentId : '',
+    image
   };
 
   const formIk = useFormik({
     initialValues,
     validationSchema,
     onSubmit: (values) => {
-      dispatch(categoryActions.addCategory(values));
-      setShowAdd(false);
+      dispatch(categoryActions.updateCategory({ _id, ...values }));
+      setShowEdit(false);
     }
   });
 
@@ -79,7 +81,7 @@ const CategoryAdd = ({ categories, showAdd, setShowAdd }: Props) => {
   };
 
   return (
-    <Dialog show={showAdd} setShow={setShowAdd} title="CATEGORY ADD">
+    <Dialog show={showEdit} setShow={setShowEdit} title="CATEGORY EDIT">
       <DialogContent dividers>
         <form onSubmit={formIk.handleSubmit}>
           <Input
@@ -87,7 +89,6 @@ const CategoryAdd = ({ categories, showAdd, setShowAdd }: Props) => {
             {...formIk.getFieldProps('name')}
             error={formIk.touched.name && formIk.errors.name}
           />
-
           <div className={classes.upload}>
             <label htmlFor="upload">
               <input
@@ -103,7 +104,7 @@ const CategoryAdd = ({ categories, showAdd, setShowAdd }: Props) => {
                 size={matches ? 'medium' : 'small'}
                 component="span"
               >
-                <AddIcon /> Add image
+                <AddIcon /> {image ? 'Change image' : 'Add image'}
               </Fab>
             </label>
             <img
@@ -112,7 +113,7 @@ const CategoryAdd = ({ categories, showAdd, setShowAdd }: Props) => {
                   ? categoryImgReset
                   : categoryImg
                   ? URL.createObjectURL(categoryImg)
-                  : ''
+                  : image || ''
               }
               alt=""
             />
@@ -121,7 +122,7 @@ const CategoryAdd = ({ categories, showAdd, setShowAdd }: Props) => {
             label="Parent Category"
             error={formIk.touched.parentId && formIk.errors.parentId}
             {...formIk.getFieldProps('parentId')}
-            items={createCategoryList(categories, [], 1)}
+            items={createCategoryList(categories, [], 1, _id)}
             isObject
           />
         </form>
@@ -130,14 +131,13 @@ const CategoryAdd = ({ categories, showAdd, setShowAdd }: Props) => {
         <Button
           disabled={!(formIk.isValid && formIk.dirty)}
           onClick={() => formIk.submitForm()}
-          text="ADD"
+          text="SAVE"
         />
         <Button
           disabled={!formIk.dirty}
           onClick={() => {
             formIk.resetForm();
-            setCategoryImg(null);
-            setCategoryImgReset('');
+            setCategoryImgReset(image || '');
           }}
           color="secondary"
           text="RESET"
@@ -147,17 +147,11 @@ const CategoryAdd = ({ categories, showAdd, setShowAdd }: Props) => {
   );
 };
 
-CategoryAdd.propTypes = {
-  categories: PropTypes.arrayOf(
-    PropTypes.shape({
-      _id: PropTypes.string,
-      name: PropTypes.string,
-      parentId: PropTypes.string,
-      image: PropTypes.string
-    })
-  ),
-  showAdd: PropTypes.bool,
-  setShowAdd: PropTypes.func
+CategoryEdit.propTypes = {
+  categories: PropTypes.arrayOf(PropTypes.any),
+  showEdit: PropTypes.bool,
+  setShowEdit: PropTypes.func,
+  categoryRecord: PropTypes.any
 };
 
-export default CategoryAdd;
+export default CategoryEdit;

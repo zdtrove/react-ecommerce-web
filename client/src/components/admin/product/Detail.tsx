@@ -32,12 +32,7 @@ type Props = {
   product: Product;
 };
 
-const ProductDetail = ({
-  category,
-  showDetail,
-  setShowDetail,
-  product
-}: Props) => {
+const Detail = ({ category, showDetail, setShowDetail, product }: Props) => {
   const classes = useStyles();
   const { name, description, price, sold, star, images } = product;
 
@@ -73,7 +68,7 @@ const ProductDetail = ({
   );
 };
 
-ProductDetail.propTypes = {
+Detail.propTypes = {
   showDetail: PropTypes.bool,
   setShowDetail: PropTypes.func,
   product: PropTypes.shape({
@@ -90,4 +85,4 @@ ProductDetail.propTypes = {
   })
 };
 
-export default ProductDetail;
+export default Detail;

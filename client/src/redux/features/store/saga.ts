@@ -4,7 +4,7 @@ import { ENDPOINTS } from 'constants/index';
 import { call, all, put, takeEvery } from 'redux-saga/effects';
 import { AddOrUpdateResponse, DeleteResponse, ListResponse } from 'types/common';
 import { Store } from 'types/store';
-import { storeActions } from './storeSlice';
+import { storeActions } from './slice';
 
 function* getStoresSaga() {
   try {
