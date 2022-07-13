@@ -11,6 +11,8 @@ import {
 import { addDataApi, deleteDataApi, getAllDataApi, updateDataApi } from 'apis/commonApi';
 import { ENDPOINTS } from 'constants/index';
 import { imagesUpload } from 'utils/upload';
+import { findIndex } from 'utils/functions';
+import { ProductListCart } from 'types/cart';
 
 function* getProductsSaga() {
   try {
@@ -19,6 +21,38 @@ function* getProductsSaga() {
     if (status === 200) {
       yield put(productActions.getProductsSuccess(data));
     }
+  } catch (error) {
+    console.log(error);
+    yield put(productActions.getProductsFail());
+  }
+}
+
+function* getProductsAddCartSaga(action: PayloadAction<ProductListCart>) {
+  try {
+    const { product, products } = action.payload;
+    let tempProducts = [...products];
+    const itemIndex = findIndex(tempProducts, product);
+    if (itemIndex >= 0) {
+      const tempProduct = { ...tempProducts[itemIndex], inCart: true };
+      tempProducts[itemIndex] = tempProduct;
+    }
+    yield put(productActions.getProductsSuccess(tempProducts));
+  } catch (error) {
+    console.log(error);
+    yield put(productActions.getProductsFail());
+  }
+}
+
+function* getProductsRemoveCartSaga(action: PayloadAction<ProductListCart>) {
+  try {
+    const { product, products } = action.payload;
+    let tempProducts = [...products];
+    const itemIndex = findIndex(tempProducts, product);
+    if (itemIndex >= 0) {
+      const tempProduct = { ...tempProducts[itemIndex], inCart: false };
+      tempProducts[itemIndex] = tempProduct;
+    }
+    yield put(productActions.getProductsSuccess(tempProducts));
   } catch (error) {
     console.log(error);
     yield put(productActions.getProductsFail());
@@ -91,6 +125,8 @@ export function* productSaga() {
     takeEvery(productActions.getProducts, getProductsSaga),
     takeEvery(productActions.addProduct, addProductSaga),
     takeEvery(productActions.updateProduct, updateProductSaga),
-    takeEvery(productActions.deleteProduct, deleteProductSaga)
+    takeEvery(productActions.deleteProduct, deleteProductSaga),
+    takeEvery(productActions.getProductsAddCart, getProductsAddCartSaga),
+    takeEvery(productActions.getProductsRemoveCart, getProductsRemoveCartSaga)
   ]);
 }

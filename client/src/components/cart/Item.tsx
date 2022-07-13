@@ -1,4 +1,4 @@
-import { useAppDispatch } from 'redux/hook';
+import { useAppDispatch, useAppSelector } from 'redux/hook';
 import {
   Avatar,
   IconButton,
@@ -16,6 +16,7 @@ import RemoveCircleOutlineIcon from '@material-ui/icons/RemoveCircleOutline';
 import { Button } from 'components/UI';
 import { cartActions } from 'redux/features/cart/slice';
 import { formatNumber } from 'utils/functions';
+import { selectProducts } from 'redux/features/product/slice';
 
 type Props = {
   cartItem: CartItemType;
@@ -45,6 +46,7 @@ const useStyles = makeStyles({
 const CartItem = ({ cartItem }: Props) => {
   const classes = useStyles();
   const dispatch = useAppDispatch();
+  const products = useAppSelector(selectProducts);
   const { decrement, increment, remove } = cartActions;
 
   return (
@@ -63,13 +65,17 @@ const CartItem = ({ cartItem }: Props) => {
             <>
               <Typography variant="caption">{formatNumber(cartItem.price)}</Typography>
               <br />
-              <Button onClick={() => dispatch(remove(cartItem))} text="Remove" size="small" />
+              <Button
+                onClick={() => dispatch(remove({ product: cartItem, products }))}
+                text="Remove"
+                size="small"
+              />
             </>
           }
         />
-        <ListItemText primary={`${formatNumber(cartItem.totalAmount)}`} />
+        <ListItemText primary={`${formatNumber(cartItem.totalAmount!)}`} />
         <ListItemSecondaryAction className={classes.action}>
-          <IconButton onClick={() => dispatch(decrement(cartItem))}>
+          <IconButton onClick={() => dispatch(decrement({ product: cartItem, products }))}>
             <RemoveCircleOutlineIcon />
           </IconButton>
           <ListItemText primary={cartItem.quantity} />

@@ -8,6 +8,11 @@ export type CartState = {
 };
 
 export type CartItemType = Product & {
-  quantity: number;
-  totalAmount: number;
+  quantity?: number;
+  totalAmount?: number;
+};
+
+export type ProductListCart = {
+  product: CartItemType;
+  products: Product[];
 };

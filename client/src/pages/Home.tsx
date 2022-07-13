@@ -6,6 +6,7 @@ import { productActions, selectProducts } from 'redux/features/product/slice';
 import { useAppDispatch, useAppSelector } from 'redux/hook';
 import { Button } from 'components/UI';
 import { cartActions } from 'redux/features/cart/slice';
+import { Product } from 'types/product';
 
 const Home = () => {
   const dispatch = useAppDispatch();
@@ -23,10 +24,17 @@ const Home = () => {
       <h1>HOME PAGE</h1>
       <Cart />
       {products?.length &&
-        products.map((product) => (
+        products.map((product: Product) => (
           <Fragment key={product._id}>
             <p>{product.name}</p>
-            <Button onClick={() => dispatch(addToCart(product))} text="Add To Cart" />
+            {product.inCart ? (
+              <Button variant="contained" disabled text="In Cart" />
+            ) : (
+              <Button
+                onClick={() => dispatch(addToCart({ product, products }))}
+                text="Add To Cart"
+              />
+            )}
           </Fragment>
         ))}
     </Layout>

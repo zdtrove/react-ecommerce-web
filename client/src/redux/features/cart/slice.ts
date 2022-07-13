@@ -1,6 +1,7 @@
+/* eslint-disable no-unused-vars */
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { AppState } from 'redux/store';
-import { CartState } from 'types/cart';
+import { CartState, ProductListCart } from 'types/cart';
 import { Product } from 'types/product';
 import { findIndex } from 'utils/functions';
 
@@ -21,41 +22,46 @@ const cartSlice = createSlice({
     closeCart(state) {
       state.open = false;
     },
-    addToCart(state, action: PayloadAction<Product>) {
-      const itemIndex = findIndex(state.cartItems, action.payload);
+    addToCart(state, action: PayloadAction<ProductListCart>) {},
+    addToCartSuccess(state, action: PayloadAction<ProductListCart>) {
+      const { product } = action.payload;
+      const itemIndex = findIndex(state.cartItems, product);
       if (itemIndex >= 0) {
-        state.cartItems[itemIndex].quantity += 1;
-        state.cartItems[itemIndex].totalAmount += state.cartItems[itemIndex].price;
+        state.cartItems[itemIndex].quantity! += 1;
+        state.cartItems[itemIndex].totalAmount! += state.cartItems[itemIndex].price;
       } else {
         const tempProduct = {
-          ...action.payload,
+          ...product,
           quantity: 1,
-          totalAmount: action.payload.price
+          totalAmount: product.price
         };
         state.cartItems.push(tempProduct);
       }
       state.cartTotalQuantity += 1;
     },
-    // eslint-disable-next-line no-unused-vars
     increment(state, action: PayloadAction<Product>) {},
     incrementSuccess(state, action: PayloadAction<Product>) {
       const itemIndex = findIndex(state.cartItems, action.payload);
       if (itemIndex >= 0) {
-        state.cartItems[itemIndex].quantity += 1;
-        state.cartItems[itemIndex].totalAmount += state.cartItems[itemIndex].price;
+        state.cartItems[itemIndex].quantity! += 1;
+        state.cartItems[itemIndex].totalAmount! += state.cartItems[itemIndex].price;
       }
+      state.cartTotalQuantity += 1;
     },
-    // eslint-disable-next-line no-unused-vars
-    decrement(state, action: PayloadAction<Product>) {},
+    decrement(state, action: PayloadAction<ProductListCart>) {},
     decrementSuccess(state, action: PayloadAction<Product>) {
       const itemIndex = findIndex(state.cartItems, action.payload);
       if (itemIndex >= 0) {
-        state.cartItems[itemIndex].quantity -= 1;
-        state.cartItems[itemIndex].totalAmount -= state.cartItems[itemIndex].price;
+        state.cartItems[itemIndex].quantity! -= 1;
+        state.cartItems[itemIndex].totalAmount! -= state.cartItems[itemIndex].price;
       }
+      state.cartTotalQuantity -= 1;
     },
-    remove(state, action: PayloadAction<Product>) {
-      state.cartItems = state.cartItems.filter((item) => item._id !== action.payload._id);
+    remove(state, action: PayloadAction<ProductListCart>) {},
+    removeSuccess(state, action: PayloadAction<ProductListCart>) {
+      const { product } = action.payload;
+      state.cartItems = state.cartItems.filter((item) => item._id !== product._id);
+      state.cartTotalQuantity -= product.quantity!;
     }
   }
 });

@@ -22,6 +22,7 @@ export type Product = {
   sold?: number;
   star?: Star;
   configuration?: Configuration;
+  inCart?: boolean;
 };
 
 export type Configuration = {

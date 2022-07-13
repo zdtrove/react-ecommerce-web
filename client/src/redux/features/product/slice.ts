@@ -1,5 +1,7 @@
+/* eslint-disable no-unused-vars */
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { AppState } from 'redux/store';
+import { ProductListCart } from 'types/cart';
 import { Product, ProductState } from 'types/product';
 
 const initialState: ProductState = {
@@ -18,24 +20,27 @@ const productSlice = createSlice({
       state.loading = false;
       state.products = action.payload;
     },
+    getProductsAddCart(state, action: PayloadAction<ProductListCart>) {
+      state.loading = true;
+    },
+    getProductsRemoveCart(state, action: PayloadAction<ProductListCart>) {
+      state.loading = true;
+    },
     getProductsFail(state) {
       state.loading = false;
     },
-    // eslint-disable-next-line no-unused-vars
     addProduct(state, action: PayloadAction<Product>) {
       state.loading = true;
     },
     addProductFail(state) {
       state.loading = false;
     },
-    // eslint-disable-next-line no-unused-vars
     updateProduct(state, action: PayloadAction<Product>) {
       state.loading = true;
     },
     updateProductFail(state) {
       state.loading = false;
     },
-    // eslint-disable-next-line no-unused-vars
     deleteProduct(state, action: PayloadAction<string>) {
       state.loading = true;
     },
