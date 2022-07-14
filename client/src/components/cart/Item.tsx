@@ -10,7 +10,7 @@ import {
   Typography
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import { CartItemType } from 'types/cart';
+import { CartItem } from 'types/cart';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import RemoveCircleOutlineIcon from '@material-ui/icons/RemoveCircleOutline';
 import { Button } from 'components/UI';
@@ -19,7 +19,7 @@ import { formatNumber } from 'utils/functions';
 import { selectProducts } from 'redux/features/product/slice';
 
 type Props = {
-  cartItem: CartItemType;
+  cartItem: CartItem;
 };
 
 const useStyles = makeStyles({
@@ -43,7 +43,7 @@ const useStyles = makeStyles({
   }
 });
 
-const CartItem = ({ cartItem }: Props) => {
+const CartItemComponent = ({ cartItem }: Props) => {
   const classes = useStyles();
   const dispatch = useAppDispatch();
   const products = useAppSelector(selectProducts);
@@ -69,6 +69,7 @@ const CartItem = ({ cartItem }: Props) => {
                 onClick={() => dispatch(remove({ product: cartItem, products }))}
                 text="Remove"
                 size="small"
+                color="secondary"
               />
             </>
           }
@@ -88,4 +89,4 @@ const CartItem = ({ cartItem }: Props) => {
   );
 };
 
-export default CartItem;
+export default CartItemComponent;

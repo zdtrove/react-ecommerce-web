@@ -12,14 +12,24 @@ import { addDataApi, deleteDataApi, getAllDataApi, updateDataApi } from 'apis/co
 import { ENDPOINTS } from 'constants/index';
 import { imagesUpload } from 'utils/upload';
 import { findIndex } from 'utils/functions';
-import { ProductListCart } from 'types/cart';
+import { CartItem, CartItems, ProductListCart } from 'types/cart';
 
 function* getProductsSaga() {
   try {
     const res: ListResponse<Product> = yield call(getAllDataApi, ENDPOINTS.products.getAll);
     const { status, data } = res;
     if (status === 200) {
-      yield put(productActions.getProductsSuccess(data));
+      const cartItems: CartItems = JSON.parse(localStorage.getItem('cartItems') || '{}');
+      const tempData = [...data];
+      if ('list' in cartItems) {
+        cartItems.list.forEach((cartItem: CartItem) => {
+          const index = findIndex(tempData, cartItem);
+          if (index >= 0) {
+            tempData[index].inCart = true;
+          }
+        });
+      }
+      yield put(productActions.getProductsSuccess(tempData));
     }
   } catch (error) {
     console.log(error);

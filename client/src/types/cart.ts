@@ -2,17 +2,21 @@ import { Product } from './product';
 
 export type CartState = {
   open: boolean;
-  cartItems: CartItemType[];
+  cartItems: CartItems;
+};
+
+export type CartItems = {
+  list: CartItem[];
   cartTotalQuantity: number;
   cartTotalAmount: number;
 };
 
-export type CartItemType = Product & {
+export type CartItem = Product & {
   quantity?: number;
   totalAmount?: number;
 };
 
 export type ProductListCart = {
-  product: CartItemType;
+  product: CartItem;
   products: Product[];
 };

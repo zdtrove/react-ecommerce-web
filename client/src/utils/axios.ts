@@ -48,6 +48,7 @@ axios.interceptors.response.use(
   },
   async function (error) {
     const { data, config } = error.response;
+    console.log(error.response);
     if (data.name === JWT_INVALID) {
       store.dispatch({ type: authActions.logoutSuccess.type });
       localStorage.removeItem(ACCESS_TOKEN);
@@ -59,13 +60,14 @@ axios.interceptors.response.use(
     }
 
     if (data.name === JWT_EXPIRED) {
-      await store.dispatch({ type: authActions.refreshToken.type });
+      store.dispatch({ type: authActions.refreshToken.type });
       config._retry = true;
       config.headers['Authorization'] = localStorage.getItem(ACCESS_TOKEN);
 
       return axiosPackage(config);
     }
     if (data.name !== JWT_INVALID) {
+      console.log('error.response', error.response);
       store.dispatch({
         type: uiActions.showSnackbar.type,
         payload: {

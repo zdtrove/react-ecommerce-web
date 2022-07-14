@@ -37,3 +37,5 @@ const PORT = process.env.PORT || 5000
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`)
 })
+
+// Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyYmQ2Yzc1OTFkNDg1MmQxNDNkYzhiMiIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTY1Nzc2MzM4OCwiZXhwIjoxNjU3NzcwNTg4fQ.zUCbVO4XYrr10GDImOl9co2TD4MHTWBv5fJlHOXLliE

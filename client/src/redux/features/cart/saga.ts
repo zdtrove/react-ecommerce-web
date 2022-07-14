@@ -1,6 +1,6 @@
 import { PayloadAction } from '@reduxjs/toolkit';
 import { all, put, takeEvery } from 'redux-saga/effects';
-import { CartItemType, ProductListCart } from 'types/cart';
+import { CartItem, ProductListCart } from 'types/cart';
 import { productActions } from '../product/slice';
 import { uiActions } from '../ui/slice';
 import { cartActions } from './slice';
@@ -28,7 +28,7 @@ function* decrementSaga(action: PayloadAction<ProductListCart>) {
   }
 }
 
-function* incrementSaga(action: PayloadAction<CartItemType>) {
+function* incrementSaga(action: PayloadAction<CartItem>) {
   try {
     if (action.payload.quantity! < action.payload.inventory!) {
       yield put(cartActions.incrementSuccess(action.payload));

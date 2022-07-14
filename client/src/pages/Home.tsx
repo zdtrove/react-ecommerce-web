@@ -7,16 +7,18 @@ import { useAppDispatch, useAppSelector } from 'redux/hook';
 import { Button } from 'components/UI';
 import { cartActions } from 'redux/features/cart/slice';
 import { Product } from 'types/product';
+import { selectIsLoggedIn } from 'redux/features/auth/slice';
 
 const Home = () => {
   const dispatch = useAppDispatch();
   const products = useAppSelector(selectProducts);
+  const isLoggedIn = useAppSelector(selectIsLoggedIn);
   const { getProducts } = productActions;
   const { addToCart } = cartActions;
 
   useEffect(() => {
     dispatch(getProducts());
-  }, []);
+  }, [isLoggedIn]);
 
   return (
     <Layout>

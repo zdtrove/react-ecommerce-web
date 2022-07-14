@@ -8,8 +8,9 @@ const createAccessToken = payload => {
 }
 
 const createRefreshToken = payload => {
-    return jwt.sign(payload, process.env.REFRESH_TOKEN_SECRET, { expiresIn: '1d' })
-    // return jwt.sign(payload, process.env.REFRESH_TOKEN_SECRET, { expiresIn: '30s' })
+    return jwt.sign(payload, process.env.REFRESH_TOKEN_SECRET, { expiresIn: '2d' })
+    // return jwt.sign(payload, process.env.REFRESH_TOKEN_SECRET, { expiresIn: '1d' })
+    // return jwt.sign(payload, process.env.REFRESH_TOKEN_SECRET, { expiresIn: '60s' })
 }
 
 exports.register = async (req, res) => {
@@ -55,8 +56,9 @@ exports.login = async (req, res) => {
         res.cookie(cookiePath, refreshToken, {
             httpOnly: true,
             path: `/api/auth/${cookiePath}`,
-            maxAge: 24 * 60 * 60 * 1000 // 1 days
-            // maxAge: 30 * 1000 // 30 secons
+            maxAge: 48 * 60 * 60 * 1000 // 2 days
+            // maxAge: 24 * 60 * 60 * 1000 // 1 days
+            // maxAge: 30 * 1000 // 60 secons
         })
 
         res.status(200).json({
@@ -87,36 +89,33 @@ exports.getLoggedUser = async (req, res) => {
     try {
         const { accessToken } = req.body
         let user
-        
         if (accessToken) {
-            await jwt.verify(accessToken.split(" ")[1], process.env.ACCESS_TOKEN_SECRET, async (err, result) => {
-                if (err) return res.status(400).json({ ...err })
-                user = await User.findById(result.id).select("-password")
-            })
+            let verify = jwt.verify(accessToken.split(" ")[1], process.env.ACCESS_TOKEN_SECRET)
+            if (!verify) {
+                return res.status(400).json({ message: 'Invalid token' })
+            }
+            user = await User.findById(verify.id).select("-password")
         }
-
         res.status(200).json({ user })
     } catch (err) {
-        return res.status(500).json({ err })
+        return res.status(500).json({ ...err })
     }
 }
 
 exports.generateAccessToken = async (req, res) => {
     try {
         const refreshToken = req.cookies.refresh_token
-        jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, async (err, result) => {
-            if (err) {
-                console.log({ ...err, role: req.body.role })
-                return res.status(400).json({ ...err, role: req.body.role })
-            }
-            const { id, role } = result
-            const user = await User.findById(id).select("-password")
-            const accessToken = createAccessToken({ id, role })
-            
-            res.status(200).json({
-                accessToken,
-                user
-            })
+        let verify = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET)
+        if (!verify) {
+            return res.status(400).json({ message: "Invalid token", role: req.body.role })
+        }
+        const { id, role } = verify
+        const user = await User.findById(id).select("-password")
+        const accessToken = createAccessToken({ id, role })
+        
+        res.status(200).json({
+            accessToken,
+            user
         })
     } catch (err) {
         return res.status(500).json({ message: err.message })
