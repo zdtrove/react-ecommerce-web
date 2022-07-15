@@ -59,6 +59,14 @@ const authSlice = createSlice({
       state.loading = false;
       state.isLoggedIn = false;
       state.user = null;
+    },
+    clearToken(state) {
+      state.loading = true;
+    },
+    clearTokenSuccess(state) {
+      state.loading = false;
+      state.isLoggedIn = false;
+      state.user = null;
     }
   }
 });

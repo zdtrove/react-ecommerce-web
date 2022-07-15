@@ -3,7 +3,7 @@ import { AppState } from 'redux/store';
 import { Dashboard, DashboardState } from 'types/dashboard';
 
 const initialState: DashboardState = {
-  dashboards: [],
+  dashboards: {} as Dashboard,
   loading: false
 };
 
@@ -14,7 +14,7 @@ const dashboardSlice = createSlice({
     getDashboards(state) {
       state.loading = true;
     },
-    getDashboardsSuccess(state, action: PayloadAction<Dashboard[]>) {
+    getDashboardsSuccess(state, action: PayloadAction<Dashboard>) {
       state.loading = false;
       state.dashboards = action.payload;
     },

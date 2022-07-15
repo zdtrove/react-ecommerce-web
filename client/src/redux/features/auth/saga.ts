@@ -25,7 +25,9 @@ const {
   refreshToken,
   refreshTokenSuccess,
   logout,
-  logoutSuccess
+  logoutSuccess,
+  clearToken,
+  clearTokenSuccess
 } = authActions;
 
 function* loginSaga(action: PayloadAction<LoginPayload>) {
@@ -97,12 +99,22 @@ function* logoutSaga(action: PayloadAction<any>) {
   }
 }
 
+function* clearTokenSaga() {
+  try {
+    yield put(clearTokenSuccess());
+    localStorage.removeItem(ACCESS_TOKEN);
+  } catch (error) {
+    console.log(error);
+  }
+}
+
 export function* authSaga() {
   yield all([
     takeEvery(login, loginSaga),
     takeEvery(signUp, signUpSaga),
     takeEvery(getLoggedUser, getLoggedUserSaga),
     takeEvery(refreshToken, refreshTokenSaga),
-    takeEvery(logout, logoutSaga)
+    takeEvery(logout, logoutSaga),
+    takeEvery(clearToken, clearTokenSaga)
   ]);
 }

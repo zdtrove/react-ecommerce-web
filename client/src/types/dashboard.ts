@@ -13,6 +13,6 @@ export type Dashboard = {
 };
 
 export type DashboardState = {
-  dashboards: Dashboard[];
+  dashboards: Dashboard;
   loading: boolean;
 };

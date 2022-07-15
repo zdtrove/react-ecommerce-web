@@ -5,10 +5,12 @@ import { authActions } from 'redux/features/auth/slice';
 import { ROUTES } from '../constants';
 import { uiActions } from 'redux/features/ui/slice';
 
-const { SNACKBAR_STATUS_SUCCESS, SNACKBAR_STATUS_ERROR } = snackbar;
+const { SNACKBAR_STATUS_SUCCESS } = snackbar;
 const { ADMIN } = userRoles;
 const { JWT_EXPIRED, JWT_INVALID, ACCESS_TOKEN } = jwtConst;
 const { CLOUDINARY_URL } = uploadConst;
+const { showBackdrop, showSnackbar, hideBackdrop } = uiActions;
+const { logoutSuccess, refreshToken, clearToken } = authActions;
 
 const axios = axiosPackage.create({});
 
@@ -19,7 +21,7 @@ axios.interceptors.request.use(
         Authorization: localStorage.getItem(ACCESS_TOKEN)
       });
     }
-    store.dispatch({ type: uiActions.showBackdrop.type });
+    store.dispatch({ type: showBackdrop.type });
 
     return config;
   },
@@ -34,7 +36,7 @@ axios.interceptors.response.use(
     if (message) {
       if (response.status === 200 || response.status === 201) {
         store.dispatch({
-          type: uiActions.showSnackbar.type,
+          type: showSnackbar.type,
           payload: {
             message: response.data.message,
             status: SNACKBAR_STATUS_SUCCESS
@@ -42,7 +44,7 @@ axios.interceptors.response.use(
         });
       }
     }
-    store.dispatch({ type: uiActions.hideBackdrop.type });
+    store.dispatch({ type: hideBackdrop.type });
 
     return response;
   },
@@ -50,7 +52,7 @@ axios.interceptors.response.use(
     const { data, config } = error.response;
     console.log(error.response);
     if (data.name === JWT_INVALID) {
-      store.dispatch({ type: authActions.logoutSuccess.type });
+      store.dispatch({ type: logoutSuccess.type });
       localStorage.removeItem(ACCESS_TOKEN);
       if (data.role) {
         window.location.href = data.role === ADMIN ? ROUTES.admin.login : ROUTES.home.login;
@@ -60,7 +62,7 @@ axios.interceptors.response.use(
     }
 
     if (data.name === JWT_EXPIRED) {
-      store.dispatch({ type: authActions.refreshToken.type });
+      store.dispatch({ type: refreshToken.type });
       config._retry = true;
       config.headers['Authorization'] = localStorage.getItem(ACCESS_TOKEN);
 
@@ -68,15 +70,10 @@ axios.interceptors.response.use(
     }
     if (data.name !== JWT_INVALID) {
       console.log('error.response', error.response);
-      store.dispatch({
-        type: uiActions.showSnackbar.type,
-        payload: {
-          message: error.response.data.message,
-          status: SNACKBAR_STATUS_ERROR
-        }
-      });
+      store.dispatch({ type: clearToken.type });
+      window.location.href = ROUTES.home.login;
     }
-    store.dispatch({ type: uiActions.hideBackdrop });
+    store.dispatch({ type: hideBackdrop });
 
     return Promise.reject(error);
   }

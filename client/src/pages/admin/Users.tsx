@@ -2,27 +2,22 @@ import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useAppDispatch, useAppSelector } from 'redux/hook';
 import Layout from 'components/admin/layouts';
-import { Input, Button, Dialog } from 'components/UI';
+import { Input, Button, Dialog, Table, TableHeader } from 'components/UI';
 import {
+  Paper,
   makeStyles,
   useTheme,
-  Paper,
   TableContainer,
-  Table,
-  TableHead,
-  TableBody,
   TableRow,
   TableCell,
   TablePagination,
-  Card,
-  Typography,
   Toolbar,
   DialogContent,
   DialogContentText,
   DialogActions,
   IconButton
 } from '@material-ui/core';
-import PeopleOutlineTwoToneIcon from '@material-ui/icons/PeopleOutlineTwoTone';
+import GroupRoundedIcon from '@material-ui/icons/GroupRounded';
 import AddIcon from '@material-ui/icons/Add';
 import SearchIcon from '@material-ui/icons/Search';
 import Detail from 'components/admin/user/Detail';
@@ -36,28 +31,6 @@ import { User } from 'types/user';
 import { userActions, selectUsers } from 'redux/features/user/slice';
 
 const useStyles = makeStyles((theme) => ({
-  rootHeader: {
-    minWidth: 240
-  },
-  header: {
-    padding: theme.spacing(2),
-    [theme.breakpoints.up('sm')]: {
-      padding: theme.spacing(4)
-    },
-    display: 'flex',
-    marginBottom: theme.spacing(3)
-  },
-  headerIcon: {
-    display: 'inline-block',
-    padding: theme.spacing(2),
-    color: '#3c44b1'
-  },
-  headerTitle: {
-    paddingLeft: theme.spacing(4),
-    '& .MuiTypography-subtitle2': {
-      opacity: '0.6'
-    }
-  },
   marginBtn: {
     margin: theme.spacing(0.5)
   },
@@ -209,101 +182,74 @@ const Users = () => {
 
   return (
     <Layout>
-      <Paper className={classes.rootHeader}>
-        <div className={classes.header}>
-          <Card className={classes.headerIcon}>
-            <PeopleOutlineTwoToneIcon />
-          </Card>
-          <div className={classes.headerTitle}>
-            <Typography variant="h6" component="div">
-              Users
-            </Typography>
-            <Typography variant="subtitle2" component="div">
-              List Users
-            </Typography>
-          </div>
-        </div>
-      </Paper>
-      <Paper className={classes.rootTable}>
-        <TableContainer>
-          <Toolbar className={classes.tableAction}>
-            <Input
-              label="Search Users"
-              startIcon={<SearchIcon />}
-              onChange={(e) => setSearchValue(e.target.value)}
-              margin="none"
-              value={searchValue}
-            />
-            <Button
-              onClick={() => setShowAdd(true)}
-              variant="outlined"
-              startIcon={<AddIcon />}
-              text="ADD NEW"
-            />
-          </Toolbar>
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell>Full Name</TableCell>
-                <TableCell>Email</TableCell>
-                <TableCell>Phone</TableCell>
-                <TableCell>Role</TableCell>
-                <TableCell>Actions</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {userList
-                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((user: User, idx: number) => (
-                  <TableRow key={idx}>
-                    <TableCell>{user.fullName}</TableCell>
-                    <TableCell>{user.email}</TableCell>
-                    <TableCell>{user.phone}</TableCell>
-                    <TableCell>{user.role}</TableCell>
-                    <TableCell>
-                      <Button
-                        onClick={() => {
-                          setUserRecord(user);
-                          setShowDetail(true);
-                        }}
-                        className={classes.marginBtn}
-                        text="DETAIL"
-                        color="default"
-                      />
-                      <Button
-                        onClick={() => {
-                          setUserRecord(user);
-                          setShowEdit(true);
-                        }}
-                        className={classes.marginBtn}
-                        text="EDIT"
-                      />
-                      <Button
-                        className={classes.marginBtn}
-                        color="secondary"
-                        text="DELETE"
-                        onClick={() => {
-                          setUserRecord(user);
-                          setShowDelete(true);
-                        }}
-                      />
-                    </TableCell>
-                  </TableRow>
-                ))}
-            </TableBody>
-          </Table>
-          <TablePagination
-            rowsPerPageOptions={[3, 6, 10, 25, 50]}
-            component="div"
-            count={userList.length}
-            rowsPerPage={rowsPerPage}
-            page={page}
-            onPageChange={onPageChange}
-            onRowsPerPageChange={onRowsPerPageChange}
-            ActionsComponent={TablePaginationActions}
+      <TableHeader title="Users" subtitle="List Users" icon={<GroupRoundedIcon />} />
+      <TableContainer className={classes.rootTable} component={Paper}>
+        <Toolbar className={classes.tableAction}>
+          <Input
+            label="Search Users"
+            startIcon={<SearchIcon />}
+            onChange={(e) => setSearchValue(e.target.value)}
+            margin="none"
+            value={searchValue}
           />
-        </TableContainer>
-      </Paper>
+          <Button
+            onClick={() => setShowAdd(true)}
+            variant="outlined"
+            startIcon={<AddIcon />}
+            text="ADD NEW"
+          />
+        </Toolbar>
+        <Table headers={['Full Name', 'Email', 'Phone', 'Role', 'Actions']}>
+          {userList
+            .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+            .map((user: User, idx: number) => (
+              <TableRow key={idx}>
+                <TableCell>{user.fullName}</TableCell>
+                <TableCell>{user.email}</TableCell>
+                <TableCell>{user.phone}</TableCell>
+                <TableCell>{user.role}</TableCell>
+                <TableCell>
+                  <Button
+                    onClick={() => {
+                      setUserRecord(user);
+                      setShowDetail(true);
+                    }}
+                    className={classes.marginBtn}
+                    text="DETAIL"
+                    color="default"
+                  />
+                  <Button
+                    onClick={() => {
+                      setUserRecord(user);
+                      setShowEdit(true);
+                    }}
+                    className={classes.marginBtn}
+                    text="EDIT"
+                  />
+                  <Button
+                    className={classes.marginBtn}
+                    color="secondary"
+                    text="DELETE"
+                    onClick={() => {
+                      setUserRecord(user);
+                      setShowDelete(true);
+                    }}
+                  />
+                </TableCell>
+              </TableRow>
+            ))}
+        </Table>
+        <TablePagination
+          rowsPerPageOptions={[3, 6, 10, 25, 50]}
+          component="div"
+          count={userList.length}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          onPageChange={onPageChange}
+          onRowsPerPageChange={onRowsPerPageChange}
+          ActionsComponent={TablePaginationActions}
+        />
+      </TableContainer>
       {showAdd && (
         <Add
           {...{

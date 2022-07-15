@@ -35,6 +35,11 @@ export type ListResponse<T> = {
   data: T[];
 };
 
+export type Response<T> = {
+  status: number;
+  data: T;
+};
+
 export type DeleteResponse<T> = {
   status: number;
   data: {

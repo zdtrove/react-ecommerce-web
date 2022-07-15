@@ -12,13 +12,13 @@ exports.getDashboard = async (req, res) => {
         const events = await Event.find({}).limit(5);
         const stores = await Store.find({}).limit(5);
 
-        return res.status(200).json([{
+        return res.status(200).json({
             users,
             categories,
             products,
             events,
             stores
-        }])
+        })
 	} catch (err) {
 		return res.status(500).json({ message: err.message })
 	}

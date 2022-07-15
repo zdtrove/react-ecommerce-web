@@ -5,8 +5,15 @@ import {
   TableCell,
   TableContainer,
   TableHead,
-  TableRow
+  TableRow,
+  makeStyles
 } from '@material-ui/core';
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    marginBottom: theme.spacing(6)
+  }
+}));
 
 type Props = {
   headers: string[];
@@ -14,8 +21,10 @@ type Props = {
 };
 
 const Table = ({ headers, children }: Props) => {
+  const classes = useStyles();
+
   return (
-    <TableContainer component={Paper}>
+    <TableContainer className={classes.root} component={Paper}>
       <MuiTable aria-label="simple table">
         <TableHead>
           <TableRow>

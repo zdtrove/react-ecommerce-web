@@ -48,7 +48,7 @@ const useStyles = makeStyles((theme) => ({
       padding: theme.spacing(4)
     },
     display: 'flex',
-    marginBottom: theme.spacing(3)
+    marginBottom: theme.spacing(2)
   },
   headerIcon: {
     display: 'inline-block',
