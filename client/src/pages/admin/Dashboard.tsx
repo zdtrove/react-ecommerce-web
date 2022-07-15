@@ -1,15 +1,5 @@
-import {
-  Card,
-  makeStyles,
-  Paper,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Typography
-} from '@material-ui/core';
+/* eslint-disable no-unused-vars */
+import { Card, makeStyles, Paper, TableCell, TableRow, Typography } from '@material-ui/core';
 import Layout from 'components/admin/layouts';
 import { useEffect, useState } from 'react';
 import { dashboardActions, selectDashboards } from 'redux/features/dashboard/slice';
@@ -20,7 +10,7 @@ import { Product } from 'types/product';
 import { Category } from 'types/category';
 import { Event } from 'types/event';
 import { Store } from 'types/store';
-import { Button } from 'components/UI';
+import { Button, Table } from 'components/UI';
 import { useHistory } from 'react-router-dom';
 import { ROUTES } from 'constants/index';
 
@@ -95,28 +85,16 @@ const Dashboard = () => {
         </div>
         <Button text="View all" onClick={() => history.push(ROUTES.admin.users)} />
       </Paper>
-      <TableContainer component={Paper}>
-        <Table aria-label="simple table">
-          <TableHead>
-            <TableRow>
-              <TableCell align="center">Full Name</TableCell>
-              <TableCell align="center">Email</TableCell>
-              <TableCell align="center">Phone</TableCell>
-              <TableCell align="center">Role</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {users.map((user) => (
-              <TableRow key={user._id}>
-                <TableCell align="center">{user.fullName}</TableCell>
-                <TableCell align="center">{user.email}</TableCell>
-                <TableCell align="center">{user.phone}</TableCell>
-                <TableCell align="center">{user.role}</TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+      <Table headers={['Full Name', 'Email', 'Phone', 'Role']}>
+        {users.map((user) => (
+          <TableRow key={user._id}>
+            <TableCell align="center">{user.fullName}</TableCell>
+            <TableCell align="center">{user.email}</TableCell>
+            <TableCell align="center">{user.phone}</TableCell>
+            <TableCell align="center">{user.role}</TableCell>
+          </TableRow>
+        ))}
+      </Table>
       <br />
       <br />
       <Paper className={classes.rootHeader}>
@@ -135,26 +113,15 @@ const Dashboard = () => {
         </div>
         <Button text="View all" onClick={() => history.push(ROUTES.admin.products)} />
       </Paper>
-      <TableContainer component={Paper}>
-        <Table aria-label="simple table">
-          <TableHead>
-            <TableRow>
-              <TableCell align="center">Name</TableCell>
-              <TableCell align="center">Description</TableCell>
-              <TableCell align="center">Price</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {products.map((product) => (
-              <TableRow key={product._id}>
-                <TableCell align="center">{product.name}</TableCell>
-                <TableCell align="center">{product.description}</TableCell>
-                <TableCell align="center">{product.price}</TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+      <Table headers={['Name', 'Description', 'Price']}>
+        {products.map((product) => (
+          <TableRow key={product._id}>
+            <TableCell align="center">{product.name}</TableCell>
+            <TableCell align="center">{product.description}</TableCell>
+            <TableCell align="center">{product.price}</TableCell>
+          </TableRow>
+        ))}
+      </Table>
       <br />
       <br />
       <Paper className={classes.rootHeader}>
@@ -173,22 +140,13 @@ const Dashboard = () => {
         </div>
         <Button text="View all" onClick={() => history.push(ROUTES.admin.categories)} />
       </Paper>
-      <TableContainer component={Paper}>
-        <Table aria-label="simple table">
-          <TableHead>
-            <TableRow>
-              <TableCell align="left">Name</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {categories.map((category) => (
-              <TableRow key={category._id}>
-                <TableCell align="left">{category.name}</TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+      <Table headers={['Name']}>
+        {categories.map((category) => (
+          <TableRow key={category._id}>
+            <TableCell align="left">{category.name}</TableCell>
+          </TableRow>
+        ))}
+      </Table>
       <br />
       <br />
       <Paper className={classes.rootHeader}>
@@ -207,28 +165,16 @@ const Dashboard = () => {
         </div>
         <Button text="View all" onClick={() => history.push(ROUTES.admin.events)} />
       </Paper>
-      <TableContainer component={Paper}>
-        <Table aria-label="simple table">
-          <TableHead>
-            <TableRow>
-              <TableCell align="left">Name</TableCell>
-              <TableCell align="left">Description</TableCell>
-              <TableCell align="left">Start Date</TableCell>
-              <TableCell align="left">End Date</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {events.map((event) => (
-              <TableRow key={event._id}>
-                <TableCell align="left">{event.name}</TableCell>
-                <TableCell align="left">{event.description}</TableCell>
-                <TableCell align="left">{event.startDate}</TableCell>
-                <TableCell align="left">{event.endDate}</TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+      <Table headers={['Name', 'Description', 'Start Date', 'End Date']}>
+        {events.map((event) => (
+          <TableRow key={event._id}>
+            <TableCell align="left">{event.name}</TableCell>
+            <TableCell align="left">{event.description}</TableCell>
+            <TableCell align="left">{event.startDate}</TableCell>
+            <TableCell align="left">{event.endDate}</TableCell>
+          </TableRow>
+        ))}
+      </Table>
       <br />
       <br />
       <Paper className={classes.rootHeader}>
@@ -247,26 +193,15 @@ const Dashboard = () => {
         </div>
         <Button text="View all" onClick={() => history.push(ROUTES.admin.stores)} />
       </Paper>
-      <TableContainer component={Paper}>
-        <Table aria-label="simple table">
-          <TableHead>
-            <TableRow>
-              <TableCell align="left">Name</TableCell>
-              <TableCell align="left">Address</TableCell>
-              <TableCell align="left">Region</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {stores.map((store) => (
-              <TableRow key={store._id}>
-                <TableCell align="left">{store.name}</TableCell>
-                <TableCell align="left">{store.address}</TableCell>
-                <TableCell align="left">{store.region}</TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+      <Table headers={['Name', 'Address', 'Region']}>
+        {stores.map((store) => (
+          <TableRow key={store._id}>
+            <TableCell align="left">{store.name}</TableCell>
+            <TableCell align="left">{store.address}</TableCell>
+            <TableCell align="left">{store.region}</TableCell>
+          </TableRow>
+        ))}
+      </Table>
     </Layout>
   );
 };
