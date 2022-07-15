@@ -12,16 +12,28 @@ import { addDataApi, deleteDataApi, getAllDataApi, updateDataApi } from 'apis/co
 import { ENDPOINTS } from 'constants/index';
 import { imageUpload } from 'utils/upload';
 
+const {
+  addCategory,
+  addCategoryFail,
+  getCategories,
+  getCategoriesSuccess,
+  getCategoriesFail,
+  updateCategory,
+  updateCategoryFail,
+  deleteCategory,
+  deleteCategoryFail
+} = categoryActions;
+
 function* getCategoriesSaga() {
   try {
     const res: ListResponse<Category> = yield call(getAllDataApi, ENDPOINTS.categories.getAll);
     const { status, data } = res;
     if (status === 200) {
-      yield put(categoryActions.getCategoriesSuccess(data));
+      yield put(getCategoriesSuccess(data));
     }
   } catch (error) {
     console.log(error);
-    yield put(categoryActions.getCategoriesFail());
+    yield put(getCategoriesFail());
   }
 }
 
@@ -38,11 +50,11 @@ function* updateCategorySaga(action: PayloadAction<Category>) {
     );
     const { status } = res;
     if (status === 200) {
-      yield put(categoryActions.getCategories());
+      yield put(getCategories());
     }
   } catch (error) {
     console.log(error);
-    yield put(categoryActions.updateCategoryFail());
+    yield put(updateCategoryFail());
   }
 }
 
@@ -59,11 +71,11 @@ function* addCategorySaga(action: PayloadAction<Category>) {
     );
     const { status } = res;
     if (status === 201) {
-      yield put(categoryActions.getCategories());
+      yield put(getCategories());
     }
   } catch (error) {
     console.log(error);
-    yield put(categoryActions.addCategoryFail());
+    yield put(addCategoryFail());
   }
 }
 
@@ -76,19 +88,19 @@ function* deleteCategorySaga(action: PayloadAction<string>) {
     );
     const { status } = res;
     if (status === 200) {
-      yield put(categoryActions.getCategories());
+      yield put(getCategories());
     }
   } catch (error) {
     console.log(error);
-    yield put(categoryActions.deleteCategoryFail());
+    yield put(deleteCategoryFail());
   }
 }
 
 export function* categorySaga() {
   yield all([
-    takeEvery(categoryActions.getCategories, getCategoriesSaga),
-    takeEvery(categoryActions.updateCategory, updateCategorySaga),
-    takeEvery(categoryActions.addCategory, addCategorySaga),
-    takeEvery(categoryActions.deleteCategory, deleteCategorySaga)
+    takeEvery(getCategories, getCategoriesSaga),
+    takeEvery(updateCategory, updateCategorySaga),
+    takeEvery(addCategory, addCategorySaga),
+    takeEvery(deleteCategory, deleteCategorySaga)
   ]);
 }

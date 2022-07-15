@@ -66,7 +66,7 @@ const CartItemComponent = ({ cartItem }: Props) => {
               <Typography variant="caption">{formatNumber(cartItem.price)}</Typography>
               <br />
               <Button
-                onClick={() => dispatch(remove({ product: cartItem, products }))}
+                onClick={() => dispatch(remove({ product: cartItem, products, inCart: false }))}
                 text="Remove"
                 size="small"
                 color="secondary"
@@ -76,7 +76,9 @@ const CartItemComponent = ({ cartItem }: Props) => {
         />
         <ListItemText primary={`${formatNumber(cartItem.totalAmount!)}`} />
         <ListItemSecondaryAction className={classes.action}>
-          <IconButton onClick={() => dispatch(decrement({ product: cartItem, products }))}>
+          <IconButton
+            onClick={() => dispatch(decrement({ product: cartItem, products, inCart: false }))}
+          >
             <RemoveCircleOutlineIcon />
           </IconButton>
           <ListItemText primary={cartItem.quantity} />

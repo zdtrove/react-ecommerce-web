@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useAppDispatch, useAppSelector } from 'redux/hook';
-import LayoutAdmin from 'components/admin/layouts/LayoutAdmin';
+import Layout from 'components/admin/layouts';
 import { Input, Button, Dialog } from 'components/UI';
 import {
   makeStyles,
@@ -198,7 +198,7 @@ const Users = () => {
 
   useEffect(() => {
     dispatch(userActions.getUsers());
-  }, [dispatch]);
+  }, []);
 
   useEffect(() => {
     setPage(0);
@@ -208,7 +208,7 @@ const Users = () => {
   }, [searchValue]);
 
   return (
-    <LayoutAdmin>
+    <Layout>
       <Paper className={classes.rootHeader}>
         <div className={classes.header}>
           <Card className={classes.headerIcon}>
@@ -347,7 +347,7 @@ const Users = () => {
           </DialogActions>
         </Dialog>
       )}
-    </LayoutAdmin>
+    </Layout>
   );
 };
 

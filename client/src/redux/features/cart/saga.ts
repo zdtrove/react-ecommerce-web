@@ -5,10 +5,25 @@ import { productActions } from '../product/slice';
 import { uiActions } from '../ui/slice';
 import { cartActions } from './slice';
 
+const {
+  addToCart,
+  addToCartSuccess,
+  increment,
+  incrementSuccess,
+  decrement,
+  decrementSuccess,
+  remove,
+  removeSuccess,
+  clear,
+  clearSuccess
+} = cartActions;
+
+const { getProductsAddOrRemoveCart, getProductsClearCart } = productActions;
+
 function* addToCartSaga(action: PayloadAction<ProductListCart>) {
   try {
-    yield put(cartActions.addToCartSuccess(action.payload));
-    yield put(productActions.getProductsAddCart(action.payload));
+    yield put(addToCartSuccess(action.payload));
+    yield put(getProductsAddOrRemoveCart(action.payload));
   } catch (error) {
     console.log(error);
   }
@@ -18,10 +33,10 @@ function* decrementSaga(action: PayloadAction<ProductListCart>) {
   try {
     const { product } = action.payload;
     if (product.quantity! > 1) {
-      yield put(cartActions.decrementSuccess(product));
+      yield put(decrementSuccess(product));
     } else {
-      yield put(cartActions.removeSuccess(action.payload));
-      yield put(productActions.getProductsRemoveCart(action.payload));
+      yield put(removeSuccess(action.payload));
+      yield put(getProductsAddOrRemoveCart(action.payload));
     }
   } catch (error) {
     console.log(error);
@@ -31,7 +46,7 @@ function* decrementSaga(action: PayloadAction<ProductListCart>) {
 function* incrementSaga(action: PayloadAction<CartItem>) {
   try {
     if (action.payload.quantity! < action.payload.inventory!) {
-      yield put(cartActions.incrementSuccess(action.payload));
+      yield put(incrementSuccess(action.payload));
     } else {
       yield put(
         uiActions.showSnackbar({ message: `Only ${action.payload.inventory} products in stock` })
@@ -44,8 +59,17 @@ function* incrementSaga(action: PayloadAction<CartItem>) {
 
 function* removeSaga(action: PayloadAction<ProductListCart>) {
   try {
-    yield put(cartActions.removeSuccess(action.payload));
-    yield put(productActions.getProductsRemoveCart(action.payload));
+    yield put(removeSuccess(action.payload));
+    yield put(getProductsAddOrRemoveCart(action.payload));
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+function* clearSaga() {
+  try {
+    yield put(clearSuccess());
+    yield put(getProductsClearCart());
   } catch (error) {
     console.log(error);
   }
@@ -53,9 +77,10 @@ function* removeSaga(action: PayloadAction<ProductListCart>) {
 
 export function* cartSaga() {
   yield all([
-    takeEvery(cartActions.decrement, decrementSaga),
-    takeEvery(cartActions.increment, incrementSaga),
-    takeEvery(cartActions.addToCart, addToCartSaga),
-    takeEvery(cartActions.remove, removeSaga)
+    takeEvery(decrement, decrementSaga),
+    takeEvery(increment, incrementSaga),
+    takeEvery(addToCart, addToCartSaga),
+    takeEvery(remove, removeSaga),
+    takeEvery(clear, clearSaga)
   ]);
 }

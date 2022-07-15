@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
-import Layout from 'components/layouts/Layout';
+import Layout from 'components/layouts';
 import {
   makeStyles,
   Toolbar,

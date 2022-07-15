@@ -1,16 +1,15 @@
 /* eslint-disable no-unused-vars */
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { AppState } from 'redux/store';
-import { CartState, ProductListCart } from 'types/cart';
+import { CartItems, CartState, ProductListCart } from 'types/cart';
 import { Product } from 'types/product';
 import { findIndex } from 'utils/functions';
 
+const defaultCarts: CartItems = { list: [], cartTotalQuantity: 0, cartTotalAmount: 0 };
+
 const initialState: CartState = {
   open: false,
-  cartItems: JSON.parse(
-    localStorage.getItem('cartItems') ||
-      JSON.stringify({ list: [], cartTotalQuantity: 0, cartTotalAmount: 0 })
-  )
+  cartItems: JSON.parse(localStorage.getItem('cartItems') || JSON.stringify(defaultCarts))
 };
 
 const cartSlice = createSlice({
@@ -76,6 +75,13 @@ const cartSlice = createSlice({
       cartItems.list = cartItems.list.filter((item) => item._id !== _id);
       cartItems.cartTotalQuantity -= quantity!;
       cartItems.cartTotalAmount -= price;
+      cartItems.list.length
+        ? localStorage.setItem('cartItems', JSON.stringify(cartItems))
+        : localStorage.removeItem('cartItems');
+    },
+    clear(state) {},
+    clearSuccess(state) {
+      state.cartItems = defaultCarts;
       localStorage.removeItem('cartItems');
     }
   }

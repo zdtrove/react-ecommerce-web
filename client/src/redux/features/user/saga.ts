@@ -7,16 +7,28 @@ import { userActions } from './slice';
 import { addDataApi, deleteDataApi, getAllDataApi, updateDataApi } from 'apis/commonApi';
 import { ENDPOINTS } from 'constants/index';
 
+const {
+  addUser,
+  addUserFail,
+  getUsers,
+  getUsersSuccess,
+  getUsersFail,
+  updateUser,
+  updateUserFail,
+  deleteUserFail,
+  deleteUser
+} = userActions;
+
 function* getUsersSaga() {
   try {
     const res: ListResponse<User> = yield call(getAllDataApi, ENDPOINTS.users.getAll);
     const { status, data } = res;
     if (status === 200) {
-      yield put(userActions.getUsersSuccess(data));
+      yield put(getUsersSuccess(data));
     }
   } catch (error) {
     console.log(error);
-    yield put(userActions.getUsersFail());
+    yield put(getUsersFail());
   }
 }
 
@@ -29,11 +41,11 @@ function* addUserSaga(action: PayloadAction<User>) {
     );
     const { status } = res;
     if (status === 201) {
-      yield put(userActions.getUsers());
+      yield put(getUsers());
     }
   } catch (error) {
     console.log(error);
-    yield put(userActions.addUserFail());
+    yield put(addUserFail());
   }
 }
 
@@ -46,11 +58,11 @@ function* updateUserSaga(action: PayloadAction<User>) {
     );
     const { status } = res;
     if (status === 200) {
-      yield put(userActions.getUsers());
+      yield put(getUsers());
     }
   } catch (error) {
     console.log(error);
-    yield put(userActions.updateUserFail());
+    yield put(updateUserFail());
   }
 }
 
@@ -63,19 +75,19 @@ function* deleteUserSaga(action: PayloadAction<string>) {
     );
     const { status } = res;
     if (status === 200) {
-      yield put(userActions.getUsers());
+      yield put(getUsers());
     }
   } catch (error) {
     console.log(error);
-    yield put(userActions.deleteUserFail());
+    yield put(deleteUserFail());
   }
 }
 
 export function* userSaga() {
   yield all([
-    takeEvery(userActions.getUsers, getUsersSaga),
-    takeEvery(userActions.addUser, addUserSaga),
-    takeEvery(userActions.updateUser, updateUserSaga),
-    takeEvery(userActions.deleteUser, deleteUserSaga)
+    takeEvery(getUsers, getUsersSaga),
+    takeEvery(addUser, addUserSaga),
+    takeEvery(updateUser, updateUserSaga),
+    takeEvery(deleteUser, deleteUserSaga)
   ]);
 }

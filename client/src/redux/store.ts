@@ -9,6 +9,7 @@ import productReducer from './features/product/slice';
 import eventReducer from './features/event/slice';
 import storeReducer from './features/store/slice';
 import cartReducer from './features/cart/slice';
+import dashboardReducer from './features/dashboard/slice';
 
 const rootReducer = combineReducers({
   auth: authReducer,
@@ -18,7 +19,8 @@ const rootReducer = combineReducers({
   store: storeReducer,
   user: userReducer,
   ui: uiReducer,
-  cart: cartReducer
+  cart: cartReducer,
+  dashboard: dashboardReducer
 });
 
 const sagaMiddleware = createSagaMiddleware();

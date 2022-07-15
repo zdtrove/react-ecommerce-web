@@ -6,16 +6,28 @@ import { AddOrUpdateResponse, DeleteResponse, ListResponse } from 'types/common'
 import { Event } from 'types/event';
 import { eventActions } from './slice';
 
+const {
+  addEvent,
+  addEventFail,
+  getEvents,
+  getEventsSuccess,
+  getEventsFail,
+  updateEventFail,
+  updateEvent,
+  deleteEvent,
+  deleteEventFail
+} = eventActions;
+
 function* getEventsSaga() {
   try {
     const res: ListResponse<Event> = yield call(getAllDataApi, ENDPOINTS.events.getAll);
     const { status, data } = res;
     if (status === 200) {
-      yield put(eventActions.getEventsSuccess(data));
+      yield put(getEventsSuccess(data));
     }
   } catch (error) {
     console.log(error);
-    yield put(eventActions.getEventsFail());
+    yield put(getEventsFail());
   }
 }
 
@@ -28,11 +40,11 @@ function* addEventSaga(action: PayloadAction<Event>) {
     );
     const { status } = res;
     if (status === 201) {
-      yield put(eventActions.getEvents());
+      yield put(getEvents());
     }
   } catch (error) {
     console.log(error);
-    yield put(eventActions.addEventFail());
+    yield put(addEventFail());
   }
 }
 
@@ -45,11 +57,11 @@ function* updateEventSaga(action: PayloadAction<Event>) {
     );
     const { status } = res;
     if (status === 200) {
-      yield put(eventActions.getEvents());
+      yield put(getEvents());
     }
   } catch (error) {
     console.log(error);
-    yield put(eventActions.updateEventFail());
+    yield put(updateEventFail());
   }
 }
 
@@ -62,19 +74,19 @@ function* deleteEventSaga(action: PayloadAction<string>) {
     );
     const { status } = res;
     if (status === 200) {
-      yield put(eventActions.getEvents());
+      yield put(getEvents());
     }
   } catch (error) {
     console.log(error);
-    yield put(eventActions.deleteEventFail());
+    yield put(deleteEventFail());
   }
 }
 
 export function* eventSaga() {
   yield all([
-    takeEvery(eventActions.getEvents, getEventsSaga),
-    takeEvery(eventActions.addEvent, addEventSaga),
-    takeEvery(eventActions.updateEvent, updateEventSaga),
-    takeEvery(eventActions.deleteEvent, deleteEventSaga)
+    takeEvery(getEvents, getEventsSaga),
+    takeEvery(addEvent, addEventSaga),
+    takeEvery(updateEvent, updateEventSaga),
+    takeEvery(deleteEvent, deleteEventSaga)
   ]);
 }

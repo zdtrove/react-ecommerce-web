@@ -19,4 +19,5 @@ export type CartItem = Product & {
 export type ProductListCart = {
   product: CartItem;
   products: Product[];
+  inCart: boolean;
 };

@@ -21,6 +21,7 @@ import { ROUTES } from 'constants/index';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import StoreMallDirectoryIcon from '@material-ui/icons/StoreMallDirectory';
 import EventNoteIcon from '@material-ui/icons/EventNote';
+import DashboardIcon from '@material-ui/icons/Dashboard';
 
 const drawerWidth = 240;
 
@@ -89,6 +90,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const sidebars = [
+  { name: 'Dashboard', pathname: ROUTES.admin.index, icon: <DashboardIcon /> },
   { name: 'Users', pathname: ROUTES.admin.users, icon: <GroupRoundedIcon /> },
   { name: 'Categories', pathname: ROUTES.admin.categories, icon: <CategoryRoundedIcon /> },
   { name: 'Products', pathname: ROUTES.admin.products, icon: <ShoppingCartIcon /> },

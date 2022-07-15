@@ -1,6 +1,7 @@
 import {
   Box,
   Drawer,
+  IconButton,
   List,
   ListItem,
   ListItemSecondaryAction,
@@ -18,14 +19,21 @@ import {
 import { useAppDispatch, useAppSelector } from 'redux/hook';
 import { formatNumber } from 'utils/functions';
 import CartItem from './Item';
+import CloseIcon from '@material-ui/icons/Close';
 
 const useStyles = makeStyles({
   root: {},
   list: {
     width: 550,
+    position: 'relative',
     '& .MuiTypography-h4': {
       padding: 10
     }
+  },
+  close: {
+    position: 'absolute',
+    top: 5,
+    left: 5
   },
   total: {
     margin: '0 10px'
@@ -38,7 +46,7 @@ const Cart = () => {
   const open = useAppSelector(selectOpenCart);
   const cartItems = useAppSelector(selectCartItems);
   const cartTotalAmount = useAppSelector(selectCartTotalAmount);
-  const { closeCart } = cartActions;
+  const { closeCart, clear } = cartActions;
 
   return (
     <>
@@ -49,6 +57,9 @@ const Cart = () => {
         onClose={() => dispatch(closeCart())}
       >
         <div className={classes.list} role="presentation">
+          <IconButton className={classes.close} onClick={() => dispatch(closeCart())}>
+            <CloseIcon />
+          </IconButton>
           <Typography variant="h4" align="center">
             Your Cart
           </Typography>
@@ -70,7 +81,13 @@ const Cart = () => {
                 </ListItem>
               </List>
               <Box display="flex" justifyContent="center" alignItems="center">
-                <Button variant="contained" color="secondary" text="Clear cart" size="large" />
+                <Button
+                  variant="contained"
+                  color="secondary"
+                  text="Clear cart"
+                  size="large"
+                  onClick={() => dispatch(clear())}
+                />
                 <Button variant="contained" color="primary" text="Order" size="large" />
               </Box>
             </>

@@ -6,6 +6,7 @@ import { userSaga } from './features/user/saga';
 import { eventSaga } from './features/event/saga';
 import { storeSaga } from './features/store/saga';
 import { cartSaga } from './features/cart/saga';
+import { dashboardSaga } from './features/dashboard/saga';
 
 export default function* rootSaga() {
   yield all([
@@ -15,6 +16,7 @@ export default function* rootSaga() {
     userSaga(),
     eventSaga(),
     storeSaga(),
-    cartSaga()
+    cartSaga(),
+    dashboardSaga()
   ]);
 }

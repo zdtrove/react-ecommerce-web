@@ -18,7 +18,7 @@ import {
   DialogContentText,
   DialogActions
 } from '@material-ui/core';
-import LayoutAdmin from 'components/admin/layouts/LayoutAdmin';
+import Layout from 'components/admin/layouts';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import SearchIcon from '@material-ui/icons/Search';
 import AddIcon from '@material-ui/icons/Add';
@@ -203,7 +203,7 @@ const Products = () => {
 
   useEffect(() => {
     dispatch(productActions.getProducts());
-  }, [dispatch]);
+  }, []);
 
   useEffect(() => {
     setPage(0);
@@ -215,7 +215,7 @@ const Products = () => {
   }, [searchValue]);
 
   return (
-    <LayoutAdmin>
+    <Layout>
       <Paper className={classes.rootHeader}>
         <div className={classes.header}>
           <Card className={classes.headerIcon}>
@@ -357,7 +357,7 @@ const Products = () => {
           </DialogActions>
         </Dialog>
       )}
-    </LayoutAdmin>
+    </Layout>
   );
 };
 

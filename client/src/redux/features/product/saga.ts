@@ -14,6 +14,19 @@ import { imagesUpload } from 'utils/upload';
 import { findIndex } from 'utils/functions';
 import { CartItem, CartItems, ProductListCart } from 'types/cart';
 
+const {
+  addProduct,
+  addProductFail,
+  getProducts,
+  getProductsSuccess,
+  getProductsFail,
+  updateProduct,
+  updateProductFail,
+  deleteProduct,
+  deleteProductFail,
+  getProductsAddOrRemoveCart
+} = productActions;
+
 function* getProductsSaga() {
   try {
     const res: ListResponse<Product> = yield call(getAllDataApi, ENDPOINTS.products.getAll);
@@ -29,43 +42,27 @@ function* getProductsSaga() {
           }
         });
       }
-      yield put(productActions.getProductsSuccess(tempData));
+      yield put(getProductsSuccess(tempData));
     }
   } catch (error) {
     console.log(error);
-    yield put(productActions.getProductsFail());
+    yield put(getProductsFail());
   }
 }
 
-function* getProductsAddCartSaga(action: PayloadAction<ProductListCart>) {
+function* getProductsAddOrRemoveCartSaga(action: PayloadAction<ProductListCart>) {
   try {
-    const { product, products } = action.payload;
+    const { product, products, inCart } = action.payload;
     let tempProducts = [...products];
     const itemIndex = findIndex(tempProducts, product);
     if (itemIndex >= 0) {
-      const tempProduct = { ...tempProducts[itemIndex], inCart: true };
+      const tempProduct = { ...tempProducts[itemIndex], inCart };
       tempProducts[itemIndex] = tempProduct;
     }
-    yield put(productActions.getProductsSuccess(tempProducts));
+    yield put(getProductsSuccess(tempProducts));
   } catch (error) {
     console.log(error);
-    yield put(productActions.getProductsFail());
-  }
-}
-
-function* getProductsRemoveCartSaga(action: PayloadAction<ProductListCart>) {
-  try {
-    const { product, products } = action.payload;
-    let tempProducts = [...products];
-    const itemIndex = findIndex(tempProducts, product);
-    if (itemIndex >= 0) {
-      const tempProduct = { ...tempProducts[itemIndex], inCart: false };
-      tempProducts[itemIndex] = tempProduct;
-    }
-    yield put(productActions.getProductsSuccess(tempProducts));
-  } catch (error) {
-    console.log(error);
-    yield put(productActions.getProductsFail());
+    yield put(getProductsFail());
   }
 }
 
@@ -82,11 +79,11 @@ function* addProductSaga(action: PayloadAction<Product>) {
     );
     const { status } = res;
     if (status === 201) {
-      yield put(productActions.getProducts());
+      yield put(getProducts());
     }
   } catch (error) {
     console.log(error);
-    yield put(productActions.addProductFail());
+    yield put(addProductFail());
   }
 }
 
@@ -105,11 +102,11 @@ function* updateProductSaga(action: PayloadAction<Product>) {
     );
     const { status } = res;
     if (status === 200) {
-      yield put(productActions.getProducts());
+      yield put(getProducts());
     }
   } catch (error) {
     console.log(error);
-    yield put(productActions.updateProductFail());
+    yield put(updateProductFail());
   }
 }
 
@@ -122,21 +119,20 @@ function* deleteProductSaga(action: PayloadAction<string>) {
     );
     const { status } = res;
     if (status === 200) {
-      yield put(productActions.getProducts());
+      yield put(getProducts());
     }
   } catch (error) {
     console.log(error);
-    yield put(productActions.deleteProductFail());
+    yield put(deleteProductFail());
   }
 }
 
 export function* productSaga() {
   yield all([
-    takeEvery(productActions.getProducts, getProductsSaga),
-    takeEvery(productActions.addProduct, addProductSaga),
-    takeEvery(productActions.updateProduct, updateProductSaga),
-    takeEvery(productActions.deleteProduct, deleteProductSaga),
-    takeEvery(productActions.getProductsAddCart, getProductsAddCartSaga),
-    takeEvery(productActions.getProductsRemoveCart, getProductsRemoveCartSaga)
+    takeEvery(getProducts, getProductsSaga),
+    takeEvery(addProduct, addProductSaga),
+    takeEvery(updateProduct, updateProductSaga),
+    takeEvery(deleteProduct, deleteProductSaga),
+    takeEvery(getProductsAddOrRemoveCart, getProductsAddOrRemoveCartSaga)
   ]);
 }

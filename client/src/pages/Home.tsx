@@ -1,7 +1,7 @@
 import { Fragment, useEffect } from 'react';
 import { Toolbar } from '@material-ui/core';
 import Cart from 'components/cart';
-import Layout from 'components/layouts/Layout';
+import Layout from 'components/layouts';
 import { productActions, selectProducts } from 'redux/features/product/slice';
 import { useAppDispatch, useAppSelector } from 'redux/hook';
 import { Button } from 'components/UI';
@@ -33,7 +33,7 @@ const Home = () => {
               <Button variant="contained" disabled text="In Cart" />
             ) : (
               <Button
-                onClick={() => dispatch(addToCart({ product, products }))}
+                onClick={() => dispatch(addToCart({ product, products, inCart: true }))}
                 text="Add To Cart"
               />
             )}

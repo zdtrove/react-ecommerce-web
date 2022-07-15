@@ -6,16 +6,28 @@ import { AddOrUpdateResponse, DeleteResponse, ListResponse } from 'types/common'
 import { Store } from 'types/store';
 import { storeActions } from './slice';
 
+const {
+  addStore,
+  addStoreFail,
+  getStores,
+  getStoresSuccess,
+  getStoresFail,
+  updateStore,
+  updateStoreFail,
+  deleteStore,
+  deleteStoreFail
+} = storeActions;
+
 function* getStoresSaga() {
   try {
     const res: ListResponse<Store> = yield call(getAllDataApi, ENDPOINTS.stores.getAll);
     const { status, data } = res;
     if (status === 200) {
-      yield put(storeActions.getStoresSuccess(data));
+      yield put(getStoresSuccess(data));
     }
   } catch (error) {
     console.log(error);
-    yield put(storeActions.getStoresFail());
+    yield put(getStoresFail());
   }
 }
 
@@ -28,11 +40,11 @@ function* addStoreSaga(action: PayloadAction<Store>) {
     );
     const { status } = res;
     if (status === 201) {
-      yield put(storeActions.getStores());
+      yield put(getStores());
     }
   } catch (error) {
     console.log(error);
-    yield put(storeActions.addStoreFail());
+    yield put(addStoreFail());
   }
 }
 
@@ -45,11 +57,11 @@ function* updateStoreSaga(action: PayloadAction<Store>) {
     );
     const { status } = res;
     if (status === 200) {
-      yield put(storeActions.getStores());
+      yield put(getStores());
     }
   } catch (error) {
     console.log(error);
-    yield put(storeActions.updateStoreFail());
+    yield put(updateStoreFail());
   }
 }
 
@@ -62,19 +74,19 @@ function* deleteStoreSaga(action: PayloadAction<string>) {
     );
     const { status } = res;
     if (status === 200) {
-      yield put(storeActions.getStores());
+      yield put(getStores());
     }
   } catch (error) {
     console.log(error);
-    yield put(storeActions.deleteStoreFail());
+    yield put(deleteStoreFail());
   }
 }
 
 export function* storeSaga() {
   yield all([
-    takeEvery(storeActions.getStores, getStoresSaga),
-    takeEvery(storeActions.addStore, addStoreSaga),
-    takeEvery(storeActions.updateStore, updateStoreSaga),
-    takeEvery(storeActions.deleteStore, deleteStoreSaga)
+    takeEvery(getStores, getStoresSaga),
+    takeEvery(addStore, addStoreSaga),
+    takeEvery(updateStore, updateStoreSaga),
+    takeEvery(deleteStore, deleteStoreSaga)
   ]);
 }

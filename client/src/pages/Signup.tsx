@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useAppDispatch } from 'redux/hook';
-import Layout from 'components/layouts/Layout';
+import Layout from 'components/layouts';
 import {
   makeStyles,
   Toolbar,

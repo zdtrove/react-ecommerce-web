@@ -25,6 +25,7 @@ app.use('/api', require('./routes/product.route'))
 app.use('/api', require('./routes/user.route'))
 app.use('/api', require('./routes/store.route'))
 app.use('/api', require('./routes/event.route'))
+app.use('/api', require('./routes/dashboard.route'))
 
 if (process.env.NODE_ENV === 'production') {
 	app.use(express.static('client/build'))

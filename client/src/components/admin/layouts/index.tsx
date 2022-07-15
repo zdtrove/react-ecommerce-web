@@ -16,7 +16,7 @@ import { Menu as MenuIcon } from '@material-ui/icons';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import MailIcon from '@material-ui/icons/Mail';
 import NotificationsIcon from '@material-ui/icons/Notifications';
-import SidebarAdmin from './SidebarAdmin';
+import SidebarAdmin from './Sidebar';
 import { Button } from 'components/UI';
 import clsx from 'clsx';
 import { authActions } from 'redux/features/auth/slice';
@@ -80,7 +80,7 @@ type Props = {
   children?: React.ReactNode;
 };
 
-const LayoutAdmin = ({ children }: Props) => {
+const Layout = ({ children }: Props) => {
   const classes = useStyles();
   const dispatch = useAppDispatch();
   const history = useHistory();
@@ -166,8 +166,8 @@ const LayoutAdmin = ({ children }: Props) => {
   );
 };
 
-LayoutAdmin.propTypes = {
+Layout.propTypes = {
   children: PropTypes.node
 };
 
-export default LayoutAdmin;
+export default Layout;

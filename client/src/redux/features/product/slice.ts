@@ -20,11 +20,12 @@ const productSlice = createSlice({
       state.loading = false;
       state.products = action.payload;
     },
-    getProductsAddCart(state, action: PayloadAction<ProductListCart>) {
+    getProductsAddOrRemoveCart(state, action: PayloadAction<ProductListCart>) {
       state.loading = true;
     },
-    getProductsRemoveCart(state, action: PayloadAction<ProductListCart>) {
-      state.loading = true;
+    getProductsClearCart(state) {
+      const products = state.products.map((product) => ({ ...product, inCart: false }));
+      state.products = products;
     },
     getProductsFail(state) {
       state.loading = false;

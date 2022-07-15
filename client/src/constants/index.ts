@@ -44,6 +44,9 @@ export const ROUTES = {
 };
 
 export const ENDPOINTS = {
+  dashboards: {
+    getAll: '/api/dashboard'
+  },
   auth: {
     signUp: '/api/auth/register',
     login: '/api/auth/login',

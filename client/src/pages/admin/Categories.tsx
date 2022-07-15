@@ -16,7 +16,7 @@ import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import AddIcon from '@material-ui/icons/Add';
 import TreeItem from '@material-ui/lab/TreeItem';
 import CategoryRoundedIcon from '@material-ui/icons/CategoryRounded';
-import LayoutAdmin from 'components/admin/layouts/LayoutAdmin';
+import Layout from 'components/admin/layouts';
 import { Button, Dialog } from 'components/UI';
 import Edit from 'components/admin/category/Edit';
 import Add from 'components/admin/category/Add';
@@ -201,10 +201,10 @@ const Categories = () => {
 
   useEffect(() => {
     dispatch(categoryActions.getCategories());
-  }, [dispatch]);
+  }, []);
 
   return (
-    <LayoutAdmin>
+    <Layout>
       <div className={classes.root}>
         <Paper className={classes.rootHeader}>
           <div className={classes.header}>
@@ -280,7 +280,7 @@ const Categories = () => {
           </Dialog>
         )}
       </div>
-    </LayoutAdmin>
+    </Layout>
   );
 };
 
