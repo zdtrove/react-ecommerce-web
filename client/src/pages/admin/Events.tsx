@@ -1,63 +1,29 @@
 import { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
 import { useAppDispatch, useAppSelector } from 'redux/hook';
 import Layout from 'components/admin/layouts';
-import { Input, Button, Dialog } from 'components/UI';
+import { Input, Button, Dialog, Table, TableHeader, TablePaginationActions } from 'components/UI';
 import {
   makeStyles,
-  useTheme,
   Paper,
   TableContainer,
-  Table,
-  TableHead,
-  TableBody,
   TableRow,
   TableCell,
   TablePagination,
-  Card,
-  Typography,
   Toolbar,
   DialogContent,
   DialogContentText,
-  DialogActions,
-  IconButton
+  DialogActions
 } from '@material-ui/core';
-import PeopleOutlineTwoToneIcon from '@material-ui/icons/PeopleOutlineTwoTone';
+import EventNoteIcon from '@material-ui/icons/EventNote';
 import AddIcon from '@material-ui/icons/Add';
 import SearchIcon from '@material-ui/icons/Search';
 import Detail from 'components/admin/event/Detail';
 import Edit from 'components/admin/event/Edit';
 import Add from 'components/admin/event/Add';
-import FirstPageIcon from '@material-ui/icons/FirstPage';
-import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
-import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
-import LastPageIcon from '@material-ui/icons/LastPage';
 import { Event } from 'types/event';
 import { eventActions, selectEvents } from 'redux/features/event/slice';
 
 const useStyles = makeStyles((theme) => ({
-  rootHeader: {
-    minWidth: 240
-  },
-  header: {
-    padding: theme.spacing(2),
-    [theme.breakpoints.up('sm')]: {
-      padding: theme.spacing(4)
-    },
-    display: 'flex',
-    marginBottom: theme.spacing(2)
-  },
-  headerIcon: {
-    display: 'inline-block',
-    padding: theme.spacing(2),
-    color: '#3c44b1'
-  },
-  headerTitle: {
-    paddingLeft: theme.spacing(4),
-    '& .MuiTypography-subtitle2': {
-      opacity: '0.6'
-    }
-  },
   marginBtn: {
     margin: theme.spacing(0.5)
   },
@@ -92,78 +58,6 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const useStyles1 = makeStyles((theme) => ({
-  root: {
-    flexShrink: 0,
-    marginLeft: theme.spacing(2.5)
-  }
-}));
-
-type Props = {
-  count: number;
-  page: number;
-  rowsPerPage: number;
-  // eslint-disable-next-line no-unused-vars
-  onPageChange: (event: React.MouseEvent<HTMLButtonElement>, newPage: number) => void;
-};
-
-const TablePaginationActions = ({ count, page, rowsPerPage, onPageChange }: Props) => {
-  const classes = useStyles1();
-  const theme = useTheme();
-
-  const handleFirstPageButtonClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    onPageChange(event, 0);
-  };
-
-  const handleBackButtonClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    onPageChange(event, page - 1);
-  };
-
-  const handleNextButtonClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    onPageChange(event, page + 1);
-  };
-
-  const handleLastPageButtonClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    onPageChange(event, Math.max(0, Math.ceil(count / rowsPerPage) - 1));
-  };
-
-  return (
-    <div className={classes.root}>
-      <IconButton
-        onClick={handleFirstPageButtonClick}
-        disabled={page === 0}
-        aria-label="first page"
-      >
-        {theme.direction === 'rtl' ? <LastPageIcon /> : <FirstPageIcon />}
-      </IconButton>
-      <IconButton onClick={handleBackButtonClick} disabled={page === 0} aria-label="previous page">
-        {theme.direction === 'rtl' ? <KeyboardArrowRight /> : <KeyboardArrowLeft />}
-      </IconButton>
-      <IconButton
-        onClick={handleNextButtonClick}
-        disabled={page >= Math.ceil(count / rowsPerPage) - 1}
-        aria-label="next page"
-      >
-        {theme.direction === 'rtl' ? <KeyboardArrowLeft /> : <KeyboardArrowRight />}
-      </IconButton>
-      <IconButton
-        onClick={handleLastPageButtonClick}
-        disabled={page >= Math.ceil(count / rowsPerPage) - 1}
-        aria-label="last page"
-      >
-        {theme.direction === 'rtl' ? <FirstPageIcon /> : <LastPageIcon />}
-      </IconButton>
-    </div>
-  );
-};
-
-TablePaginationActions.propTypes = {
-  count: PropTypes.any,
-  page: PropTypes.any,
-  rowsPerPage: PropTypes.any,
-  onPageChange: PropTypes.any
-};
-
 const Events = () => {
   const dispatch = useAppDispatch();
   const classes = useStyles();
@@ -197,7 +91,9 @@ const Events = () => {
   }, [events]);
 
   useEffect(() => {
-    dispatch(eventActions.getEvents());
+    if (!events.length) {
+      dispatch(eventActions.getEvents());
+    }
   }, []);
 
   useEffect(() => {
@@ -209,101 +105,74 @@ const Events = () => {
 
   return (
     <Layout>
-      <Paper className={classes.rootHeader}>
-        <div className={classes.header}>
-          <Card className={classes.headerIcon}>
-            <PeopleOutlineTwoToneIcon />
-          </Card>
-          <div className={classes.headerTitle}>
-            <Typography variant="h6" component="div">
-              Events
-            </Typography>
-            <Typography variant="subtitle2" component="div">
-              List Events
-            </Typography>
-          </div>
-        </div>
-      </Paper>
-      <Paper className={classes.rootTable}>
-        <TableContainer>
-          <Toolbar className={classes.tableAction}>
-            <Input
-              label="Search Events"
-              startIcon={<SearchIcon />}
-              onChange={(e) => setSearchValue(e.target.value)}
-              margin="none"
-              value={searchValue}
-            />
-            <Button
-              onClick={() => setShowAdd(true)}
-              variant="outlined"
-              startIcon={<AddIcon />}
-              text="ADD NEW"
-            />
-          </Toolbar>
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell>Name</TableCell>
-                <TableCell>Description</TableCell>
-                <TableCell>Start Date</TableCell>
-                <TableCell>End Date</TableCell>
-                <TableCell>Actions</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {eventList
-                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((event: Event, idx: number) => (
-                  <TableRow key={idx}>
-                    <TableCell>{event.name}</TableCell>
-                    <TableCell>{event.description}</TableCell>
-                    <TableCell>{event.startDate}</TableCell>
-                    <TableCell>{event.endDate}</TableCell>
-                    <TableCell>
-                      <Button
-                        onClick={() => {
-                          setEventRecord(event);
-                          setShowDetail(true);
-                        }}
-                        className={classes.marginBtn}
-                        text="DETAIL"
-                        color="default"
-                      />
-                      <Button
-                        onClick={() => {
-                          setEventRecord(event);
-                          setShowEdit(true);
-                        }}
-                        className={classes.marginBtn}
-                        text="EDIT"
-                      />
-                      <Button
-                        className={classes.marginBtn}
-                        color="secondary"
-                        text="DELETE"
-                        onClick={() => {
-                          setEventRecord(event);
-                          setShowDelete(true);
-                        }}
-                      />
-                    </TableCell>
-                  </TableRow>
-                ))}
-            </TableBody>
-          </Table>
-          <TablePagination
-            rowsPerPageOptions={[3, 6, 10, 25, 50]}
-            component="div"
-            count={eventList.length}
-            rowsPerPage={rowsPerPage}
-            page={page}
-            onPageChange={onPageChange}
-            onRowsPerPageChange={onRowsPerPageChange}
-            ActionsComponent={TablePaginationActions}
+      <TableHeader title="Events" subtitle="List Events" icon={<EventNoteIcon />} />
+      <TableContainer className={classes.rootTable} component={Paper}>
+        <Toolbar className={classes.tableAction}>
+          <Input
+            label="Search Events"
+            startIcon={<SearchIcon />}
+            onChange={(e) => setSearchValue(e.target.value)}
+            margin="none"
+            value={searchValue}
           />
-        </TableContainer>
-      </Paper>
+          <Button
+            onClick={() => setShowAdd(true)}
+            variant="outlined"
+            startIcon={<AddIcon />}
+            text="ADD NEW"
+          />
+        </Toolbar>
+        <Table headers={['Name', 'Description', 'Start Date', 'End Date', 'Actions']}>
+          {eventList
+            .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+            .map((event: Event, idx: number) => (
+              <TableRow key={idx}>
+                <TableCell>{event.name}</TableCell>
+                <TableCell>{event.description}</TableCell>
+                <TableCell>{event.startDate}</TableCell>
+                <TableCell>{event.endDate}</TableCell>
+                <TableCell>
+                  <Button
+                    onClick={() => {
+                      setEventRecord(event);
+                      setShowDetail(true);
+                    }}
+                    className={classes.marginBtn}
+                    text="DETAIL"
+                    color="default"
+                  />
+                  <Button
+                    onClick={() => {
+                      setEventRecord(event);
+                      setShowEdit(true);
+                    }}
+                    className={classes.marginBtn}
+                    text="EDIT"
+                  />
+                  <Button
+                    className={classes.marginBtn}
+                    color="secondary"
+                    text="DELETE"
+                    onClick={() => {
+                      setEventRecord(event);
+                      setShowDelete(true);
+                    }}
+                  />
+                </TableCell>
+              </TableRow>
+            ))}
+        </Table>
+        <TablePagination
+          rowsPerPageOptions={[3, 6, 10, 25, 50]}
+          component="div"
+          count={eventList.length}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          onPageChange={onPageChange}
+          onRowsPerPageChange={onRowsPerPageChange}
+          ActionsComponent={TablePaginationActions}
+        />
+      </TableContainer>
       {showAdd && (
         <Add
           {...{

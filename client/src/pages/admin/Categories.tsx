@@ -3,7 +3,6 @@ import { useAppSelector, useAppDispatch } from 'redux/hook';
 import {
   makeStyles,
   Paper,
-  Card,
   Typography,
   Toolbar,
   DialogContent,
@@ -17,7 +16,7 @@ import AddIcon from '@material-ui/icons/Add';
 import TreeItem from '@material-ui/lab/TreeItem';
 import CategoryRoundedIcon from '@material-ui/icons/CategoryRounded';
 import Layout from 'components/admin/layouts';
-import { Button, Dialog } from 'components/UI';
+import { Button, Dialog, TableHeader } from 'components/UI';
 import Edit from 'components/admin/category/Edit';
 import Add from 'components/admin/category/Add';
 import { categoryActions, selectCategories } from 'redux/features/category/slice';
@@ -69,28 +68,6 @@ const useStyles = makeStyles((theme) => ({
       [theme.breakpoints.up('sm')]: {
         marginLeft: theme.spacing(5)
       }
-    }
-  },
-  rootHeader: {
-    minWidth: 240
-  },
-  header: {
-    padding: theme.spacing(2),
-    [theme.breakpoints.up('sm')]: {
-      padding: theme.spacing(4)
-    },
-    display: 'flex',
-    marginBottom: theme.spacing(3)
-  },
-  headerIcon: {
-    display: 'inline-block',
-    padding: theme.spacing(2),
-    color: '#3c44b1'
-  },
-  headerTitle: {
-    paddingLeft: theme.spacing(4),
-    '& .MuiTypography-subtitle2': {
-      opacity: '0.6'
     }
   },
   labelRoot: {
@@ -200,27 +177,15 @@ const Categories = () => {
   };
 
   useEffect(() => {
-    dispatch(categoryActions.getCategories());
+    if (!categories.length) {
+      dispatch(categoryActions.getCategories());
+    }
   }, []);
 
   return (
     <Layout>
       <div className={classes.root}>
-        <Paper className={classes.rootHeader}>
-          <div className={classes.header}>
-            <Card className={classes.headerIcon}>
-              <CategoryRoundedIcon />
-            </Card>
-            <div className={classes.headerTitle}>
-              <Typography variant="h6" component="div">
-                Categories
-              </Typography>
-              <Typography variant="subtitle2" component="div">
-                List Categories
-              </Typography>
-            </div>
-          </div>
-        </Paper>
+        <TableHeader title="Categories" subtitle="List Categories" icon={<CategoryRoundedIcon />} />
         <Paper className={classes.rootTree}>
           <Toolbar>
             <Button

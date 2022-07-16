@@ -1,63 +1,29 @@
 import { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
 import { useAppDispatch, useAppSelector } from 'redux/hook';
 import Layout from 'components/admin/layouts';
-import { Input, Button, Dialog } from 'components/UI';
+import { Input, Button, Dialog, Table, TableHeader, TablePaginationActions } from 'components/UI';
 import {
   makeStyles,
-  useTheme,
   Paper,
   TableContainer,
-  Table,
-  TableHead,
-  TableBody,
   TableRow,
   TableCell,
   TablePagination,
-  Card,
-  Typography,
   Toolbar,
   DialogContent,
   DialogContentText,
-  DialogActions,
-  IconButton
+  DialogActions
 } from '@material-ui/core';
-import PeopleOutlineTwoToneIcon from '@material-ui/icons/PeopleOutlineTwoTone';
+import StoreMallDirectoryIcon from '@material-ui/icons/StoreMallDirectory';
 import AddIcon from '@material-ui/icons/Add';
 import SearchIcon from '@material-ui/icons/Search';
 import Detail from 'components/admin/store/Detail';
 import Edit from 'components/admin/store/Edit';
 import Add from 'components/admin/store/Add';
-import FirstPageIcon from '@material-ui/icons/FirstPage';
-import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
-import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
-import LastPageIcon from '@material-ui/icons/LastPage';
 import { Store } from 'types/store';
 import { storeActions, selectStores } from 'redux/features/store/slice';
 
 const useStyles = makeStyles((theme) => ({
-  rootHeader: {
-    minWidth: 240
-  },
-  header: {
-    padding: theme.spacing(2),
-    [theme.breakpoints.up('sm')]: {
-      padding: theme.spacing(4)
-    },
-    display: 'flex',
-    marginBottom: theme.spacing(2)
-  },
-  headerIcon: {
-    display: 'inline-block',
-    padding: theme.spacing(2),
-    color: '#3c44b1'
-  },
-  headerTitle: {
-    paddingLeft: theme.spacing(4),
-    '& .MuiTypography-subtitle2': {
-      opacity: '0.6'
-    }
-  },
   marginBtn: {
     margin: theme.spacing(0.5)
   },
@@ -92,78 +58,6 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const useStyles1 = makeStyles((theme) => ({
-  root: {
-    flexShrink: 0,
-    marginLeft: theme.spacing(2.5)
-  }
-}));
-
-type Props = {
-  count: number;
-  page: number;
-  rowsPerPage: number;
-  // eslint-disable-next-line no-unused-vars
-  onPageChange: (store: React.MouseEvent<HTMLButtonElement>, newPage: number) => void;
-};
-
-const TablePaginationActions = ({ count, page, rowsPerPage, onPageChange }: Props) => {
-  const classes = useStyles1();
-  const theme = useTheme();
-
-  const handleFirstPageButtonClick = (store: React.MouseEvent<HTMLButtonElement>) => {
-    onPageChange(store, 0);
-  };
-
-  const handleBackButtonClick = (store: React.MouseEvent<HTMLButtonElement>) => {
-    onPageChange(store, page - 1);
-  };
-
-  const handleNextButtonClick = (store: React.MouseEvent<HTMLButtonElement>) => {
-    onPageChange(store, page + 1);
-  };
-
-  const handleLastPageButtonClick = (store: React.MouseEvent<HTMLButtonElement>) => {
-    onPageChange(store, Math.max(0, Math.ceil(count / rowsPerPage) - 1));
-  };
-
-  return (
-    <div className={classes.root}>
-      <IconButton
-        onClick={handleFirstPageButtonClick}
-        disabled={page === 0}
-        aria-label="first page"
-      >
-        {theme.direction === 'rtl' ? <LastPageIcon /> : <FirstPageIcon />}
-      </IconButton>
-      <IconButton onClick={handleBackButtonClick} disabled={page === 0} aria-label="previous page">
-        {theme.direction === 'rtl' ? <KeyboardArrowRight /> : <KeyboardArrowLeft />}
-      </IconButton>
-      <IconButton
-        onClick={handleNextButtonClick}
-        disabled={page >= Math.ceil(count / rowsPerPage) - 1}
-        aria-label="next page"
-      >
-        {theme.direction === 'rtl' ? <KeyboardArrowLeft /> : <KeyboardArrowRight />}
-      </IconButton>
-      <IconButton
-        onClick={handleLastPageButtonClick}
-        disabled={page >= Math.ceil(count / rowsPerPage) - 1}
-        aria-label="last page"
-      >
-        {theme.direction === 'rtl' ? <FirstPageIcon /> : <LastPageIcon />}
-      </IconButton>
-    </div>
-  );
-};
-
-TablePaginationActions.propTypes = {
-  count: PropTypes.any,
-  page: PropTypes.any,
-  rowsPerPage: PropTypes.any,
-  onPageChange: PropTypes.any
-};
-
 const Stores = () => {
   const dispatch = useAppDispatch();
   const classes = useStyles();
@@ -197,7 +91,9 @@ const Stores = () => {
   }, [stores]);
 
   useEffect(() => {
-    dispatch(storeActions.getStores());
+    if (!stores.length) {
+      dispatch(storeActions.getStores());
+    }
   }, []);
 
   useEffect(() => {
@@ -209,99 +105,73 @@ const Stores = () => {
 
   return (
     <Layout>
-      <Paper className={classes.rootHeader}>
-        <div className={classes.header}>
-          <Card className={classes.headerIcon}>
-            <PeopleOutlineTwoToneIcon />
-          </Card>
-          <div className={classes.headerTitle}>
-            <Typography variant="h6" component="div">
-              Stores
-            </Typography>
-            <Typography variant="subtitle2" component="div">
-              List Stores
-            </Typography>
-          </div>
-        </div>
-      </Paper>
-      <Paper className={classes.rootTable}>
-        <TableContainer>
-          <Toolbar className={classes.tableAction}>
-            <Input
-              label="Search Stores"
-              startIcon={<SearchIcon />}
-              onChange={(e) => setSearchValue(e.target.value)}
-              margin="none"
-              value={searchValue}
-            />
-            <Button
-              onClick={() => setShowAdd(true)}
-              variant="outlined"
-              startIcon={<AddIcon />}
-              text="ADD NEW"
-            />
-          </Toolbar>
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell>Name</TableCell>
-                <TableCell>Address</TableCell>
-                <TableCell>Region</TableCell>
-                <TableCell>Actions</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {storeList
-                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((store: Store, idx: number) => (
-                  <TableRow key={idx}>
-                    <TableCell>{store.name}</TableCell>
-                    <TableCell>{store.address}</TableCell>
-                    <TableCell>{store.region}</TableCell>
-                    <TableCell>
-                      <Button
-                        onClick={() => {
-                          setStoreRecord(store);
-                          setShowDetail(true);
-                        }}
-                        className={classes.marginBtn}
-                        text="DETAIL"
-                        color="default"
-                      />
-                      <Button
-                        onClick={() => {
-                          setStoreRecord(store);
-                          setShowEdit(true);
-                        }}
-                        className={classes.marginBtn}
-                        text="EDIT"
-                      />
-                      <Button
-                        className={classes.marginBtn}
-                        color="secondary"
-                        text="DELETE"
-                        onClick={() => {
-                          setStoreRecord(store);
-                          setShowDelete(true);
-                        }}
-                      />
-                    </TableCell>
-                  </TableRow>
-                ))}
-            </TableBody>
-          </Table>
-          <TablePagination
-            rowsPerPageOptions={[3, 6, 10, 25, 50]}
-            component="div"
-            count={storeList.length}
-            rowsPerPage={rowsPerPage}
-            page={page}
-            onPageChange={onPageChange}
-            onRowsPerPageChange={onRowsPerPageChange}
-            ActionsComponent={TablePaginationActions}
+      <TableHeader title="Stores" subtitle="List Stores" icon={<StoreMallDirectoryIcon />} />
+      <TableContainer className={classes.rootTable} component={Paper}>
+        <Toolbar className={classes.tableAction}>
+          <Input
+            label="Search Stores"
+            startIcon={<SearchIcon />}
+            onChange={(e) => setSearchValue(e.target.value)}
+            margin="none"
+            value={searchValue}
           />
-        </TableContainer>
-      </Paper>
+          <Button
+            onClick={() => setShowAdd(true)}
+            variant="outlined"
+            startIcon={<AddIcon />}
+            text="ADD NEW"
+          />
+        </Toolbar>
+        <Table headers={['Name', 'Address', 'Region', 'Actions']}>
+          {storeList
+            .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+            .map((store: Store, idx: number) => (
+              <TableRow key={idx}>
+                <TableCell>{store.name}</TableCell>
+                <TableCell>{store.address}</TableCell>
+                <TableCell>{store.region}</TableCell>
+                <TableCell>
+                  <Button
+                    onClick={() => {
+                      setStoreRecord(store);
+                      setShowDetail(true);
+                    }}
+                    className={classes.marginBtn}
+                    text="DETAIL"
+                    color="default"
+                  />
+                  <Button
+                    onClick={() => {
+                      setStoreRecord(store);
+                      setShowEdit(true);
+                    }}
+                    className={classes.marginBtn}
+                    text="EDIT"
+                  />
+                  <Button
+                    className={classes.marginBtn}
+                    color="secondary"
+                    text="DELETE"
+                    onClick={() => {
+                      setStoreRecord(store);
+                      setShowDelete(true);
+                    }}
+                  />
+                </TableCell>
+              </TableRow>
+            ))}
+        </Table>
+        <TablePagination
+          rowsPerPageOptions={[3, 6, 10, 25, 50]}
+          component="div"
+          count={storeList.length}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          onPageChange={onPageChange}
+          onRowsPerPageChange={onRowsPerPageChange}
+          ActionsComponent={TablePaginationActions}
+        />
+      </TableContainer>
       {showAdd && (
         <Add
           {...{

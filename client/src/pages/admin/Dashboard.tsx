@@ -16,7 +16,9 @@ const Dashboard = () => {
   const dashboards = useAppSelector(selectDashboards);
 
   useEffect(() => {
-    dispatch(dashboardActions.getDashboards());
+    if (Object.keys(dashboards).length === 0) {
+      dispatch(dashboardActions.getDashboards());
+    }
   }, []);
 
   return (

@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { AppState } from 'redux/store';
-import { CartItems, CartState, ProductListCart } from 'types/cart';
+import { CartItem, CartItems, CartState, ProductListCart } from 'types/cart';
 import { Product } from 'types/product';
 import { findIndex } from 'utils/functions';
 
@@ -23,23 +23,22 @@ const cartSlice = createSlice({
       state.open = false;
     },
     addToCart(state, action: PayloadAction<ProductListCart>) {},
-    addToCartSuccess(state, action: PayloadAction<ProductListCart>) {
-      const { product } = action.payload;
+    addToCartSuccess(state, action: PayloadAction<Product>) {
       const { cartItems } = state;
-      const index = findIndex(cartItems.list, product);
+      const index = findIndex(cartItems.list, action.payload);
       if (index >= 0) {
         cartItems.list[index].quantity! += 1;
         cartItems.list[index].totalAmount! += cartItems.list[index].price;
       } else {
         const tempProduct = {
-          ...product,
+          ...action.payload,
           quantity: 1,
-          totalAmount: product.price
+          totalAmount: action.payload.price
         };
         cartItems.list.push(tempProduct);
       }
       cartItems.cartTotalQuantity += 1;
-      cartItems.cartTotalAmount += product.price;
+      cartItems.cartTotalAmount += action.payload.price;
       localStorage.setItem('cartItems', JSON.stringify(cartItems));
     },
     increment(state, action: PayloadAction<Product>) {},
@@ -67,14 +66,12 @@ const cartSlice = createSlice({
       localStorage.setItem('cartItems', JSON.stringify(cartItems));
     },
     remove(state, action: PayloadAction<ProductListCart>) {},
-    removeSuccess(state, action: PayloadAction<ProductListCart>) {
-      const {
-        product: { _id, quantity, price }
-      } = action.payload;
+    removeSuccess(state, action: PayloadAction<CartItem>) {
+      const { _id, quantity, price } = action.payload;
       const { cartItems } = state;
       cartItems.list = cartItems.list.filter((item) => item._id !== _id);
       cartItems.cartTotalQuantity -= quantity!;
-      cartItems.cartTotalAmount -= price;
+      cartItems.cartTotalAmount -= quantity! * price;
       cartItems.list.length
         ? localStorage.setItem('cartItems', JSON.stringify(cartItems))
         : localStorage.removeItem('cartItems');

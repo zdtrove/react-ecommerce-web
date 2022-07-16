@@ -29,7 +29,7 @@ const Table = ({ headers, children }: Props) => {
         <TableHead>
           <TableRow>
             {headers.map((header, idx) => (
-              <TableCell align="center" key={idx}>
+              <TableCell align="left" key={idx}>
                 {header}
               </TableCell>
             ))}

@@ -1,12 +1,10 @@
 import { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
 import { useAppDispatch, useAppSelector } from 'redux/hook';
 import Layout from 'components/admin/layouts';
-import { Input, Button, Dialog, Table, TableHeader } from 'components/UI';
+import { Input, Button, Dialog, Table, TableHeader, TablePaginationActions } from 'components/UI';
 import {
   Paper,
   makeStyles,
-  useTheme,
   TableContainer,
   TableRow,
   TableCell,
@@ -14,8 +12,7 @@ import {
   Toolbar,
   DialogContent,
   DialogContentText,
-  DialogActions,
-  IconButton
+  DialogActions
 } from '@material-ui/core';
 import GroupRoundedIcon from '@material-ui/icons/GroupRounded';
 import AddIcon from '@material-ui/icons/Add';
@@ -23,10 +20,6 @@ import SearchIcon from '@material-ui/icons/Search';
 import Detail from 'components/admin/user/Detail';
 import Edit from 'components/admin/user/Edit';
 import Add from 'components/admin/user/Add';
-import FirstPageIcon from '@material-ui/icons/FirstPage';
-import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
-import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
-import LastPageIcon from '@material-ui/icons/LastPage';
 import { User } from 'types/user';
 import { userActions, selectUsers } from 'redux/features/user/slice';
 
@@ -65,78 +58,6 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const useStyles1 = makeStyles((theme) => ({
-  root: {
-    flexShrink: 0,
-    marginLeft: theme.spacing(2.5)
-  }
-}));
-
-type Props = {
-  count: number;
-  page: number;
-  rowsPerPage: number;
-  // eslint-disable-next-line no-unused-vars
-  onPageChange: (event: React.MouseEvent<HTMLButtonElement>, newPage: number) => void;
-};
-
-const TablePaginationActions = ({ count, page, rowsPerPage, onPageChange }: Props) => {
-  const classes = useStyles1();
-  const theme = useTheme();
-
-  const handleFirstPageButtonClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    onPageChange(event, 0);
-  };
-
-  const handleBackButtonClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    onPageChange(event, page - 1);
-  };
-
-  const handleNextButtonClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    onPageChange(event, page + 1);
-  };
-
-  const handleLastPageButtonClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    onPageChange(event, Math.max(0, Math.ceil(count / rowsPerPage) - 1));
-  };
-
-  return (
-    <div className={classes.root}>
-      <IconButton
-        onClick={handleFirstPageButtonClick}
-        disabled={page === 0}
-        aria-label="first page"
-      >
-        {theme.direction === 'rtl' ? <LastPageIcon /> : <FirstPageIcon />}
-      </IconButton>
-      <IconButton onClick={handleBackButtonClick} disabled={page === 0} aria-label="previous page">
-        {theme.direction === 'rtl' ? <KeyboardArrowRight /> : <KeyboardArrowLeft />}
-      </IconButton>
-      <IconButton
-        onClick={handleNextButtonClick}
-        disabled={page >= Math.ceil(count / rowsPerPage) - 1}
-        aria-label="next page"
-      >
-        {theme.direction === 'rtl' ? <KeyboardArrowLeft /> : <KeyboardArrowRight />}
-      </IconButton>
-      <IconButton
-        onClick={handleLastPageButtonClick}
-        disabled={page >= Math.ceil(count / rowsPerPage) - 1}
-        aria-label="last page"
-      >
-        {theme.direction === 'rtl' ? <FirstPageIcon /> : <LastPageIcon />}
-      </IconButton>
-    </div>
-  );
-};
-
-TablePaginationActions.propTypes = {
-  count: PropTypes.any,
-  page: PropTypes.any,
-  rowsPerPage: PropTypes.any,
-  onPageChange: PropTypes.any
-};
-
 const Users = () => {
   const dispatch = useAppDispatch();
   const classes = useStyles();
@@ -170,7 +91,9 @@ const Users = () => {
   }, [users]);
 
   useEffect(() => {
-    dispatch(userActions.getUsers());
+    if (!users.length) {
+      dispatch(userActions.getUsers());
+    }
   }, []);
 
   useEffect(() => {
