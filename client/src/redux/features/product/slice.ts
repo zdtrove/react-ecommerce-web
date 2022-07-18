@@ -6,7 +6,8 @@ import { Product, ProductState } from 'types/product';
 
 const initialState: ProductState = {
   products: [],
-  loading: false
+  loading: false,
+  productsSearchBar: []
 };
 
 const productSlice = createSlice({
@@ -47,6 +48,13 @@ const productSlice = createSlice({
     },
     deleteProductFail(state) {
       state.loading = false;
+    },
+    getProductsSearchBar(state, action: PayloadAction<string>) {
+      state.loading = true;
+    },
+    getProductsSearchBarSuccess(state, action: PayloadAction<Product[]>) {
+      state.loading = true;
+      state.productsSearchBar = action.payload;
     }
   }
 });

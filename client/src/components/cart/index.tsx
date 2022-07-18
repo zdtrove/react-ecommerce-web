@@ -20,6 +20,8 @@ import { useAppDispatch, useAppSelector } from 'redux/hook';
 import { formatNumber } from 'utils/functions';
 import CartItem from './Item';
 import CloseIcon from '@material-ui/icons/Close';
+import AddShoppingCartIcon from '@material-ui/icons/AddShoppingCart';
+import HighlightOffIcon from '@material-ui/icons/HighlightOff';
 
 const useStyles = makeStyles({
   root: {},
@@ -60,9 +62,9 @@ const Cart = () => {
           <IconButton className={classes.close} onClick={() => dispatch(closeCart())}>
             <CloseIcon />
           </IconButton>
-          <Typography variant="h4" align="center">
-            Your Cart
-          </Typography>
+          <Box display="flex" justifyContent="center" p={1}>
+            <img style={{ width: 100 }} src="logo.png" alt="cart" />
+          </Box>
           {cartItems.length ? (
             <>
               {cartItems.map((item) => (
@@ -87,12 +89,19 @@ const Cart = () => {
                   text="Clear cart"
                   size="large"
                   onClick={() => dispatch(clear())}
+                  startIcon={<HighlightOffIcon />}
                 />
-                <Button variant="contained" color="primary" text="Order" size="large" />
+                <Button
+                  variant="contained"
+                  color="primary"
+                  text="Order"
+                  size="large"
+                  startIcon={<AddShoppingCartIcon />}
+                />
               </Box>
             </>
           ) : (
-            <Typography variant="h5" align="center">
+            <Typography variant="h5" align="center" style={{ padding: '50px 0' }}>
               Your cart is empty
             </Typography>
           )}

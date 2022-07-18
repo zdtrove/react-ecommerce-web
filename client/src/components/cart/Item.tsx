@@ -13,7 +13,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { CartItem } from 'types/cart';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import RemoveCircleOutlineIcon from '@material-ui/icons/RemoveCircleOutline';
-import { Button } from 'components/UI';
+import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import { cartActions } from 'redux/features/cart/slice';
 import { formatNumber } from 'utils/functions';
 import { selectProducts } from 'redux/features/product/slice';
@@ -52,6 +52,13 @@ const CartItemComponent = ({ cartItem }: Props) => {
   return (
     <List dense className={classes.root}>
       <ListItem>
+        <IconButton
+          onClick={() => dispatch(remove({ product: cartItem, products, inCart: false }))}
+          size="small"
+          style={{ padding: 8 }}
+        >
+          <DeleteForeverIcon color="secondary" />
+        </IconButton>
         <ListItemAvatar>
           <Avatar
             variant="square"
@@ -65,12 +72,6 @@ const CartItemComponent = ({ cartItem }: Props) => {
             <>
               <Typography variant="caption">{formatNumber(cartItem.price)}</Typography>
               <br />
-              <Button
-                onClick={() => dispatch(remove({ product: cartItem, products, inCart: false }))}
-                text="Remove"
-                size="small"
-                color="secondary"
-              />
             </>
           }
         />

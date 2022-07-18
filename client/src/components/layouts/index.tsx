@@ -2,26 +2,26 @@ import PropTypes from 'prop-types';
 import { useAppDispatch, useAppSelector } from 'redux/hook';
 import {
   makeStyles,
+  alpha,
   Container,
   AppBar,
   Toolbar,
   IconButton,
-  Typography,
   CssBaseline,
-  Badge
+  Badge,
+  InputBase,
+  Typography
 } from '@material-ui/core';
-import { Menu as MenuIcon } from '@material-ui/icons';
-import { Link, useHistory } from 'react-router-dom';
-import { Button } from 'components/UI';
-import { ROUTES, userRoles } from 'constants/index';
-import { authActions, selectIsLoggedIn } from 'redux/features/auth/slice';
 import AddShoppingCartIcon from '@material-ui/icons/AddShoppingCart';
 import AccountCircle from '@material-ui/icons/AccountCircle';
+import SearchIcon from '@material-ui/icons/Search';
 import { cartActions, selectCartTotalQuantity } from 'redux/features/cart/slice';
-
-const { USER } = userRoles;
+import { green } from '@material-ui/core/colors';
 
 const useStyles = makeStyles((theme) => ({
+  grow: {
+    flexGrow: 1
+  },
   title: {
     flexGrow: 1,
     textDecoration: 'none'
@@ -31,6 +31,51 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.up('md')]: {
       display: 'flex'
     }
+  },
+  search: {
+    position: 'relative',
+    borderRadius: theme.shape.borderRadius,
+    backgroundColor: alpha(theme.palette.common.white, 0.15),
+    '&:hover': {
+      backgroundColor: alpha(theme.palette.common.white, 0.25)
+    },
+    marginRight: theme.spacing(2),
+    marginLeft: 0,
+    width: '100%',
+    [theme.breakpoints.up('sm')]: {
+      marginLeft: theme.spacing(3),
+      width: 'auto'
+    }
+  },
+  searchIcon: {
+    padding: theme.spacing(0, 2),
+    height: '100%',
+    position: 'absolute',
+    pointerEvents: 'none',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  inputRoot: {
+    color: 'inherit'
+  },
+  inputInput: {
+    padding: theme.spacing(1, 1, 1, 0),
+    // vertical padding + font size from searchIcon
+    paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
+    transition: theme.transitions.create('width'),
+    width: '100%',
+    [theme.breakpoints.up('md')]: {
+      width: '30ch'
+    }
+  },
+  logo: {
+    width: 80,
+    padding: 5
+  },
+  logoTitle: {
+    color: green['A400'],
+    fontStyle: 'italic'
   }
 }));
 
@@ -40,64 +85,33 @@ type Props = {
 
 const Layout = ({ children }: Props) => {
   const dispatch = useAppDispatch();
-  const history = useHistory();
   const classes = useStyles();
-  const isLoggedIn = useAppSelector(selectIsLoggedIn);
   const cartTotalQuantity = useAppSelector(selectCartTotalQuantity);
   const { openCart } = cartActions;
-
-  const renderAuthBtn = () => {
-    return isLoggedIn ? (
-      <Button
-        variant="text"
-        size="medium"
-        text="LOGOUT"
-        onClick={() => dispatch(authActions.logout({ history, role: USER }))}
-        disableRipple
-        color="inherit"
-      />
-    ) : (
-      <>
-        <Button
-          variant="text"
-          size="medium"
-          disableRipple
-          color="inherit"
-          to={ROUTES.home.login}
-          component={Link}
-          text="LOGIN"
-        />
-        <Button
-          variant="text"
-          size="medium"
-          disableRipple
-          color="inherit"
-          to={ROUTES.home.signUp}
-          component={Link}
-          text="REGISTER"
-        />
-      </>
-    );
-  };
 
   return (
     <Container component="main">
       <CssBaseline />
       <AppBar>
         <Toolbar>
-          <IconButton color="inherit">
-            <MenuIcon />
-          </IconButton>
-          <Typography
-            variant="h6"
-            color="inherit"
-            className={classes.title}
-            to={ROUTES.admin.index}
-            component={Link}
-          >
-            Go to Admin
+          <img className={classes.logo} src="logo.png" alt="logo" />
+          <Typography variant="h5" className={classes.logoTitle}>
+            E-COMMERCE SHOP
           </Typography>
-          {renderAuthBtn()}
+          <div className={classes.search}>
+            <div className={classes.searchIcon}>
+              <SearchIcon />
+            </div>
+            <InputBase
+              placeholder="Search…"
+              classes={{
+                root: classes.inputRoot,
+                input: classes.inputInput
+              }}
+              inputProps={{ 'aria-label': 'search' }}
+            />
+          </div>
+          <div className={classes.grow} />
           <div className={classes.sectionDesktop}>
             <IconButton onClick={() => dispatch(openCart())} color="inherit">
               <Badge overlap="rectangular" badgeContent={cartTotalQuantity} color="secondary">

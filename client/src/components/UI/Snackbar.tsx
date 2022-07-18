@@ -5,7 +5,7 @@ import { selectSnackbar, uiActions } from 'redux/features/ui/slice';
 
 const useStyles = makeStyles((theme) => ({
   snackbar: {
-    top: theme.spacing(9),
+    top: theme.spacing(1),
     right: theme.spacing(1)
   }
 }));

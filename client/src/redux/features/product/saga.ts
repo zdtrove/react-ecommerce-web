@@ -25,7 +25,14 @@ const {
   deleteProduct,
   deleteProductFail,
   getProductsAddOrRemoveCart
+  // getProductsSearchBar,
+  // getProductsSearchBarSuccess
 } = productActions;
+
+// function* getProductsSearchBarSaga(action: PayloadAction<string>) {
+//   delay(1000);
+//   yield getProductsSearchBarSuccess();
+// }
 
 function* getProductsSaga() {
   try {

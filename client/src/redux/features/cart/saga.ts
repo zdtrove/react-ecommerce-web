@@ -1,4 +1,5 @@
 import { PayloadAction } from '@reduxjs/toolkit';
+import { snackbar } from 'constants/index';
 import { all, put, takeEvery } from 'redux-saga/effects';
 import { CartItem, ProductListCart } from 'types/cart';
 import { productActions } from '../product/slice';
@@ -49,7 +50,10 @@ function* incrementSaga(action: PayloadAction<CartItem>) {
       yield put(incrementSuccess(action.payload));
     } else {
       yield put(
-        uiActions.showSnackbar({ message: `Only ${action.payload.inventory} products in stock` })
+        uiActions.showSnackbar({
+          message: `Only ${action.payload.inventory} products in stock`,
+          status: snackbar.SNACKBAR_STATUS_WARNING
+        })
       );
     }
   } catch (error) {

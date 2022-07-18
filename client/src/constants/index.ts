@@ -1,5 +1,6 @@
 export const snackbar = {
   SNACKBAR_STATUS_SUCCESS: 'success',
+  SNACKBAR_STATUS_WARNING: 'warning',
   SNACKBAR_STATUS_ERROR: 'error'
 };
 
