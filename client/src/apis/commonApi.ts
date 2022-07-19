@@ -9,9 +9,9 @@ export const addDataApi = async (endpoint: string, data: Data) => {
   }
 };
 
-export const getAllDataApi = async (endpoint: string) => {
+export const getAllDataApi = async (endpoint: string, search: string = '') => {
   try {
-    return await axios.get(endpoint);
+    return await axios.get(`${endpoint}?name[regex]=${search}`);
   } catch (err) {
     return err;
   }

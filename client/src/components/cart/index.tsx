@@ -1,5 +1,6 @@
 import {
   Box,
+  Divider,
   Drawer,
   IconButton,
   List,
@@ -23,8 +24,12 @@ import CloseIcon from '@material-ui/icons/Close';
 import AddShoppingCartIcon from '@material-ui/icons/AddShoppingCart';
 import HighlightOffIcon from '@material-ui/icons/HighlightOff';
 
-const useStyles = makeStyles({
-  root: {},
+const useStyles = makeStyles((theme) => ({
+  root: {
+    '& .MuiPaper-root': {
+      backgroundColor: theme.palette.antiquewhite.main
+    }
+  },
   list: {
     width: 550,
     position: 'relative',
@@ -34,13 +39,13 @@ const useStyles = makeStyles({
   },
   close: {
     position: 'absolute',
-    top: 5,
-    left: 5
+    top: 10,
+    left: 10
   },
   total: {
     margin: '0 10px'
   }
-});
+}));
 
 const Cart = () => {
   const classes = useStyles();
@@ -67,6 +72,7 @@ const Cart = () => {
           </Box>
           {cartItems.length ? (
             <>
+              <Divider />
               {cartItems.map((item) => (
                 <CartItem key={item._id} cartItem={item} />
               ))}

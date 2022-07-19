@@ -1,5 +1,5 @@
 import { Product } from 'types/product';
-import { call, all, put, takeEvery } from 'redux-saga/effects';
+import { call, all, put, takeEvery, delay, takeLatest } from 'redux-saga/effects';
 import { productActions } from './slice';
 import { PayloadAction } from '@reduxjs/toolkit';
 import {
@@ -24,15 +24,31 @@ const {
   updateProductFail,
   deleteProduct,
   deleteProductFail,
-  getProductsAddOrRemoveCart
-  // getProductsSearchBar,
-  // getProductsSearchBarSuccess
+  getProductsAddOrRemoveCart,
+  getProductsSearchBar,
+  getProductsSearchBarSuccess
 } = productActions;
 
-// function* getProductsSearchBarSaga(action: PayloadAction<string>) {
-//   delay(1000);
-//   yield getProductsSearchBarSuccess();
-// }
+function* getProductsSearchBarSaga(action: PayloadAction<string>) {
+  try {
+    if (!action.payload) {
+      yield put(getProductsSearchBarSuccess([]));
+    } else {
+      yield delay(500);
+      const res: ListResponse<Product> = yield call(
+        getAllDataApi,
+        ENDPOINTS.products.getAll,
+        action.payload
+      );
+      const { status, data } = res;
+      if (status === 200) {
+        yield put(getProductsSearchBarSuccess(data));
+      }
+    }
+  } catch (error) {
+    console.log(error);
+  }
+}
 
 function* getProductsSaga() {
   try {
@@ -140,6 +156,7 @@ export function* productSaga() {
     takeEvery(addProduct, addProductSaga),
     takeEvery(updateProduct, updateProductSaga),
     takeEvery(deleteProduct, deleteProductSaga),
-    takeEvery(getProductsAddOrRemoveCart, getProductsAddOrRemoveCartSaga)
+    takeEvery(getProductsAddOrRemoveCart, getProductsAddOrRemoveCartSaga),
+    takeLatest(getProductsSearchBar, getProductsSearchBarSaga)
   ]);
 }

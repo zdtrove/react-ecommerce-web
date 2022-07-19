@@ -1,6 +1,7 @@
 import { useAppDispatch, useAppSelector } from 'redux/hook';
 import {
   Avatar,
+  Divider,
   IconButton,
   List,
   ListItem,
@@ -50,45 +51,48 @@ const CartItemComponent = ({ cartItem }: Props) => {
   const { decrement, increment, remove } = cartActions;
 
   return (
-    <List dense className={classes.root}>
-      <ListItem>
-        <IconButton
-          onClick={() => dispatch(remove({ product: cartItem, products, inCart: false }))}
-          size="small"
-          style={{ padding: 8 }}
-        >
-          <DeleteForeverIcon color="secondary" />
-        </IconButton>
-        <ListItemAvatar>
-          <Avatar
-            variant="square"
-            alt={'product'}
-            src={cartItem.images ? cartItem.images[0]?.url : ''}
-          />
-        </ListItemAvatar>
-        <ListItemText
-          primary={cartItem.name}
-          secondary={
-            <>
-              <Typography variant="caption">{formatNumber(cartItem.price)}</Typography>
-              <br />
-            </>
-          }
-        />
-        <ListItemText primary={`${formatNumber(cartItem.totalAmount!)}`} />
-        <ListItemSecondaryAction className={classes.action}>
+    <>
+      <List dense className={classes.root}>
+        <ListItem>
           <IconButton
-            onClick={() => dispatch(decrement({ product: cartItem, products, inCart: false }))}
+            onClick={() => dispatch(remove({ product: cartItem, products, inCart: false }))}
+            size="small"
+            style={{ padding: 8 }}
           >
-            <RemoveCircleOutlineIcon />
+            <DeleteForeverIcon color="secondary" />
           </IconButton>
-          <ListItemText primary={cartItem.quantity} />
-          <IconButton onClick={() => dispatch(increment(cartItem))}>
-            <AddCircleOutlineIcon />
-          </IconButton>
-        </ListItemSecondaryAction>
-      </ListItem>
-    </List>
+          <ListItemAvatar>
+            <Avatar
+              variant="square"
+              alt={'product'}
+              src={cartItem.images ? cartItem.images[0]?.url : ''}
+            />
+          </ListItemAvatar>
+          <ListItemText
+            primary={cartItem.name}
+            secondary={
+              <>
+                <Typography variant="caption">{formatNumber(cartItem.price)}</Typography>
+                <br />
+              </>
+            }
+          />
+          <ListItemText primary={`${formatNumber(cartItem.totalAmount!)}`} />
+          <ListItemSecondaryAction className={classes.action}>
+            <IconButton
+              onClick={() => dispatch(decrement({ product: cartItem, products, inCart: false }))}
+            >
+              <RemoveCircleOutlineIcon />
+            </IconButton>
+            <ListItemText primary={cartItem.quantity} />
+            <IconButton onClick={() => dispatch(increment(cartItem))}>
+              <AddCircleOutlineIcon />
+            </IconButton>
+          </ListItemSecondaryAction>
+        </ListItem>
+      </List>
+      <Divider />
+    </>
   );
 };
 

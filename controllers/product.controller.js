@@ -1,6 +1,7 @@
 const Product = require('../models/product.model')
 const slugify = require('slugify')
 const shortid = require('shortid')
+const APIfeatures = require('../utils/function');
 
 exports.addProduct = async (req, res) => {
     try {
@@ -35,10 +36,12 @@ exports.addProduct = async (req, res) => {
 
 exports.getProducts = async (req, res) => {
     try {
-        const products = await Product.find()
+        const features = new APIfeatures(Product.find(), req.query).filtering().sorting().paginating()
+        const products = await features.query
 
         return res.status(200).json(products)
     } catch (err) {
+        console.log(err);
         res.status(500).json({ message: err.message })
     }
 }

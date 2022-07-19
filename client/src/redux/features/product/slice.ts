@@ -65,6 +65,7 @@ export const productActions = productSlice.actions;
 // Selectors
 export const selectProducts = (state: AppState) => state.product.products;
 export const selectLoadingProduct = (state: AppState) => state.product.loading;
+export const selectProductsSearchBar = (state: AppState) => state.product.productsSearchBar;
 
 // Reducer
 const productReducer = productSlice.reducer;
