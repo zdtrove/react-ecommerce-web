@@ -71,7 +71,11 @@ const validationSchema = Yup.object().shape({
 
 const initialValues: Product = {
   name: '',
+  enName: '',
   description: '',
+  enDescription: '',
+  shortDescription: '',
+  enShortDescription: '',
   price: 0,
   images: [],
   categoryId: ''
@@ -132,9 +136,36 @@ const Add = ({ showAdd, setShowAdd }: Props) => {
             startIcon={<ShoppingCartIcon />}
           />
           <Input
+            label="English Name *"
+            {...formIk.getFieldProps('enName')}
+            error={formIk.touched.enName && formIk.errors.enName}
+            startIcon={<ShoppingCartIcon />}
+          />
+          <Input
             label="Description"
             {...formIk.getFieldProps('description')}
             error={formIk.touched.description && formIk.errors.description}
+            multiline
+            minRows={4}
+          />
+          <Input
+            label="English Description"
+            {...formIk.getFieldProps('enDescription')}
+            error={formIk.touched.enDescription && formIk.errors.enDescription}
+            multiline
+            minRows={4}
+          />
+          <Input
+            label="Short Description"
+            {...formIk.getFieldProps('shortDescription')}
+            error={formIk.touched.shortDescription && formIk.errors.shortDescription}
+            multiline
+            minRows={4}
+          />
+          <Input
+            label="English Short Description"
+            {...formIk.getFieldProps('enShortDescription')}
+            error={formIk.touched.enShortDescription && formIk.errors.enShortDescription}
             multiline
             minRows={4}
           />

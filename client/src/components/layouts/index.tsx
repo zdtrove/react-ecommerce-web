@@ -1,4 +1,4 @@
-import { Fragment } from 'react';
+import { Fragment, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useAppDispatch, useAppSelector } from 'redux/hook';
 import {
@@ -17,7 +17,10 @@ import {
   ListItemAvatar,
   Avatar,
   ListItemText,
-  Divider
+  Divider,
+  Select,
+  FormControl,
+  MenuItem
 } from '@material-ui/core';
 import AddShoppingCartIcon from '@material-ui/icons/AddShoppingCart';
 import AccountCircle from '@material-ui/icons/AccountCircle';
@@ -25,6 +28,7 @@ import SearchIcon from '@material-ui/icons/Search';
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import VpnKeyIcon from '@material-ui/icons/VpnKey';
+import GTranslateIcon from '@material-ui/icons/GTranslate';
 import { cartActions, selectCartTotalQuantity } from 'redux/features/cart/slice';
 import { productActions, selectProductsSearchBar } from 'redux/features/product/slice';
 import { formatNumber } from 'utils/functions';
@@ -32,9 +36,39 @@ import { Button } from 'components/UI';
 import useComponentVisible from 'hooks/useComponentVisible';
 import clsx from 'clsx';
 import { useGlobalStyles } from 'theme';
-import { selectIsLoggedIn } from 'redux/features/auth/slice';
+import { authActions, selectIsLoggedIn } from 'redux/features/auth/slice';
+import { userRoles } from 'constants/index';
+import { useHistory } from 'react-router-dom';
+import Menu from 'components/Menu';
 
 const useStyles = makeStyles((theme) => ({
+  logout: {
+    color: theme.palette.secondary.dark,
+    '&:hover': {
+      color: `${theme.palette.secondary.dark} !important`
+    }
+  },
+  formControl: {
+    minWidth: 135,
+    margin: '4px 5px',
+    '& .MuiOutlinedInput-input': {
+      padding: '0.65rem'
+    }
+  },
+  select: {
+    backgroundColor: theme.palette.primary.dark,
+    color: theme.palette.green.main,
+    '&:hover': {
+      backgroundColor: theme.palette.primary.light,
+      color: theme.palette.aquamarine.dark
+    },
+    '& .MuiOutlinedInput-notchedOutline': {
+      border: 'none'
+    },
+    '& .MuiSvgIcon-root': {
+      color: theme.palette.green.main
+    }
+  },
   grow: {
     flexGrow: 1
   },
@@ -127,12 +161,19 @@ const Layout = ({ children }: Props) => {
   const dispatch = useAppDispatch();
   const classes = useStyles();
   const globalClasses = useGlobalStyles();
+  const history = useHistory();
   const cartTotalQuantity = useAppSelector(selectCartTotalQuantity);
   const productsSearchBar = useAppSelector(selectProductsSearchBar);
   const isLoggedIn = useAppSelector(selectIsLoggedIn);
   const { openCart } = cartActions;
   const { getProductsSearchBar, getProductsSearchBarSuccess } = productActions;
   const { ref, isComponentVisible, setIsComponentVisible } = useComponentVisible(true);
+  const { USER } = userRoles;
+  const [language, setLanguage] = useState('en');
+
+  const handleChangeLanguage = (event: React.ChangeEvent<{ value: unknown }>) => {
+    setLanguage(event.target.value as string);
+  };
 
   return (
     <Container component="main">
@@ -206,16 +247,36 @@ const Layout = ({ children }: Props) => {
                 <AddShoppingCartIcon />
               </Badge>
             </IconButton>
+            <FormControl variant="outlined" className={classes.formControl}>
+              <Select
+                labelId="demo-simple-select-outlined-label"
+                id="demo-simple-select-outlined"
+                value={language}
+                onChange={handleChangeLanguage}
+                label="Language"
+                className={clsx(classes.select, globalClasses.boxShadow)}
+                IconComponent={GTranslateIcon}
+              >
+                <MenuItem value="en">English</MenuItem>
+                <MenuItem value="vi">Vietnamese</MenuItem>
+              </Select>
+            </FormControl>
             <Button text="My Wishlist" startIcon={<FavoriteBorderIcon />} />
             <Button text="My Account" startIcon={<AccountCircle />} />
             {isLoggedIn ? (
-              <Button text="Logout" startIcon={<ExitToAppIcon />} />
+              <Button
+                onClick={() => dispatch(authActions.logout({ history, role: USER }))}
+                text="Logout"
+                startIcon={<ExitToAppIcon />}
+                className={classes.logout}
+              />
             ) : (
               <Button text="Login" startIcon={<VpnKeyIcon />} />
             )}
           </div>
         </Toolbar>
       </AppBar>
+      <Menu />
       {children}
     </Container>
   );

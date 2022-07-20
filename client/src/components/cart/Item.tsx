@@ -23,7 +23,7 @@ type Props = {
   cartItem: CartItem;
 };
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
   root: {
     '& .MuiListItemText-primary': {
       fontWeight: 'bold'
@@ -40,9 +40,12 @@ const useStyles = makeStyles({
   action: {
     display: 'flex',
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
+    '& .MuiSvgIcon-root': {
+      color: theme.palette.primary.dark
+    }
   }
-});
+}));
 
 const CartItemComponent = ({ cartItem }: Props) => {
   const classes = useStyles();

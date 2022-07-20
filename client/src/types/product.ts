@@ -1,8 +1,11 @@
 export type Product = {
   _id?: string;
   name: string;
+  enName: string;
   description?: string;
+  enDescription?: string;
   shortDescription?: string;
+  enShortDescription?: string;
   gift?: Gift;
   categoryId: string;
   price: number;
@@ -54,6 +57,7 @@ export type Camera = {
 
 export type Gift = {
   text?: string;
+  enText?: string;
   price?: number;
 };
 

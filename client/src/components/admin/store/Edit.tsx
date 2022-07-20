@@ -25,12 +25,15 @@ type Props = {
 
 const Edit = ({ showEdit, setShowEdit, storeRecord }: Props) => {
   const dispatch = useAppDispatch();
-  const { _id, name, address, region } = storeRecord;
+  const { _id, name, enName, address, enAddress, region, enRegion } = storeRecord;
 
   const initialValues: Store = {
     name,
+    enName,
     address,
-    region
+    enAddress,
+    region,
+    enRegion
   };
 
   const formIk = useFormik({
@@ -53,15 +56,33 @@ const Edit = ({ showEdit, setShowEdit, storeRecord }: Props) => {
             startIcon={<StorefrontIcon />}
           />
           <Input
+            label="English Name"
+            {...formIk.getFieldProps('enName')}
+            error={formIk.touched.enName && formIk.errors.enName}
+            startIcon={<StorefrontIcon />}
+          />
+          <Input
             label="Address"
             {...formIk.getFieldProps('address')}
             error={formIk.touched.address && formIk.errors.address}
             startIcon={<HomeIcon />}
           />
           <Input
+            label="English Address"
+            {...formIk.getFieldProps('enAddress')}
+            error={formIk.touched.enAddress && formIk.errors.enAddress}
+            startIcon={<HomeIcon />}
+          />
+          <Input
             label="Region"
             {...formIk.getFieldProps('region')}
             error={formIk.touched.region && formIk.errors.region}
+            startIcon={<PersonPinCircleIcon />}
+          />
+          <Input
+            label="English Region"
+            {...formIk.getFieldProps('enRegion')}
+            error={formIk.touched.enRegion && formIk.errors.enRegion}
             startIcon={<PersonPinCircleIcon />}
           />
         </form>

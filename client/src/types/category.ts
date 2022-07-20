@@ -6,6 +6,9 @@ export type CategoryState = {
 export type Category = {
   _id?: string;
   name: string;
+  enName: string;
+  icon?: string;
+  isMenu?: string;
   slug?: string;
   parentId?: string;
   image: string | null;

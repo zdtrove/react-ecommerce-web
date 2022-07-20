@@ -7,7 +7,19 @@ const storeSchema = new mongoose.Schema({
         trim: true,
         maxlength: 64
     },
+    enName: {
+        type: String,
+        required: true,
+        trim: true,
+        maxlength: 64
+    },
     address: {
+        type: String,
+        required: true,
+        trim: true,
+        maxlength: 254
+    },
+    enAddress: {
         type: String,
         required: true,
         trim: true,
@@ -19,8 +31,18 @@ const storeSchema = new mongoose.Schema({
         trim: true,
         maxlength: 32
     },
+    enRegion: {
+        type: String,
+        required: true,
+        trim: true,
+        maxlength: 32
+    },
     map: {
         title: {
+            type: String,
+            default: ''
+        },
+        enTitle: {
             type: String,
             default: ''
         },

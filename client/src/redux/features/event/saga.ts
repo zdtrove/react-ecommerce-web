@@ -35,7 +35,7 @@ function* addEventSaga(action: PayloadAction<Event>) {
   try {
     const res: AddOrUpdateResponse<Event> = yield call(
       addDataApi,
-      ENDPOINTS.events.getOne,
+      ENDPOINTS.events.getAll,
       action.payload
     );
     const { status } = res;

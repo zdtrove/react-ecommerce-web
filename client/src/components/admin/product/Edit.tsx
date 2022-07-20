@@ -81,14 +81,29 @@ const Edit = ({ showEdit, setShowEdit, product }: Props) => {
   const classes = useStyles();
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.up('sm'));
-  const { _id, name, description, categoryId, price, images } = product;
+  const {
+    _id,
+    name,
+    enName,
+    description,
+    enDescription,
+    shortDescription,
+    enShortDescription,
+    categoryId,
+    price,
+    images
+  } = product;
   const categories = useAppSelector(selectCategories);
   const [imagesNew, setImagesChange] = useState<any[]>([]);
   const [imagesOld, setImagesOld] = useState<any[]>(images || []);
 
   let initialValues: Product = {
     name,
+    enName,
     description,
+    enDescription,
+    shortDescription,
+    enShortDescription,
     price,
     imagesOld: product.images,
     imagesNew: [],
@@ -146,9 +161,36 @@ const Edit = ({ showEdit, setShowEdit, product }: Props) => {
             startIcon={<ShoppingCartIcon />}
           />
           <Input
+            label="English Name *"
+            {...formIk.getFieldProps('enName')}
+            error={formIk.touched.enName && formIk.errors.enName}
+            startIcon={<ShoppingCartIcon />}
+          />
+          <Input
             label="Description"
             {...formIk.getFieldProps('description')}
             error={formIk.touched.description && formIk.errors.description}
+            multiline
+            minRows={4}
+          />
+          <Input
+            label="English Description"
+            {...formIk.getFieldProps('enDescription')}
+            error={formIk.touched.enDescription && formIk.errors.enDescription}
+            multiline
+            minRows={4}
+          />
+          <Input
+            label="Short Description"
+            {...formIk.getFieldProps('shortDescription')}
+            error={formIk.touched.shortDescription && formIk.errors.shortDescription}
+            multiline
+            minRows={4}
+          />
+          <Input
+            label="English Short Description"
+            {...formIk.getFieldProps('enShortDescription')}
+            error={formIk.touched.enShortDescription && formIk.errors.enShortDescription}
             multiline
             minRows={4}
           />
@@ -231,7 +273,11 @@ Edit.propTypes = {
   product: PropTypes.shape({
     _id: PropTypes.string,
     name: PropTypes.string,
+    enName: PropTypes.string,
     description: PropTypes.string,
+    enDescription: PropTypes.string,
+    shortDescription: PropTypes.string,
+    enShortDescription: PropTypes.string,
     categoryId: PropTypes.string,
     price: PropTypes.number,
     sold: PropTypes.number,

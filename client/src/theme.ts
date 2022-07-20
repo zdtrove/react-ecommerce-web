@@ -8,11 +8,13 @@ declare module '@material-ui/core/styles/createPalette' {
     green: Palette['primary'];
     aquamarine: Palette['primary'];
     antiquewhite: Palette['primary'];
+    chartreuse: Palette['primary'];
   }
   interface PaletteOptions {
     green: PaletteOptions['primary'];
     aquamarine: PaletteOptions['primary'];
     antiquewhite: PaletteOptions['primary'];
+    chartreuse: PaletteOptions['primary'];
   }
 }
 
@@ -24,7 +26,9 @@ export const theme = createTheme({
       light: teal[400]
     },
     secondary: {
-      main: pink[500]
+      dark: pink[900],
+      main: pink[500],
+      light: pink[400]
     },
     green: {
       main: green['A400'],
@@ -37,10 +41,13 @@ export const theme = createTheme({
     },
     antiquewhite: {
       main: 'antiquewhite'
+    },
+    chartreuse: {
+      main: 'chartreuse'
     }
   },
   typography: {
-    fontFamily: 'cursive'
+    fontFamily: 'Montserrat'
   }
 });
 

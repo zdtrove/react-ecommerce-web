@@ -12,7 +12,10 @@ const createCategories = (categories, parentId = null) => {
         result.push({
             _id: cat._id,
             name: cat.name,
+            enName: cat.enName,
             slug: cat.slug,
+            icon: cat.icon,
+            isMenu: cat.isMenu,
             parentId: cat.parentId,
             image: cat.image ? cat.image : null,
             children: createCategories(categories, cat._id)
@@ -24,9 +27,9 @@ const createCategories = (categories, parentId = null) => {
 
 exports.addCategory = async (req, res) => {
     try {
-        const { name, parentId, image } = req.body
+        const { name, enName, icon, isMenu, parentId, image } = req.body
 
-        const categoryObj = { name, slug: slugify(`${name}-${shortid.generate()}`, { lower: true }), image }
+        const categoryObj = { name, enName, icon, isMenu, slug: slugify(`${name}-${shortid.generate()}`, { lower: true }), image }
         if (parentId) categoryObj.parentId = parentId
 
         const category = new Category(categoryObj)
@@ -59,9 +62,9 @@ exports.getCategories = async (req, res) => {
 
 exports.updateCategory = async (req, res) => {
     try {
-        const { name, parentId, image } = req.body
+        const { name, enName, icon, isMenu, parentId, image } = req.body
         const category = await Category.findOneAndUpdate({ _id: req.params.id }, {
-            name, parentId, image
+            name, enName, icon, isMenu, parentId, image
         });
 
         res.status(200).json({

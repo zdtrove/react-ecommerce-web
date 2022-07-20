@@ -12,10 +12,10 @@ exports.getEvents = async (req, res) => {
 
 exports.addEvent = async (req, res) => {
 	try {
-		const { name, description, startDate, endDate } = req.body
+		const { name, enName, description, enDescription, startDate, endDate } = req.body
 
         const newEvent = new Event({
-            name, description, startDate, endDate
+            name, enName, description, enDescription, startDate, endDate
         })
 
         await newEvent.save((err, data) => {
@@ -32,9 +32,9 @@ exports.addEvent = async (req, res) => {
 
 exports.updateEvent = async (req, res) => {
 	try {
-		const { name, description, startDate, endDate } = req.body
+		const { name, enName, description, enDescription, startDate, endDate } = req.body
 		const event = await Event.findOneAndUpdate({ _id: req.params.id }, {
-			name, description, startDate, endDate
+			name, enName, description, enDescription, startDate, endDate
 		})
 
 		res.status(200).json({

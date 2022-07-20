@@ -1,8 +1,11 @@
 export type Store = {
   _id?: string;
   name: string;
+  enName: string;
   address: string;
+  enAddress: string;
   region: string;
+  enRegion: string;
   openingHour?: string;
   closingHour?: string;
   map?: Map;

@@ -10,7 +10,7 @@ import {
   Fab
 } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
-import { Input, Select, Button, Dialog } from 'components/UI';
+import { Input, Select, Button, Dialog, RadioGroup } from 'components/UI';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { categoryActions } from 'redux/features/category/slice';
@@ -58,6 +58,9 @@ const CategoryAdd = ({ categories, showAdd, setShowAdd }: Props) => {
 
   const initialValues: Category = {
     name: '',
+    enName: '',
+    icon: '',
+    isMenu: 'Yes',
     parentId: '',
     image: ''
   };
@@ -87,7 +90,22 @@ const CategoryAdd = ({ categories, showAdd, setShowAdd }: Props) => {
             {...formIk.getFieldProps('name')}
             error={formIk.touched.name && formIk.errors.name}
           />
-
+          <Input
+            label="English Name"
+            {...formIk.getFieldProps('enName')}
+            error={formIk.touched.enName && formIk.errors.enName}
+          />
+          <Input
+            label="Icon Name"
+            {...formIk.getFieldProps('icon')}
+            error={formIk.touched.icon && formIk.errors.icon}
+          />
+          <RadioGroup
+            row
+            label="Is Menu"
+            {...formIk.getFieldProps('isMenu')}
+            items={['No', 'Yes']}
+          />
           <div className={classes.upload}>
             <label htmlFor="upload">
               <input

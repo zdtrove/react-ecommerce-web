@@ -5,12 +5,12 @@ import { authActions } from 'redux/features/auth/slice';
 import { ROUTES } from '../constants';
 import { uiActions } from 'redux/features/ui/slice';
 
-const { SNACKBAR_STATUS_SUCCESS } = snackbar;
+const { SNACKBAR_STATUS_SUCCESS, SNACKBAR_STATUS_ERROR } = snackbar;
 const { ADMIN } = userRoles;
 const { JWT_EXPIRED, JWT_INVALID, ACCESS_TOKEN } = jwtConst;
 const { CLOUDINARY_URL } = uploadConst;
 const { showBackdrop, showSnackbar, hideBackdrop } = uiActions;
-const { logoutSuccess, refreshToken, clearToken } = authActions;
+const { logoutSuccess, refreshToken } = authActions;
 
 const axios = axiosPackage.create({});
 
@@ -70,8 +70,15 @@ axios.interceptors.response.use(
     }
     if (data.name !== JWT_INVALID) {
       console.log('error.response', error.response);
-      store.dispatch({ type: clearToken.type });
-      window.location.href = ROUTES.home.login;
+      // store.dispatch({ type: clearToken.type });
+      // window.location.href = ROUTES.home.login;
+      store.dispatch({
+        type: showSnackbar.type,
+        payload: {
+          message: error.response.data.message,
+          status: SNACKBAR_STATUS_ERROR
+        }
+      });
     }
     store.dispatch({ type: hideBackdrop });
 

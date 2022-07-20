@@ -29,13 +29,15 @@ type Props = {
 
 const Edit = ({ showEdit, setShowEdit, eventRecord }: Props) => {
   const dispatch = useAppDispatch();
-  const { _id, name, description, startDate, endDate } = eventRecord;
+  const { _id, name, enName, description, enDescription, startDate, endDate } = eventRecord;
   const [startDateEdit, setStartDateEdit] = useState<Date | null>(startDate);
   const [endDateEdit, setEndDateEdit] = useState<Date | null>(endDate);
 
   const initialValues: Event = {
     name,
+    enName,
     description,
+    enDescription,
     startDate,
     endDate
   };
@@ -70,9 +72,22 @@ const Edit = ({ showEdit, setShowEdit, eventRecord }: Props) => {
             startIcon={<EventNoteIcon />}
           />
           <Input
+            label="English Name"
+            {...formIk.getFieldProps('enName')}
+            error={formIk.touched.enName && formIk.errors.enName}
+            startIcon={<EventNoteIcon />}
+          />
+          <Input
             label="Description"
             {...formIk.getFieldProps('description')}
             error={formIk.touched.description && formIk.errors.description}
+            multiline
+            minRows={4}
+          />
+          <Input
+            label="English Description"
+            {...formIk.getFieldProps('enDescription')}
+            error={formIk.touched.enDescription && formIk.errors.enDescription}
             multiline
             minRows={4}
           />

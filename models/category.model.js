@@ -7,10 +7,24 @@ const categorySchema = new mongoose.Schema({
         trim: true,
         maxLength: [50, "Category name is up to 50 chars long"]
     },
+    enName: {
+        type: String,
+        required: [true, "Please add your category english name"],
+        trim: true,
+        maxLength: [50, "Category name is up to 50 chars long"]
+    },
     slug: {
         type: String,
         required: [true, "Category slug is required"],
         unique: true
+    },
+    icon: {
+        type: String,
+        default: ''
+    },
+    isMenu: {
+        type: String,
+        default: 'Yes'
     },
     type: {
         type: String

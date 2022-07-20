@@ -34,7 +34,7 @@ const RadioGroup = ({ label, items, ...rest }: Props) => {
 
 RadioGroup.propTypes = {
   label: PropTypes.string,
-  items: PropTypes.arrayOf(PropTypes.string)
+  items: PropTypes.arrayOf(PropTypes.any)
 };
 
 export default RadioGroup;

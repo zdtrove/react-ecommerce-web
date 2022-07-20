@@ -12,10 +12,10 @@ exports.getStores = async (req, res) => {
 
 exports.addStore = async (req, res) => {
 	try {
-		const { name, address, region } = req.body
+		const { name, enName, address, enAddress, region, enRegion } = req.body
 
         const newStore = new Store({
-            name, address, region
+            name, enName, address, enAddress, region, enRegion
         })
 
         await newStore.save((err, data) => {
@@ -32,9 +32,9 @@ exports.addStore = async (req, res) => {
 
 exports.updateStore = async (req, res) => {
 	try {
-		const { name, address, region } = req.body
+		const { name, enName, address, enAddress, region, enRegion } = req.body
 		const store = await Store.findOneAndUpdate({ _id: req.params.id }, {
-			name, address, region
+			name, enName, address, enAddress, region, enRegion
 		})
 
 		res.status(200).json({

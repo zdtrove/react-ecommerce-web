@@ -5,13 +5,17 @@ const APIfeatures = require('../utils/function');
 
 exports.addProduct = async (req, res) => {
     try {
-        const { name, images, description, price, categoryId } = req.body
+        const { name, enName, images, description, enDescription, shortDescription, enShortDescription, price, categoryId } = req.body
 
         const productObj = {
             name,
+            enName,
             slug: slugify(`${name}-${shortid.generate()}`, { lower: true }),
             images,
             description,
+            enDescription,
+            shortDescription,
+            enShortDescription,
             price,
             categoryId
         }
@@ -48,8 +52,8 @@ exports.getProducts = async (req, res) => {
 
 exports.updateProduct = async (req, res) => {
     try {
-        const { name, description, price, categoryId, images } = req.body
-        const productUpdate = { name, description, price, categoryId };
+        const { name, enName, description, enDescription, shortDescription, enShortDescription, price, categoryId, images } = req.body
+        const productUpdate = { name, enName, description, enDescription, shortDescription, enShortDescription, price, categoryId };
         if (images.length > 0) {
             productUpdate.images = images;
         }

@@ -10,7 +10,7 @@ import {
   Fab
 } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
-import { Input, Select, Button, Dialog } from 'components/UI';
+import { Input, Select, Button, Dialog, RadioGroup } from 'components/UI';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { categoryActions } from 'redux/features/category/slice';
@@ -54,12 +54,15 @@ const CategoryEdit = ({ categories, showEdit, setShowEdit, categoryRecord }: Pro
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.up('sm'));
   const dispatch = useAppDispatch();
-  const { _id, name, parentId, image } = categoryRecord;
+  const { _id, name, enName, icon, isMenu, parentId, image } = categoryRecord;
   const [categoryImg, setCategoryImg] = useState<Blob | MediaSource | null>(null);
   const [categoryImgReset, setCategoryImgReset] = useState('');
 
   const initialValues: Category = {
     name,
+    enName,
+    icon,
+    isMenu,
     parentId: parentId ? parentId : '',
     image
   };
@@ -88,6 +91,22 @@ const CategoryEdit = ({ categories, showEdit, setShowEdit, categoryRecord }: Pro
             label="Name"
             {...formIk.getFieldProps('name')}
             error={formIk.touched.name && formIk.errors.name}
+          />
+          <Input
+            label="English Name"
+            {...formIk.getFieldProps('enName')}
+            error={formIk.touched.enName && formIk.errors.enName}
+          />
+          <Input
+            label="Icon Name"
+            {...formIk.getFieldProps('icon')}
+            error={formIk.touched.icon && formIk.errors.icon}
+          />
+          <RadioGroup
+            row
+            label="Is Menu"
+            {...formIk.getFieldProps('isMenu')}
+            items={['No', 'Yes']}
           />
           <div className={classes.upload}>
             <label htmlFor="upload">

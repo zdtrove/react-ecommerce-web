@@ -7,16 +7,34 @@ const productSchema = new mongoose.Schema({
         trim: true,
         maxLength: [50, "Product name is up to 50 chars long"]
     },
+    enName: {
+        type: String,
+        required: [true, "Please add your product english name"],
+        trim: true,
+        maxLength: [50, "Product name is up to 50 chars long"]
+    },
     description: {
         type: String,
         maxLength: [1000, "Product description is up to 1000 chars long"]
+    },
+    enDescription: {
+        type: String,
+        maxLength: [1000, "Product english description is up to 1000 chars long"]
     },
     shortDescription: {
         type: String,
         maxLength: [100, "Product short description is up to 100 chars long"]
     },
+    enShortDescription: {
+        type: String,
+        maxLength: [100, "Product english short description is up to 100 chars long"]
+    },
     gift: {
         text: {
+            type: String,
+            default: ''
+        },
+        enText: {
             type: String,
             default: ''
         },

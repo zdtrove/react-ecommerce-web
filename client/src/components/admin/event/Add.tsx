@@ -22,7 +22,9 @@ const validationSchema = Yup.object().shape({
 
 const initialValues: Event = {
   name: '',
+  enName: '',
   description: '',
+  enDescription: '',
   startDate: new Date(),
   endDate: new Date()
 };
@@ -68,9 +70,22 @@ const Add = ({ showAdd, setShowAdd }: Props) => {
             startIcon={<EventNoteIcon />}
           />
           <Input
+            label="English Name"
+            {...formIk.getFieldProps('enName')}
+            error={formIk.touched.enName && formIk.errors.enName}
+            startIcon={<EventNoteIcon />}
+          />
+          <Input
             label="Description"
             {...formIk.getFieldProps('description')}
             error={formIk.touched.description && formIk.errors.description}
+            multiline
+            minRows={4}
+          />
+          <Input
+            label="English Description"
+            {...formIk.getFieldProps('enDescription')}
+            error={formIk.touched.enDescription && formIk.errors.enDescription}
             multiline
             minRows={4}
           />

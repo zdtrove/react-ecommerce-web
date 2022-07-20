@@ -59,6 +59,7 @@ function* updateCategorySaga(action: PayloadAction<Category>) {
 }
 
 function* addCategorySaga(action: PayloadAction<Category>) {
+  console.log(action.payload);
   try {
     if (action.payload.image) {
       const image: cloudinaryImageType = yield call(imageUpload, action.payload.image);
