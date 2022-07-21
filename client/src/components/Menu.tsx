@@ -38,16 +38,42 @@ const useStyles = makeStyles((theme) => ({
     }
   },
   parentCategory: {
-    position: 'relative'
+    position: 'relative',
+    '& .sub-menu': {
+      position: 'absolute',
+      top: 38,
+      left: -110,
+      minWidth: 385,
+      background: theme.palette.primary.dark,
+      borderRadius: 5,
+      display: 'none'
+    },
+    '&:hover .sub-menu': {
+      display: 'block'
+    }
   },
   childrenCategory: {
-    position: 'absolute',
-    top: 40,
-    left: 5,
-    minWidth: 400,
     display: 'flex',
-    background: theme.palette.primary.main,
-    borderRadius: 5
+    padding: theme.spacing(1),
+    paddingTop: theme.spacing(2.5),
+    paddingBottom: theme.spacing(2.5),
+    '& .MuiList-padding': {
+      padding: 0
+    },
+    '& .MuiListItem-root': {
+      paddingTop: theme.spacing(0.25),
+      paddingBottom: theme.spacing(0.25)
+    }
+  },
+  itemLv1: {
+    color: theme.palette.antiquewhite.main,
+    fontWeight: 700,
+    marginBottom: theme.spacing(1),
+    textDecoration: 'underline',
+    textUnderlineOffset: `${theme.spacing(0.5)}px`
+  },
+  itemLv2: {
+    color: theme.palette.antiquewhite.main
   }
 }));
 
@@ -101,27 +127,29 @@ const Menu = () => {
             text={cat.name.toUpperCase()}
           />
           {cat.children?.length ? (
-            <div className={clsx(classes.childrenCategory, globalClasses.boxShadow)}>
-              {cat.children.map((item) => (
-                <Fragment key={item._id}>
-                  <div>
-                    <List>
-                      <ListItem>
-                        <Typography>{item.name}</Typography>
-                      </ListItem>
-                    </List>
-                    {item.children?.length ? (
+            <div className="sub-menu">
+              <div className={clsx(classes.childrenCategory, globalClasses.boxShadow)}>
+                {cat.children.map((itemLv1) => (
+                  <Fragment key={itemLv1._id}>
+                    <div>
                       <List>
-                        {item.children.map((item1) => (
-                          <ListItem key={item1._id}>
-                            <Typography>{item1.name}</Typography>
-                          </ListItem>
-                        ))}
+                        <ListItem>
+                          <Typography className={classes.itemLv1}>{itemLv1.name}</Typography>
+                        </ListItem>
                       </List>
-                    ) : null}
-                  </div>
-                </Fragment>
-              ))}
+                      {itemLv1.children?.length ? (
+                        <List>
+                          {itemLv1.children.map((itemLv2) => (
+                            <ListItem key={itemLv2._id}>
+                              <Typography className={classes.itemLv2}>{itemLv2.name}</Typography>
+                            </ListItem>
+                          ))}
+                        </List>
+                      ) : null}
+                    </div>
+                  </Fragment>
+                ))}
+              </div>
             </div>
           ) : null}
         </div>

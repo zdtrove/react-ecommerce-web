@@ -136,7 +136,7 @@ const useStyles = makeStyles((theme) => ({
   listProductSearch: {
     position: 'absolute',
     backgroundColor: theme.palette.primary.light,
-    width: 349,
+    width: 373,
     top: 40,
     borderRadius: 5,
     '& .MuiList-root': {

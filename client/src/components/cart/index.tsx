@@ -24,10 +24,10 @@ import CloseIcon from '@material-ui/icons/Close';
 import AddShoppingCartIcon from '@material-ui/icons/AddShoppingCart';
 import HighlightOffIcon from '@material-ui/icons/HighlightOff';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   root: {
     '& .MuiPaper-root': {
-      backgroundColor: theme.palette.antiquewhite.main
+      backgroundColor: 'azure'
     }
   },
   list: {
