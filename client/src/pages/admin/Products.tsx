@@ -23,7 +23,7 @@ import { Product } from 'types/product';
 import { productActions, selectProducts } from 'redux/features/product/slice';
 import { useAppDispatch, useAppSelector } from 'redux/hook';
 import { findCategoryById } from 'utils/functions';
-import { selectCategories } from 'redux/features/category/slice';
+import { categoryActions, selectCategories } from 'redux/features/category/slice';
 import { Category } from 'types/category';
 
 const useStyles = makeStyles((theme) => ({
@@ -98,6 +98,9 @@ const Products = () => {
   useEffect(() => {
     if (!products.length) {
       dispatch(productActions.getProducts());
+    }
+    if (!categories.length) {
+      dispatch(categoryActions.getCategories());
     }
   }, []);
 

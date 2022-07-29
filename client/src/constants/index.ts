@@ -40,7 +40,8 @@ export const ROUTES = {
     users: '/admin/users',
     products: '/admin/products',
     events: '/admin/events',
-    stores: '/admin/stores'
+    stores: '/admin/stores',
+    settings: '/admin/settings'
   }
 };
 

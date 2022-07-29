@@ -1,6 +1,7 @@
 export type CategoryState = {
   categories: Category[];
   loading: boolean;
+  categoriesPhone: Category;
 };
 
 export type Category = {

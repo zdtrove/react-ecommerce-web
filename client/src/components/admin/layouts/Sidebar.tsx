@@ -22,6 +22,7 @@ import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import StoreMallDirectoryIcon from '@material-ui/icons/StoreMallDirectory';
 import EventNoteIcon from '@material-ui/icons/EventNote';
 import DashboardIcon from '@material-ui/icons/Dashboard';
+import SettingsIcon from '@material-ui/icons/Settings';
 
 const drawerWidth = 240;
 
@@ -95,7 +96,8 @@ const sidebars = [
   { name: 'Categories', pathname: ROUTES.admin.categories, icon: <CategoryRoundedIcon /> },
   { name: 'Products', pathname: ROUTES.admin.products, icon: <ShoppingCartIcon /> },
   { name: 'Events', pathname: ROUTES.admin.events, icon: <EventNoteIcon /> },
-  { name: 'Stores', pathname: ROUTES.admin.stores, icon: <StoreMallDirectoryIcon /> }
+  { name: 'Stores', pathname: ROUTES.admin.stores, icon: <StoreMallDirectoryIcon /> },
+  { name: 'Settings', pathname: ROUTES.admin.settings, icon: <SettingsIcon /> }
 ];
 
 type Props = {

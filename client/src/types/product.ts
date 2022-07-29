@@ -70,4 +70,5 @@ export type ProductState = {
   products: Product[];
   loading: boolean;
   productsSearchBar: Product[];
+  productsPhone: Product[];
 };

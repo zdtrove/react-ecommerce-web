@@ -7,7 +7,8 @@ import { Product, ProductState } from 'types/product';
 const initialState: ProductState = {
   products: [],
   loading: false,
-  productsSearchBar: []
+  productsSearchBar: [],
+  productsPhone: []
 };
 
 const productSlice = createSlice({
@@ -30,6 +31,10 @@ const productSlice = createSlice({
     },
     getProductsFail(state) {
       state.loading = false;
+    },
+    getProductByCategoryId(state, action: PayloadAction<string>) {
+      const products = state.products.filter((product) => product.categoryId === action.payload);
+      state.productsPhone = products;
     },
     addProduct(state, action: PayloadAction<Product>) {
       state.loading = true;
@@ -66,6 +71,7 @@ export const productActions = productSlice.actions;
 export const selectProducts = (state: AppState) => state.product.products;
 export const selectLoadingProduct = (state: AppState) => state.product.loading;
 export const selectProductsSearchBar = (state: AppState) => state.product.productsSearchBar;
+export const selectProductsPhone = (state: AppState) => state.product.productsPhone;
 
 // Reducer
 const productReducer = productSlice.reducer;

@@ -176,7 +176,7 @@ const Layout = ({ children }: Props) => {
   };
 
   return (
-    <Container component="main">
+    <Container style={{ width: 1200, padding: 0 }} component="main">
       <CssBaseline />
       <AppBar>
         <Toolbar>

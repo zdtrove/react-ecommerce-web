@@ -24,6 +24,7 @@ const useStyles = makeStyles((theme) => ({
     position: 'fixed',
     width: '100%',
     columnGap: 5,
+    zIndex: 999,
     '& .MuiButtonBase-root': {
       minWidth: 130,
       backgroundColor: theme.palette.primary.dark,
@@ -113,47 +114,66 @@ const Menu = () => {
     }
   };
 
+  const renderMenu = () => {
+    return categories.map((cat) => {
+      if (cat.isMenu === 'Yes') {
+        return (
+          <div key={cat._id} className={classes.parentCategory}>
+            <Button
+              startIcon={handleIcon(cat.icon)}
+              endIcon={
+                cat.children?.length && cat.children?.some((item) => item.isMenu === 'Yes') ? (
+                  <ArrowDropDownIcon />
+                ) : (
+                  <></>
+                )
+              }
+              text={cat.name.toUpperCase()}
+            />
+            {cat.children?.length && cat.children?.some((item) => item.isMenu === 'Yes') ? (
+              <div className="sub-menu">
+                <div className={clsx(classes.childrenCategory, globalClasses.boxShadow)}>
+                  {cat.children.map(
+                    (itemLv1) =>
+                      itemLv1.isMenu === 'Yes' && (
+                        <Fragment key={itemLv1._id}>
+                          <div>
+                            <List>
+                              <ListItem>
+                                <Typography className={classes.itemLv1}>{itemLv1.name}</Typography>
+                              </ListItem>
+                            </List>
+                            {itemLv1.children?.length ? (
+                              <List>
+                                {itemLv1.children.map((itemLv2) => (
+                                  <ListItem key={itemLv2._id}>
+                                    <Typography className={classes.itemLv2}>
+                                      {itemLv2.name}
+                                    </Typography>
+                                  </ListItem>
+                                ))}
+                              </List>
+                            ) : null}
+                          </div>
+                        </Fragment>
+                      )
+                  )}
+                </div>
+              </div>
+            ) : null}
+          </div>
+        );
+      }
+    });
+  };
+
   useEffect(() => {
     dispatch(categoryActions.getCategories());
   }, []);
 
   return (
     <Box display="flex" justifyContent="center" alignItems="center" className={classes.root}>
-      {categories.map((cat) => (
-        <div key={cat._id} className={classes.parentCategory}>
-          <Button
-            startIcon={handleIcon(cat.icon)}
-            endIcon={cat.children?.length ? <ArrowDropDownIcon /> : <></>}
-            text={cat.name.toUpperCase()}
-          />
-          {cat.children?.length ? (
-            <div className="sub-menu">
-              <div className={clsx(classes.childrenCategory, globalClasses.boxShadow)}>
-                {cat.children.map((itemLv1) => (
-                  <Fragment key={itemLv1._id}>
-                    <div>
-                      <List>
-                        <ListItem>
-                          <Typography className={classes.itemLv1}>{itemLv1.name}</Typography>
-                        </ListItem>
-                      </List>
-                      {itemLv1.children?.length ? (
-                        <List>
-                          {itemLv1.children.map((itemLv2) => (
-                            <ListItem key={itemLv2._id}>
-                              <Typography className={classes.itemLv2}>{itemLv2.name}</Typography>
-                            </ListItem>
-                          ))}
-                        </List>
-                      ) : null}
-                    </div>
-                  </Fragment>
-                ))}
-              </div>
-            </div>
-          ) : null}
-        </div>
-      ))}
+      {renderMenu()}
     </Box>
   );
 };
