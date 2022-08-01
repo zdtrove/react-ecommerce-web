@@ -13,6 +13,7 @@ import TabletAndroidIcon from '@material-ui/icons/TabletAndroid';
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 import { useGlobalStyles } from 'theme';
 import clsx from 'clsx';
+import { useHistory } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -82,6 +83,7 @@ const Menu = () => {
   const classes = useStyles();
   const globalClasses = useGlobalStyles();
   const dispatch = useAppDispatch();
+  const history = useHistory();
   const categories = useAppSelector(selectCategories);
 
   const handleIcon = (name?: string) => {
@@ -129,6 +131,7 @@ const Menu = () => {
                 )
               }
               text={cat.name.toUpperCase()}
+              onClick={() => history.push(`/category/${cat._id}`)}
             />
             {cat.children?.length && cat.children?.some((item) => item.isMenu === 'Yes') ? (
               <div className="sub-menu">

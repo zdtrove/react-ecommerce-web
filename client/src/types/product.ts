@@ -72,9 +72,10 @@ export type ProductState = {
   productsSearchBar: Product[];
   productsPhone: Product[];
   productsLaptop: Product[];
-  productsTablet?: Product[];
-  productsWatch?: Product[];
-  productsRefrigerator?: Product[];
+  productsTablet: Product[];
+  productsWatch: Product[];
+  productsRefrigerator: Product[];
   productsAirConditioner?: Product[];
   productsWashingMachine?: Product[];
+  productsByCategoryId?: Product[];
 };

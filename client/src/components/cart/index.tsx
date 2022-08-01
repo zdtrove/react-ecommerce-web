@@ -7,9 +7,9 @@ import {
   ListItem,
   ListItemSecondaryAction,
   ListItemText,
-  Typography
+  Typography,
+  makeStyles
 } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
 import { Button } from 'components/UI';
 import {
   cartActions,
@@ -24,7 +24,7 @@ import CloseIcon from '@material-ui/icons/Close';
 import AddShoppingCartIcon from '@material-ui/icons/AddShoppingCart';
 import HighlightOffIcon from '@material-ui/icons/HighlightOff';
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     '& .MuiPaper-root': {
       backgroundColor: 'azure'
@@ -33,6 +33,7 @@ const useStyles = makeStyles(() => ({
   list: {
     width: 550,
     position: 'relative',
+    paddingBottom: theme.spacing(6),
     '& .MuiTypography-h4': {
       padding: 10
     }
@@ -44,6 +45,10 @@ const useStyles = makeStyles(() => ({
   },
   total: {
     margin: '0 10px'
+  },
+  totalPrice: {
+    fontWeight: 700,
+    color: theme.palette.secondary.main
   }
 }));
 
@@ -68,7 +73,7 @@ const Cart = () => {
             <CloseIcon />
           </IconButton>
           <Box display="flex" justifyContent="center" p={1}>
-            <img style={{ width: 100 }} src="logo.png" alt="cart" />
+            <img style={{ width: 100 }} src="/logo.png" alt="cart" />
           </Box>
           {cartItems.length ? (
             <>
@@ -82,7 +87,9 @@ const Cart = () => {
                   <ListItemSecondaryAction>
                     <ListItemText
                       primary={
-                        <Typography variant="h5">{formatNumber(cartTotalAmount)}</Typography>
+                        <Typography className={classes.totalPrice} variant="h5">
+                          {formatNumber(cartTotalAmount)}
+                        </Typography>
                       }
                     />
                   </ListItemSecondaryAction>

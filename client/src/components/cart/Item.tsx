@@ -44,6 +44,13 @@ const useStyles = makeStyles((theme) => ({
     '& .MuiSvgIcon-root': {
       color: theme.palette.primary.dark
     }
+  },
+  name: {
+    maxWidth: 200,
+    paddingRight: theme.spacing(1)
+  },
+  price: {
+    color: theme.palette.secondary.main
   }
 }));
 
@@ -72,6 +79,7 @@ const CartItemComponent = ({ cartItem }: Props) => {
             />
           </ListItemAvatar>
           <ListItemText
+            className={classes.name}
             primary={cartItem.name}
             secondary={
               <>
@@ -80,7 +88,10 @@ const CartItemComponent = ({ cartItem }: Props) => {
               </>
             }
           />
-          <ListItemText primary={`${formatNumber(cartItem.totalAmount!)}`} />
+          <ListItemText
+            className={classes.price}
+            primary={`${formatNumber(cartItem.totalAmount!)}`}
+          />
           <ListItemSecondaryAction className={classes.action}>
             <IconButton
               onClick={() => dispatch(decrement({ product: cartItem, products, inCart: false }))}

@@ -62,7 +62,8 @@ const CategoryAdd = ({ categories, showAdd, setShowAdd }: Props) => {
     icon: '',
     isMenu: 'Yes',
     parentId: '',
-    image: ''
+    image: '',
+    children: []
   };
 
   const formIk = useFormik({

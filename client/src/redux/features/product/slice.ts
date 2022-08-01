@@ -11,7 +11,9 @@ const initialState: ProductState = {
   productsPhone: [],
   productsLaptop: [],
   productsTablet: [],
-  productsWatch: []
+  productsWatch: [],
+  productsRefrigerator: [],
+  productsByCategoryId: []
 };
 
 const productSlice = createSlice({
@@ -50,6 +52,14 @@ const productSlice = createSlice({
     getProductsWatch(state, action: PayloadAction<string>) {
       const products = state.products.filter((product) => product.categoryId === action.payload);
       state.productsWatch = products;
+    },
+    getProductsRefrigerator(state, action: PayloadAction<string>) {
+      const products = state.products.filter((product) => product.categoryId === action.payload);
+      state.productsRefrigerator = products;
+    },
+    getProductsByCategoryId(state, action: PayloadAction<string>) {
+      const products = state.products.filter((product) => product.categoryId === action.payload);
+      state.productsByCategoryId = products;
     },
     addProduct(state, action: PayloadAction<Product>) {
       state.loading = true;
@@ -90,6 +100,8 @@ export const selectProductsPhone = (state: AppState) => state.product.productsPh
 export const selectProductsLaptop = (state: AppState) => state.product.productsLaptop;
 export const selectProductsTablet = (state: AppState) => state.product.productsTablet;
 export const selectProductsWatch = (state: AppState) => state.product.productsWatch;
+export const selectProductsRefrigerator = (state: AppState) => state.product.productsRefrigerator;
+export const selectProductsByCategoryId = (state: AppState) => state.product.productsByCategoryId;
 
 // Reducer
 const productReducer = productSlice.reducer;

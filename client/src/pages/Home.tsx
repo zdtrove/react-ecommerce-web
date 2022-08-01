@@ -1,12 +1,12 @@
 import { useEffect } from 'react';
 import { Box, makeStyles, Toolbar, Typography } from '@material-ui/core';
-import Cart from 'components/cart';
 import Layout from 'components/layouts';
 import {
   productActions,
   selectProducts,
   selectProductsLaptop,
   selectProductsPhone,
+  selectProductsRefrigerator,
   selectProductsTablet,
   selectProductsWatch
 } from 'redux/features/product/slice';
@@ -22,10 +22,13 @@ import {
   selectCategories,
   selectCategoriesLaptop,
   selectCategoriesPhone,
+  selectCategoriesRefrigerator,
   selectCategoriesTablet,
   selectCategoriesWatch
 } from 'redux/features/category/slice';
 import ProductItem from './product/ProductItem';
+import { Category } from 'types/category';
+import { Product } from 'types/product';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -95,16 +98,29 @@ const Home = () => {
   const productsLaptop = useAppSelector(selectProductsLaptop);
   const productsTablet = useAppSelector(selectProductsTablet);
   const productsWatch = useAppSelector(selectProductsWatch);
+  const productsRefrigerator = useAppSelector(selectProductsRefrigerator);
   const categoriesPhone = useAppSelector(selectCategoriesPhone);
   const categoriesLaptop = useAppSelector(selectCategoriesLaptop);
   const categoriesTablet = useAppSelector(selectCategoriesTablet);
   const categoriesWatch = useAppSelector(selectCategoriesWatch);
-  const { getProducts, getProductsPhone, getProductsLaptop, getProductsTablet, getProductsWatch } =
-    productActions;
-  const { getCategoriesPhone, getCategoriesLaptop, getCategoriesTablet, getCategoriesWatch } =
-    categoryActions;
+  const categoriesRefrigerator = useAppSelector(selectCategoriesRefrigerator);
+  const {
+    getProducts,
+    getProductsPhone,
+    getProductsLaptop,
+    getProductsTablet,
+    getProductsWatch,
+    getProductsRefrigerator
+  } = productActions;
+  const {
+    getCategoriesPhone,
+    getCategoriesLaptop,
+    getCategoriesTablet,
+    getCategoriesWatch,
+    getCategoriesRefrigerator
+  } = categoryActions;
 
-  const renderCategoriesPhone = () => {
+  const renderProducts = (categories: Category, products: Product[], getProduct: any) => {
     return (
       <>
         <Box
@@ -113,11 +129,11 @@ const Home = () => {
           justifyContent="left"
           alignItems="center"
         >
-          <Typography className={classes.listTitle}>{categoriesPhone?.name}</Typography>
-          {categoriesPhone?.children?.map((cat) => (
+          <Typography className={classes.listTitle}>{categories?.name}</Typography>
+          {categories?.children?.map((cat) => (
             <Typography
               key={cat._id}
-              onClick={() => dispatch(getProductsPhone(cat._id || ''))}
+              onClick={() => dispatch(getProduct(cat._id || ''))}
               style={{ fontWeight: 700 }}
             >
               {cat.name}
@@ -132,133 +148,7 @@ const Home = () => {
             slidesPerView={5}
             spaceBetween={10}
           >
-            {productsPhone?.map((product) => (
-              <SwiperSlide key={product._id}>
-                <ProductItem product={product} />
-              </SwiperSlide>
-            ))}
-          </Swiper>
-          <Box display="flex" justifyContent="center">
-            <Button className={classes.viewAll} text="View all products" />
-          </Box>
-        </Box>
-      </>
-    );
-  };
-
-  const renderCategoriesLaptop = () => {
-    return (
-      <>
-        <Box
-          className={classes.listCategory}
-          display="flex"
-          justifyContent="left"
-          alignItems="center"
-        >
-          <Typography className={classes.listTitle}>{categoriesLaptop?.name}</Typography>
-          {categoriesLaptop?.children?.map((cat) => (
-            <Typography
-              key={cat._id}
-              onClick={() => dispatch(getProductsLaptop(cat._id || ''))}
-              style={{ fontWeight: 700 }}
-            >
-              {cat.name}
-            </Typography>
-          ))}
-        </Box>
-        <Box className={classes.box}>
-          <Swiper
-            navigation={true}
-            modules={[Navigation]}
-            width={1175}
-            slidesPerView={5}
-            spaceBetween={10}
-          >
-            {productsLaptop?.map((product) => (
-              <SwiperSlide key={product._id}>
-                <ProductItem product={product} />
-              </SwiperSlide>
-            ))}
-          </Swiper>
-          <Box display="flex" justifyContent="center">
-            <Button className={classes.viewAll} text="View all products" />
-          </Box>
-        </Box>
-      </>
-    );
-  };
-
-  const renderCategoriesTablet = () => {
-    return (
-      <>
-        <Box
-          className={classes.listCategory}
-          display="flex"
-          justifyContent="left"
-          alignItems="center"
-        >
-          <Typography className={classes.listTitle}>{categoriesTablet?.name}</Typography>
-          {categoriesTablet?.children?.map((cat) => (
-            <Typography
-              key={cat._id}
-              onClick={() => dispatch(getProductsTablet(cat._id || ''))}
-              style={{ fontWeight: 700 }}
-            >
-              {cat.name}
-            </Typography>
-          ))}
-        </Box>
-        <Box className={classes.box}>
-          <Swiper
-            navigation={true}
-            modules={[Navigation]}
-            width={1175}
-            slidesPerView={5}
-            spaceBetween={10}
-          >
-            {productsTablet?.map((product) => (
-              <SwiperSlide key={product._id}>
-                <ProductItem product={product} />
-              </SwiperSlide>
-            ))}
-          </Swiper>
-          <Box display="flex" justifyContent="center">
-            <Button className={classes.viewAll} text="View all products" />
-          </Box>
-        </Box>
-      </>
-    );
-  };
-
-  const renderCategoriesWatch = () => {
-    return (
-      <>
-        <Box
-          className={classes.listCategory}
-          display="flex"
-          justifyContent="left"
-          alignItems="center"
-        >
-          <Typography className={classes.listTitle}>{categoriesWatch?.name}</Typography>
-          {categoriesWatch?.children?.map((cat) => (
-            <Typography
-              key={cat._id}
-              onClick={() => dispatch(getProductsWatch(cat._id || ''))}
-              style={{ fontWeight: 700 }}
-            >
-              {cat.name}
-            </Typography>
-          ))}
-        </Box>
-        <Box className={classes.box}>
-          <Swiper
-            navigation={true}
-            modules={[Navigation]}
-            width={1175}
-            slidesPerView={5}
-            spaceBetween={10}
-          >
-            {productsWatch?.map((product) => (
+            {products?.map((product) => (
               <SwiperSlide key={product._id}>
                 <ProductItem product={product} />
               </SwiperSlide>
@@ -278,19 +168,23 @@ const Home = () => {
 
   useEffect(() => {
     if (categoriesPhone?.children) {
-      dispatch(getProductsPhone(categoriesPhone.children[0]._id || ''));
+      dispatch(getProductsPhone(categoriesPhone.children[0]._id!));
     }
 
     if (categoriesLaptop?.children) {
-      dispatch(getProductsLaptop(categoriesLaptop.children[0]._id || ''));
+      dispatch(getProductsLaptop(categoriesLaptop.children[0]._id!));
     }
 
     if (categoriesTablet?.children) {
-      dispatch(getProductsTablet(categoriesTablet.children[0]._id || ''));
+      dispatch(getProductsTablet(categoriesTablet.children[0]._id!));
     }
 
     if (categoriesWatch?.children) {
-      dispatch(getProductsWatch(categoriesWatch.children[0]._id || ''));
+      dispatch(getProductsWatch(categoriesWatch.children[0]._id!));
+    }
+
+    if (categoriesRefrigerator?.children) {
+      dispatch(getProductsRefrigerator(categoriesRefrigerator.children[0]._id!));
     }
   }, [products]);
 
@@ -299,12 +193,12 @@ const Home = () => {
     dispatch(getCategoriesLaptop());
     dispatch(getCategoriesTablet());
     dispatch(getCategoriesWatch());
+    dispatch(getCategoriesRefrigerator());
   }, [categories]);
 
   return (
     <Layout>
       <Toolbar />
-      <Cart />
       <div className={classes.root}>
         <Swiper
           style={{ width: 1200 }}
@@ -360,10 +254,11 @@ const Home = () => {
             <img src="/slider/slider-10.png" alt="slider" />
           </SwiperSlide>
         </Swiper>
-        {renderCategoriesPhone()}
-        {renderCategoriesLaptop()}
-        {renderCategoriesTablet()}
-        {renderCategoriesWatch()}
+        {renderProducts(categoriesPhone, productsPhone, getProductsPhone)}
+        {renderProducts(categoriesLaptop, productsLaptop, getProductsLaptop)}
+        {renderProducts(categoriesTablet, productsTablet, getProductsTablet)}
+        {renderProducts(categoriesWatch, productsWatch, getProductsWatch)}
+        {renderProducts(categoriesRefrigerator, productsRefrigerator, getProductsRefrigerator)}
       </div>
     </Layout>
   );

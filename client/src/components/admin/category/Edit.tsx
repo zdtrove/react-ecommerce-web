@@ -54,7 +54,7 @@ const CategoryEdit = ({ categories, showEdit, setShowEdit, categoryRecord }: Pro
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.up('sm'));
   const dispatch = useAppDispatch();
-  const { _id, name, enName, icon, isMenu, parentId, image } = categoryRecord;
+  const { _id, name, enName, icon, isMenu, parentId, image, children } = categoryRecord;
   const [categoryImg, setCategoryImg] = useState<Blob | MediaSource | null>(null);
   const [categoryImgReset, setCategoryImgReset] = useState('');
 
@@ -64,7 +64,8 @@ const CategoryEdit = ({ categories, showEdit, setShowEdit, categoryRecord }: Pro
     icon,
     isMenu,
     parentId: parentId ? parentId : '',
-    image
+    image,
+    children
   };
 
   const formIk = useFormik({

@@ -31,7 +31,8 @@ export const ROUTES = {
   home: {
     index: '/',
     login: '/login',
-    signUp: '/sign-up'
+    signUp: '/sign-up',
+    category: '/category/:id'
   },
   admin: {
     index: '/admin',

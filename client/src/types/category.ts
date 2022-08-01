@@ -4,8 +4,8 @@ export type CategoryState = {
   categoriesPhone: Category;
   categoriesLaptop: Category;
   categoriesTablet: Category;
-  categoriesWatch?: Category;
-  categoriesRefrigerator?: Category;
+  categoriesWatch: Category;
+  categoriesRefrigerator: Category;
   categoriesAirConditioner?: Category;
   categoriesWashingMachine?: Category;
 };
@@ -19,7 +19,7 @@ export type Category = {
   slug?: string;
   parentId?: string;
   image: string | null;
-  children?: Category[];
+  children: Category[];
 };
 
 export type CategoryOption = {

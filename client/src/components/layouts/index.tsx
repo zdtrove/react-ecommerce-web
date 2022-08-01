@@ -114,6 +114,10 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
     justifyContent: 'center'
   },
+  searchPrice: {
+    color: theme.palette.green.main,
+    fontWeight: 500
+  },
   inputRoot: {
     color: 'inherit'
   },
@@ -181,7 +185,7 @@ const Layout = ({ children }: Props) => {
       <CssBaseline />
       <AppBar>
         <Toolbar>
-          <img className={classes.logo} src="logo.png" alt="logo" />
+          <img className={classes.logo} src="/logo.png" alt="logo" />
           <Typography variant="h5" className={classes.logoTitle}>
             E-COMMERCE SHOP
           </Typography>
@@ -223,7 +227,7 @@ const Layout = ({ children }: Props) => {
                           primary={product.name}
                           secondary={
                             <>
-                              <Typography variant="caption">
+                              <Typography className={classes.searchPrice} variant="caption">
                                 {formatNumber(product.price)}
                               </Typography>
                               <br />

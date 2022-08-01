@@ -9,7 +9,8 @@ const initialState: CategoryState = {
   categoriesPhone: {} as Category,
   categoriesLaptop: {} as Category,
   categoriesTablet: {} as Category,
-  categoriesWatch: {} as Category
+  categoriesWatch: {} as Category,
+  categoriesRefrigerator: {} as Category
 };
 
 const categorySlice = createSlice({
@@ -41,6 +42,12 @@ const categorySlice = createSlice({
     getCategoriesWatch(state) {
       const categories = state.categories.filter((cat) => cat._id === HOME_CATEGORY_IDS.watch);
       state.categoriesWatch = categories[0];
+    },
+    getCategoriesRefrigerator(state) {
+      const categories = state.categories.filter(
+        (cat) => cat._id === HOME_CATEGORY_IDS.refrigerator
+      );
+      state.categoriesRefrigerator = categories[0];
     },
     // eslint-disable-next-line no-unused-vars
     updateCategory(state, action: PayloadAction<Category>) {
@@ -76,6 +83,8 @@ export const selectCategoriesPhone = (state: AppState) => state.category.categor
 export const selectCategoriesLaptop = (state: AppState) => state.category.categoriesLaptop;
 export const selectCategoriesTablet = (state: AppState) => state.category.categoriesTablet;
 export const selectCategoriesWatch = (state: AppState) => state.category.categoriesWatch;
+export const selectCategoriesRefrigerator = (state: AppState) =>
+  state.category.categoriesRefrigerator;
 
 // Reducer
 const categoryReducer = categorySlice.reducer;
