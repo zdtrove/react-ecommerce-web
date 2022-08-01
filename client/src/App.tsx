@@ -25,7 +25,7 @@ function App() {
   }, [dispatch]);
 
   useEffect(() => {
-    console.log(`Last Updated: ${new Date('2022-06-28')}`);
+    console.log(`Last Updated: ${new Date('2022-08-01')}`);
   }, []);
 
   return (

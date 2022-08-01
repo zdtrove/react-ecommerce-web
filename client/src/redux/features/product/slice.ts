@@ -8,7 +8,10 @@ const initialState: ProductState = {
   products: [],
   loading: false,
   productsSearchBar: [],
-  productsPhone: []
+  productsPhone: [],
+  productsLaptop: [],
+  productsTablet: [],
+  productsWatch: []
 };
 
 const productSlice = createSlice({
@@ -32,9 +35,21 @@ const productSlice = createSlice({
     getProductsFail(state) {
       state.loading = false;
     },
-    getProductByCategoryId(state, action: PayloadAction<string>) {
+    getProductsPhone(state, action: PayloadAction<string>) {
       const products = state.products.filter((product) => product.categoryId === action.payload);
       state.productsPhone = products;
+    },
+    getProductsLaptop(state, action: PayloadAction<string>) {
+      const products = state.products.filter((product) => product.categoryId === action.payload);
+      state.productsLaptop = products;
+    },
+    getProductsTablet(state, action: PayloadAction<string>) {
+      const products = state.products.filter((product) => product.categoryId === action.payload);
+      state.productsTablet = products;
+    },
+    getProductsWatch(state, action: PayloadAction<string>) {
+      const products = state.products.filter((product) => product.categoryId === action.payload);
+      state.productsWatch = products;
     },
     addProduct(state, action: PayloadAction<Product>) {
       state.loading = true;
@@ -72,6 +87,9 @@ export const selectProducts = (state: AppState) => state.product.products;
 export const selectLoadingProduct = (state: AppState) => state.product.loading;
 export const selectProductsSearchBar = (state: AppState) => state.product.productsSearchBar;
 export const selectProductsPhone = (state: AppState) => state.product.productsPhone;
+export const selectProductsLaptop = (state: AppState) => state.product.productsLaptop;
+export const selectProductsTablet = (state: AppState) => state.product.productsTablet;
+export const selectProductsWatch = (state: AppState) => state.product.productsWatch;
 
 // Reducer
 const productReducer = productSlice.reducer;

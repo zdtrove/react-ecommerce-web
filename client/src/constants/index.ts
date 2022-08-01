@@ -84,3 +84,13 @@ export const CONFIGURATION = {
   ram: ['1 GB', '2 GB', '3 GB', '4 GB', '6 GB', '8 GB', '12 GB'],
   hardDrive: ['SSD 2 TB', 'SSD 1 TB', 'SSD 512 GB', 'SSD 256 GB', 'SSD 128 GB']
 };
+
+export const HOME_CATEGORY_IDS = {
+  smartphone: '62d7b06e7b66332da45e50de',
+  laptop: '62d7b0e40a77ec12fc4f7d10',
+  tablet: '62d7b0fc0a77ec12fc4f7d15',
+  watch: '62d7b11b0a77ec12fc4f7d1a',
+  refrigerator: '62d7b15c0a77ec12fc4f7d24',
+  airConditioner: '62d7b1be0a77ec12fc4f7d29',
+  washingMachine: '62d7b22f0a77ec12fc4f7d2e'
+};

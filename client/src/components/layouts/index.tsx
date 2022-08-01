@@ -99,6 +99,7 @@ const useStyles = makeStyles((theme) => ({
     marginRight: theme.spacing(2),
     marginLeft: 0,
     width: '100%',
+    maxWidth: 250,
     [theme.breakpoints.up('sm')]: {
       marginLeft: theme.spacing(3),
       width: 'auto'
@@ -261,8 +262,8 @@ const Layout = ({ children }: Props) => {
                 <MenuItem value="vi">Vietnamese</MenuItem>
               </Select>
             </FormControl>
-            <Button text="My Wishlist" startIcon={<FavoriteBorderIcon />} />
-            <Button text="My Account" startIcon={<AccountCircle />} />
+            <Button text="Wishlist" startIcon={<FavoriteBorderIcon />} />
+            <Button text="Account" startIcon={<AccountCircle />} />
             {isLoggedIn ? (
               <Button
                 onClick={() => dispatch(authActions.logout({ history, role: USER }))}

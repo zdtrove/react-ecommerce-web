@@ -26,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
     columnGap: 5,
     zIndex: 999,
     '& .MuiButtonBase-root': {
-      minWidth: 130,
+      minWidth: 135,
       backgroundColor: theme.palette.primary.dark,
       color: theme.palette.antiquewhite.main,
       fontWeight: 700,
