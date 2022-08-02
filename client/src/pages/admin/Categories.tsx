@@ -7,7 +7,8 @@ import {
   Toolbar,
   DialogContent,
   DialogContentText,
-  DialogActions
+  DialogActions,
+  Box
 } from '@material-ui/core';
 import TreeView from '@material-ui/lab/TreeView';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
@@ -78,10 +79,15 @@ const useStyles = makeStyles((theme) => ({
   },
   labelIcon: {
     marginRight: theme.spacing(3),
-    width: '90px',
-    height: '26px',
+    width: 100,
+    height: 30,
     border: '1px solid #ddd',
-    borderRadius: '52px'
+    borderRadius: 52,
+    padding: theme.spacing(1),
+    '& img': {
+      width: '100%',
+      maxWidth: 90
+    }
   },
   labelText: {
     fontWeight: 'inherit',
@@ -141,7 +147,14 @@ const Categories = () => {
           label={
             <div className={classes.labelRoot}>
               {category.image && (
-                <img className={classes.labelIcon} src={category.image} alt={category.name} />
+                <Box
+                  display="flex"
+                  justifyContent="center"
+                  alignItems="center"
+                  className={classes.labelIcon}
+                >
+                  <img src={category.image} alt={category.name} />
+                </Box>
               )}
               <Typography className={classes.labelText}>{category.name}</Typography>
               {selected === (category._id || '') ? (

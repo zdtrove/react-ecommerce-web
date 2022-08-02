@@ -4,10 +4,12 @@ import Layout from 'components/layouts';
 import {
   productActions,
   selectProducts,
+  selectProductsAirConditioner,
   selectProductsLaptop,
   selectProductsPhone,
   selectProductsRefrigerator,
   selectProductsTablet,
+  selectProductsWashingMachine,
   selectProductsWatch
 } from 'redux/features/product/slice';
 import { useAppDispatch, useAppSelector } from 'redux/hook';
@@ -20,16 +22,19 @@ import 'swiper/css/autoplay';
 import {
   categoryActions,
   selectCategories,
+  selectCategoriesAirConditioner,
   selectCategoriesLaptop,
   selectCategoriesPhone,
   selectCategoriesRefrigerator,
   selectCategoriesTablet,
+  selectCategoriesWashingMachine,
   selectCategoriesWatch
 } from 'redux/features/category/slice';
-import ProductItem from './product/ProductItem';
+import ProductItem from '../components/product/ProductItem';
 import { Category } from 'types/category';
 import { Product } from 'types/product';
 import clsx from 'clsx';
+import { useHistory } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -101,6 +106,7 @@ const useStyles = makeStyles((theme) => ({
 const Home = () => {
   const classes = useStyles();
   const dispatch = useAppDispatch();
+  const history = useHistory();
   const products = useAppSelector(selectProducts);
   const categories = useAppSelector(selectCategories);
   const productsPhone = useAppSelector(selectProductsPhone);
@@ -108,25 +114,33 @@ const Home = () => {
   const productsTablet = useAppSelector(selectProductsTablet);
   const productsWatch = useAppSelector(selectProductsWatch);
   const productsRefrigerator = useAppSelector(selectProductsRefrigerator);
+  const productsAirConditioner = useAppSelector(selectProductsAirConditioner);
+  const productsWashingMachine = useAppSelector(selectProductsWashingMachine);
   const categoriesPhone = useAppSelector(selectCategoriesPhone);
   const categoriesLaptop = useAppSelector(selectCategoriesLaptop);
   const categoriesTablet = useAppSelector(selectCategoriesTablet);
   const categoriesWatch = useAppSelector(selectCategoriesWatch);
   const categoriesRefrigerator = useAppSelector(selectCategoriesRefrigerator);
+  const categoriesAirConditioner = useAppSelector(selectCategoriesAirConditioner);
+  const categoriesWashingMachine = useAppSelector(selectCategoriesWashingMachine);
   const {
     getProducts,
     getProductsPhone,
     getProductsLaptop,
     getProductsTablet,
     getProductsWatch,
-    getProductsRefrigerator
+    getProductsRefrigerator,
+    getProductsAirConditioner,
+    getProductsWashingMachine
   } = productActions;
   const {
     getCategoriesPhone,
     getCategoriesLaptop,
     getCategoriesTablet,
     getCategoriesWatch,
-    getCategoriesRefrigerator
+    getCategoriesRefrigerator,
+    getCategoriesAirConditioner,
+    getCategoriesWashingMachine
   } = categoryActions;
   const [currentCategoryId, setCurrentCategoryId] = useState('');
 
@@ -142,21 +156,18 @@ const Home = () => {
           <Typography className={classes.listTitle}>{categories?.name}</Typography>
           {categories?.children?.map((cat) => (
             <Box
+              key={cat._id}
               display="flex"
               justifyContent="center"
               className={clsx(classes.categoryLogo, {
                 [classes.active]: cat._id === currentCategoryId
               })}
-              key={cat._id}
+              onClick={() => {
+                dispatch(getProduct(cat._id));
+                setCurrentCategoryId(cat._id!);
+              }}
             >
-              <img
-                src={cat.image || ''}
-                onClick={() => {
-                  dispatch(getProduct(cat._id));
-                  setCurrentCategoryId(cat._id!);
-                }}
-                alt="category"
-              />
+              <img src={cat.image!} alt="category" />
             </Box>
           ))}
         </Box>
@@ -175,7 +186,11 @@ const Home = () => {
             ))}
           </Swiper>
           <Box display="flex" justifyContent="center">
-            <Button className={classes.viewAll} text="View all products" />
+            <Button
+              onClick={() => history.push(`/category/${categories._id}`)}
+              className={classes.viewAll}
+              text="View all products"
+            />
           </Box>
         </Box>
       </>
@@ -183,7 +198,9 @@ const Home = () => {
   };
 
   useEffect(() => {
-    dispatch(getProducts());
+    if (!products.length) {
+      dispatch(getProducts());
+    }
   }, []);
 
   useEffect(() => {
@@ -206,6 +223,14 @@ const Home = () => {
     if (categoriesRefrigerator?.children) {
       dispatch(getProductsRefrigerator(categoriesRefrigerator.children[0]._id!));
     }
+
+    if (categoriesAirConditioner?.children) {
+      dispatch(getProductsAirConditioner(categoriesAirConditioner.children[0]._id!));
+    }
+
+    if (categoriesWashingMachine?.children) {
+      dispatch(getProductsWashingMachine(categoriesWashingMachine.children[0]._id!));
+    }
   }, [products]);
 
   useEffect(() => {
@@ -214,6 +239,8 @@ const Home = () => {
     dispatch(getCategoriesTablet());
     dispatch(getCategoriesWatch());
     dispatch(getCategoriesRefrigerator());
+    dispatch(getCategoriesAirConditioner());
+    dispatch(getCategoriesWashingMachine());
   }, [categories]);
 
   return (
@@ -279,6 +306,16 @@ const Home = () => {
         {renderProducts(categoriesTablet, productsTablet, getProductsTablet)}
         {renderProducts(categoriesWatch, productsWatch, getProductsWatch)}
         {renderProducts(categoriesRefrigerator, productsRefrigerator, getProductsRefrigerator)}
+        {renderProducts(
+          categoriesAirConditioner,
+          productsAirConditioner,
+          getProductsAirConditioner
+        )}
+        {renderProducts(
+          categoriesWashingMachine,
+          productsWashingMachine,
+          getProductsWashingMachine
+        )}
       </div>
     </Layout>
   );

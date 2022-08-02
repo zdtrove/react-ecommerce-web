@@ -171,7 +171,9 @@ const Menu = () => {
   };
 
   useEffect(() => {
-    dispatch(categoryActions.getCategories());
+    if (!categories.length) {
+      dispatch(categoryActions.getCategories());
+    }
   }, []);
 
   return (

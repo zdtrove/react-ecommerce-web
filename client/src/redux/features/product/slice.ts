@@ -14,7 +14,9 @@ const initialState: ProductState = {
   productsWatch: [],
   productsRefrigerator: [],
   productsByCategoryId: [],
-  productsByCategoryIds: []
+  productsByCategoryIds: [],
+  productsAirConditioner: [],
+  productsWashingMachine: []
 };
 
 const productSlice = createSlice({
@@ -57,6 +59,14 @@ const productSlice = createSlice({
     getProductsRefrigerator(state, action: PayloadAction<string>) {
       const products = state.products.filter((product) => product.categoryId === action.payload);
       state.productsRefrigerator = products;
+    },
+    getProductsAirConditioner(state, action: PayloadAction<string>) {
+      const products = state.products.filter((product) => product.categoryId === action.payload);
+      state.productsAirConditioner = products;
+    },
+    getProductsWashingMachine(state, action: PayloadAction<string>) {
+      const products = state.products.filter((product) => product.categoryId === action.payload);
+      state.productsWashingMachine = products;
     },
     getProductsByCategoryId(state, action: PayloadAction<string>) {
       const products = state.products.filter((product) => product.categoryId === action.payload);
@@ -108,6 +118,10 @@ export const selectProductsLaptop = (state: AppState) => state.product.productsL
 export const selectProductsTablet = (state: AppState) => state.product.productsTablet;
 export const selectProductsWatch = (state: AppState) => state.product.productsWatch;
 export const selectProductsRefrigerator = (state: AppState) => state.product.productsRefrigerator;
+export const selectProductsAirConditioner = (state: AppState) =>
+  state.product.productsAirConditioner;
+export const selectProductsWashingMachine = (state: AppState) =>
+  state.product.productsWashingMachine;
 export const selectProductsByCategoryId = (state: AppState) => state.product.productsByCategoryId;
 export const selectProductsByCategoryIds = (state: AppState) => state.product.productsByCategoryIds;
 

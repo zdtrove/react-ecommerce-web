@@ -11,7 +11,9 @@ const initialState: CategoryState = {
   categoriesTablet: {} as Category,
   categoriesWatch: {} as Category,
   categoriesRefrigerator: {} as Category,
-  categoriesById: {} as Category
+  categoriesById: {} as Category,
+  categoriesAirConditioner: {} as Category,
+  categoriesWashingMachine: {} as Category
 };
 
 const categorySlice = createSlice({
@@ -54,6 +56,18 @@ const categorySlice = createSlice({
       );
       state.categoriesRefrigerator = categories[0];
     },
+    getCategoriesAirConditioner(state) {
+      const categories = state.categories.filter(
+        (cat) => cat._id === HOME_CATEGORY_IDS.airConditioner
+      );
+      state.categoriesAirConditioner = categories[0];
+    },
+    getCategoriesWashingMachine(state) {
+      const categories = state.categories.filter(
+        (cat) => cat._id === HOME_CATEGORY_IDS.washingMachine
+      );
+      state.categoriesWashingMachine = categories[0];
+    },
     // eslint-disable-next-line no-unused-vars
     updateCategory(state, action: PayloadAction<Category>) {
       state.loading = true;
@@ -90,6 +104,10 @@ export const selectCategoriesTablet = (state: AppState) => state.category.catego
 export const selectCategoriesWatch = (state: AppState) => state.category.categoriesWatch;
 export const selectCategoriesRefrigerator = (state: AppState) =>
   state.category.categoriesRefrigerator;
+export const selectCategoriesAirConditioner = (state: AppState) =>
+  state.category.categoriesAirConditioner;
+export const selectCategoriesWashingMachine = (state: AppState) =>
+  state.category.categoriesWashingMachine;
 export const selectCategoriesById = (state: AppState) => state.category.categoriesById;
 
 // Reducer

@@ -16,7 +16,7 @@ import {
 } from 'redux/features/product/slice';
 import { useAppDispatch, useAppSelector } from 'redux/hook';
 import { Product } from 'types/product';
-import ProductItem from './product/ProductItem';
+import ProductItem from '../components/product/ProductItem';
 import clsx from 'clsx';
 import { Category } from 'types/category';
 
@@ -119,7 +119,9 @@ const CategoryPage = () => {
   }, [id]);
 
   useEffect(() => {
-    dispatch(getProducts());
+    if (!products.length) {
+      dispatch(getProducts());
+    }
   }, []);
 
   return (
@@ -134,22 +136,19 @@ const CategoryPage = () => {
         >
           {categoriesById?.children?.map((cat) => (
             <Box
+              key={cat._id}
               display="flex"
               justifyContent="center"
               className={clsx(classes.categoryLogo, {
                 [classes.active]: cat._id === currentCategory._id
               })}
-              key={cat._id}
+              onClick={() => {
+                dispatch(getProductsByCategoryId(cat._id!));
+                setCurrentCategory(cat);
+                setLoadMoreNumber(LOAD_MORE);
+              }}
             >
-              <img
-                src={cat.image || ''}
-                onClick={() => {
-                  dispatch(getProductsByCategoryId(cat._id!));
-                  setCurrentCategory(cat);
-                  setLoadMoreNumber(LOAD_MORE);
-                }}
-                alt="category"
-              />
+              <img src={cat.image!} alt="category" />
             </Box>
           ))}
         </Box>
@@ -164,10 +163,10 @@ const CategoryPage = () => {
           alignItems="center"
           flexWrap="wrap"
         >
-          {productSlice.length >= 0 &&
+          {productSlice.length > 0 &&
             productSlice.map((product) => <ProductItem key={product._id} product={product} />)}
         </Box>
-        {productSlice.length >= 0 && remainNumber > 0 && (
+        {productSlice.length > 0 && remainNumber > 0 && (
           <Box display="flex" justifyContent="center">
             <Button
               className={classes.loadMore}

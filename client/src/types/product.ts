@@ -75,8 +75,8 @@ export type ProductState = {
   productsTablet: Product[];
   productsWatch: Product[];
   productsRefrigerator: Product[];
-  productsAirConditioner?: Product[];
-  productsWashingMachine?: Product[];
+  productsAirConditioner: Product[];
+  productsWashingMachine: Product[];
   productsByCategoryId: Product[];
   productsByCategoryIds: Product[];
 };

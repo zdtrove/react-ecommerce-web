@@ -21,6 +21,10 @@ const useStyles = makeStyles((theme) => ({
       width: '90%',
       textAlign: 'center',
       margin: '0 auto',
+      minHeight: 150,
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
       '& img': {
         width: '100%',
         transition: 'all 200ms ease-in-out',

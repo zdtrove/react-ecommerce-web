@@ -96,4 +96,4 @@ export const HOME_CATEGORY_IDS = {
   washingMachine: '62d7b22f0a77ec12fc4f7d2e'
 };
 
-export const LOAD_MORE = 5;
+export const LOAD_MORE = 15;

@@ -145,6 +145,8 @@ const useStyles = makeStyles((theme) => ({
     width: 373,
     top: 40,
     borderRadius: 5,
+    overflowY: 'scroll',
+    maxHeight: 500,
     '& .MuiList-root': {
       cursor: 'pointer',
       '&:hover': {
