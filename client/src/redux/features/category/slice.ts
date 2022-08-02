@@ -10,7 +10,8 @@ const initialState: CategoryState = {
   categoriesLaptop: {} as Category,
   categoriesTablet: {} as Category,
   categoriesWatch: {} as Category,
-  categoriesRefrigerator: {} as Category
+  categoriesRefrigerator: {} as Category,
+  categoriesById: {} as Category
 };
 
 const categorySlice = createSlice({
@@ -26,6 +27,10 @@ const categorySlice = createSlice({
     },
     getCategoriesFail(state) {
       state.loading = false;
+    },
+    getCategoriesById(state, action: PayloadAction<string>) {
+      const categories = state.categories.filter((category) => category._id === action.payload);
+      state.categoriesById = categories[0];
     },
     getCategoriesPhone(state) {
       const categories = state.categories.filter((cat) => cat._id === HOME_CATEGORY_IDS.smartphone);
@@ -85,6 +90,7 @@ export const selectCategoriesTablet = (state: AppState) => state.category.catego
 export const selectCategoriesWatch = (state: AppState) => state.category.categoriesWatch;
 export const selectCategoriesRefrigerator = (state: AppState) =>
   state.category.categoriesRefrigerator;
+export const selectCategoriesById = (state: AppState) => state.category.categoriesById;
 
 // Reducer
 const categoryReducer = categorySlice.reducer;

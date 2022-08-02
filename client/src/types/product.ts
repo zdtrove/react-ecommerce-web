@@ -78,4 +78,5 @@ export type ProductState = {
   productsAirConditioner?: Product[];
   productsWashingMachine?: Product[];
   productsByCategoryId?: Product[];
+  productsByCategoryIds: Product[];
 };

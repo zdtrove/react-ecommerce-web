@@ -10,18 +10,25 @@ import { selectProducts } from 'redux/features/product/slice';
 const useStyles = makeStyles((theme) => ({
   root: {
     backgroundColor: 'white',
-    maxWidth: 215,
+    maxWidth: 227,
     padding: 10,
     borderRadius: 5,
-    minHeight: 338,
-    border: '1px solid #ddd',
+    minHeight: 360,
+    border: `1px solid ${theme.palette.primary.dark}`,
     position: 'relative',
     '& figure': {
       width: '90%',
       textAlign: 'center',
       margin: '0 auto',
       '& img': {
-        width: '100%'
+        width: '100%',
+        transition: 'all 200ms ease-in-out',
+        marginTop: theme.spacing(1.5),
+        marginBottom: 0,
+        '&:hover': {
+          marginBottom: theme.spacing(1.5),
+          marginTop: 0
+        }
       }
     },
     '& .MuiButtonBase-root': {

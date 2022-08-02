@@ -47,19 +47,23 @@ const useStyles = makeStyles((theme) => ({
   listCategory: {
     backgroundColor: theme.palette.primary.dark,
     padding: theme.spacing(2),
-    columnGap: 10,
+    columnGap: theme.spacing(1.25),
     width: '100%',
     margin: '15px 0',
     borderRadius: 8,
     marginTop: theme.spacing(6),
-    '& .MuiTypography-root': {
-      padding: '5px 10px',
-      backgroundColor: 'white',
-      borderRadius: 20,
-      minWidth: 120,
-      textAlign: 'center',
-      cursor: 'pointer'
+    '& img': {
+      width: 'auto',
+      height: 20
     }
+  },
+  categoryLogo: {
+    backgroundColor: 'white',
+    border: '1px solid #e0e0e0',
+    borderRadius: 52,
+    cursor: 'pointer',
+    padding: '6px 13px',
+    minWidth: 120
   },
   listTitle: {
     backgroundColor: 'transparent !important',
@@ -85,7 +89,7 @@ const useStyles = makeStyles((theme) => ({
   },
   listProduct: {
     padding: theme.spacing(2),
-    columnGap: 10
+    columnGap: theme.spacing(1.25)
   }
 }));
 
@@ -131,13 +135,18 @@ const Home = () => {
         >
           <Typography className={classes.listTitle}>{categories?.name}</Typography>
           {categories?.children?.map((cat) => (
-            <Typography
+            <Box
+              display="flex"
+              justifyContent="center"
+              className={classes.categoryLogo}
               key={cat._id}
-              onClick={() => dispatch(getProduct(cat._id || ''))}
-              style={{ fontWeight: 700 }}
             >
-              {cat.name}
-            </Typography>
+              <img
+                src={cat.image || ''}
+                onClick={() => dispatch(getProduct(cat._id || ''))}
+                alt="category"
+              />
+            </Box>
           ))}
         </Box>
         <Box className={classes.box}>

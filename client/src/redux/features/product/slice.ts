@@ -13,7 +13,8 @@ const initialState: ProductState = {
   productsTablet: [],
   productsWatch: [],
   productsRefrigerator: [],
-  productsByCategoryId: []
+  productsByCategoryId: [],
+  productsByCategoryIds: []
 };
 
 const productSlice = createSlice({
@@ -61,6 +62,12 @@ const productSlice = createSlice({
       const products = state.products.filter((product) => product.categoryId === action.payload);
       state.productsByCategoryId = products;
     },
+    getProductsByCategoryIds(state, action: PayloadAction<string[]>) {
+      const products = state.products.filter((product) =>
+        action.payload.includes(product.categoryId)
+      );
+      state.productsByCategoryIds = products;
+    },
     addProduct(state, action: PayloadAction<Product>) {
       state.loading = true;
     },
@@ -102,6 +109,7 @@ export const selectProductsTablet = (state: AppState) => state.product.productsT
 export const selectProductsWatch = (state: AppState) => state.product.productsWatch;
 export const selectProductsRefrigerator = (state: AppState) => state.product.productsRefrigerator;
 export const selectProductsByCategoryId = (state: AppState) => state.product.productsByCategoryId;
+export const selectProductsByCategoryIds = (state: AppState) => state.product.productsByCategoryIds;
 
 // Reducer
 const productReducer = productSlice.reducer;

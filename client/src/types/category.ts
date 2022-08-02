@@ -8,6 +8,7 @@ export type CategoryState = {
   categoriesRefrigerator: Category;
   categoriesAirConditioner?: Category;
   categoriesWashingMachine?: Category;
+  categoriesById: Category;
 };
 
 export type Category = {

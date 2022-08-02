@@ -42,7 +42,7 @@ const Detail = ({ category, showDetail, setShowDetail, product }: Props) => {
         <DialogContent dividers>
           <Typography variant="h6">Name</Typography>
           <DialogContentText>{name}</DialogContentText>
-          <Typography variant="h6">Email</Typography>
+          <Typography variant="h6">Description</Typography>
           <DialogContentText>{description}</DialogContentText>
           <Typography variant="h6">Category</Typography>
           <DialogContentText>{category.name}</DialogContentText>

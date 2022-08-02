@@ -20,7 +20,8 @@ import {
   Divider,
   Select,
   FormControl,
-  MenuItem
+  MenuItem,
+  Box
 } from '@material-ui/core';
 import AddShoppingCartIcon from '@material-ui/icons/AddShoppingCart';
 import AccountCircle from '@material-ui/icons/AccountCircle';
@@ -37,7 +38,7 @@ import useComponentVisible from 'hooks/useComponentVisible';
 import clsx from 'clsx';
 import { useGlobalStyles } from 'theme';
 import { authActions, selectIsLoggedIn } from 'redux/features/auth/slice';
-import { userRoles } from 'constants/index';
+import { ROUTES, userRoles } from 'constants/index';
 import { useHistory } from 'react-router-dom';
 import Menu from 'components/Menu';
 
@@ -106,7 +107,7 @@ const useStyles = makeStyles((theme) => ({
     }
   },
   searchIcon: {
-    padding: theme.spacing(0, 2),
+    padding: theme.spacing(0, 1),
     height: '100%',
     position: 'absolute',
     pointerEvents: 'none',
@@ -123,7 +124,7 @@ const useStyles = makeStyles((theme) => ({
   },
   inputInput: {
     padding: theme.spacing(1, 1, 1, 0),
-    paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
+    paddingLeft: `calc(1em + ${theme.spacing(2.5)}px)`,
     transition: theme.transitions.create('width'),
     width: '100%',
     [theme.breakpoints.up('md')]: {
@@ -185,10 +186,17 @@ const Layout = ({ children }: Props) => {
       <CssBaseline />
       <AppBar>
         <Toolbar>
-          <img className={classes.logo} src="/logo.png" alt="logo" />
-          <Typography variant="h5" className={classes.logoTitle}>
-            E-COMMERCE SHOP
-          </Typography>
+          <Box
+            style={{ cursor: 'pointer' }}
+            onClick={() => history.push(ROUTES.home.index)}
+            display="flex"
+            alignItems="center"
+          >
+            <img className={classes.logo} src="/logo.png" alt="logo" />
+            <Typography variant="h5" className={classes.logoTitle}>
+              MY SHOP
+            </Typography>
+          </Box>
           <div className={classes.search}>
             <div className={classes.searchIcon}>
               <SearchIcon />
