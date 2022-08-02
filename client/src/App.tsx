@@ -16,7 +16,7 @@ import PrivateRoute from 'components/PrivateRoute';
 import { ROUTES } from 'constants/index';
 import { useAppDispatch } from 'redux/hook';
 import { authActions } from 'redux/features/auth/slice';
-import Category from 'pages/Category';
+import CategoryPage from 'pages/Category';
 import Cart from 'components/cart';
 
 function App() {
@@ -37,7 +37,7 @@ function App() {
         <PrivateRoute exact path={ROUTES.home.index} component={Home} />
         <Route path={ROUTES.home.login} component={Login} />
         <Route path={ROUTES.home.signUp} component={Register} />
-        <Route path={ROUTES.home.category} component={Category} />
+        <Route path={ROUTES.home.category} component={CategoryPage} />
         {/* Admin */}
         <PrivateRoute admin exact path={ROUTES.admin.index} component={Dashboard} />
         <PrivateRoute admin exact path={ROUTES.admin.categories} component={CategoriesAdmin} />

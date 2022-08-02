@@ -16,6 +16,7 @@ const useStyles = makeStyles((theme) => ({
     minHeight: 360,
     border: `1px solid ${theme.palette.primary.dark}`,
     position: 'relative',
+    cursor: 'pointer',
     '& figure': {
       width: '90%',
       textAlign: 'center',

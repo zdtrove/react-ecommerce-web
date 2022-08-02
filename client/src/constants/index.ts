@@ -95,3 +95,5 @@ export const HOME_CATEGORY_IDS = {
   airConditioner: '62d7b1be0a77ec12fc4f7d29',
   washingMachine: '62d7b22f0a77ec12fc4f7d2e'
 };
+
+export const LOAD_MORE = 5;

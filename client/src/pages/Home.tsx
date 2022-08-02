@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Box, makeStyles, Toolbar, Typography } from '@material-ui/core';
 import Layout from 'components/layouts';
 import {
@@ -29,6 +29,7 @@ import {
 import ProductItem from './product/ProductItem';
 import { Category } from 'types/category';
 import { Product } from 'types/product';
+import clsx from 'clsx';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -54,7 +55,8 @@ const useStyles = makeStyles((theme) => ({
     marginTop: theme.spacing(6),
     '& img': {
       width: 'auto',
-      height: 20
+      height: 20,
+      maxWidth: 90
     }
   },
   categoryLogo: {
@@ -90,6 +92,9 @@ const useStyles = makeStyles((theme) => ({
   listProduct: {
     padding: theme.spacing(2),
     columnGap: theme.spacing(1.25)
+  },
+  active: {
+    border: '2.5px solid chartreuse'
   }
 }));
 
@@ -123,6 +128,7 @@ const Home = () => {
     getCategoriesWatch,
     getCategoriesRefrigerator
   } = categoryActions;
+  const [currentCategoryId, setCurrentCategoryId] = useState('');
 
   const renderProducts = (categories: Category, products: Product[], getProduct: any) => {
     return (
@@ -138,12 +144,17 @@ const Home = () => {
             <Box
               display="flex"
               justifyContent="center"
-              className={classes.categoryLogo}
+              className={clsx(classes.categoryLogo, {
+                [classes.active]: cat._id === currentCategoryId
+              })}
               key={cat._id}
             >
               <img
                 src={cat.image || ''}
-                onClick={() => dispatch(getProduct(cat._id || ''))}
+                onClick={() => {
+                  dispatch(getProduct(cat._id));
+                  setCurrentCategoryId(cat._id!);
+                }}
                 alt="category"
               />
             </Box>
