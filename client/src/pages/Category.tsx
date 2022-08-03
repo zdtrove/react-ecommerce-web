@@ -115,12 +115,13 @@ const CategoryPage = () => {
 
   const sortProduct = (products: Product[]) => {
     return products.sort((a, b) => {
-      if (sortBy === 'asc') {
-        return a.price - b.price;
-      } else if (sortBy === 'desc') {
-        return b.price - a.price;
-      } else {
-        return b.sold - a.sold;
+      switch (sortBy) {
+        case 'asc':
+          return a.price - b.price;
+        case 'desc':
+          return b.price - a.price;
+        default:
+          return b.sold - a.sold;
       }
     });
   };
@@ -157,14 +158,11 @@ const CategoryPage = () => {
   useEffect(() => {
     if (productsByCategoryId.length) {
       let temp = [...productsByCategoryId];
-      if (sortBy) {
-        temp = sortProduct(temp);
-      }
-      if (search) {
-        temp = searchProduct(temp);
-      }
+      sortBy && (temp = sortProduct(temp));
       setProductList(temp);
     } else setProductList([]);
+    setSearch('');
+    setSearchValue('');
   }, [productsByCategoryId]);
 
   useEffect(() => {

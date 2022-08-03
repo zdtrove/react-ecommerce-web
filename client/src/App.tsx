@@ -18,6 +18,7 @@ import { useAppDispatch } from 'redux/hook';
 import { authActions } from 'redux/features/auth/slice';
 import CategoryPage from 'pages/Category';
 import Cart from 'components/cart';
+import ProductPage from 'pages/Product';
 
 function App() {
   const dispatch = useAppDispatch();
@@ -27,17 +28,18 @@ function App() {
   }, [dispatch]);
 
   useEffect(() => {
-    console.log(`Last Updated: ${new Date('2022-08-01')}`);
+    console.log(`Last Updated: ${new Date('2022-08-03')}`);
   }, []);
 
   return (
     <Router>
       <Switch>
         {/* User */}
-        <PrivateRoute exact path={ROUTES.home.index} component={Home} />
+        <Route exact path={ROUTES.home.index} component={Home} />
         <Route path={ROUTES.home.login} component={Login} />
         <Route path={ROUTES.home.signUp} component={Register} />
         <Route path={ROUTES.home.category} component={CategoryPage} />
+        <Route path={ROUTES.home.product} component={ProductPage} />
         {/* Admin */}
         <PrivateRoute admin exact path={ROUTES.admin.index} component={Dashboard} />
         <PrivateRoute admin exact path={ROUTES.admin.categories} component={CategoriesAdmin} />

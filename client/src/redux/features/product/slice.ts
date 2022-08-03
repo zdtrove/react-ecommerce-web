@@ -6,6 +6,7 @@ import { Product, ProductState } from 'types/product';
 
 const initialState: ProductState = {
   products: [],
+  product: {} as Product,
   loading: false,
   productsSearchBar: [],
   productsPhone: [],
@@ -16,7 +17,8 @@ const initialState: ProductState = {
   productsByCategoryId: [],
   productsByCategoryIds: [],
   productsAirConditioner: [],
-  productsWashingMachine: []
+  productsWashingMachine: [],
+  productsRelated: []
 };
 
 const productSlice = createSlice({
@@ -78,6 +80,14 @@ const productSlice = createSlice({
       );
       state.productsByCategoryIds = products;
     },
+    getProductById(state, action: PayloadAction<string>) {
+      const products = state.products.filter((product) => product._id === action.payload);
+      state.product = products[0];
+    },
+    getProductsRelated(state, action: PayloadAction<string>) {
+      const products = state.products.filter((product) => product.categoryId === action.payload);
+      state.productsRelated = products;
+    },
     addProduct(state, action: PayloadAction<Product>) {
       state.loading = true;
     },
@@ -124,6 +134,8 @@ export const selectProductsWashingMachine = (state: AppState) =>
   state.product.productsWashingMachine;
 export const selectProductsByCategoryId = (state: AppState) => state.product.productsByCategoryId;
 export const selectProductsByCategoryIds = (state: AppState) => state.product.productsByCategoryIds;
+export const selectProduct = (state: AppState) => state.product.product;
+export const selectProductsRelated = (state: AppState) => state.product.productsRelated;
 
 // Reducer
 const productReducer = productSlice.reducer;

@@ -137,7 +137,8 @@ const useStyles = makeStyles((theme) => ({
   },
   logoTitle: {
     color: theme.palette.green.main,
-    fontStyle: 'italic'
+    fontStyle: 'italic',
+    minWidth: 120
   },
   listProductSearch: {
     position: 'absolute',

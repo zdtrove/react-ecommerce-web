@@ -32,7 +32,8 @@ export const ROUTES = {
     index: '/',
     login: '/login',
     signUp: '/sign-up',
-    category: '/category/:id'
+    category: '/category/:id',
+    product: '/product/:id'
   },
   admin: {
     index: '/admin',

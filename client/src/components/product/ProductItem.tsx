@@ -6,6 +6,7 @@ import { Button } from 'components/UI';
 import { useAppDispatch, useAppSelector } from 'redux/hook';
 import { cartActions } from 'redux/features/cart/slice';
 import { selectProducts } from 'redux/features/product/slice';
+import { useHistory } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -77,15 +78,20 @@ type Props = {
 const ProductItem = ({ product }: Props) => {
   const classes = useStyles();
   const dispatch = useAppDispatch();
+  const history = useHistory();
   const { addToCart } = cartActions;
   const products = useAppSelector(selectProducts);
 
   return (
     <div className={classes.root} key={product._id}>
-      <figure>
+      <figure onClick={() => history.push(`/product/${product._id}`)}>
         <img src={product.images && product.images[0].url} alt="" />
       </figure>
-      <Typography className={classes.name} variant="subtitle2">
+      <Typography
+        onClick={() => history.push(`/product/${product._id}`)}
+        className={classes.name}
+        variant="subtitle2"
+      >
         {product.name}
       </Typography>
       <Typography className={classes.price} color="secondary" variant="h5">
