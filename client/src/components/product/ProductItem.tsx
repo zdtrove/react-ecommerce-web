@@ -38,9 +38,7 @@ const useStyles = makeStyles((theme) => ({
     },
     '& .MuiButtonBase-root': {
       padding: '2px 16px',
-      borderRadius: 20,
-      position: 'absolute',
-      bottom: 10
+      borderRadius: 20
     }
   },
   name: {
@@ -62,7 +60,13 @@ const useStyles = makeStyles((theme) => ({
     }
   },
   addToCart: {
-    backgroundColor: theme.palette.green.dark
+    backgroundColor: theme.palette.green.dark,
+    marginLeft: 0
+  },
+  action: {
+    position: 'absolute',
+    bottom: theme.spacing(1),
+    columnGap: theme.spacing(1)
   }
 }));
 
@@ -93,7 +97,7 @@ const ProductItem = ({ product }: Props) => {
           4.9 <small>(33)</small>
         </Typography>
       </Box>
-      <Box display="flex" justifyContent="left" alignItems="center">
+      <Box className={classes.action} display="flex" justifyContent="left" alignItems="center">
         {product.inCart ? (
           <Button variant="contained" disabled text="In Cart" />
         ) : (
@@ -103,6 +107,12 @@ const ProductItem = ({ product }: Props) => {
             text="Add To Cart"
           />
         )}
+        <Typography variant="subtitle2">
+          Đã bán{' '}
+          <small>
+            <b>({product.sold})</b>
+          </small>
+        </Typography>
       </Box>
     </div>
   );

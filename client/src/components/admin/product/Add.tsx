@@ -78,7 +78,8 @@ const initialValues: Product = {
   enShortDescription: '',
   price: 0,
   images: [],
-  categoryId: ''
+  categoryId: '',
+  sold: 0
 };
 
 type Props = {

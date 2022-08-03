@@ -1,7 +1,16 @@
-import { Box, makeStyles, Toolbar, Typography, Button } from '@material-ui/core';
+import {
+  Box,
+  makeStyles,
+  Toolbar,
+  Typography,
+  Button,
+  Select,
+  MenuItem,
+  FormControl
+} from '@material-ui/core';
 import Layout from 'components/layouts';
 import { LOAD_MORE } from 'constants/index';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import {
   categoryActions,
@@ -19,6 +28,8 @@ import { Product } from 'types/product';
 import ProductItem from '../components/product/ProductItem';
 import clsx from 'clsx';
 import { Category } from 'types/category';
+import { Input } from 'components/UI';
+import * as _ from 'lodash';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -58,6 +69,22 @@ const useStyles = makeStyles((theme) => ({
   },
   active: {
     border: '2.5px solid chartreuse'
+  },
+  sortBy: {
+    minWidth: 150,
+    '& .MuiSelect-root': {
+      padding: theme.spacing(1.25, 4, 1.25, 1.25)
+    }
+  },
+  filterForm: {
+    columnGap: theme.spacing(2)
+  },
+  searchInput: {
+    marginTop: 0,
+    marginBottom: 0,
+    '& .MuiInputBase-input': {
+      padding: theme.spacing(1.25)
+    }
   }
 }));
 
@@ -78,16 +105,71 @@ const CategoryPage = () => {
   const [loadMoreNumber, setLoadMoreNumber] = useState<number>(LOAD_MORE);
   const [remainNumber, setRemainNumber] = useState<number>(0);
   const [currentCategory, setCurrentCategory] = useState<Category>({} as Category);
+  const [sortBy, setSortBy] = useState('');
+  const [searchValue, setSearchValue] = useState('');
+  const [search, setSearch] = useState('');
+
+  const handleChangeSortPrice = (event: React.ChangeEvent<{ value: unknown }>) => {
+    setSortBy(event.target.value as string);
+  };
+
+  const sortProduct = (products: Product[]) => {
+    return products.sort((a, b) => {
+      if (sortBy === 'asc') {
+        return a.price - b.price;
+      } else if (sortBy === 'desc') {
+        return b.price - a.price;
+      } else {
+        return b.sold - a.sold;
+      }
+    });
+  };
+
+  const searchProduct = (products: Product[]) => {
+    return products.filter((product) =>
+      product.name.toLowerCase().includes(search.trim().toLowerCase())
+    );
+  };
+
+  const debounceSearchFn = useCallback(_.debounce(setSearch, 500), []);
+
+  const handleSearch = (event: React.ChangeEvent<{ value: unknown }>) => {
+    setSearchValue(event.target.value as string);
+    debounceSearchFn(event.target.value as string);
+  };
 
   useEffect(() => {
-    setProductList(productsByCategoryId);
+    if (productsByCategoryId.length) {
+      setProductList(
+        searchProduct(sortBy ? sortProduct([...productsByCategoryId]) : [...productsByCategoryId])
+      );
+    } else if (productsByCategoryIds.length) {
+      setProductList(
+        searchProduct(sortBy ? sortProduct([...productsByCategoryIds]) : [...productsByCategoryIds])
+      );
+    }
+  }, [search]);
+
+  useEffect(() => {
+    productList.length && setProductList(sortProduct([...productList]));
+  }, [sortBy]);
+
+  useEffect(() => {
+    if (productsByCategoryId.length) {
+      let temp = [...productsByCategoryId];
+      if (sortBy) {
+        temp = sortProduct(temp);
+      }
+      if (search) {
+        temp = searchProduct(temp);
+      }
+      setProductList(temp);
+    } else setProductList([]);
   }, [productsByCategoryId]);
 
   useEffect(() => {
     setProductSlice(productList.slice(0, loadMoreNumber));
-    if (productList.length) {
-      setRemainNumber(productList.length - loadMoreNumber);
-    }
+    productList.length && setRemainNumber(productList.length - loadMoreNumber);
   }, [loadMoreNumber]);
 
   useEffect(() => {
@@ -151,6 +233,25 @@ const CategoryPage = () => {
               <img src={cat.image!} alt="category" />
             </Box>
           ))}
+        </Box>
+        <Box className={classes.filterForm} display="flex" alignItems="center" mb={2}>
+          <Box>
+            <Typography variant="subtitle2">Sort by</Typography>
+            <FormControl variant="outlined">
+              <Select className={classes.sortBy} value={sortBy} onChange={handleChangeSortPrice}>
+                <MenuItem disabled value="">
+                  Select
+                </MenuItem>
+                <MenuItem value="desc">Giá giảm dần</MenuItem>
+                <MenuItem value="asc">Giá tăng dần</MenuItem>
+                <MenuItem value="bestseller">Bán chạy nhất</MenuItem>
+              </Select>
+            </FormControl>
+          </Box>
+          <Box>
+            <Typography variant="subtitle2">Search</Typography>
+            <Input className={classes.searchInput} value={searchValue} onChange={handleSearch} />
+          </Box>
         </Box>
         <Typography variant="h5" style={{ marginBottom: 20 }}>
           <b>{categoriesById?.name}</b> <b style={{ color: 'green' }}>{currentCategory.name}</b> (

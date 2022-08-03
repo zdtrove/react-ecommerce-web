@@ -22,6 +22,7 @@ type Props = {
   endIcon?: React.ReactElement;
   InputProps?: AdornmentType;
   disabled?: boolean;
+  className?: string;
   // eslint-disable-next-line no-unused-vars
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 };

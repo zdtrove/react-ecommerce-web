@@ -107,7 +107,8 @@ const Edit = ({ showEdit, setShowEdit, product }: Props) => {
     price,
     imagesOld: product.images,
     imagesNew: [],
-    categoryId
+    categoryId,
+    sold: 0
   };
 
   const formIk = useFormik({

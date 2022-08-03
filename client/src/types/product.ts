@@ -22,7 +22,7 @@ export type Product = {
   images?: any[];
   imagesOld?: any[];
   imagesNew?: any[];
-  sold?: number;
+  sold: number;
   star?: Star;
   configuration?: Configuration;
   inCart?: boolean;
