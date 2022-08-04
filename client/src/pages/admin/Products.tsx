@@ -92,7 +92,13 @@ const Products = () => {
   };
 
   useEffect(() => {
-    setProductList(products);
+    let temp = products;
+    if (searchValue) {
+      temp = products.filter((product: Product) =>
+        product.name.toLowerCase().includes(searchValue.toLowerCase())
+      );
+    }
+    setProductList(temp);
   }, [products]);
 
   useEffect(() => {

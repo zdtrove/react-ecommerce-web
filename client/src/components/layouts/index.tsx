@@ -26,7 +26,7 @@ import {
 import AddShoppingCartIcon from '@material-ui/icons/AddShoppingCart';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import SearchIcon from '@material-ui/icons/Search';
-import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
+import FavoriteIcon from '@material-ui/icons/Favorite';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import VpnKeyIcon from '@material-ui/icons/VpnKey';
 import GTranslateIcon from '@material-ui/icons/GTranslate';
@@ -196,6 +196,11 @@ const Layout = ({ children }: Props) => {
     dispatch(showSnackbar({ status: 'warning', message: 'Under construction' }));
   };
 
+  const goToProduct = (id: string) => {
+    setIsComponentVisible(false);
+    history.push(`/product/${id}`);
+  };
+
   return (
     <Container style={{ width: 1200, padding: 0 }} component="main">
       <CssBaseline />
@@ -238,7 +243,7 @@ const Layout = ({ children }: Props) => {
                 productsSearchBar.map((product, index) => (
                   <Fragment key={product._id}>
                     <List dense>
-                      <ListItem>
+                      <ListItem onClick={() => goToProduct(product._id!)}>
                         <ListItemAvatar>
                           <Avatar
                             variant="square"
@@ -296,7 +301,7 @@ const Layout = ({ children }: Props) => {
                   dispatch(showSnackbar({ status: 'warning', message: 'Under construction' }))
                 }
                 text="Wishlist"
-                startIcon={<FavoriteBorderIcon />}
+                startIcon={<FavoriteIcon />}
               />
             )}
             {isLoggedIn && (

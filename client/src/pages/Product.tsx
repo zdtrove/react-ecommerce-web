@@ -19,12 +19,15 @@ import StarIcon from '@material-ui/icons/Star';
 import { Button } from 'components/UI';
 import { cartActions } from 'redux/features/cart/slice';
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
-
+import FavoriteIcon from '@material-ui/icons/Favorite';
+import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
+import StarOutlineIcon from '@material-ui/icons/StarOutline';
+import StarHalfIcon from '@material-ui/icons/StarHalf';
 import 'swiper/css';
 import 'swiper/css/free-mode';
 import 'swiper/css/navigation';
 import 'swiper/css/thumbs';
-import { uiActions } from 'redux/features/ui/slice';
+import { Rating } from '@material-ui/lab';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -32,8 +35,8 @@ const useStyles = makeStyles((theme) => ({
     paddingBottom: theme.spacing(6)
   },
   gallery: {
-    height: 500,
-    width: 800,
+    height: 600,
+    width: 700,
     marginTop: 10,
     '& .swiper': {
       width: '100%',
@@ -98,7 +101,7 @@ const useStyles = makeStyles((theme) => ({
     }
   },
   detailContainer: {
-    columnGap: theme.spacing(2)
+    columnGap: theme.spacing(4)
   },
   detail: {
     '& .MuiTypography-root': {
@@ -128,6 +131,65 @@ const useStyles = makeStyles((theme) => ({
   action: {
     marginTop: theme.spacing(1),
     columnGap: theme.spacing(1)
+  },
+  ratedResult: {
+    marginTop: theme.spacing(5)
+  },
+  average: {
+    marginBottom: theme.spacing(0.75),
+    '& .MuiSvgIcon-root': {
+      color: 'orange',
+      width: 30,
+      height: 'auto'
+    }
+  },
+  line: {
+    '& .MuiTypography-root': {
+      fontWeight: 700
+    },
+    '& .MuiSvgIcon-root': {
+      color: 'orange',
+      width: 20,
+      height: 'auto'
+    }
+  },
+  percent: {
+    width: 300,
+    height: 8,
+    backgroundColor: '#ddd',
+    borderRadius: 10,
+    marginLeft: 10,
+    marginRight: 10,
+    '& p': {
+      height: 8,
+      backgroundColor: 'orange',
+      margin: 0,
+      borderTopLeftRadius: 10,
+      borderBottomLeftRadius: 10
+    }
+  },
+  rated: {
+    marginTop: theme.spacing(8),
+    '& .MuiRating-label': {
+      width: 88,
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center'
+    },
+    '& .MuiSvgIcon-root': {
+      width: 50,
+      height: 'auto'
+    }
+  },
+  ratedText: {
+    '& .MuiTypography-root': {
+      width: 88,
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      fontWeight: 700,
+      textAlign: 'center'
+    }
   }
 }));
 
@@ -140,11 +202,12 @@ const ProductPage = () => {
   const productsRelated = useAppSelector(selectProductsRelated);
   const { getProductById, getProducts, getProductsRelated } = productActions;
   const { addToCart } = cartActions;
-  const { showSnackbar } = uiActions;
   const [thumbsSwiper, setThumbsSwiper] = useState<any>(null);
   const [images, setImages] = useState<string[]>([]);
   const [openLightBox, setOpenLightBox] = useState(false);
   const [currentImage, setCurrentImage] = useState('');
+  const [value, setValue] = useState<number | null>(0);
+  const [favorite, setFavorite] = useState(false);
 
   const handleLightBox = (image: string) => {
     setOpenLightBox(true);
@@ -214,9 +277,12 @@ const ProductPage = () => {
             <Typography variant="h5" style={{ fontWeight: 700 }}>
               {product?.name}
             </Typography>
-            <Typography variant="h5" color="secondary" style={{ fontWeight: 700 }}>
-              {product?.price && formatNumber(product?.price)}
-            </Typography>
+            <Box display="flex" justifyContent="left" alignItems="center">
+              <AttachMoneyIcon style={{ color: 'green' }} />
+              <Typography variant="h5" color="secondary" style={{ fontWeight: 700 }}>
+                {product?.price && formatNumber(product?.price)}
+              </Typography>
+            </Box>
             <Box
               className={classes.star}
               display="flex"
@@ -226,16 +292,21 @@ const ProductPage = () => {
               <Box display="flex" alignItems="center">
                 <StarIcon style={{ color: 'orange' }} />
                 <Typography variant="subtitle2" style={{ paddingTop: 4 }}>
-                  4.9 <small>(33)</small>
+                  3.5 <small>(33)</small>
                 </Typography>
               </Box>
               <Tooltip TransitionComponent={Zoom} arrow title="Add to wishlist" placement="top">
-                <FavoriteBorderIcon
-                  onClick={() =>
-                    dispatch(showSnackbar({ status: 'warning', message: 'Under construction' }))
-                  }
-                  style={{ cursor: 'pointer' }}
-                />
+                {favorite ? (
+                  <FavoriteIcon
+                    onClick={() => setFavorite(false)}
+                    style={{ cursor: 'pointer', width: 35, color: 'red' }}
+                  />
+                ) : (
+                  <FavoriteBorderIcon
+                    onClick={() => setFavorite(true)}
+                    style={{ cursor: 'pointer', width: 35, color: 'red' }}
+                  />
+                )}
               </Tooltip>
             </Box>
             <Box
@@ -259,6 +330,110 @@ const ProductPage = () => {
                   <b>({product?.sold})</b>
                 </small>
               </Typography>
+            </Box>
+            <Box className={classes.ratedResult}>
+              <Box className={classes.average} display="flex" alignItems="center">
+                <Typography variant="h5" style={{ color: 'orange', marginRight: 10 }}>
+                  3.5
+                </Typography>
+                <StarIcon />
+                <StarIcon />
+                <StarIcon />
+                <StarHalfIcon />
+                <StarOutlineIcon />
+                <Typography style={{ marginLeft: 10, fontWeight: 'bold' }}>33 đánh giá</Typography>
+              </Box>
+              <Box className={classes.line} display="flex" alignItems="center">
+                <Typography style={{ width: 10 }}>5</Typography>
+                <Box style={{ marginLeft: 5, width: 100 }} display="flex" alignItems="center">
+                  <StarIcon />
+                  <StarIcon />
+                  <StarIcon />
+                  <StarIcon />
+                  <StarIcon />
+                </Box>
+                <Typography className={classes.percent}>
+                  <p style={{ width: '40%' }} />
+                </Typography>
+                <Typography>35</Typography>
+              </Box>
+              <Box className={classes.line} display="flex" alignItems="center">
+                <Typography style={{ width: 10 }}>4</Typography>
+                <Box style={{ marginLeft: 5, width: 100 }} display="flex" alignItems="center">
+                  <StarIcon />
+                  <StarIcon />
+                  <StarIcon />
+                  <StarIcon />
+                  <StarOutlineIcon />
+                </Box>
+                <Typography className={classes.percent}>
+                  <p style={{ width: '60%' }} />
+                </Typography>
+                <Typography>44</Typography>
+              </Box>
+              <Box className={classes.line} display="flex" alignItems="center">
+                <Typography style={{ width: 10 }}>3</Typography>
+                <Box style={{ marginLeft: 5, width: 100 }} display="flex" alignItems="center">
+                  <StarIcon />
+                  <StarIcon />
+                  <StarIcon />
+                  <StarOutlineIcon />
+                  <StarOutlineIcon />
+                </Box>
+                <Typography className={classes.percent}>
+                  <p style={{ width: '10%' }} />
+                </Typography>
+                <Typography>7</Typography>
+              </Box>
+              <Box className={classes.line} display="flex" alignItems="center">
+                <Typography style={{ width: 10 }}>2</Typography>
+                <Box style={{ marginLeft: 5, width: 100 }} display="flex" alignItems="center">
+                  <StarIcon />
+                  <StarIcon />
+                  <StarOutlineIcon />
+                  <StarOutlineIcon />
+                  <StarOutlineIcon />
+                </Box>
+                <Typography className={classes.percent}>
+                  <p style={{ width: '30%' }} />
+                </Typography>
+                <Typography>21</Typography>
+              </Box>
+              <Box className={classes.line} display="flex" alignItems="center">
+                <Typography style={{ width: 10 }}>1</Typography>
+                <Box style={{ marginLeft: 5, width: 100 }} display="flex" alignItems="center">
+                  <StarIcon />
+                  <StarOutlineIcon />
+                  <StarOutlineIcon />
+                  <StarOutlineIcon />
+                  <StarOutlineIcon />
+                </Box>
+                <Typography className={classes.percent}>
+                  <p style={{ width: '10%' }} />
+                </Typography>
+                <Typography>7</Typography>
+              </Box>
+            </Box>
+            <Box className={classes.rated}>
+              <Typography style={{ fontWeight: 700 }} variant="h5">
+                Đánh giá:
+              </Typography>
+              <Box style={{ border: '1px solid green', padding: 10, borderRadius: 8 }}>
+                <Rating
+                  name="simple-controlled"
+                  value={value}
+                  onChange={(event, newValue) => {
+                    setValue(newValue);
+                  }}
+                />
+                <Box display="flex" alignItems="center" className={classes.ratedText}>
+                  <Typography>Rất tệ</Typography>
+                  <Typography>Tệ</Typography>
+                  <Typography>Bình thường</Typography>
+                  <Typography>Tốt</Typography>
+                  <Typography>Rất tốt</Typography>
+                </Box>
+              </Box>
             </Box>
           </Box>
         </Box>

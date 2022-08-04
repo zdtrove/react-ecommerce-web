@@ -1,6 +1,7 @@
 import { useAppDispatch, useAppSelector } from 'redux/hook';
 import {
   Avatar,
+  Box,
   Divider,
   IconButton,
   List,
@@ -18,6 +19,8 @@ import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import { cartActions } from 'redux/features/cart/slice';
 import { formatNumber } from 'utils/functions';
 import { selectProducts } from 'redux/features/product/slice';
+import { useHistory } from 'react-router-dom';
+import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
 
 type Props = {
   cartItem: CartItem;
@@ -51,7 +54,8 @@ const useStyles = makeStyles((theme) => ({
   },
   name: {
     maxWidth: 200,
-    paddingRight: theme.spacing(1)
+    paddingRight: theme.spacing(1),
+    cursor: 'pointer'
   },
   price: {
     color: theme.palette.secondary.main
@@ -61,8 +65,15 @@ const useStyles = makeStyles((theme) => ({
 const CartItemComponent = ({ cartItem }: Props) => {
   const classes = useStyles();
   const dispatch = useAppDispatch();
+  const history = useHistory();
   const products = useAppSelector(selectProducts);
   const { decrement, increment, remove } = cartActions;
+  const { closeCart } = cartActions;
+
+  const goToProduct = () => {
+    dispatch(closeCart());
+    history.push(`/product/${cartItem._id}`);
+  };
 
   return (
     <>
@@ -77,25 +88,31 @@ const CartItemComponent = ({ cartItem }: Props) => {
           </IconButton>
           <ListItemAvatar>
             <Avatar
+              onClick={goToProduct}
               variant="square"
               alt={'product'}
               src={cartItem.images ? cartItem.images[0]?.url : ''}
+              style={{ cursor: 'pointer' }}
             />
           </ListItemAvatar>
           <ListItemText
+            onClick={goToProduct}
             className={classes.name}
             primary={cartItem.name}
             secondary={
-              <>
+              <Box display="flex" justifyContent="left" alignItems="center">
+                <AttachMoneyIcon style={{ color: 'green', fontSize: 12 }} />
                 <Typography variant="caption">{formatNumber(cartItem.price)}</Typography>
-                <br />
-              </>
+              </Box>
             }
           />
-          <ListItemText
-            className={classes.price}
-            primary={`${formatNumber(cartItem.totalAmount!)}`}
-          />
+          <Box display="flex" justifyContent="left" alignItems="center">
+            <AttachMoneyIcon style={{ color: 'green', fontSize: 14 }} />
+            <ListItemText
+              className={classes.price}
+              primary={`${formatNumber(cartItem.totalAmount!)}`}
+            />
+          </Box>
           <ListItemSecondaryAction className={classes.action}>
             <IconButton
               onClick={() => dispatch(decrement({ product: cartItem, products, inCart: false }))}

@@ -23,6 +23,8 @@ import CartItem from './Item';
 import CloseIcon from '@material-ui/icons/Close';
 import AddShoppingCartIcon from '@material-ui/icons/AddShoppingCart';
 import HighlightOffIcon from '@material-ui/icons/HighlightOff';
+import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
+import { uiActions } from 'redux/features/ui/slice';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -59,6 +61,7 @@ const Cart = () => {
   const cartItems = useAppSelector(selectCartItems);
   const cartTotalAmount = useAppSelector(selectCartTotalAmount);
   const { closeCart, clear } = cartActions;
+  const { showSnackbar } = uiActions;
 
   return (
     <>
@@ -85,13 +88,16 @@ const Cart = () => {
                 <ListItem>
                   <ListItemText primary={<Typography variant="h5">Total:</Typography>} />
                   <ListItemSecondaryAction>
-                    <ListItemText
-                      primary={
-                        <Typography className={classes.totalPrice} variant="h5">
-                          {formatNumber(cartTotalAmount)}
-                        </Typography>
-                      }
-                    />
+                    <Box display="flex" justifyContent="left" alignItems="center">
+                      <AttachMoneyIcon style={{ color: 'green' }} />
+                      <ListItemText
+                        primary={
+                          <Typography className={classes.totalPrice} variant="h5">
+                            {formatNumber(cartTotalAmount)}
+                          </Typography>
+                        }
+                      />
+                    </Box>
                   </ListItemSecondaryAction>
                 </ListItem>
               </List>
@@ -110,6 +116,9 @@ const Cart = () => {
                   text="Order"
                   size="large"
                   startIcon={<AddShoppingCartIcon />}
+                  onClick={() =>
+                    dispatch(showSnackbar({ status: 'warning', message: 'Under construction' }))
+                  }
                 />
               </Box>
             </>

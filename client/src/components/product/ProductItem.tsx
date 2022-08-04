@@ -8,7 +8,9 @@ import { cartActions } from 'redux/features/cart/slice';
 import { selectProducts } from 'redux/features/product/slice';
 import { useHistory } from 'react-router-dom';
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
-import { uiActions } from 'redux/features/ui/slice';
+import FavoriteIcon from '@material-ui/icons/Favorite';
+import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
+import { useState } from 'react';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -16,7 +18,7 @@ const useStyles = makeStyles((theme) => ({
     maxWidth: 227,
     padding: 10,
     borderRadius: 5,
-    minHeight: 360,
+    minHeight: 370,
     border: `1px solid ${theme.palette.primary.dark}`,
     position: 'relative',
     cursor: 'pointer',
@@ -82,8 +84,8 @@ const ProductItem = ({ product }: Props) => {
   const dispatch = useAppDispatch();
   const history = useHistory();
   const { addToCart } = cartActions;
-  const { showSnackbar } = uiActions;
   const products = useAppSelector(selectProducts);
+  const [favorite, setFavorite] = useState(false);
 
   return (
     <div className={classes.root} key={product._id}>
@@ -97,9 +99,12 @@ const ProductItem = ({ product }: Props) => {
       >
         {product.name}
       </Typography>
-      <Typography className={classes.price} color="secondary" variant="h5">
-        {formatNumber(product.price)}
-      </Typography>
+      <Box display="flex" justifyContent="left" alignItems="center">
+        <AttachMoneyIcon style={{ color: 'green' }} />
+        <Typography className={classes.price} color="secondary" variant="h5">
+          {formatNumber(product.price)}
+        </Typography>
+      </Box>
       <Box
         className={classes.star}
         display="flex"
@@ -109,16 +114,21 @@ const ProductItem = ({ product }: Props) => {
         <Box display="flex" alignItems="center">
           <StarIcon style={{ color: 'orange' }} />
           <Typography variant="subtitle2" style={{ paddingTop: 4 }}>
-            4.9 <small>(33)</small>
+            3.5 <small>(33)</small>
           </Typography>
         </Box>
         <Tooltip TransitionComponent={Zoom} arrow title="Add to wishlist" placement="top">
-          <FavoriteBorderIcon
-            onClick={() =>
-              dispatch(showSnackbar({ status: 'warning', message: 'Under construction' }))
-            }
-            style={{ cursor: 'pointer' }}
-          />
+          {favorite ? (
+            <FavoriteIcon
+              onClick={() => setFavorite(false)}
+              style={{ cursor: 'pointer', color: 'red' }}
+            />
+          ) : (
+            <FavoriteBorderIcon
+              onClick={() => setFavorite(true)}
+              style={{ cursor: 'pointer', color: 'red' }}
+            />
+          )}
         </Tooltip>
       </Box>
       <Box className={classes.action} display="flex" justifyContent="left" alignItems="center">
