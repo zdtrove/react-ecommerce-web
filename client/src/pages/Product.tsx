@@ -1,4 +1,4 @@
-import { Box, IconButton, makeStyles, Toolbar, Typography } from '@material-ui/core';
+import { Box, IconButton, makeStyles, Toolbar, Tooltip, Typography, Zoom } from '@material-ui/core';
 import Layout from 'components/layouts';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
@@ -13,13 +13,18 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { FreeMode, Navigation, Thumbs } from 'swiper';
 import clsx from 'clsx';
 import CloseIcon from '@material-ui/icons/Close';
+import { formatNumber } from 'utils/functions';
+import ProductItem from 'components/product/ProductItem';
+import StarIcon from '@material-ui/icons/Star';
+import { Button } from 'components/UI';
+import { cartActions } from 'redux/features/cart/slice';
+import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 
 import 'swiper/css';
 import 'swiper/css/free-mode';
 import 'swiper/css/navigation';
 import 'swiper/css/thumbs';
-import { formatNumber } from 'utils/functions';
-import ProductItem from 'components/product/ProductItem';
+import { uiActions } from 'redux/features/ui/slice';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -28,7 +33,8 @@ const useStyles = makeStyles((theme) => ({
   },
   gallery: {
     height: 500,
-    width: 700,
+    width: 800,
+    marginTop: 10,
     '& .swiper': {
       width: '100%',
       height: 300,
@@ -62,6 +68,9 @@ const useStyles = makeStyles((theme) => ({
       '& .swiper-slide-thumb-active': {
         opacity: 1
       }
+    },
+    '& .swiper-button-disabled': {
+      pointerEvents: 'initial'
     }
   },
   lightBox: {
@@ -88,13 +97,37 @@ const useStyles = makeStyles((theme) => ({
       backgroundColor: '#9e9e9e'
     }
   },
-  detail: {
+  detailContainer: {
     columnGap: theme.spacing(2)
+  },
+  detail: {
+    '& .MuiTypography-root': {
+      lineHeight: 1.6
+    }
   },
   related: {
     backgroundColor: theme.palette.primary.light,
     padding: `${theme.spacing(1.5)}px`,
     marginTop: theme.spacing(6)
+  },
+  star: {
+    '& .MuiSvgIcon-root': {
+      width: 25,
+      height: 'auto',
+      padding: '3px 0',
+      marginRight: 5
+    },
+    '& small': {
+      fontWeight: 700
+    }
+  },
+  addToCart: {
+    backgroundColor: theme.palette.green.dark,
+    marginLeft: 0
+  },
+  action: {
+    marginTop: theme.spacing(1),
+    columnGap: theme.spacing(1)
   }
 }));
 
@@ -106,6 +139,8 @@ const ProductPage = () => {
   const products = useAppSelector(selectProducts);
   const productsRelated = useAppSelector(selectProductsRelated);
   const { getProductById, getProducts, getProductsRelated } = productActions;
+  const { addToCart } = cartActions;
+  const { showSnackbar } = uiActions;
   const [thumbsSwiper, setThumbsSwiper] = useState<any>(null);
   const [images, setImages] = useState<string[]>([]);
   const [openLightBox, setOpenLightBox] = useState(false);
@@ -122,12 +157,17 @@ const ProductPage = () => {
       product?.images.forEach((item, index) => index && images.push(item.url));
       setImages(images);
     }
-    dispatch(getProductsRelated(product?.categoryId));
+    if (product?.categoryId) {
+      dispatch(getProductsRelated(product));
+    }
   }, [product]);
 
   useEffect(() => {
     dispatch(getProductById(id));
-  }, [products]);
+    if (product?.categoryId) {
+      dispatch(getProductsRelated(product));
+    }
+  }, [id, products]);
 
   useEffect(() => {
     !products.length && dispatch(getProducts());
@@ -137,7 +177,7 @@ const ProductPage = () => {
     <Layout>
       <Toolbar />
       <Box className={classes.root}>
-        <Box className={classes.detail} display="flex">
+        <Box className={classes.detailContainer} display="flex">
           <Box className={classes.gallery}>
             <Swiper
               spaceBetween={10}
@@ -170,15 +210,60 @@ const ProductPage = () => {
                 ))}
             </Swiper>
           </Box>
-          <Box>
-            <Typography variant="h5">{product?.name}</Typography>
-            <Typography variant="h5" color="secondary">
+          <Box className={classes.detail}>
+            <Typography variant="h5" style={{ fontWeight: 700 }}>
+              {product?.name}
+            </Typography>
+            <Typography variant="h5" color="secondary" style={{ fontWeight: 700 }}>
               {product?.price && formatNumber(product?.price)}
             </Typography>
+            <Box
+              className={classes.star}
+              display="flex"
+              justifyContent="space-between"
+              alignItems="center"
+            >
+              <Box display="flex" alignItems="center">
+                <StarIcon style={{ color: 'orange' }} />
+                <Typography variant="subtitle2" style={{ paddingTop: 4 }}>
+                  4.9 <small>(33)</small>
+                </Typography>
+              </Box>
+              <Tooltip TransitionComponent={Zoom} arrow title="Add to wishlist" placement="top">
+                <FavoriteBorderIcon
+                  onClick={() =>
+                    dispatch(showSnackbar({ status: 'warning', message: 'Under construction' }))
+                  }
+                  style={{ cursor: 'pointer' }}
+                />
+              </Tooltip>
+            </Box>
+            <Box
+              className={classes.action}
+              display="flex"
+              justifyContent="left"
+              alignItems="center"
+            >
+              {product?.inCart ? (
+                <Button variant="contained" disabled text="In Cart" />
+              ) : (
+                <Button
+                  className={classes.addToCart}
+                  onClick={() => dispatch(addToCart({ product, products, inCart: true }))}
+                  text="Add To Cart"
+                />
+              )}
+              <Typography variant="subtitle2">
+                Đã bán{' '}
+                <small>
+                  <b>({product?.sold})</b>
+                </small>
+              </Typography>
+            </Box>
           </Box>
         </Box>
         <Box className={classes.related}>
-          <Typography variant="h5" style={{ margin: '10px 0', color: 'white' }}>
+          <Typography variant="h5" style={{ marginBottom: 10, color: 'white', fontWeight: 700 }}>
             Related products
           </Typography>
           <Swiper

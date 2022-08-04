@@ -31,10 +31,14 @@ const useStyles = makeStyles((theme) => ({
     '& .MuiAvatar-root': {
       width: 60,
       height: 60,
-      margin: '0 10px'
+      marginRight: 10,
+      marginLeft: 5
     },
     '& .MuiButtonBase-root': {
       margin: '5px 0'
+    },
+    '& .MuiListItem-root': {
+      paddingLeft: 5
     }
   },
   action: {

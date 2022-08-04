@@ -64,6 +64,9 @@ const useStyles = makeStyles((theme) => ({
   root: {
     marginTop: theme.spacing(10),
     marginBottom: theme.spacing(5),
+    padding: theme.spacing(4),
+    maxWidth: 800,
+    margin: '0 auto',
     '& .MuiFormHelperText-root': {
       marginLeft: 0,
       marginTop: '3px'

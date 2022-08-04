@@ -46,6 +46,9 @@ const validationSchema = Yup.object().shape({
 const useStyles = makeStyles((theme) => ({
   root: {
     marginTop: theme.spacing(10),
+    padding: theme.spacing(4),
+    maxWidth: 800,
+    margin: '0 auto',
     '& .MuiFormHelperText-root': {
       marginLeft: 0,
       marginTop: '3px'
@@ -172,6 +175,17 @@ const Login = () => {
           </Grid>
         </form>
       </Paper>
+      <Box display="flex" justifyContent="center" alignItems="center" my={3}>
+        <Typography>
+          Don&rsquo;t have an account?{' '}
+          <span
+            onClick={() => history.push(ROUTES.home.signUp)}
+            style={{ fontWeight: 700, color: 'green', cursor: 'pointer' }}
+          >
+            Sign up now
+          </span>
+        </Typography>
+      </Box>
     </Layout>
   );
 };

@@ -63,7 +63,7 @@ const Events = () => {
   const classes = useStyles();
   const events = useAppSelector(selectEvents);
   const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(3);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
   const [showDetail, setShowDetail] = useState(false);
   const [showEdit, setShowEdit] = useState(false);
   const [showDelete, setShowDelete] = useState(false);

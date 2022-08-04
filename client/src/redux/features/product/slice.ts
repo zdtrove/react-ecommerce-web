@@ -84,9 +84,12 @@ const productSlice = createSlice({
       const products = state.products.filter((product) => product._id === action.payload);
       state.product = products[0];
     },
-    getProductsRelated(state, action: PayloadAction<string>) {
-      const products = state.products.filter((product) => product.categoryId === action.payload);
-      state.productsRelated = products;
+    getProductsRelated(state, action: PayloadAction<Product>) {
+      const products = state.products.filter(
+        (product) => product.categoryId === action.payload.categoryId
+      );
+      const productsExclude = products.filter((product) => product._id !== action.payload._id);
+      state.productsRelated = productsExclude;
     },
     addProduct(state, action: PayloadAction<Product>) {
       state.loading = true;

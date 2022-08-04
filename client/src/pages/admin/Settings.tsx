@@ -1,11 +1,12 @@
-type Props = {
-  prop: string;
-};
+import { Typography } from '@material-ui/core';
+import Layout from 'components/admin/layouts';
 
-const Settings = (props: Props) => {
-  const { prop } = props;
-
-  return <>{prop}</>;
+const Settings = () => {
+  return (
+    <Layout>
+      <Typography variant="h4">Under Construction</Typography>
+    </Layout>
+  );
 };
 
 export default Settings;

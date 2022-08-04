@@ -7,6 +7,7 @@ import UsersAdmin from 'pages/admin/Users';
 import ProductsAdmin from 'pages/admin/Products';
 import EventsAdmin from 'pages/admin/Events';
 import StoresAdmin from 'pages/admin/Stores';
+import SettingsAdmin from 'pages/admin/Settings';
 import NotFound from 'pages/NotFound';
 import Home from 'pages/Home';
 import Register from 'pages/Signup';
@@ -19,6 +20,8 @@ import { authActions } from 'redux/features/auth/slice';
 import CategoryPage from 'pages/Category';
 import Cart from 'components/cart';
 import ProductPage from 'pages/Product';
+import UseScrollToTop from 'hooks/useScrollToTop';
+import './styles.css';
 
 function App() {
   const dispatch = useAppDispatch();
@@ -33,6 +36,7 @@ function App() {
 
   return (
     <Router>
+      <UseScrollToTop />
       <Switch>
         {/* User */}
         <Route exact path={ROUTES.home.index} component={Home} />
@@ -47,6 +51,7 @@ function App() {
         <PrivateRoute admin exact path={ROUTES.admin.products} component={ProductsAdmin} />
         <PrivateRoute admin exact path={ROUTES.admin.events} component={EventsAdmin} />
         <PrivateRoute admin exact path={ROUTES.admin.stores} component={StoresAdmin} />
+        <PrivateRoute admin exact path={ROUTES.admin.settings} component={SettingsAdmin} />
         <Route path={ROUTES.admin.login} component={LoginAdmin} />
         {/* Not Found */}
         <Route component={NotFound} />

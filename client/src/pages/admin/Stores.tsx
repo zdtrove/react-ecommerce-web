@@ -63,7 +63,7 @@ const Stores = () => {
   const classes = useStyles();
   const stores = useAppSelector(selectStores);
   const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(3);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
   const [showDetail, setShowDetail] = useState(false);
   const [showEdit, setShowEdit] = useState(false);
   const [showDelete, setShowDelete] = useState(false);

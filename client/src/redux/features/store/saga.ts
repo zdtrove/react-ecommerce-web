@@ -35,7 +35,7 @@ function* addStoreSaga(action: PayloadAction<Store>) {
   try {
     const res: AddOrUpdateResponse<Store> = yield call(
       addDataApi,
-      ENDPOINTS.stores.getOne,
+      ENDPOINTS.stores.getAll,
       action.payload
     );
     const { status } = res;

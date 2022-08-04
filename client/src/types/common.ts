@@ -17,12 +17,14 @@ export type decodedType = {
 };
 
 export type UiState = {
-  snackbar: {
-    isShow: boolean;
-    message: string | null;
-    status: Color;
-  };
+  snackbar: Snackbar;
   backdrop: boolean;
+};
+
+export type Snackbar = {
+  isShow?: boolean;
+  message: string | null;
+  status: Color;
 };
 
 export type AddOrUpdateResponse<T> = {

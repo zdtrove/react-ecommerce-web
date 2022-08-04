@@ -32,10 +32,10 @@ const Dashboard = () => {
       <Table headers={['Full Name', 'Email', 'Phone', 'Role']}>
         {dashboards?.users?.map((user) => (
           <TableRow key={user._id}>
-            <TableCell align="center">{user.fullName}</TableCell>
-            <TableCell align="center">{user.email}</TableCell>
-            <TableCell align="center">{user.phone}</TableCell>
-            <TableCell align="center">{user.role}</TableCell>
+            <TableCell align="left">{user.fullName}</TableCell>
+            <TableCell align="left">{user.email}</TableCell>
+            <TableCell align="left">{user.phone}</TableCell>
+            <TableCell align="left">{user.role}</TableCell>
           </TableRow>
         ))}
       </Table>
@@ -48,9 +48,9 @@ const Dashboard = () => {
       <Table headers={['Name', 'Description', 'Price']}>
         {dashboards?.products?.map((product) => (
           <TableRow key={product._id}>
-            <TableCell align="center">{product.name}</TableCell>
-            <TableCell align="center">{product.description}</TableCell>
-            <TableCell align="center">{product.price}</TableCell>
+            <TableCell align="left">{product.name}</TableCell>
+            <TableCell align="left">{product.description}</TableCell>
+            <TableCell align="left">{product.price}</TableCell>
           </TableRow>
         ))}
       </Table>

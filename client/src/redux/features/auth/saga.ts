@@ -12,7 +12,7 @@ import {
 } from 'types/auth';
 
 const { ACCESS_TOKEN } = jwtConst;
-const { USER } = userRoles;
+const { ADMIN } = userRoles;
 const {
   signUp,
   signUpSuccess,
@@ -91,7 +91,7 @@ function* logoutSaga(action: PayloadAction<any>) {
     if (status === 200) {
       yield put(logoutSuccess());
       const { history, role } = action.payload;
-      history.push(role === USER ? ROUTES.home.login : ROUTES.admin.login);
+      role === ADMIN && history.push(ROUTES.admin.login);
       localStorage.removeItem(ACCESS_TOKEN);
     }
   } catch (error) {

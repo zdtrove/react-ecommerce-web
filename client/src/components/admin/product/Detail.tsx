@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { makeStyles, DialogContent, DialogContentText, Typography } from '@material-ui/core';
+import { makeStyles, DialogContent, DialogContentText, Typography, Box } from '@material-ui/core';
 import { Dialog } from 'components/UI';
 import { Product } from 'types/product';
 import { imageShow } from 'utils/functions';
@@ -45,8 +45,14 @@ const Detail = ({ category, showDetail, setShowDetail, product }: Props) => {
           <Typography variant="h6">Description</Typography>
           <DialogContentText>{description}</DialogContentText>
           <Typography variant="h6">Category</Typography>
-          <DialogContentText>{category.name}</DialogContentText>
-          <img style={{ border: '1px solid #ddd' }} src={category.image || ''} alt="" />
+          <Box
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+            style={{ border: '1px solid #ddd', width: 150, padding: 5, borderRadius: 52 }}
+          >
+            <img style={{ width: '80%' }} src={category.image!} alt="" />
+          </Box>
           <Typography variant="h6">Price</Typography>
           <DialogContentText>{price}</DialogContentText>
           <Typography variant="h6">Sold</Typography>

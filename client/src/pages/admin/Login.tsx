@@ -48,6 +48,9 @@ const validationSchema = Yup.object().shape({
 const useStyles = makeStyles((theme) => ({
   root: {
     marginTop: theme.spacing(10),
+    padding: theme.spacing(4),
+    width: 800,
+    margin: '0 auto',
     '& .MuiFormHelperText-root': {
       marginLeft: 0,
       marginTop: '3px'
@@ -111,14 +114,14 @@ const Login = () => {
   }, [isLoggedIn, user?.role, history]);
 
   return (
-    <Container maxWidth="sm">
+    <Container>
       <Toolbar />
       <Paper className={classes.root} component={Box}>
         <Box className={classes.header}>
           <Avatar>
             <LockRoundedIcon color="inherit" />
           </Avatar>
-          <Typography variant="h4">Login</Typography>
+          <Typography variant="h4">Login Admin</Typography>
         </Box>
         <form onSubmit={formIk.handleSubmit}>
           <Grid container>
@@ -159,7 +162,11 @@ const Login = () => {
                 }}
               />
               <div className={classes.buttons}>
-                <Button disabled={!(formIk.isValid && formIk.dirty)} text="LOGIN" />
+                <Button
+                  onClick={formIk.handleSubmit}
+                  disabled={!(formIk.isValid && formIk.dirty)}
+                  text="LOGIN"
+                />
                 <Button
                   disabled={!formIk.dirty}
                   onClick={() => formIk.resetForm()}
@@ -171,6 +178,17 @@ const Login = () => {
           </Grid>
         </form>
       </Paper>
+      <Box display="flex" justifyContent="center" alignItems="center" my={3}>
+        <Typography>
+          Don&rsquo;t have an account?{' '}
+          <span
+            onClick={() => history.push(ROUTES.home.signUp)}
+            style={{ fontWeight: 700, color: 'green', cursor: 'pointer' }}
+          >
+            Sign up now
+          </span>
+        </Typography>
+      </Box>
     </Container>
   );
 };

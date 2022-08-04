@@ -41,6 +41,7 @@ import { authActions, selectIsLoggedIn } from 'redux/features/auth/slice';
 import { ROUTES, userRoles } from 'constants/index';
 import { useHistory } from 'react-router-dom';
 import Menu from 'components/Menu';
+import { uiActions } from 'redux/features/ui/slice';
 
 const useStyles = makeStyles((theme) => ({
   logout: {
@@ -59,6 +60,7 @@ const useStyles = makeStyles((theme) => ({
   select: {
     backgroundColor: theme.palette.primary.dark,
     color: theme.palette.green.main,
+    width: 145,
     '&:hover': {
       backgroundColor: theme.palette.primary.light,
       color: theme.palette.aquamarine.dark
@@ -78,10 +80,7 @@ const useStyles = makeStyles((theme) => ({
     textDecoration: 'none'
   },
   sectionDesktop: {
-    display: 'none',
-    [theme.breakpoints.up('md')]: {
-      display: 'flex'
-    },
+    display: 'flex',
     '& .MuiButtonBase-root': {
       backgroundColor: theme.palette.primary.dark,
       '&:hover': {
@@ -100,7 +99,7 @@ const useStyles = makeStyles((theme) => ({
     marginRight: theme.spacing(2),
     marginLeft: 0,
     width: '100%',
-    maxWidth: 250,
+    maxWidth: 300,
     [theme.breakpoints.up('sm')]: {
       marginLeft: theme.spacing(3),
       width: 'auto'
@@ -117,7 +116,8 @@ const useStyles = makeStyles((theme) => ({
   },
   searchPrice: {
     color: theme.palette.green.main,
-    fontWeight: 500
+    fontWeight: 500,
+    fontSize: 18
   },
   inputRoot: {
     color: 'inherit'
@@ -143,7 +143,7 @@ const useStyles = makeStyles((theme) => ({
   listProductSearch: {
     position: 'absolute',
     backgroundColor: theme.palette.primary.light,
-    width: 373,
+    width: 450,
     top: 40,
     borderRadius: 5,
     overflowY: 'scroll',
@@ -158,6 +158,14 @@ const useStyles = makeStyles((theme) => ({
     },
     '& .MuiDivider-root': {
       backgroundColor: 'rgb(255 255 255 / 53%)'
+    },
+    '& .MuiListItemText-primary': {
+      fontWeight: 700
+    }
+  },
+  wishlist: {
+    '& .MuiButton-startIcon': {
+      color: theme.palette.secondary.main
     }
   }
 }));
@@ -170,7 +178,10 @@ const Layout = ({ children }: Props) => {
   const dispatch = useAppDispatch();
   const classes = useStyles();
   const globalClasses = useGlobalStyles();
+  const { showSnackbar } = uiActions;
   const history = useHistory();
+  const authPages = ['/login', '/sign-up'];
+  const isPageAuth = authPages.includes(history.location.pathname);
   const cartTotalQuantity = useAppSelector(selectCartTotalQuantity);
   const productsSearchBar = useAppSelector(selectProductsSearchBar);
   const isLoggedIn = useAppSelector(selectIsLoggedIn);
@@ -182,6 +193,7 @@ const Layout = ({ children }: Props) => {
 
   const handleChangeLanguage = (event: React.ChangeEvent<{ value: unknown }>) => {
     setLanguage(event.target.value as string);
+    dispatch(showSnackbar({ status: 'warning', message: 'Under construction' }));
   };
 
   return (
@@ -277,8 +289,25 @@ const Layout = ({ children }: Props) => {
                 <MenuItem value="vi">Vietnamese</MenuItem>
               </Select>
             </FormControl>
-            <Button text="Wishlist" startIcon={<FavoriteBorderIcon />} />
-            <Button text="Account" startIcon={<AccountCircle />} />
+            {isLoggedIn && (
+              <Button
+                className={classes.wishlist}
+                onClick={() =>
+                  dispatch(showSnackbar({ status: 'warning', message: 'Under construction' }))
+                }
+                text="Wishlist"
+                startIcon={<FavoriteBorderIcon />}
+              />
+            )}
+            {isLoggedIn && (
+              <Button
+                onClick={() =>
+                  dispatch(showSnackbar({ status: 'warning', message: 'Under construction' }))
+                }
+                text="Account"
+                startIcon={<AccountCircle />}
+              />
+            )}
             {isLoggedIn ? (
               <Button
                 onClick={() => dispatch(authActions.logout({ history, role: USER }))}
@@ -287,12 +316,16 @@ const Layout = ({ children }: Props) => {
                 className={classes.logout}
               />
             ) : (
-              <Button text="Login" startIcon={<VpnKeyIcon />} />
+              <Button
+                text="Login"
+                onClick={() => history.push(ROUTES.home.login)}
+                startIcon={<VpnKeyIcon />}
+              />
             )}
           </div>
         </Toolbar>
       </AppBar>
-      <Menu />
+      {!isPageAuth && <Menu />}
       {children}
     </Container>
   );

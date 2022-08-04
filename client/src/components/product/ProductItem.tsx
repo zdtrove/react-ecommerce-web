@@ -1,4 +1,4 @@
-import { Box, Typography, makeStyles } from '@material-ui/core';
+import { Box, Typography, makeStyles, Tooltip, Zoom } from '@material-ui/core';
 import { Product } from 'types/product';
 import { formatNumber } from 'utils/functions';
 import StarIcon from '@material-ui/icons/Star';
@@ -7,6 +7,8 @@ import { useAppDispatch, useAppSelector } from 'redux/hook';
 import { cartActions } from 'redux/features/cart/slice';
 import { selectProducts } from 'redux/features/product/slice';
 import { useHistory } from 'react-router-dom';
+import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
+import { uiActions } from 'redux/features/ui/slice';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -51,10 +53,10 @@ const useStyles = makeStyles((theme) => ({
   },
   star: {
     '& .MuiSvgIcon-root': {
-      width: 20,
+      width: 25,
+      height: 'auto',
       padding: '3px 0',
-      marginRight: 5,
-      color: 'orange'
+      marginRight: 5
     },
     '& small': {
       fontWeight: 700
@@ -80,6 +82,7 @@ const ProductItem = ({ product }: Props) => {
   const dispatch = useAppDispatch();
   const history = useHistory();
   const { addToCart } = cartActions;
+  const { showSnackbar } = uiActions;
   const products = useAppSelector(selectProducts);
 
   return (
@@ -97,11 +100,26 @@ const ProductItem = ({ product }: Props) => {
       <Typography className={classes.price} color="secondary" variant="h5">
         {formatNumber(product.price)}
       </Typography>
-      <Box className={classes.star} display="flex" justifyContent="left" alignItems="center">
-        <StarIcon />
-        <Typography variant="subtitle2">
-          4.9 <small>(33)</small>
-        </Typography>
+      <Box
+        className={classes.star}
+        display="flex"
+        justifyContent="space-between"
+        alignItems="center"
+      >
+        <Box display="flex" alignItems="center">
+          <StarIcon style={{ color: 'orange' }} />
+          <Typography variant="subtitle2" style={{ paddingTop: 4 }}>
+            4.9 <small>(33)</small>
+          </Typography>
+        </Box>
+        <Tooltip TransitionComponent={Zoom} arrow title="Add to wishlist" placement="top">
+          <FavoriteBorderIcon
+            onClick={() =>
+              dispatch(showSnackbar({ status: 'warning', message: 'Under construction' }))
+            }
+            style={{ cursor: 'pointer' }}
+          />
+        </Tooltip>
       </Box>
       <Box className={classes.action} display="flex" justifyContent="left" alignItems="center">
         {product.inCart ? (

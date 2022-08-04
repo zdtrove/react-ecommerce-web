@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { AppState } from 'redux/store';
-import { UiState } from 'types/common';
+import { Snackbar, UiState } from 'types/common';
 
 const initialState: UiState = {
   snackbar: {
@@ -15,7 +15,7 @@ const uiSlice = createSlice({
   name: 'ui',
   initialState,
   reducers: {
-    showSnackbar(state, action: PayloadAction<any>) {
+    showSnackbar(state, action: PayloadAction<Snackbar>) {
       state.snackbar = {
         isShow: true,
         message: action.payload.message,
