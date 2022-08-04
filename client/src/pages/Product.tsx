@@ -28,6 +28,7 @@ import 'swiper/css/free-mode';
 import 'swiper/css/navigation';
 import 'swiper/css/thumbs';
 import { Rating } from '@material-ui/lab';
+import { uiActions } from 'redux/features/ui/slice';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -202,6 +203,7 @@ const ProductPage = () => {
   const productsRelated = useAppSelector(selectProductsRelated);
   const { getProductById, getProducts, getProductsRelated } = productActions;
   const { addToCart } = cartActions;
+  const { showSnackbar } = uiActions;
   const [thumbsSwiper, setThumbsSwiper] = useState<any>(null);
   const [images, setImages] = useState<string[]>([]);
   const [openLightBox, setOpenLightBox] = useState(false);
@@ -434,6 +436,14 @@ const ProductPage = () => {
                   <Typography>Rất tốt</Typography>
                 </Box>
               </Box>
+            </Box>
+            <Box display="flex" justifyContent="center" style={{ marginTop: 10 }}>
+              <Button
+                onClick={() =>
+                  dispatch(showSnackbar({ status: 'warning', message: 'Under construction' }))
+                }
+                text="Gửi đánh giá"
+              />
             </Box>
           </Box>
         </Box>
