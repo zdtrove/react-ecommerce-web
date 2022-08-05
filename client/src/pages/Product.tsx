@@ -297,7 +297,12 @@ const ProductPage = () => {
                   3.5 <small>(33)</small>
                 </Typography>
               </Box>
-              <Tooltip TransitionComponent={Zoom} arrow title="Add to wishlist" placement="top">
+              <Tooltip
+                TransitionComponent={Zoom}
+                arrow
+                title={`${favorite ? 'Remove from wishlist' : 'Add to wishlist'}`}
+                placement="top"
+              >
                 {favorite ? (
                   <FavoriteIcon
                     onClick={() => setFavorite(false)}
