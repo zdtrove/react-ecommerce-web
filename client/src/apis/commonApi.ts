@@ -1,4 +1,5 @@
 import { Data } from 'types/common';
+import { User } from 'types/user';
 import axios from 'utils/axios';
 
 export const addDataApi = async (endpoint: string, data: Data) => {
@@ -17,9 +18,9 @@ export const getAllDataApi = async (endpoint: string, search: string = '') => {
   }
 };
 
-export const updateDataApi = async (endpoint: string, user: Data) => {
+export const updateDataApi = async (endpoint: string, data: Data) => {
   try {
-    return await axios.patch(`${endpoint}/${user._id}`, user);
+    return await axios.patch(`${endpoint}/${data._id}`, data);
   } catch (err) {
     return err;
   }
@@ -28,6 +29,25 @@ export const updateDataApi = async (endpoint: string, user: Data) => {
 export const deleteDataApi = async (endpoint: string, id: string) => {
   try {
     return await axios.delete(`${endpoint}/${id}`);
+  } catch (err) {
+    return err;
+  }
+};
+
+export const addWishlistApi = async (endpoint: string, data: { productId: string; user: User }) => {
+  try {
+    return await axios.patch(`${endpoint}/${data.user._id}/add-wishlist`, data);
+  } catch (err) {
+    return err;
+  }
+};
+
+export const removeWishlistApi = async (
+  endpoint: string,
+  data: { productId: string; user: User }
+) => {
+  try {
+    return await axios.patch(`${endpoint}/${data.user._id}/remove-wishlist`, data);
   } catch (err) {
     return err;
   }

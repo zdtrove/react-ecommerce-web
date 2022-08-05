@@ -36,6 +36,53 @@ exports.addUser = async (req, res) => {
 	}
 }
 
+exports.addWishlist = async (req, res) => {
+	try {
+		const { productId } = req.body
+
+        let user = await User.findOne({ _id: req.params.id })
+		const { wishlist } = user;
+		wishlist.push(productId);
+
+        user = await User.findOneAndUpdate({ _id: req.params.id }, { wishlist })
+
+		const newUser = { ...user._doc }
+		delete newUser.password
+
+		res.status(200).json({
+			message: "Add to wishlist success",
+			data: newUser
+		})
+	} catch (err) {
+		return res.status(500).json({ message: err.message })
+	}
+}
+
+exports.removeWishlist = async (req, res) => {
+	try {
+		const { productId } = req.body
+
+        let user = await User.findOne({ _id: req.params.id })
+		const { wishlist } = user;
+		const index = wishlist.indexOf(productId);
+		if (index > -1) {
+			wishlist.splice(index, 1);
+		}
+
+        user = await User.findOneAndUpdate({ _id: req.params.id }, { wishlist })
+
+		const newUser = { ...user._doc }
+		delete newUser.password
+
+		res.status(200).json({
+			message: "Remove from wishlist success",
+			data: newUser
+		})
+	} catch (err) {
+		return res.status(500).json({ message: err.message })
+	}
+}
+
 exports.updateUser = async (req, res) => {
 	try {
 		const { fullName, phone, gender, city, payments, role } = req.body

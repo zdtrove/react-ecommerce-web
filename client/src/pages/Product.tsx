@@ -1,4 +1,13 @@
-import { Box, IconButton, makeStyles, Toolbar, Tooltip, Typography, Zoom } from '@material-ui/core';
+import {
+  Box,
+  CircularProgress,
+  IconButton,
+  makeStyles,
+  Toolbar,
+  Tooltip,
+  Typography,
+  Zoom
+} from '@material-ui/core';
 import Layout from 'components/layouts';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
@@ -29,6 +38,9 @@ import 'swiper/css/navigation';
 import 'swiper/css/thumbs';
 import { Rating } from '@material-ui/lab';
 import { uiActions } from 'redux/features/ui/slice';
+import { ENDPOINTS } from 'constants/index';
+import { addWishlistApi, removeWishlistApi } from 'apis/commonApi';
+import { selectUser } from 'redux/features/auth/slice';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -198,6 +210,7 @@ const ProductPage = () => {
   const classes = useStyles();
   const { id } = useParams<{ id: string }>();
   const dispatch = useAppDispatch();
+  const user = useAppSelector(selectUser);
   const product = useAppSelector(selectProduct);
   const products = useAppSelector(selectProducts);
   const productsRelated = useAppSelector(selectProductsRelated);
@@ -210,11 +223,32 @@ const ProductPage = () => {
   const [currentImage, setCurrentImage] = useState('');
   const [value, setValue] = useState<number | null>(0);
   const [favorite, setFavorite] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  const handleAddWishlist = async () => {
+    setLoading(true);
+    await addWishlistApi(ENDPOINTS.users.getOne, { productId: product?._id!, user: user! });
+    setLoading(false);
+    setFavorite(true);
+  };
+
+  const handleRemoveWishlist = async () => {
+    setLoading(true);
+    await removeWishlistApi(ENDPOINTS.users.getOne, { productId: product?._id!, user: user! });
+    setLoading(false);
+    setFavorite(false);
+  };
 
   const handleLightBox = (image: string) => {
     setOpenLightBox(true);
     setCurrentImage(image);
   };
+
+  useEffect(() => {
+    if (user?._id) {
+      setFavorite(user.wishlist.some((value) => value === product?._id));
+    }
+  }, [user, product]);
 
   useEffect(() => {
     if (product?.images) {
@@ -297,24 +331,32 @@ const ProductPage = () => {
                   3.5 <small>(33)</small>
                 </Typography>
               </Box>
-              <Tooltip
-                TransitionComponent={Zoom}
-                arrow
-                title={`${favorite ? 'Remove from wishlist' : 'Add to wishlist'}`}
-                placement="top"
+              <Box
+                display="flex"
+                justifyContent="center"
+                alignItems="center"
+                style={{ columnGap: 10 }}
               >
-                {favorite ? (
-                  <FavoriteIcon
-                    onClick={() => setFavorite(false)}
-                    style={{ cursor: 'pointer', width: 35, color: 'red' }}
-                  />
-                ) : (
-                  <FavoriteBorderIcon
-                    onClick={() => setFavorite(true)}
-                    style={{ cursor: 'pointer', width: 35, color: 'red' }}
-                  />
-                )}
-              </Tooltip>
+                {loading && <CircularProgress size={20} />}
+                <Tooltip
+                  TransitionComponent={Zoom}
+                  arrow
+                  title={`${favorite ? 'Remove from wishlist' : 'Add to wishlist'}`}
+                  placement="top"
+                >
+                  {favorite ? (
+                    <FavoriteIcon
+                      onClick={handleRemoveWishlist}
+                      style={{ cursor: 'pointer', color: 'red' }}
+                    />
+                  ) : (
+                    <FavoriteBorderIcon
+                      onClick={handleAddWishlist}
+                      style={{ cursor: 'pointer', color: 'red' }}
+                    />
+                  )}
+                </Tooltip>
+              </Box>
             </Box>
             <Box
               className={classes.action}
@@ -359,9 +401,9 @@ const ProductPage = () => {
                   <StarIcon />
                   <StarIcon />
                 </Box>
-                <Typography className={classes.percent}>
+                <div className={classes.percent}>
                   <p style={{ width: '40%' }} />
-                </Typography>
+                </div>
                 <Typography>35</Typography>
               </Box>
               <Box className={classes.line} display="flex" alignItems="center">
@@ -373,9 +415,9 @@ const ProductPage = () => {
                   <StarIcon />
                   <StarOutlineIcon />
                 </Box>
-                <Typography className={classes.percent}>
+                <div className={classes.percent}>
                   <p style={{ width: '60%' }} />
-                </Typography>
+                </div>
                 <Typography>44</Typography>
               </Box>
               <Box className={classes.line} display="flex" alignItems="center">
@@ -387,9 +429,9 @@ const ProductPage = () => {
                   <StarOutlineIcon />
                   <StarOutlineIcon />
                 </Box>
-                <Typography className={classes.percent}>
+                <div className={classes.percent}>
                   <p style={{ width: '10%' }} />
-                </Typography>
+                </div>
                 <Typography>7</Typography>
               </Box>
               <Box className={classes.line} display="flex" alignItems="center">
@@ -401,9 +443,9 @@ const ProductPage = () => {
                   <StarOutlineIcon />
                   <StarOutlineIcon />
                 </Box>
-                <Typography className={classes.percent}>
+                <div className={classes.percent}>
                   <p style={{ width: '30%' }} />
-                </Typography>
+                </div>
                 <Typography>21</Typography>
               </Box>
               <Box className={classes.line} display="flex" alignItems="center">
@@ -415,9 +457,9 @@ const ProductPage = () => {
                   <StarOutlineIcon />
                   <StarOutlineIcon />
                 </Box>
-                <Typography className={classes.percent}>
+                <div className={classes.percent}>
                   <p style={{ width: '10%' }} />
-                </Typography>
+                </div>
                 <Typography>7</Typography>
               </Box>
             </Box>

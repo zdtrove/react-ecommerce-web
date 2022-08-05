@@ -27,7 +27,7 @@ type Props = {
 
 const Edit = ({ showEdit, setShowEdit, userRecord }: Props) => {
   const dispatch = useAppDispatch();
-  const { _id, email, fullName, phone, gender, city, payments, role } = userRecord;
+  const { _id, email, fullName, phone, gender, city, payments, role, wishlist } = userRecord;
 
   let initialValues: User = {
     email,
@@ -36,7 +36,8 @@ const Edit = ({ showEdit, setShowEdit, userRecord }: Props) => {
     gender,
     city,
     payments,
-    role
+    role,
+    wishlist
   };
 
   const handlePayments = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -122,7 +123,8 @@ Edit.propTypes = {
     gender: PropTypes.string,
     city: PropTypes.string,
     payments: PropTypes.array,
-    role: PropTypes.string
+    role: PropTypes.string,
+    wishlist: PropTypes.array
   })
 };
 

@@ -1,6 +1,8 @@
 export type UserState = {
   users: User[];
   loading: boolean;
+  loadingAddWishlist: boolean;
+  loadingRemoveWishlist: boolean;
 };
 
 export type User = {
@@ -14,4 +16,5 @@ export type User = {
   role: string;
   password?: string;
   passwordConfirm?: string;
+  wishlist: string[];
 };

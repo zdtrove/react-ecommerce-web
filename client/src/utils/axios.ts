@@ -9,7 +9,7 @@ const { SNACKBAR_STATUS_SUCCESS, SNACKBAR_STATUS_ERROR } = snackbar;
 const { ADMIN } = userRoles;
 const { JWT_EXPIRED, JWT_INVALID, ACCESS_TOKEN } = jwtConst;
 const { CLOUDINARY_URL } = uploadConst;
-const { showBackdrop, showSnackbar, hideBackdrop } = uiActions;
+const { showSnackbar } = uiActions;
 const { logoutSuccess, refreshToken } = authActions;
 
 const axios = axiosPackage.create({});
@@ -21,7 +21,7 @@ axios.interceptors.request.use(
         Authorization: localStorage.getItem(ACCESS_TOKEN)
       });
     }
-    store.dispatch({ type: showBackdrop.type });
+    // store.dispatch({ type: showBackdrop.type });
 
     return config;
   },
@@ -44,7 +44,7 @@ axios.interceptors.response.use(
         });
       }
     }
-    store.dispatch({ type: hideBackdrop.type });
+    // store.dispatch({ type: hideBackdrop.type });
 
     return response;
   },
@@ -80,7 +80,7 @@ axios.interceptors.response.use(
         }
       });
     }
-    store.dispatch({ type: hideBackdrop });
+    // store.dispatch({ type: hideBackdrop });
 
     return Promise.reject(error);
   }

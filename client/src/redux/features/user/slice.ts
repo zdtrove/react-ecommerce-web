@@ -4,7 +4,9 @@ import { User, UserState } from 'types/user';
 
 const initialState: UserState = {
   users: [],
-  loading: false
+  loading: false,
+  loadingAddWishlist: false,
+  loadingRemoveWishlist: false
 };
 
 const userSlice = createSlice({
@@ -51,6 +53,8 @@ export const userActions = userSlice.actions;
 // Selectors
 export const selectUsers = (state: AppState) => state.user.users;
 export const selectLoadingUser = (state: AppState) => state.user.loading;
+export const selectLoadingAddWishlist = (state: AppState) => state.user.loadingAddWishlist;
+export const selectLoadingRemoveWishlist = (state: AppState) => state.user.loadingRemoveWishlist;
 
 // Reducer
 const userReducer = userSlice.reducer;

@@ -57,7 +57,8 @@ const initialValues: User = {
   payments: [],
   password: '',
   passwordConfirm: '',
-  role: 'user'
+  role: 'user',
+  wishlist: []
 };
 
 type Props = {
