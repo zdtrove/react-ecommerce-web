@@ -40,7 +40,7 @@ import { Rating } from '@material-ui/lab';
 import { uiActions } from 'redux/features/ui/slice';
 import { ENDPOINTS } from 'constants/index';
 import { addWishlistApi, removeWishlistApi } from 'apis/commonApi';
-import { selectUser } from 'redux/features/auth/slice';
+import { selectIsLoggedIn, selectUser } from 'redux/features/auth/slice';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -218,6 +218,7 @@ const ProductPage = () => {
   const classes = useStyles();
   const { id } = useParams<{ id: string }>();
   const dispatch = useAppDispatch();
+  const isLoggedIn = useAppSelector(selectIsLoggedIn);
   const user = useAppSelector(selectUser);
   const product = useAppSelector(selectProduct);
   const products = useAppSelector(selectProducts);
@@ -234,17 +235,35 @@ const ProductPage = () => {
   const [loading, setLoading] = useState(false);
 
   const handleAddWishlist = async () => {
-    setLoading(true);
-    await addWishlistApi(ENDPOINTS.users.getOne, { productId: product?._id!, user: user! });
-    setLoading(false);
-    setFavorite(true);
+    if (isLoggedIn) {
+      setLoading(true);
+      await addWishlistApi(ENDPOINTS.users.getOne, { productId: product?._id!, user: user! });
+      setLoading(false);
+      setFavorite(true);
+    } else {
+      dispatch(
+        showSnackbar({
+          status: 'warning',
+          message: 'You must be logged in to perform this function'
+        })
+      );
+    }
   };
 
   const handleRemoveWishlist = async () => {
-    setLoading(true);
-    await removeWishlistApi(ENDPOINTS.users.getOne, { productId: product?._id!, user: user! });
-    setLoading(false);
-    setFavorite(false);
+    if (isLoggedIn) {
+      setLoading(true);
+      await removeWishlistApi(ENDPOINTS.users.getOne, { productId: product?._id!, user: user! });
+      setLoading(false);
+      setFavorite(false);
+    } else {
+      dispatch(
+        showSnackbar({
+          status: 'warning',
+          message: 'You must be logged in to perform this function'
+        })
+      );
+    }
   };
 
   const handleLightBox = (image: string) => {
@@ -386,7 +405,7 @@ const ProductPage = () => {
                 />
               )}
               <Typography variant="subtitle2">
-                Đã bán{' '}
+                Sold{' '}
                 <small>
                   <b>({product?.sold})</b>
                 </small>
@@ -402,7 +421,7 @@ const ProductPage = () => {
                 <StarIcon />
                 <StarHalfIcon />
                 <StarOutlineIcon />
-                <Typography style={{ marginLeft: 10, fontWeight: 'bold' }}>33 đánh giá</Typography>
+                <Typography style={{ marginLeft: 10, fontWeight: 'bold' }}>33 Rated</Typography>
               </Box>
               <Box className={classes.line} display="flex" alignItems="center">
                 <Typography style={{ width: 10 }}>5</Typography>
@@ -477,7 +496,7 @@ const ProductPage = () => {
             </Box>
             <Box className={classes.rated}>
               <Typography style={{ fontWeight: 700 }} variant="h5">
-                Đánh giá:
+                Rated:
               </Typography>
               <Box style={{ border: '1px dashed orange', padding: 10, borderRadius: 8 }}>
                 <Rating
@@ -488,11 +507,11 @@ const ProductPage = () => {
                   }}
                 />
                 <Box display="flex" alignItems="center" className={classes.ratedText}>
-                  <Typography>Rất tệ</Typography>
-                  <Typography>Tệ</Typography>
-                  <Typography>Bình thường</Typography>
-                  <Typography>Tốt</Typography>
-                  <Typography>Rất tốt</Typography>
+                  <Typography>Very bad</Typography>
+                  <Typography>Bad</Typography>
+                  <Typography>Normal</Typography>
+                  <Typography>Good</Typography>
+                  <Typography>Very good</Typography>
                 </Box>
               </Box>
             </Box>
@@ -501,7 +520,7 @@ const ProductPage = () => {
                 onClick={() =>
                   dispatch(showSnackbar({ status: 'warning', message: 'Under construction' }))
                 }
-                text="Gửi đánh giá"
+                text="Send rated"
               />
             </Box>
           </Box>

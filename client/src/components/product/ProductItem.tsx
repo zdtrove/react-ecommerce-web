@@ -11,10 +11,11 @@ import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
 import { useEffect, useState } from 'react';
-import { selectUser } from 'redux/features/auth/slice';
+import { selectIsLoggedIn, selectUser } from 'redux/features/auth/slice';
 import { addWishlistApi, removeWishlistApi } from 'apis/commonApi';
 import { ENDPOINTS } from 'constants/index';
 import clsx from 'clsx';
+import { uiActions } from 'redux/features/ui/slice';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -102,23 +103,43 @@ const ProductItem = ({ product }: Props) => {
   const dispatch = useAppDispatch();
   const history = useHistory();
   const user = useAppSelector(selectUser);
+  const isLoggedIn = useAppSelector(selectIsLoggedIn);
   const { addToCart } = cartActions;
+  const { showSnackbar } = uiActions;
   const products = useAppSelector(selectProducts);
   const [favorite, setFavorite] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const handleAddWishlist = async () => {
-    setLoading(true);
-    await addWishlistApi(ENDPOINTS.users.getOne, { productId: product?._id!, user: user! });
-    setLoading(false);
-    setFavorite(true);
+    if (isLoggedIn) {
+      setLoading(true);
+      await addWishlistApi(ENDPOINTS.users.getOne, { productId: product?._id!, user: user! });
+      setLoading(false);
+      setFavorite(true);
+    } else {
+      dispatch(
+        showSnackbar({
+          status: 'warning',
+          message: 'You must be logged in to perform this function'
+        })
+      );
+    }
   };
 
   const handleRemoveWishlist = async () => {
-    setLoading(true);
-    await removeWishlistApi(ENDPOINTS.users.getOne, { productId: product?._id!, user: user! });
-    setLoading(false);
-    setFavorite(false);
+    if (isLoggedIn) {
+      setLoading(true);
+      await removeWishlistApi(ENDPOINTS.users.getOne, { productId: product?._id!, user: user! });
+      setLoading(false);
+      setFavorite(false);
+    } else {
+      dispatch(
+        showSnackbar({
+          status: 'warning',
+          message: 'You must be logged in to perform this function'
+        })
+      );
+    }
   };
 
   useEffect(() => {
@@ -194,7 +215,7 @@ const ProductItem = ({ product }: Props) => {
           />
         )}
         <Typography variant="subtitle2">
-          Đã bán{' '}
+          Sold{' '}
           <small>
             <b>({product.sold})</b>
           </small>
