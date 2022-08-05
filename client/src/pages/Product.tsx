@@ -203,6 +203,14 @@ const useStyles = makeStyles((theme) => ({
       fontWeight: 700,
       textAlign: 'center'
     }
+  },
+  wishlist: {
+    cursor: 'pointer',
+    color: 'red'
+  },
+  disabled: {
+    pointerEvents: 'none',
+    cursor: 'default !important'
   }
 }));
 
@@ -347,12 +355,16 @@ const ProductPage = () => {
                   {favorite ? (
                     <FavoriteIcon
                       onClick={handleRemoveWishlist}
-                      style={{ cursor: 'pointer', color: 'red' }}
+                      className={clsx(classes.wishlist, {
+                        [classes.disabled]: loading
+                      })}
                     />
                   ) : (
                     <FavoriteBorderIcon
                       onClick={handleAddWishlist}
-                      style={{ cursor: 'pointer', color: 'red' }}
+                      className={clsx(classes.wishlist, {
+                        [classes.disabled]: loading
+                      })}
                     />
                   )}
                 </Tooltip>
