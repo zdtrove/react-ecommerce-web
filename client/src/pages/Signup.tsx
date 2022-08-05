@@ -27,6 +27,7 @@ import VisibilityOffRoundedIcon from '@material-ui/icons/VisibilityOffRounded';
 import { authActions } from 'redux/features/auth/slice';
 import { userConst } from 'constants/index';
 import { SignUpPayload } from 'types/auth';
+import { useHistory } from 'react-router-dom';
 
 const { GENDER, CITY, PAYMENT_METHODS } = userConst;
 
@@ -106,6 +107,7 @@ const useStyles = makeStyles((theme) => ({
 const SignUp = () => {
   const dispatch = useAppDispatch();
   const classes = useStyles();
+  const history = useHistory();
   const [showPass, setShowPass] = useState(false);
   const [showPassCf, setShowPassCf] = useState(false);
   const [typePass, setTypePass] = useState('password');
@@ -115,7 +117,7 @@ const SignUp = () => {
     initialValues,
     validationSchema,
     onSubmit: (values) => {
-      dispatch(authActions.signUp(values));
+      dispatch(authActions.signUp({ signUpData: values, history }));
     }
   });
 

@@ -1,7 +1,7 @@
 import { User } from 'types/user';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { AppState } from 'redux/store';
-import { AuthState, LoginPayload, SignUpPayload } from 'types/auth';
+import { AuthState, LoginPayload } from 'types/auth';
 
 const initialState: AuthState = {
   loading: false,
@@ -34,7 +34,7 @@ const authSlice = createSlice({
       state.user = action.payload;
     },
     // eslint-disable-next-line no-unused-vars
-    signUp(state, action: PayloadAction<SignUpPayload>) {
+    signUp(state, action: PayloadAction<any>) {
       state.loading = true;
     },
     signUpSuccess(state) {

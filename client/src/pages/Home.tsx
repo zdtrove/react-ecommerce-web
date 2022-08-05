@@ -198,9 +198,7 @@ const Home = () => {
   };
 
   useEffect(() => {
-    if (!products.length) {
-      dispatch(getProducts());
-    }
+    dispatch(getProducts());
   }, []);
 
   useEffect(() => {

@@ -420,7 +420,7 @@ const ProductPage = () => {
               <Typography style={{ fontWeight: 700 }} variant="h5">
                 Đánh giá:
               </Typography>
-              <Box style={{ border: '1px solid green', padding: 10, borderRadius: 8 }}>
+              <Box style={{ border: '1px dashed orange', padding: 10, borderRadius: 8 }}>
                 <Rating
                   name="simple-controlled"
                   value={value}

@@ -3,13 +3,7 @@ import { call, all, put, takeEvery } from 'redux-saga/effects';
 import { authActions } from './slice';
 import { jwtConst, userRoles, ROUTES } from 'constants/index';
 import { PayloadAction } from '@reduxjs/toolkit';
-import {
-  LoginPayload,
-  LoginResponse,
-  LogoutResponse,
-  SignUpPayload,
-  SignUpResponse
-} from 'types/auth';
+import { LoginPayload, LoginResponse, LogoutResponse, SignUpResponse } from 'types/auth';
 
 const { ACCESS_TOKEN } = jwtConst;
 const { ADMIN } = userRoles;
@@ -44,12 +38,14 @@ function* loginSaga(action: PayloadAction<LoginPayload>) {
   }
 }
 
-function* signUpSaga(action: PayloadAction<SignUpPayload>) {
+function* signUpSaga(action: PayloadAction<any>) {
   try {
-    const res: SignUpResponse = yield call(signUpApi, action.payload);
+    const { history, signUpData } = action.payload;
+    const res: SignUpResponse = yield call(signUpApi, signUpData);
     const { status } = res;
     if (status === 201) {
       yield put(signUpSuccess());
+      history.push(ROUTES.home.login);
     }
   } catch (error) {
     console.log(error);
