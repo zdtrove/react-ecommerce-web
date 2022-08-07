@@ -4,8 +4,7 @@ import { Category, CategoryState } from 'types/category';
 
 const initialState: CategoryState = {
   categories: [],
-  loading: false,
-  categoriesById: {} as Category
+  loading: false
 };
 
 const categorySlice = createSlice({
@@ -21,10 +20,6 @@ const categorySlice = createSlice({
     },
     getCategoriesFail(state) {
       state.loading = false;
-    },
-    getCategoriesById(state, action: PayloadAction<string>) {
-      const categories = state.categories.filter((category) => category._id === action.payload);
-      state.categoriesById = categories[0];
     },
     // eslint-disable-next-line no-unused-vars
     updateCategory(state, action: PayloadAction<Category>) {
@@ -56,7 +51,6 @@ export const categoryActions = categorySlice.actions;
 // Selectors
 export const selectCategories = (state: AppState) => state.category.categories;
 export const selectLoadingCategory = (state: AppState) => state.category.loading;
-export const selectCategoriesById = (state: AppState) => state.category.categoriesById;
 
 // Reducer
 const categoryReducer = categorySlice.reducer;

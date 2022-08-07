@@ -12,18 +12,9 @@ import Layout from 'components/layouts';
 import { LOAD_MORE } from 'constants/index';
 import { useCallback, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import {
-  categoryActions,
-  selectCategories,
-  selectCategoriesById
-} from 'redux/features/category/slice';
-import {
-  productActions,
-  selectProducts,
-  selectProductsByCategoryId,
-  selectProductsByCategoryIds
-} from 'redux/features/product/slice';
-import { useAppDispatch, useAppSelector } from 'redux/hook';
+import { selectCategories } from 'redux/features/category/slice';
+import { selectProducts } from 'redux/features/product/slice';
+import { useAppSelector } from 'redux/hook';
 import { Product } from 'types/product';
 import ProductItem from 'components/product/ProductItem';
 import clsx from 'clsx';
@@ -91,16 +82,10 @@ const useStyles = makeStyles((theme) => ({
 const CategoryPage = () => {
   const classes = useStyles();
   const { id } = useParams<{ id: string }>();
-  const dispatch = useAppDispatch();
   const products = useAppSelector(selectProducts);
-  const productsByCategoryIds = useAppSelector(selectProductsByCategoryIds);
-  const productsByCategoryId = useAppSelector(selectProductsByCategoryId);
   const categories = useAppSelector(selectCategories);
-  const categoriesById = useAppSelector(selectCategoriesById);
-  const { getProductsByCategoryIds, getProductsByCategoryId } = productActions;
-  const { getCategoriesById } = categoryActions;
   const [categoryIds, setCategoryIds] = useState<string[]>([]);
-  const [productList, setProductList] = useState<Product[]>(productsByCategoryIds);
+  const [productList, setProductList] = useState<Product[]>([]);
   const [productSlice, setProductSlice] = useState<Product[]>([]);
   const [loadMoreNumber, setLoadMoreNumber] = useState<number>(LOAD_MORE);
   const [remainNumber, setRemainNumber] = useState<number>(0);
@@ -108,10 +93,8 @@ const CategoryPage = () => {
   const [sortBy, setSortBy] = useState('');
   const [searchValue, setSearchValue] = useState('');
   const [search, setSearch] = useState('');
-
-  const handleChangeSortPrice = (event: React.ChangeEvent<{ value: unknown }>) => {
-    setSortBy(event.target.value as string);
-  };
+  const [productsByCategoryId, setProductsByCategoryId] = useState<Product[]>([]);
+  const [categoriesById, setCategoriesById] = useState<Category>({} as Category);
 
   const sortProduct = (products: Product[]) => {
     return products.sort((a, b) => {
@@ -144,10 +127,8 @@ const CategoryPage = () => {
       setProductList(
         searchProduct(sortBy ? sortProduct([...productsByCategoryId]) : [...productsByCategoryId])
       );
-    } else if (productsByCategoryIds.length) {
-      setProductList(
-        searchProduct(sortBy ? sortProduct([...productsByCategoryIds]) : [...productsByCategoryIds])
-      );
+    } else if (productList.length) {
+      setProductList(searchProduct(sortBy ? sortProduct([...productList]) : [...productList]));
     }
   }, [search]);
 
@@ -176,11 +157,7 @@ const CategoryPage = () => {
   }, [productList]);
 
   useEffect(() => {
-    setProductList(productsByCategoryIds);
-  }, [productsByCategoryIds]);
-
-  useEffect(() => {
-    dispatch(getProductsByCategoryIds(categoryIds));
+    setProductList(products.filter((product) => categoryIds.includes(product.categoryId)));
   }, [categoryIds, products]);
 
   useEffect(() => {
@@ -190,7 +167,8 @@ const CategoryPage = () => {
   }, [categoriesById]);
 
   useEffect(() => {
-    dispatch(getCategoriesById(id));
+    const categoriesTemp = categories.filter((category) => category._id === id);
+    setCategoriesById(categoriesTemp[0]);
   }, [id, categories]);
 
   useEffect(() => {
@@ -217,7 +195,9 @@ const CategoryPage = () => {
                 [classes.active]: cat._id === currentCategory._id
               })}
               onClick={() => {
-                dispatch(getProductsByCategoryId(cat._id!));
+                setProductsByCategoryId(
+                  products.filter((product) => product.categoryId === cat._id!)
+                );
                 setCurrentCategory(cat);
                 setLoadMoreNumber(LOAD_MORE);
               }}
@@ -230,7 +210,11 @@ const CategoryPage = () => {
           <Box>
             <Typography variant="subtitle2">Sort by</Typography>
             <FormControl variant="outlined">
-              <Select className={classes.sortBy} value={sortBy} onChange={handleChangeSortPrice}>
+              <Select
+                className={classes.sortBy}
+                value={sortBy}
+                onChange={(e) => setSortBy(e.target.value as string)}
+              >
                 <MenuItem disabled value="">
                   Select
                 </MenuItem>

@@ -68,11 +68,7 @@ export type Star = {
 
 export type ProductState = {
   products: Product[];
-  product: Product;
   loading: boolean;
   productsSearchBar: Product[];
   loadingProductsSearchBar: boolean;
-  productsByCategoryId: Product[];
-  productsByCategoryIds: Product[];
-  productsRelated: Product[];
 };

@@ -11,12 +11,7 @@ import {
 import Layout from 'components/layouts';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import {
-  productActions,
-  selectProduct,
-  selectProducts,
-  selectProductsRelated
-} from 'redux/features/product/slice';
+import { selectProducts } from 'redux/features/product/slice';
 import { useAppDispatch, useAppSelector } from 'redux/hook';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { FreeMode, Navigation, Thumbs } from 'swiper';
@@ -41,6 +36,7 @@ import { uiActions } from 'redux/features/ui/slice';
 import { ENDPOINTS } from 'constants/index';
 import { addWishlistApi, removeWishlistApi } from 'apis/commonApi';
 import { selectIsLoggedIn, selectUser } from 'redux/features/auth/slice';
+import { Product } from 'types/product';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -220,10 +216,7 @@ const ProductPage = () => {
   const dispatch = useAppDispatch();
   const isLoggedIn = useAppSelector(selectIsLoggedIn);
   const user = useAppSelector(selectUser);
-  const product = useAppSelector(selectProduct);
   const products = useAppSelector(selectProducts);
-  const productsRelated = useAppSelector(selectProductsRelated);
-  const { getProductById, getProductsRelated } = productActions;
   const { addToCart } = cartActions;
   const { showSnackbar } = uiActions;
   const [thumbsSwiper, setThumbsSwiper] = useState<any>(null);
@@ -233,6 +226,8 @@ const ProductPage = () => {
   const [value, setValue] = useState<number | null>(0);
   const [favorite, setFavorite] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [product, setProduct] = useState<Product>({} as Product);
+  const [productsRelated, setProductsRelated] = useState<Product[]>([]);
 
   const handleAddWishlist = async () => {
     if (isLoggedIn) {
@@ -271,6 +266,11 @@ const ProductPage = () => {
     setCurrentImage(image);
   };
 
+  const handleRating = (value: number | null) => {
+    console.log(value, typeof value);
+    setValue(value);
+  };
+
   useEffect(() => {
     if (user?._id) {
       setFavorite(user.wishlist.some((value) => value === product?._id));
@@ -284,15 +284,15 @@ const ProductPage = () => {
       setImages(images);
     }
     if (product?.categoryId) {
-      dispatch(getProductsRelated(product));
+      setProductsRelated(
+        products.filter((prt) => prt.categoryId === product.categoryId && prt._id !== product?._id)
+      );
     }
   }, [product]);
 
   useEffect(() => {
-    dispatch(getProductById(id));
-    if (product?.categoryId) {
-      dispatch(getProductsRelated(product));
-    }
+    const productTemp = products.filter((product) => product._id === id);
+    setProduct(productTemp[0]);
   }, [id, products]);
 
   return (
@@ -498,9 +498,7 @@ const ProductPage = () => {
                 <Rating
                   name="simple-controlled"
                   value={value}
-                  onChange={(event, newValue) => {
-                    setValue(newValue);
-                  }}
+                  onChange={(event, value) => handleRating(value)}
                 />
                 <Box display="flex" alignItems="center" className={classes.ratedText}>
                   <Typography>Very bad</Typography>

@@ -1,7 +1,6 @@
 export type CategoryState = {
   categories: Category[];
   loading: boolean;
-  categoriesById: Category;
 };
 
 export type Category = {
