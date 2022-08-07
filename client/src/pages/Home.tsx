@@ -1,40 +1,21 @@
-import { useEffect, useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Box, makeStyles, Toolbar, Typography } from '@material-ui/core';
 import Layout from 'components/layouts';
-import {
-  productActions,
-  selectProducts,
-  selectProductsAirConditioner,
-  selectProductsLaptop,
-  selectProductsPhone,
-  selectProductsRefrigerator,
-  selectProductsTablet,
-  selectProductsWashingMachine,
-  selectProductsWatch
-} from 'redux/features/product/slice';
-import { useAppDispatch, useAppSelector } from 'redux/hook';
+import { useAppSelector } from 'redux/hook';
 import { Button } from 'components/UI';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Autoplay } from 'swiper';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/autoplay';
-import {
-  categoryActions,
-  selectCategories,
-  selectCategoriesAirConditioner,
-  selectCategoriesLaptop,
-  selectCategoriesPhone,
-  selectCategoriesRefrigerator,
-  selectCategoriesTablet,
-  selectCategoriesWashingMachine,
-  selectCategoriesWatch
-} from 'redux/features/category/slice';
+import { selectProducts } from 'redux/features/product/slice';
+import { selectCategories } from 'redux/features/category/slice';
 import ProductItem from '../components/product/ProductItem';
 import { Category } from 'types/category';
 import { Product } from 'types/product';
 import clsx from 'clsx';
 import { useHistory } from 'react-router-dom';
+import { HOME_CATEGORY_IDS } from 'constants/index';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -105,46 +86,34 @@ const useStyles = makeStyles((theme) => ({
 
 const Home = () => {
   const classes = useStyles();
-  const dispatch = useAppDispatch();
   const history = useHistory();
   const products = useAppSelector(selectProducts);
   const categories = useAppSelector(selectCategories);
-  const productsPhone = useAppSelector(selectProductsPhone);
-  const productsLaptop = useAppSelector(selectProductsLaptop);
-  const productsTablet = useAppSelector(selectProductsTablet);
-  const productsWatch = useAppSelector(selectProductsWatch);
-  const productsRefrigerator = useAppSelector(selectProductsRefrigerator);
-  const productsAirConditioner = useAppSelector(selectProductsAirConditioner);
-  const productsWashingMachine = useAppSelector(selectProductsWashingMachine);
-  const categoriesPhone = useAppSelector(selectCategoriesPhone);
-  const categoriesLaptop = useAppSelector(selectCategoriesLaptop);
-  const categoriesTablet = useAppSelector(selectCategoriesTablet);
-  const categoriesWatch = useAppSelector(selectCategoriesWatch);
-  const categoriesRefrigerator = useAppSelector(selectCategoriesRefrigerator);
-  const categoriesAirConditioner = useAppSelector(selectCategoriesAirConditioner);
-  const categoriesWashingMachine = useAppSelector(selectCategoriesWashingMachine);
-  const {
-    getProducts,
-    getProductsPhone,
-    getProductsLaptop,
-    getProductsTablet,
-    getProductsWatch,
-    getProductsRefrigerator,
-    getProductsAirConditioner,
-    getProductsWashingMachine
-  } = productActions;
-  const {
-    getCategoriesPhone,
-    getCategoriesLaptop,
-    getCategoriesTablet,
-    getCategoriesWatch,
-    getCategoriesRefrigerator,
-    getCategoriesAirConditioner,
-    getCategoriesWashingMachine
-  } = categoryActions;
+  const [productsPhone, setProductsPhone] = useState<Product[]>([]);
+  const [productsLaptop, setProductsLaptop] = useState<Product[]>([]);
+  const [productsTablet, setProductsTablet] = useState<Product[]>([]);
+  const [productsWatch, setProductsWatch] = useState<Product[]>([]);
+  const [productsRefrigerator, setProductsRefrigerator] = useState<Product[]>([]);
+  const [productsAirConditioner, setProductsAirConditioner] = useState<Product[]>([]);
+  const [productsWashingMachine, setProductsWashingMachine] = useState<Product[]>([]);
+  const [categoriesPhone, setCategoriesPhone] = useState<Category>({} as Category);
+  const [categoriesLaptop, setCategoriesLaptop] = useState<Category>({} as Category);
+  const [categoriesTablet, setCategoriesTablet] = useState<Category>({} as Category);
+  const [categoriesWatch, setCategoriesWatch] = useState<Category>({} as Category);
+  const [categoriesRefrigerator, setCategoriesRefrigerator] = useState<Category>({} as Category);
+  const [categoriesAirConditioner, setCategoriesAirConditioner] = useState<Category>(
+    {} as Category
+  );
+  const [categoriesWashingMachine, setCategoriesWashingMachine] = useState<Category>(
+    {} as Category
+  );
   const [currentCategoryId, setCurrentCategoryId] = useState('');
 
-  const renderProducts = (categories: Category, products: Product[], getProduct: any) => {
+  const handleSetProducts = (categoryId: string, setProducts: any) => {
+    setProducts(products.filter((product) => product.categoryId === categoryId));
+  };
+
+  const renderProducts = (categories: Category, products: Product[], setProducts: any) => {
     return (
       <>
         <Box
@@ -163,7 +132,7 @@ const Home = () => {
                 [classes.active]: cat._id === currentCategoryId
               })}
               onClick={() => {
-                dispatch(getProduct(cat._id));
+                handleSetProducts(cat._id!, setProducts);
                 setCurrentCategoryId(cat._id!);
               }}
             >
@@ -198,48 +167,56 @@ const Home = () => {
   };
 
   useEffect(() => {
-    dispatch(getProducts());
-  }, []);
-
-  useEffect(() => {
-    if (categoriesPhone?.children) {
-      dispatch(getProductsPhone(categoriesPhone.children[0]._id!));
-    }
-
-    if (categoriesLaptop?.children) {
-      dispatch(getProductsLaptop(categoriesLaptop.children[0]._id!));
-    }
-
-    if (categoriesTablet?.children) {
-      dispatch(getProductsTablet(categoriesTablet.children[0]._id!));
-    }
-
-    if (categoriesWatch?.children) {
-      dispatch(getProductsWatch(categoriesWatch.children[0]._id!));
-    }
-
-    if (categoriesRefrigerator?.children) {
-      dispatch(getProductsRefrigerator(categoriesRefrigerator.children[0]._id!));
-    }
-
-    if (categoriesAirConditioner?.children) {
-      dispatch(getProductsAirConditioner(categoriesAirConditioner.children[0]._id!));
-    }
-
-    if (categoriesWashingMachine?.children) {
-      dispatch(getProductsWashingMachine(categoriesWashingMachine.children[0]._id!));
-    }
+    const categoriesPhoneTemp = categories.filter(
+      (cat) => cat._id === HOME_CATEGORY_IDS.smartphone
+    );
+    const categoriesLaptopTemp = categories.filter((cat) => cat._id === HOME_CATEGORY_IDS.laptop);
+    const categoriesTabletTemp = categories.filter((cat) => cat._id === HOME_CATEGORY_IDS.tablet);
+    const categoriesWatchTemp = categories.filter((cat) => cat._id === HOME_CATEGORY_IDS.watch);
+    const categoriesRefrigeratorTemp = categories.filter(
+      (cat) => cat._id === HOME_CATEGORY_IDS.refrigerator
+    );
+    const categoriesAirConditionerTemp = categories.filter(
+      (cat) => cat._id === HOME_CATEGORY_IDS.airConditioner
+    );
+    const categoriesWashingMachineTemp = categories.filter(
+      (cat) => cat._id === HOME_CATEGORY_IDS.washingMachine
+    );
+    setCategoriesPhone(categoriesPhoneTemp[0]);
+    setCategoriesLaptop(categoriesLaptopTemp[0]);
+    setCategoriesTablet(categoriesTabletTemp[0]);
+    setCategoriesWatch(categoriesWatchTemp[0]);
+    setCategoriesRefrigerator(categoriesRefrigeratorTemp[0]);
+    setCategoriesAirConditioner(categoriesAirConditionerTemp[0]);
+    setCategoriesWashingMachine(categoriesWashingMachineTemp[0]);
+    setProductsPhone(
+      products.filter((product) => product.categoryId === categoriesPhoneTemp[0].children[0]._id!)
+    );
+    setProductsLaptop(
+      products.filter((product) => product.categoryId === categoriesLaptopTemp[0].children[0]._id!)
+    );
+    setProductsTablet(
+      products.filter((product) => product.categoryId === categoriesTabletTemp[0].children[0]._id!)
+    );
+    setProductsWatch(
+      products.filter((product) => product.categoryId === categoriesWatchTemp[0].children[0]._id!)
+    );
+    setProductsRefrigerator(
+      products.filter(
+        (product) => product.categoryId === categoriesRefrigeratorTemp[0].children[0]._id!
+      )
+    );
+    setProductsAirConditioner(
+      products.filter(
+        (product) => product.categoryId === categoriesAirConditionerTemp[0].children[0]._id!
+      )
+    );
+    setProductsWashingMachine(
+      products.filter(
+        (product) => product.categoryId === categoriesWashingMachineTemp[0].children[0]._id!
+      )
+    );
   }, [products]);
-
-  useEffect(() => {
-    dispatch(getCategoriesPhone());
-    dispatch(getCategoriesLaptop());
-    dispatch(getCategoriesTablet());
-    dispatch(getCategoriesWatch());
-    dispatch(getCategoriesRefrigerator());
-    dispatch(getCategoriesAirConditioner());
-    dispatch(getCategoriesWashingMachine());
-  }, [categories]);
 
   return (
     <Layout>
@@ -299,20 +276,20 @@ const Home = () => {
             <img src="/slider/slider-10.png" alt="slider" />
           </SwiperSlide>
         </Swiper>
-        {renderProducts(categoriesPhone, productsPhone, getProductsPhone)}
-        {renderProducts(categoriesLaptop, productsLaptop, getProductsLaptop)}
-        {renderProducts(categoriesTablet, productsTablet, getProductsTablet)}
-        {renderProducts(categoriesWatch, productsWatch, getProductsWatch)}
-        {renderProducts(categoriesRefrigerator, productsRefrigerator, getProductsRefrigerator)}
+        {renderProducts(categoriesPhone, productsPhone, setProductsPhone)}
+        {renderProducts(categoriesLaptop, productsLaptop, setProductsLaptop)}
+        {renderProducts(categoriesTablet, productsTablet, setProductsTablet)}
+        {renderProducts(categoriesWatch, productsWatch, setProductsWatch)}
+        {renderProducts(categoriesRefrigerator, productsRefrigerator, setProductsRefrigerator)}
         {renderProducts(
           categoriesAirConditioner,
           productsAirConditioner,
-          getProductsAirConditioner
+          setProductsAirConditioner
         )}
         {renderProducts(
           categoriesWashingMachine,
           productsWashingMachine,
-          getProductsWashingMachine
+          setProductsWashingMachine
         )}
       </div>
     </Layout>

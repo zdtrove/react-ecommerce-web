@@ -223,7 +223,7 @@ const ProductPage = () => {
   const product = useAppSelector(selectProduct);
   const products = useAppSelector(selectProducts);
   const productsRelated = useAppSelector(selectProductsRelated);
-  const { getProductById, getProducts, getProductsRelated } = productActions;
+  const { getProductById, getProductsRelated } = productActions;
   const { addToCart } = cartActions;
   const { showSnackbar } = uiActions;
   const [thumbsSwiper, setThumbsSwiper] = useState<any>(null);
@@ -294,10 +294,6 @@ const ProductPage = () => {
       dispatch(getProductsRelated(product));
     }
   }, [id, products]);
-
-  useEffect(() => {
-    !products.length && dispatch(getProducts());
-  }, []);
 
   return (
     <Layout>

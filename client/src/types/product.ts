@@ -71,13 +71,7 @@ export type ProductState = {
   product: Product;
   loading: boolean;
   productsSearchBar: Product[];
-  productsPhone: Product[];
-  productsLaptop: Product[];
-  productsTablet: Product[];
-  productsWatch: Product[];
-  productsRefrigerator: Product[];
-  productsAirConditioner: Product[];
-  productsWashingMachine: Product[];
+  loadingProductsSearchBar: boolean;
   productsByCategoryId: Product[];
   productsByCategoryIds: Product[];
   productsRelated: Product[];

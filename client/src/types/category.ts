@@ -1,13 +1,6 @@
 export type CategoryState = {
   categories: Category[];
   loading: boolean;
-  categoriesPhone: Category;
-  categoriesLaptop: Category;
-  categoriesTablet: Category;
-  categoriesWatch: Category;
-  categoriesRefrigerator: Category;
-  categoriesAirConditioner: Category;
-  categoriesWashingMachine: Category;
   categoriesById: Category;
 };
 

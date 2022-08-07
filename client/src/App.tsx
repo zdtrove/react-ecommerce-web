@@ -15,20 +15,34 @@ import { Snackbar, Backdrop } from 'components/UI';
 import Dashboard from 'pages/admin/Dashboard';
 import PrivateRoute from 'components/PrivateRoute';
 import { ROUTES } from 'constants/index';
-import { useAppDispatch } from 'redux/hook';
+import { useAppDispatch, useAppSelector } from 'redux/hook';
 import { authActions } from 'redux/features/auth/slice';
 import CategoryPage from 'pages/Category';
 import Cart from 'components/cart';
 import ProductPage from 'pages/Product';
 import UseScrollToTop from 'hooks/useScrollToTop';
+import { productActions, selectProducts } from 'redux/features/product/slice';
+import { categoryActions, selectCategories } from 'redux/features/category/slice';
 import './styles.css';
 
 function App() {
   const dispatch = useAppDispatch();
+  const { getProducts } = productActions;
+  const { getCategories } = categoryActions;
+  const products = useAppSelector(selectProducts);
+  const categories = useAppSelector(selectCategories);
 
   useEffect(() => {
     dispatch(authActions.getLoggedUser());
   }, [dispatch]);
+
+  useEffect(() => {
+    !categories.length && dispatch(getCategories());
+  }, []);
+
+  useEffect(() => {
+    !products.length && dispatch(getProducts());
+  }, []);
 
   useEffect(() => {
     console.log(`Last Updated: ${new Date('2022-08-03')}`);

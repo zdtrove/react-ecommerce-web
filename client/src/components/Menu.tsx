@@ -1,7 +1,7 @@
 import { Box, List, ListItem, makeStyles, Typography } from '@material-ui/core';
-import { Fragment, useEffect } from 'react';
-import { categoryActions, selectCategories } from 'redux/features/category/slice';
-import { useAppDispatch, useAppSelector } from 'redux/hook';
+import { Fragment } from 'react';
+import { selectCategories } from 'redux/features/category/slice';
+import { useAppSelector } from 'redux/hook';
 import { Button } from './UI';
 import SmartphoneIcon from '@material-ui/icons/Smartphone';
 import LaptopIcon from '@material-ui/icons/Laptop';
@@ -82,7 +82,6 @@ const useStyles = makeStyles((theme) => ({
 const Menu = () => {
   const classes = useStyles();
   const globalClasses = useGlobalStyles();
-  const dispatch = useAppDispatch();
   const history = useHistory();
   const categories = useAppSelector(selectCategories);
 
@@ -169,12 +168,6 @@ const Menu = () => {
       }
     });
   };
-
-  useEffect(() => {
-    if (!categories.length) {
-      dispatch(categoryActions.getCategories());
-    }
-  }, []);
 
   return (
     <Box display="flex" justifyContent="center" alignItems="center" className={classes.root}>

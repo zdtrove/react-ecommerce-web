@@ -21,7 +21,8 @@ import {
   Select,
   FormControl,
   MenuItem,
-  Box
+  Box,
+  CircularProgress
 } from '@material-ui/core';
 import AddShoppingCartIcon from '@material-ui/icons/AddShoppingCart';
 import AccountCircle from '@material-ui/icons/AccountCircle';
@@ -31,7 +32,11 @@ import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import VpnKeyIcon from '@material-ui/icons/VpnKey';
 import GTranslateIcon from '@material-ui/icons/GTranslate';
 import { cartActions, selectCartTotalQuantity } from 'redux/features/cart/slice';
-import { productActions, selectProductsSearchBar } from 'redux/features/product/slice';
+import {
+  productActions,
+  selectProductsSearchBar,
+  selectLoadingProductsSearchBar
+} from 'redux/features/product/slice';
 import { formatNumber } from 'utils/functions';
 import { Button } from 'components/UI';
 import useComponentVisible from 'hooks/useComponentVisible';
@@ -96,7 +101,7 @@ const useStyles = makeStyles((theme) => ({
     '&:hover': {
       backgroundColor: alpha(theme.palette.common.white, 0.25)
     },
-    marginRight: theme.spacing(2),
+    marginRight: theme.spacing(1),
     marginLeft: 0,
     width: '100%',
     maxWidth: 300,
@@ -184,6 +189,7 @@ const Layout = ({ children }: Props) => {
   const isPageAuth = authPages.includes(history.location.pathname);
   const cartTotalQuantity = useAppSelector(selectCartTotalQuantity);
   const productsSearchBar = useAppSelector(selectProductsSearchBar);
+  const loadingProductsSearchBar = useAppSelector(selectLoadingProductsSearchBar);
   const isLoggedIn = useAppSelector(selectIsLoggedIn);
   const { openCart } = cartActions;
   const { getProductsSearchBar, getProductsSearchBarSuccess } = productActions;
@@ -269,6 +275,7 @@ const Layout = ({ children }: Props) => {
                 ))}
             </div>
           </div>
+          {loadingProductsSearchBar && <CircularProgress size={25} style={{ color: 'green' }} />}
           <div className={classes.grow} />
           <div className={classes.sectionDesktop}>
             <IconButton

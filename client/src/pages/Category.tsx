@@ -97,7 +97,7 @@ const CategoryPage = () => {
   const productsByCategoryId = useAppSelector(selectProductsByCategoryId);
   const categories = useAppSelector(selectCategories);
   const categoriesById = useAppSelector(selectCategoriesById);
-  const { getProducts, getProductsByCategoryIds, getProductsByCategoryId } = productActions;
+  const { getProductsByCategoryIds, getProductsByCategoryId } = productActions;
   const { getCategoriesById } = categoryActions;
   const [categoryIds, setCategoryIds] = useState<string[]>([]);
   const [productList, setProductList] = useState<Product[]>(productsByCategoryIds);
@@ -197,12 +197,6 @@ const CategoryPage = () => {
     setLoadMoreNumber(LOAD_MORE);
     setCurrentCategory({} as Category);
   }, [id]);
-
-  useEffect(() => {
-    if (!products.length) {
-      dispatch(getProducts());
-    }
-  }, []);
 
   return (
     <Layout>
