@@ -20,6 +20,7 @@ import { authActions } from 'redux/features/auth/slice';
 import CategoryPage from 'pages/Category';
 import Cart from 'components/cart';
 import ProductPage from 'pages/Product';
+import WishlistPage from 'pages/Wishlist';
 import UseScrollToTop from 'hooks/useScrollToTop';
 import { productActions, selectProducts } from 'redux/features/product/slice';
 import { categoryActions, selectCategories } from 'redux/features/category/slice';
@@ -58,6 +59,7 @@ function App() {
         <Route path={ROUTES.home.signUp} component={Register} />
         <Route path={ROUTES.home.category} component={CategoryPage} />
         <Route path={ROUTES.home.product} component={ProductPage} />
+        <PrivateRoute path={ROUTES.home.wishlist} component={WishlistPage} />
         {/* Admin */}
         <PrivateRoute admin exact path={ROUTES.admin.index} component={Dashboard} />
         <PrivateRoute admin exact path={ROUTES.admin.categories} component={CategoriesAdmin} />

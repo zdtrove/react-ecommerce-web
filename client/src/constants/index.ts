@@ -33,7 +33,8 @@ export const ROUTES = {
     login: '/login',
     signUp: '/sign-up',
     category: '/category/:id',
-    product: '/product/:id'
+    product: '/product/:id',
+    wishlist: '/wishlist'
   },
   admin: {
     index: '/admin',

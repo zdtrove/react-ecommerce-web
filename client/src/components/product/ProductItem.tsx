@@ -11,11 +11,12 @@ import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
 import { useEffect, useState } from 'react';
-import { selectIsLoggedIn, selectUser } from 'redux/features/auth/slice';
+import { selectIsLoggedIn, selectUser, selectWishlist } from 'redux/features/auth/slice';
 import { addWishlistApi, removeWishlistApi } from 'apis/commonApi';
 import { ENDPOINTS } from 'constants/index';
 import clsx from 'clsx';
 import { uiActions } from 'redux/features/ui/slice';
+import { authActions } from 'redux/features/auth/slice';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -103,9 +104,11 @@ const ProductItem = ({ product }: Props) => {
   const dispatch = useAppDispatch();
   const history = useHistory();
   const user = useAppSelector(selectUser);
+  const wishlist = useAppSelector(selectWishlist);
   const isLoggedIn = useAppSelector(selectIsLoggedIn);
   const { addToCart } = cartActions;
   const { showSnackbar } = uiActions;
+  const { addToWishlist, removeFromWishlist } = authActions;
   const products = useAppSelector(selectProducts);
   const [favorite, setFavorite] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -114,6 +117,7 @@ const ProductItem = ({ product }: Props) => {
     if (isLoggedIn) {
       setLoading(true);
       await addWishlistApi(ENDPOINTS.users.getOne, { productId: product?._id!, user: user! });
+      dispatch(addToWishlist(product?._id!));
       setLoading(false);
       setFavorite(true);
     } else {
@@ -130,6 +134,7 @@ const ProductItem = ({ product }: Props) => {
     if (isLoggedIn) {
       setLoading(true);
       await removeWishlistApi(ENDPOINTS.users.getOne, { productId: product?._id!, user: user! });
+      dispatch(removeFromWishlist(product?._id!));
       setLoading(false);
       setFavorite(false);
     } else {
@@ -143,10 +148,10 @@ const ProductItem = ({ product }: Props) => {
   };
 
   useEffect(() => {
-    if (user?._id) {
-      setFavorite(user.wishlist.some((value) => value === product._id));
+    if (wishlist.length) {
+      setFavorite(wishlist.some((value) => value === product._id));
     }
-  }, [user]);
+  }, [wishlist]);
 
   return (
     <div className={classes.root} key={product._id}>

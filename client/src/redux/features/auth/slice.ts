@@ -6,7 +6,8 @@ import { AuthState, LoginPayload } from 'types/auth';
 const initialState: AuthState = {
   loading: false,
   isLoggedIn: false,
-  user: null
+  user: null,
+  wishlist: []
 };
 
 const authSlice = createSlice({
@@ -21,6 +22,7 @@ const authSlice = createSlice({
       state.isLoggedIn = true;
       state.loading = false;
       state.user = action.payload;
+      state.wishlist = action.payload.wishlist;
     },
     loginFail(state) {
       state.loading = false;
@@ -32,6 +34,18 @@ const authSlice = createSlice({
       state.loading = false;
       state.isLoggedIn = true;
       state.user = action.payload;
+      state.wishlist = action.payload.wishlist;
+    },
+    addToWishlist(state, action: PayloadAction<string>) {
+      state.wishlist.push(action.payload);
+    },
+    removeFromWishlist(state, action: PayloadAction<string>) {
+      const wishlist = [...state.wishlist];
+      const index = wishlist.indexOf(action.payload);
+      if (index !== -1) {
+        wishlist.splice(index, 1);
+      }
+      state.wishlist = wishlist;
     },
     // eslint-disable-next-line no-unused-vars
     signUp(state, action: PayloadAction<any>) {
@@ -78,6 +92,7 @@ export const authActions = authSlice.actions;
 export const selectUser = (state: AppState) => state.auth.user;
 export const selectIsLoggedIn = (state: AppState) => state.auth.isLoggedIn;
 export const selectLoadingAuth = (state: AppState) => state.auth.loading;
+export const selectWishlist = (state: AppState) => state.auth.wishlist;
 
 // Reducer
 const authReducer = authSlice.reducer;

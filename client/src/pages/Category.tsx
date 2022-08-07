@@ -25,7 +25,7 @@ import {
 } from 'redux/features/product/slice';
 import { useAppDispatch, useAppSelector } from 'redux/hook';
 import { Product } from 'types/product';
-import ProductItem from '../components/product/ProductItem';
+import ProductItem from 'components/product/ProductItem';
 import clsx from 'clsx';
 import { Category } from 'types/category';
 import { Input } from 'components/UI';

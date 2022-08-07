@@ -4,6 +4,7 @@ export type AuthState = {
   isLoggedIn?: boolean;
   loading?: boolean;
   user?: User | null;
+  wishlist: string[];
 };
 
 export type LoginPayload = {

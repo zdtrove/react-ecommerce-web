@@ -304,9 +304,7 @@ const Layout = ({ children }: Props) => {
             {isLoggedIn && (
               <Button
                 className={classes.wishlist}
-                onClick={() =>
-                  dispatch(showSnackbar({ status: 'warning', message: 'Under construction' }))
-                }
+                onClick={() => history.push(ROUTES.home.wishlist)}
                 text="Wishlist"
                 startIcon={<FavoriteIcon />}
               />
