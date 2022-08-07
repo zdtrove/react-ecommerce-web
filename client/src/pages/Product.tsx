@@ -34,7 +34,7 @@ import 'swiper/css/thumbs';
 import { Rating } from '@material-ui/lab';
 import { uiActions } from 'redux/features/ui/slice';
 import { ENDPOINTS } from 'constants/index';
-import { addWishlistApi, removeWishlistApi } from 'apis/commonApi';
+import { addWishlistApi, removeWishlistApi, ratingProductApi } from 'apis/commonApi';
 import { selectIsLoggedIn, selectUser } from 'redux/features/auth/slice';
 import { Product } from 'types/product';
 
@@ -226,8 +226,11 @@ const ProductPage = () => {
   const [value, setValue] = useState<number | null>(0);
   const [favorite, setFavorite] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [loadingRating, setLoadingRating] = useState(false);
   const [product, setProduct] = useState<Product>({} as Product);
   const [productsRelated, setProductsRelated] = useState<Product[]>([]);
+  console.log(loadingRating);
+  console.log('product', product);
 
   const handleAddWishlist = async () => {
     if (isLoggedIn) {
@@ -266,9 +269,15 @@ const ProductPage = () => {
     setCurrentImage(image);
   };
 
-  const handleRating = (value: number | null) => {
-    console.log(value, typeof value);
+  const handleRating = async (value: number | null) => {
     setValue(value);
+    setLoadingRating(true);
+    await ratingProductApi(ENDPOINTS.products.getOne, {
+      productId: product?._id!,
+      starNumber: value!,
+      userId: user?._id!
+    });
+    setLoadingRating(false);
   };
 
   useEffect(() => {
@@ -348,12 +357,6 @@ const ProductPage = () => {
               justifyContent="space-between"
               alignItems="center"
             >
-              <Box display="flex" alignItems="center">
-                <StarIcon style={{ color: 'orange' }} />
-                <Typography variant="subtitle2" style={{ paddingTop: 4 }}>
-                  3.5 <small>(33)</small>
-                </Typography>
-              </Box>
               <Box
                 display="flex"
                 justifyContent="center"
@@ -410,14 +413,16 @@ const ProductPage = () => {
             <Box className={classes.ratedResult}>
               <Box className={classes.average} display="flex" alignItems="center">
                 <Typography variant="h5" style={{ color: 'orange', marginRight: 10 }}>
-                  3.5
+                  {product?.star?.average}
                 </Typography>
                 <StarIcon />
                 <StarIcon />
                 <StarIcon />
                 <StarHalfIcon />
                 <StarOutlineIcon />
-                <Typography style={{ marginLeft: 10, fontWeight: 'bold' }}>33 Rated</Typography>
+                <Typography style={{ marginLeft: 10, fontWeight: 'bold' }}>
+                  {product?.star?.list?.length} Rated
+                </Typography>
               </Box>
               <Box className={classes.line} display="flex" alignItems="center">
                 <Typography style={{ width: 10 }}>5</Typography>

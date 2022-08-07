@@ -1,5 +1,5 @@
 const router = require('express').Router()
-const { addProduct, getProducts, updateProduct, deleteProduct } = require('../controllers/product.controller')
+const { addProduct, getProducts, updateProduct, deleteProduct, ratingProduct } = require('../controllers/product.controller')
 const { auth, onlyAdmin } = require('../middleware/auth.middleware')
 
 router.route('/products')
@@ -9,5 +9,8 @@ router.route('/products')
 router.route('/product/:id')
     .patch(auth, onlyAdmin, updateProduct)
     .delete(auth, onlyAdmin, deleteProduct)
+
+router.route('/product/:id/rating')
+	.patch(auth, ratingProduct)
 
 module.exports = router

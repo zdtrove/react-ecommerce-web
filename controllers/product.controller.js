@@ -69,6 +69,32 @@ exports.updateProduct = async (req, res) => {
     }
 }
 
+exports.ratingProduct = async (req, res) => {
+    try {
+        const { starNumber, userId } = req.body
+        const { star: { average, list }} = await Product.findOne({ _id: req.params.id });
+        const listTemp = [...list];
+        listTemp.push({ userId: userId, star: starNumber });
+        const sum = listTemp.reduce((accumulator, object) => accumulator + object.star, 0);
+        const avg = (sum / listTemp.length) || 0;
+        const product = await Product.findOneAndUpdate(
+            { _id: req.params.id },
+            { star: {
+                average: avg,
+                list: [...listTemp] 
+            }},
+            { new: true }
+        );
+
+        res.status(200).json({
+            message: "Rating success",
+            product: { ...product._doc }
+        })
+    } catch (err) {
+        res.status(500).json({ message: err.message })
+    }
+}
+
 exports.deleteProduct = async (req, res) => {
     try {
         const product = await Product.findOneAndDelete({ _id: req.params.id })
