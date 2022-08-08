@@ -55,8 +55,9 @@ export const removeWishlistApi = async (
 
 export const ratingProductApi = async (
   endpoint: string,
-  data: { productId: string; starNumber: number; userId: string }
+  data: { productId: string; starNumber: number; userId: string; message: string }
 ) => {
+  console.log('data', data);
   try {
     return await axios.patch(`${endpoint}/${data.productId}/rating`, data);
   } catch (err) {

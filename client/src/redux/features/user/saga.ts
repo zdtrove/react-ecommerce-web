@@ -36,7 +36,7 @@ function* addUserSaga(action: PayloadAction<User>) {
   try {
     const res: AddOrUpdateResponse<User> = yield call(
       addDataApi,
-      ENDPOINTS.users.getOne,
+      ENDPOINTS.users.getAll,
       action.payload
     );
     const { status } = res;

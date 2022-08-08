@@ -20,7 +20,7 @@ import CloseIcon from '@material-ui/icons/Close';
 import { formatNumber } from 'utils/functions';
 import ProductItem from 'components/product/ProductItem';
 import StarIcon from '@material-ui/icons/Star';
-import { Button } from 'components/UI';
+import { Button, Input } from 'components/UI';
 import { cartActions } from 'redux/features/cart/slice';
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 import FavoriteIcon from '@material-ui/icons/Favorite';
@@ -36,7 +36,7 @@ import { uiActions } from 'redux/features/ui/slice';
 import { ENDPOINTS } from 'constants/index';
 import { addWishlistApi, removeWishlistApi, ratingProductApi } from 'apis/commonApi';
 import { selectIsLoggedIn, selectUser } from 'redux/features/auth/slice';
-import { Product } from 'types/product';
+import { ListRated, Product, StarByNumber } from 'types/product';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -223,14 +223,16 @@ const ProductPage = () => {
   const [images, setImages] = useState<string[]>([]);
   const [openLightBox, setOpenLightBox] = useState(false);
   const [currentImage, setCurrentImage] = useState('');
-  const [value, setValue] = useState<number | null>(0);
+  const [rated, setRated] = useState<number | null>(0);
   const [favorite, setFavorite] = useState(false);
   const [loading, setLoading] = useState(false);
   const [loadingRating, setLoadingRating] = useState(false);
   const [product, setProduct] = useState<Product>({} as Product);
   const [productsRelated, setProductsRelated] = useState<Product[]>([]);
-  console.log(loadingRating);
+  const [message, setMessage] = useState('');
+  const [starByNumber, setStarByNumber] = useState<StarByNumber>({} as StarByNumber);
   console.log('product', product);
+  console.log('starByNumber', starByNumber);
 
   const handleAddWishlist = async () => {
     if (isLoggedIn) {
@@ -269,15 +271,257 @@ const ProductPage = () => {
     setCurrentImage(image);
   };
 
-  const handleRating = async (value: number | null) => {
-    setValue(value);
+  const handleRating = async () => {
     setLoadingRating(true);
     await ratingProductApi(ENDPOINTS.products.getOne, {
       productId: product?._id!,
-      starNumber: value!,
-      userId: user?._id!
+      starNumber: rated!,
+      userId: user?._id!,
+      message
     });
     setLoadingRating(false);
+  };
+
+  const renderStar = (star: number) => {
+    const average = product?.star?.average!;
+    return average >= star ? (
+      <StarIcon />
+    ) : average > star - 1 && average < star ? (
+      <StarHalfIcon />
+    ) : (
+      <StarOutlineIcon />
+    );
+  };
+
+  const renderRatedAverage = () => {
+    const average = product?.star?.average!;
+    return (
+      <Box className={classes.average} display="flex" alignItems="center">
+        <Typography variant="h5" style={{ color: 'orange', marginRight: 10 }}>
+          {product?.star?.average}
+        </Typography>
+        {average >= 1 ? <StarIcon /> : <StarOutlineIcon />}
+        {renderStar(2)}
+        {renderStar(3)}
+        {renderStar(4)}
+        {renderStar(5)}
+        <Typography style={{ marginLeft: 10, fontWeight: 'bold' }}>
+          {product?.star?.list?.length} Rated
+        </Typography>
+      </Box>
+    );
+  };
+
+  const renderStarPercent = (starNumber: number, percent: number, value: number) => {
+    return (
+      <Box className={classes.line} display="flex" alignItems="center">
+        <Typography style={{ width: 10 }}>{starNumber}</Typography>
+        <Box style={{ marginLeft: 5, width: 100 }} display="flex" alignItems="center">
+          <StarIcon />
+          <StarIcon />
+          <StarIcon />
+          <StarIcon />
+          <StarIcon />
+        </Box>
+        <div className={classes.percent}>
+          <p style={{ width: `${percent || 0}%` }} />
+        </div>
+        <Typography>{value}</Typography>
+      </Box>
+    );
+  };
+
+  const calculatePercent = (listStar: ListRated[], starNumber: number) => {
+    return {
+      value: listStar.filter((item) => item.star === starNumber).length,
+      percent: (listStar.filter((item) => item.star === starNumber).length / listStar.length) * 100
+    };
+  };
+
+  const renderRated = () => {
+    return (
+      <>
+        <Box className={classes.rated}>
+          <Typography style={{ fontWeight: 700 }} variant="h5">
+            Rated:
+          </Typography>
+          <Box style={{ border: '1px dashed orange', padding: 10, borderRadius: 8 }}>
+            <Rating
+              name="simple-controlled"
+              value={rated}
+              onChange={(event, value) => setRated(value)}
+            />
+            <Box display="flex" alignItems="center" className={classes.ratedText}>
+              <Typography>Very bad</Typography>
+              <Typography>Bad</Typography>
+              <Typography>Normal</Typography>
+              <Typography>Good</Typography>
+              <Typography>Very good</Typography>
+            </Box>
+          </Box>
+          <Input
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
+            multiline
+            minRows={4}
+            label="Message"
+          />
+        </Box>
+        <Box
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+          style={{ marginTop: 10, columnGap: 10 }}
+        >
+          <Button onClick={handleRating} text="Send rated" disabled={!(rated && message)} />
+          {loadingRating && <CircularProgress size={25} style={{ color: 'green' }} />}
+        </Box>
+      </>
+    );
+  };
+
+  const renderGallery = () => {
+    return (
+      <Box className={classes.gallery}>
+        <Swiper
+          spaceBetween={10}
+          navigation={true}
+          thumbs={{ swiper: thumbsSwiper }}
+          modules={[FreeMode, Navigation, Thumbs]}
+          className="mySwiper"
+        >
+          {images.length > 0 &&
+            images.map((image, index) => (
+              <SwiperSlide key={index}>
+                <img onClick={() => handleLightBox(image)} src={image} alt="image" />
+              </SwiperSlide>
+            ))}
+        </Swiper>
+        <Swiper
+          onSwiper={setThumbsSwiper}
+          spaceBetween={10}
+          slidesPerView={4}
+          freeMode={true}
+          watchSlidesProgress={true}
+          modules={[FreeMode, Navigation, Thumbs]}
+          className="mySwiperThumb"
+        >
+          {images.length > 0 &&
+            images.map((image, index) => (
+              <SwiperSlide key={index}>
+                <img src={image} alt="image" />
+              </SwiperSlide>
+            ))}
+        </Swiper>
+      </Box>
+    );
+  };
+
+  const renderDetail = () => {
+    return (
+      <>
+        <Typography variant="h5" style={{ fontWeight: 700 }}>
+          {product?.name}
+        </Typography>
+        <Box display="flex" justifyContent="left" alignItems="center">
+          <AttachMoneyIcon style={{ color: 'green' }} />
+          <Typography variant="h5" color="secondary" style={{ fontWeight: 700 }}>
+            {product?.price && formatNumber(product?.price)}
+          </Typography>
+        </Box>
+        <Box
+          className={classes.star}
+          display="flex"
+          justifyContent="space-between"
+          alignItems="center"
+        >
+          <Box display="flex" justifyContent="center" alignItems="center" style={{ columnGap: 10 }}>
+            {loading && <CircularProgress size={20} />}
+            <Tooltip
+              TransitionComponent={Zoom}
+              arrow
+              title={`${favorite ? 'Remove from wishlist' : 'Add to wishlist'}`}
+              placement="top"
+            >
+              {favorite ? (
+                <FavoriteIcon
+                  onClick={handleRemoveWishlist}
+                  className={clsx(classes.wishlist, {
+                    [classes.disabled]: loading
+                  })}
+                />
+              ) : (
+                <FavoriteBorderIcon
+                  onClick={handleAddWishlist}
+                  className={clsx(classes.wishlist, {
+                    [classes.disabled]: loading
+                  })}
+                />
+              )}
+            </Tooltip>
+          </Box>
+        </Box>
+        <Box className={classes.action} display="flex" justifyContent="left" alignItems="center">
+          {product?.inCart ? (
+            <Button variant="contained" disabled text="In Cart" />
+          ) : (
+            <Button
+              className={classes.addToCart}
+              onClick={() => dispatch(addToCart({ product, products, inCart: true }))}
+              text="Add To Cart"
+            />
+          )}
+          <Typography variant="subtitle2">
+            Sold{' '}
+            <small>
+              <b>({product?.sold})</b>
+            </small>
+          </Typography>
+        </Box>
+      </>
+    );
+  };
+
+  const renderRelated = () => {
+    return (
+      <Box className={classes.related}>
+        <Typography variant="h5" style={{ marginBottom: 10, color: 'white', fontWeight: 700 }}>
+          Related products
+        </Typography>
+        <Swiper
+          navigation={true}
+          modules={[Navigation]}
+          width={1175}
+          slidesPerView={5}
+          spaceBetween={10}
+        >
+          {productsRelated?.map((product) => (
+            <SwiperSlide key={product._id}>
+              <ProductItem product={product} />
+            </SwiperSlide>
+          ))}
+        </Swiper>
+      </Box>
+    );
+  };
+
+  const renderLightBox = () => {
+    return (
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        position="relative"
+        className={clsx(classes.lightBox, {
+          [classes.hidden]: !openLightBox
+        })}
+      >
+        <IconButton className={classes.closeLightBox} onClick={() => setOpenLightBox(false)}>
+          <CloseIcon />
+        </IconButton>
+        <img src={currentImage} alt="image" />
+      </Box>
+    );
   };
 
   useEffect(() => {
@@ -297,6 +541,21 @@ const ProductPage = () => {
         products.filter((prt) => prt.categoryId === product.categoryId && prt._id !== product?._id)
       );
     }
+    if (product?.star?.list.length) {
+      const myRated = product?.star?.list.filter((item) => item.userId === user?._id);
+      if (myRated.length) {
+        setRated(myRated[0].star);
+        setMessage(myRated[0].message);
+      }
+      const listStar = product?.star?.list;
+      setStarByNumber({
+        one: calculatePercent(listStar, 1),
+        two: calculatePercent(listStar, 2),
+        three: calculatePercent(listStar, 3),
+        four: calculatePercent(listStar, 4),
+        five: calculatePercent(listStar, 5)
+      });
+    }
   }, [product]);
 
   useEffect(() => {
@@ -309,254 +568,23 @@ const ProductPage = () => {
       <Toolbar />
       <Box className={classes.root}>
         <Box className={classes.detailContainer} display="flex">
-          <Box className={classes.gallery}>
-            <Swiper
-              spaceBetween={10}
-              navigation={true}
-              thumbs={{ swiper: thumbsSwiper }}
-              modules={[FreeMode, Navigation, Thumbs]}
-              className="mySwiper"
-            >
-              {images.length > 0 &&
-                images.map((image, index) => (
-                  <SwiperSlide key={index}>
-                    <img onClick={() => handleLightBox(image)} src={image} alt="image" />
-                  </SwiperSlide>
-                ))}
-            </Swiper>
-            <Swiper
-              onSwiper={setThumbsSwiper}
-              spaceBetween={10}
-              slidesPerView={4}
-              freeMode={true}
-              watchSlidesProgress={true}
-              modules={[FreeMode, Navigation, Thumbs]}
-              className="mySwiperThumb"
-            >
-              {images.length > 0 &&
-                images.map((image, index) => (
-                  <SwiperSlide key={index}>
-                    <img src={image} alt="image" />
-                  </SwiperSlide>
-                ))}
-            </Swiper>
-          </Box>
+          {renderGallery()}
           <Box className={classes.detail}>
-            <Typography variant="h5" style={{ fontWeight: 700 }}>
-              {product?.name}
-            </Typography>
-            <Box display="flex" justifyContent="left" alignItems="center">
-              <AttachMoneyIcon style={{ color: 'green' }} />
-              <Typography variant="h5" color="secondary" style={{ fontWeight: 700 }}>
-                {product?.price && formatNumber(product?.price)}
-              </Typography>
-            </Box>
-            <Box
-              className={classes.star}
-              display="flex"
-              justifyContent="space-between"
-              alignItems="center"
-            >
-              <Box
-                display="flex"
-                justifyContent="center"
-                alignItems="center"
-                style={{ columnGap: 10 }}
-              >
-                {loading && <CircularProgress size={20} />}
-                <Tooltip
-                  TransitionComponent={Zoom}
-                  arrow
-                  title={`${favorite ? 'Remove from wishlist' : 'Add to wishlist'}`}
-                  placement="top"
-                >
-                  {favorite ? (
-                    <FavoriteIcon
-                      onClick={handleRemoveWishlist}
-                      className={clsx(classes.wishlist, {
-                        [classes.disabled]: loading
-                      })}
-                    />
-                  ) : (
-                    <FavoriteBorderIcon
-                      onClick={handleAddWishlist}
-                      className={clsx(classes.wishlist, {
-                        [classes.disabled]: loading
-                      })}
-                    />
-                  )}
-                </Tooltip>
-              </Box>
-            </Box>
-            <Box
-              className={classes.action}
-              display="flex"
-              justifyContent="left"
-              alignItems="center"
-            >
-              {product?.inCart ? (
-                <Button variant="contained" disabled text="In Cart" />
-              ) : (
-                <Button
-                  className={classes.addToCart}
-                  onClick={() => dispatch(addToCart({ product, products, inCart: true }))}
-                  text="Add To Cart"
-                />
-              )}
-              <Typography variant="subtitle2">
-                Sold{' '}
-                <small>
-                  <b>({product?.sold})</b>
-                </small>
-              </Typography>
-            </Box>
+            {renderDetail()}
             <Box className={classes.ratedResult}>
-              <Box className={classes.average} display="flex" alignItems="center">
-                <Typography variant="h5" style={{ color: 'orange', marginRight: 10 }}>
-                  {product?.star?.average}
-                </Typography>
-                <StarIcon />
-                <StarIcon />
-                <StarIcon />
-                <StarHalfIcon />
-                <StarOutlineIcon />
-                <Typography style={{ marginLeft: 10, fontWeight: 'bold' }}>
-                  {product?.star?.list?.length} Rated
-                </Typography>
-              </Box>
-              <Box className={classes.line} display="flex" alignItems="center">
-                <Typography style={{ width: 10 }}>5</Typography>
-                <Box style={{ marginLeft: 5, width: 100 }} display="flex" alignItems="center">
-                  <StarIcon />
-                  <StarIcon />
-                  <StarIcon />
-                  <StarIcon />
-                  <StarIcon />
-                </Box>
-                <div className={classes.percent}>
-                  <p style={{ width: '40%' }} />
-                </div>
-                <Typography>35</Typography>
-              </Box>
-              <Box className={classes.line} display="flex" alignItems="center">
-                <Typography style={{ width: 10 }}>4</Typography>
-                <Box style={{ marginLeft: 5, width: 100 }} display="flex" alignItems="center">
-                  <StarIcon />
-                  <StarIcon />
-                  <StarIcon />
-                  <StarIcon />
-                  <StarOutlineIcon />
-                </Box>
-                <div className={classes.percent}>
-                  <p style={{ width: '60%' }} />
-                </div>
-                <Typography>44</Typography>
-              </Box>
-              <Box className={classes.line} display="flex" alignItems="center">
-                <Typography style={{ width: 10 }}>3</Typography>
-                <Box style={{ marginLeft: 5, width: 100 }} display="flex" alignItems="center">
-                  <StarIcon />
-                  <StarIcon />
-                  <StarIcon />
-                  <StarOutlineIcon />
-                  <StarOutlineIcon />
-                </Box>
-                <div className={classes.percent}>
-                  <p style={{ width: '10%' }} />
-                </div>
-                <Typography>7</Typography>
-              </Box>
-              <Box className={classes.line} display="flex" alignItems="center">
-                <Typography style={{ width: 10 }}>2</Typography>
-                <Box style={{ marginLeft: 5, width: 100 }} display="flex" alignItems="center">
-                  <StarIcon />
-                  <StarIcon />
-                  <StarOutlineIcon />
-                  <StarOutlineIcon />
-                  <StarOutlineIcon />
-                </Box>
-                <div className={classes.percent}>
-                  <p style={{ width: '30%' }} />
-                </div>
-                <Typography>21</Typography>
-              </Box>
-              <Box className={classes.line} display="flex" alignItems="center">
-                <Typography style={{ width: 10 }}>1</Typography>
-                <Box style={{ marginLeft: 5, width: 100 }} display="flex" alignItems="center">
-                  <StarIcon />
-                  <StarOutlineIcon />
-                  <StarOutlineIcon />
-                  <StarOutlineIcon />
-                  <StarOutlineIcon />
-                </Box>
-                <div className={classes.percent}>
-                  <p style={{ width: '10%' }} />
-                </div>
-                <Typography>7</Typography>
-              </Box>
+              {renderRatedAverage()}
+              {renderStarPercent(5, starByNumber?.five?.percent, starByNumber?.five?.value)}
+              {renderStarPercent(4, starByNumber?.four?.percent, starByNumber?.four?.value)}
+              {renderStarPercent(3, starByNumber?.three?.percent, starByNumber?.three?.value)}
+              {renderStarPercent(2, starByNumber?.two?.percent, starByNumber?.two?.value)}
+              {renderStarPercent(1, starByNumber?.one?.percent, starByNumber?.one?.value)}
             </Box>
-            <Box className={classes.rated}>
-              <Typography style={{ fontWeight: 700 }} variant="h5">
-                Rated:
-              </Typography>
-              <Box style={{ border: '1px dashed orange', padding: 10, borderRadius: 8 }}>
-                <Rating
-                  name="simple-controlled"
-                  value={value}
-                  onChange={(event, value) => handleRating(value)}
-                />
-                <Box display="flex" alignItems="center" className={classes.ratedText}>
-                  <Typography>Very bad</Typography>
-                  <Typography>Bad</Typography>
-                  <Typography>Normal</Typography>
-                  <Typography>Good</Typography>
-                  <Typography>Very good</Typography>
-                </Box>
-              </Box>
-            </Box>
-            <Box display="flex" justifyContent="center" style={{ marginTop: 10 }}>
-              <Button
-                onClick={() =>
-                  dispatch(showSnackbar({ status: 'warning', message: 'Under construction' }))
-                }
-                text="Send rated"
-              />
-            </Box>
+            {renderRated()}
           </Box>
         </Box>
-        <Box className={classes.related}>
-          <Typography variant="h5" style={{ marginBottom: 10, color: 'white', fontWeight: 700 }}>
-            Related products
-          </Typography>
-          <Swiper
-            navigation={true}
-            modules={[Navigation]}
-            width={1175}
-            slidesPerView={5}
-            spaceBetween={10}
-          >
-            {productsRelated?.map((product) => (
-              <SwiperSlide key={product._id}>
-                <ProductItem product={product} />
-              </SwiperSlide>
-            ))}
-          </Swiper>
-        </Box>
+        {renderRelated()}
       </Box>
-      <Box
-        display="flex"
-        justifyContent="center"
-        alignItems="center"
-        position="relative"
-        className={clsx(classes.lightBox, {
-          [classes.hidden]: !openLightBox
-        })}
-      >
-        <IconButton className={classes.closeLightBox} onClick={() => setOpenLightBox(false)}>
-          <CloseIcon />
-        </IconButton>
-        <img src={currentImage} alt="image" />
-      </Box>
+      {renderLightBox()}
     </Layout>
   );
 };

@@ -71,17 +71,23 @@ exports.updateProduct = async (req, res) => {
 
 exports.ratingProduct = async (req, res) => {
     try {
-        const { starNumber, userId } = req.body
-        const { star: { average, list }} = await Product.findOne({ _id: req.params.id });
+        const { starNumber, userId, message } = req.body
+        const { star: { list }} = await Product.findOne({ _id: req.params.id });
         const listTemp = [...list];
-        listTemp.push({ userId: userId, star: starNumber });
+        const index = listTemp.findIndex((item) => item.userId === userId);
+        if (index >= 0) {
+            listTemp[index].star = starNumber;
+            listTemp[index].message = message;
+        } else {
+            listTemp.push({ userId: userId, star: starNumber, message });
+        }
         const sum = listTemp.reduce((accumulator, object) => accumulator + object.star, 0);
-        const avg = (sum / listTemp.length) || 0;
+        const average = (sum / listTemp.length) || 0;
         const product = await Product.findOneAndUpdate(
             { _id: req.params.id },
             { star: {
-                average: avg,
-                list: [...listTemp] 
+                average,
+                list: [...listTemp]
             }},
             { new: true }
         );

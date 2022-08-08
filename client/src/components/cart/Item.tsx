@@ -100,10 +100,10 @@ const CartItemComponent = ({ cartItem }: Props) => {
             className={classes.name}
             primary={cartItem.name}
             secondary={
-              <Box display="flex" justifyContent="left" alignItems="center">
+              <>
                 <AttachMoneyIcon style={{ color: 'green', fontSize: 12 }} />
                 <Typography variant="caption">{formatNumber(cartItem.price)}</Typography>
-              </Box>
+              </>
             }
           />
           <Box display="flex" justifyContent="left" alignItems="center">

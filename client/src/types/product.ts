@@ -63,7 +63,13 @@ export type Gift = {
 
 export type Star = {
   average: number;
-  list: any[];
+  list: ListRated[];
+};
+
+export type ListRated = {
+  userId: string;
+  star: number;
+  message: string;
 };
 
 export type ProductState = {
@@ -71,4 +77,17 @@ export type ProductState = {
   loading: boolean;
   productsSearchBar: Product[];
   loadingProductsSearchBar: boolean;
+};
+
+export type StarPercent = {
+  value: number;
+  percent: number;
+};
+
+export type StarByNumber = {
+  one: StarPercent;
+  two: StarPercent;
+  three: StarPercent;
+  four: StarPercent;
+  five: StarPercent;
 };
