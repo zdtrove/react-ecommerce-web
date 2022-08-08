@@ -11,7 +11,7 @@ import {
 import Layout from 'components/layouts';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { selectProducts } from 'redux/features/product/slice';
+import { productActions, selectProducts } from 'redux/features/product/slice';
 import { useAppDispatch, useAppSelector } from 'redux/hook';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { FreeMode, Navigation, Thumbs } from 'swiper';
@@ -34,7 +34,7 @@ import 'swiper/css/thumbs';
 import { Rating } from '@material-ui/lab';
 import { uiActions } from 'redux/features/ui/slice';
 import { ENDPOINTS } from 'constants/index';
-import { addWishlistApi, removeWishlistApi, ratingProductApi } from 'apis/commonApi';
+import { addWishlistApi, removeWishlistApi } from 'apis/commonApi';
 import { selectIsLoggedIn, selectUser } from 'redux/features/auth/slice';
 import { ListRated, Product, StarByNumber } from 'types/product';
 
@@ -219,6 +219,7 @@ const ProductPage = () => {
   const products = useAppSelector(selectProducts);
   const { addToCart } = cartActions;
   const { showSnackbar } = uiActions;
+  const { rating } = productActions;
   const [thumbsSwiper, setThumbsSwiper] = useState<any>(null);
   const [images, setImages] = useState<string[]>([]);
   const [openLightBox, setOpenLightBox] = useState(false);
@@ -273,12 +274,14 @@ const ProductPage = () => {
 
   const handleRating = async () => {
     setLoadingRating(true);
-    await ratingProductApi(ENDPOINTS.products.getOne, {
-      productId: product?._id!,
-      starNumber: rated!,
-      userId: user?._id!,
-      message
-    });
+    dispatch(
+      rating({
+        productId: product?._id!,
+        starNumber: rated!,
+        userId: user?._id!,
+        message
+      })
+    );
     setLoadingRating(false);
   };
 
@@ -298,7 +301,7 @@ const ProductPage = () => {
     return (
       <Box className={classes.average} display="flex" alignItems="center">
         <Typography variant="h5" style={{ color: 'orange', marginRight: 10 }}>
-          {product?.star?.average}
+          {product?.star?.average.toFixed(1)}
         </Typography>
         {average >= 1 ? <StarIcon /> : <StarOutlineIcon />}
         {renderStar(2)}

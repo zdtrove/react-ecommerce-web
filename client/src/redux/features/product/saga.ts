@@ -6,9 +6,16 @@ import {
   AddOrUpdateResponse,
   DeleteResponse,
   cloudinaryImageType,
-  ListResponse
+  ListResponse,
+  Response
 } from 'types/common';
-import { addDataApi, deleteDataApi, getAllDataApi, updateDataApi } from 'apis/commonApi';
+import {
+  addDataApi,
+  deleteDataApi,
+  getAllDataApi,
+  ratingProductApi,
+  updateDataApi
+} from 'apis/commonApi';
 import { ENDPOINTS } from 'constants/index';
 import { imagesUpload } from 'utils/upload';
 import { findIndex } from 'utils/functions';
@@ -26,7 +33,8 @@ const {
   deleteProductFail,
   getProductsAddOrRemoveCart,
   getProductsSearchBar,
-  getProductsSearchBarSuccess
+  getProductsSearchBarSuccess,
+  rating
 } = productActions;
 
 function* getProductsSearchBarSaga(action: PayloadAction<string>) {
@@ -150,6 +158,30 @@ function* deleteProductSaga(action: PayloadAction<string>) {
   }
 }
 
+function* ratingSaga(
+  action: PayloadAction<{
+    productId: string;
+    starNumber: number;
+    userId: string;
+    message: string;
+  }>
+) {
+  try {
+    const res: Response<Product> = yield call(
+      ratingProductApi,
+      ENDPOINTS.products.getOne,
+      action.payload
+    );
+    const { status } = res;
+    if (status === 200) {
+      yield put(getProducts());
+    }
+  } catch (error) {
+    console.log(error);
+    yield put(deleteProductFail());
+  }
+}
+
 export function* productSaga() {
   yield all([
     takeEvery(getProducts, getProductsSaga),
@@ -157,6 +189,7 @@ export function* productSaga() {
     takeEvery(updateProduct, updateProductSaga),
     takeEvery(deleteProduct, deleteProductSaga),
     takeEvery(getProductsAddOrRemoveCart, getProductsAddOrRemoveCartSaga),
-    takeLatest(getProductsSearchBar, getProductsSearchBarSaga)
+    takeLatest(getProductsSearchBar, getProductsSearchBarSaga),
+    takeLatest(rating, ratingSaga)
   ]);
 }

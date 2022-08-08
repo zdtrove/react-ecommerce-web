@@ -56,6 +56,17 @@ const productSlice = createSlice({
     getProductsSearchBarSuccess(state, action: PayloadAction<Product[]>) {
       state.loadingProductsSearchBar = false;
       state.productsSearchBar = action.payload;
+    },
+    rating(
+      state,
+      action: PayloadAction<{
+        productId: string;
+        starNumber: number;
+        userId: string;
+        message: string;
+      }>
+    ) {
+      state.loading = true;
     }
   }
 });
