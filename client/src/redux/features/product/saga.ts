@@ -34,7 +34,8 @@ const {
   getProductsAddOrRemoveCart,
   getProductsSearchBar,
   getProductsSearchBarSuccess,
-  rating
+  rating,
+  ratingSuccess
 } = productActions;
 
 function* getProductsSearchBarSaga(action: PayloadAction<string>) {
@@ -175,6 +176,8 @@ function* ratingSaga(
     const { status } = res;
     if (status === 200) {
       yield put(getProducts());
+      yield delay(1000);
+      yield put(ratingSuccess());
     }
   } catch (error) {
     console.log(error);

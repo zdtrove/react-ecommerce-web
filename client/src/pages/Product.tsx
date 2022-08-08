@@ -11,7 +11,7 @@ import {
 import Layout from 'components/layouts';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { productActions, selectProducts } from 'redux/features/product/slice';
+import { productActions, selectProducts, selectLoadingRating } from 'redux/features/product/slice';
 import { useAppDispatch, useAppSelector } from 'redux/hook';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { FreeMode, Navigation, Thumbs } from 'swiper';
@@ -122,17 +122,6 @@ const useStyles = makeStyles((theme) => ({
     padding: `${theme.spacing(1.5)}px`,
     marginTop: theme.spacing(6)
   },
-  star: {
-    '& .MuiSvgIcon-root': {
-      width: 25,
-      height: 'auto',
-      padding: '3px 0',
-      marginRight: 5
-    },
-    '& small': {
-      fontWeight: 700
-    }
-  },
   addToCart: {
     backgroundColor: theme.palette.green.dark,
     marginLeft: 0
@@ -217,6 +206,7 @@ const ProductPage = () => {
   const isLoggedIn = useAppSelector(selectIsLoggedIn);
   const user = useAppSelector(selectUser);
   const products = useAppSelector(selectProducts);
+  const loadingRating = useAppSelector(selectLoadingRating);
   const { addToCart } = cartActions;
   const { showSnackbar } = uiActions;
   const { rating } = productActions;
@@ -227,13 +217,10 @@ const ProductPage = () => {
   const [rated, setRated] = useState<number | null>(0);
   const [favorite, setFavorite] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [loadingRating, setLoadingRating] = useState(false);
   const [product, setProduct] = useState<Product>({} as Product);
   const [productsRelated, setProductsRelated] = useState<Product[]>([]);
   const [message, setMessage] = useState('');
   const [starByNumber, setStarByNumber] = useState<StarByNumber>({} as StarByNumber);
-  console.log('product', product);
-  console.log('starByNumber', starByNumber);
 
   const handleAddWishlist = async () => {
     if (isLoggedIn) {
@@ -273,16 +260,23 @@ const ProductPage = () => {
   };
 
   const handleRating = async () => {
-    setLoadingRating(true);
-    dispatch(
-      rating({
-        productId: product?._id!,
-        starNumber: rated!,
-        userId: user?._id!,
-        message
-      })
-    );
-    setLoadingRating(false);
+    if (isLoggedIn) {
+      dispatch(
+        rating({
+          productId: product?._id!,
+          starNumber: rated!,
+          userId: user?._id!,
+          message
+        })
+      );
+    } else {
+      dispatch(
+        showSnackbar({
+          status: 'warning',
+          message: 'You must be logged in to perform this function'
+        })
+      );
+    }
   };
 
   const renderStar = (star: number) => {
@@ -329,7 +323,12 @@ const ProductPage = () => {
         <div className={classes.percent}>
           <p style={{ width: `${percent || 0}%` }} />
         </div>
-        <Typography>{value}</Typography>
+        <Typography>
+          <span style={{ display: 'flex' }}>
+            <small style={{ fontWeight: 700 }}>{value || 0}</small>
+            <small style={{ marginLeft: 5 }}>rated</small>
+          </span>
+        </Typography>
       </Box>
     );
   };
@@ -370,13 +369,13 @@ const ProductPage = () => {
             label="Message"
           />
         </Box>
-        <Box
-          display="flex"
-          justifyContent="center"
-          alignItems="center"
-          style={{ marginTop: 10, columnGap: 10 }}
-        >
-          <Button onClick={handleRating} text="Send rated" disabled={!(rated && message)} />
+        <Box display="flex" justifyContent="center" alignItems="center" style={{ marginTop: 10 }}>
+          <Button
+            onClick={handleRating}
+            text="Send rated"
+            disabled={!(rated && message) || loadingRating}
+            style={{ marginRight: 10 }}
+          />
           {loadingRating && <CircularProgress size={25} style={{ color: 'green' }} />}
         </Box>
       </>
@@ -426,19 +425,14 @@ const ProductPage = () => {
         <Typography variant="h5" style={{ fontWeight: 700 }}>
           {product?.name}
         </Typography>
-        <Box display="flex" justifyContent="left" alignItems="center">
-          <AttachMoneyIcon style={{ color: 'green' }} />
-          <Typography variant="h5" color="secondary" style={{ fontWeight: 700 }}>
-            {product?.price && formatNumber(product?.price)}
-          </Typography>
-        </Box>
-        <Box
-          className={classes.star}
-          display="flex"
-          justifyContent="space-between"
-          alignItems="center"
-        >
-          <Box display="flex" justifyContent="center" alignItems="center" style={{ columnGap: 10 }}>
+        <Box display="flex" justifyContent="space-between" alignItems="center">
+          <Box display="flex" justifyContent="left" alignItems="center">
+            <AttachMoneyIcon style={{ color: 'green' }} />
+            <Typography variant="h5" color="secondary" style={{ fontWeight: 700 }}>
+              {product?.price && formatNumber(product?.price)}
+            </Typography>
+          </Box>
+          <Box display="flex" justifyContent="right" alignItems="center" style={{ columnGap: 10 }}>
             {loading && <CircularProgress size={20} />}
             <Tooltip
               TransitionComponent={Zoom}
@@ -558,6 +552,16 @@ const ProductPage = () => {
         four: calculatePercent(listStar, 4),
         five: calculatePercent(listStar, 5)
       });
+    } else {
+      setRated(0);
+      setMessage('');
+      setStarByNumber({
+        one: { value: 0, percent: 0 },
+        two: { value: 0, percent: 0 },
+        three: { value: 0, percent: 0 },
+        four: { value: 0, percent: 0 },
+        five: { value: 0, percent: 0 }
+      });
     }
   }, [product]);
 
@@ -565,6 +569,13 @@ const ProductPage = () => {
     const productTemp = products.filter((product) => product._id === id);
     setProduct(productTemp[0]);
   }, [id, products]);
+
+  useEffect(() => {
+    if (!isLoggedIn) {
+      setRated(0);
+      setMessage('');
+    }
+  }, [isLoggedIn]);
 
   return (
     <Layout>

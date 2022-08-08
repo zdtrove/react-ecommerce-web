@@ -8,7 +8,8 @@ const initialState: ProductState = {
   products: [],
   loading: false,
   productsSearchBar: [],
-  loadingProductsSearchBar: false
+  loadingProductsSearchBar: false,
+  loadingRating: false
 };
 
 const productSlice = createSlice({
@@ -66,7 +67,10 @@ const productSlice = createSlice({
         message: string;
       }>
     ) {
-      state.loading = true;
+      state.loadingRating = true;
+    },
+    ratingSuccess(state) {
+      state.loadingRating = false;
     }
   }
 });
@@ -80,6 +84,7 @@ export const selectLoadingProduct = (state: AppState) => state.product.loading;
 export const selectProductsSearchBar = (state: AppState) => state.product.productsSearchBar;
 export const selectLoadingProductsSearchBar = (state: AppState) =>
   state.product.loadingProductsSearchBar;
+export const selectLoadingRating = (state: AppState) => state.product.loadingRating;
 
 // Reducer
 const productReducer = productSlice.reducer;

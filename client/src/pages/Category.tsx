@@ -28,8 +28,8 @@ const useStyles = makeStyles((theme) => ({
     paddingBottom: theme.spacing(6)
   },
   list: {
-    columnGap: theme.spacing(2),
-    rowGap: theme.spacing(2)
+    columnGap: theme.spacing(1.5),
+    rowGap: theme.spacing(1.5)
   },
   loadMore: {
     margin: 20,

@@ -75,6 +75,7 @@ export type ListRated = {
 export type ProductState = {
   products: Product[];
   loading: boolean;
+  loadingRating: boolean;
   productsSearchBar: Product[];
   loadingProductsSearchBar: boolean;
 };

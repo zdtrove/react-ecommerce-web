@@ -24,6 +24,7 @@ type Props = {
   component?: any;
   startIcon?: React.ReactElement;
   endIcon?: React.ReactElement;
+  style?: any;
 };
 
 const Button = ({ text, size, color, variant, onClick, ...rest }: Props) => {

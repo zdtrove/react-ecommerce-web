@@ -2,6 +2,8 @@ import { Box, Typography, makeStyles, Tooltip, Zoom, CircularProgress } from '@m
 import { Product } from 'types/product';
 import { formatNumber } from 'utils/functions';
 import StarIcon from '@material-ui/icons/Star';
+import StarOutlineIcon from '@material-ui/icons/StarOutline';
+import StarHalfIcon from '@material-ui/icons/StarHalf';
 import { Button } from 'components/UI';
 import { useAppDispatch, useAppSelector } from 'redux/hook';
 import { cartActions } from 'redux/features/cart/slice';
@@ -21,8 +23,8 @@ import { authActions } from 'redux/features/auth/slice';
 const useStyles = makeStyles((theme) => ({
   root: {
     backgroundColor: 'white',
-    maxWidth: 227,
-    padding: 10,
+    maxWidth: 230,
+    padding: 8,
     borderRadius: 5,
     minHeight: 370,
     border: `1px solid ${theme.palette.primary.dark}`,
@@ -69,8 +71,7 @@ const useStyles = makeStyles((theme) => ({
     '& .MuiSvgIcon-root': {
       width: 25,
       height: 'auto',
-      padding: '3px 0',
-      marginRight: 5
+      padding: '3px 0'
     },
     '& small': {
       fontWeight: 700
@@ -92,6 +93,14 @@ const useStyles = makeStyles((theme) => ({
   disabled: {
     pointerEvents: 'none',
     cursor: 'default !important'
+  },
+  average: {
+    '& .MuiSvgIcon-root': {
+      color: 'orange',
+      width: 20,
+      height: 'auto',
+      marginRight: 0
+    }
   }
 }));
 
@@ -147,6 +156,36 @@ const ProductItem = ({ product }: Props) => {
     }
   };
 
+  const renderStar = (star: number) => {
+    const average = product?.star?.average!;
+    return average >= star ? (
+      <StarIcon />
+    ) : average > star - 1 && average < star ? (
+      <StarHalfIcon />
+    ) : (
+      <StarOutlineIcon />
+    );
+  };
+
+  const renderRatedAverage = () => {
+    const average = product?.star?.average!;
+    return (
+      <Box className={classes.average} display="flex" alignItems="center">
+        <Typography variant="subtitle2" style={{ color: 'orange', marginRight: 5 }}>
+          {product?.star?.average.toFixed(1)}
+        </Typography>
+        {average >= 1 ? <StarIcon /> : <StarOutlineIcon />}
+        {renderStar(2)}
+        {renderStar(3)}
+        {renderStar(4)}
+        {renderStar(5)}
+        <Typography style={{ marginLeft: 5, fontWeight: 'bold' }}>
+          <small>({product?.star?.list?.length})</small>
+        </Typography>
+      </Box>
+    );
+  };
+
   useEffect(() => {
     if (wishlist.length) {
       setFavorite(wishlist.some((value) => value === product._id));
@@ -177,13 +216,8 @@ const ProductItem = ({ product }: Props) => {
         justifyContent="space-between"
         alignItems="center"
       >
-        <Box display="flex" alignItems="center">
-          <StarIcon style={{ color: 'orange' }} />
-          <Typography variant="subtitle2" style={{ paddingTop: 4 }}>
-            3.5 <small>(33)</small>
-          </Typography>
-        </Box>
-        <Box display="flex" justifyContent="center" alignItems="center" style={{ columnGap: 10 }}>
+        {renderRatedAverage()}
+        <Box display="flex" justifyContent="center" alignItems="center" style={{ columnGap: 8 }}>
           {loading && <CircularProgress size={20} />}
           <Tooltip
             TransitionComponent={Zoom}

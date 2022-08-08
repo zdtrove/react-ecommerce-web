@@ -42,6 +42,10 @@ const useStyles = makeStyles((theme) => ({
     },
     '& .MuiListItem-root': {
       paddingLeft: 5
+    },
+    '& .MuiListItemText-secondary': {
+      display: 'flex',
+      alignItems: 'center'
     }
   },
   action: {
