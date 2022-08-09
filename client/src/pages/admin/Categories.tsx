@@ -1,15 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useAppSelector, useAppDispatch } from 'redux/hook';
-import {
-  makeStyles,
-  Paper,
-  Typography,
-  Toolbar,
-  DialogContent,
-  DialogContentText,
-  DialogActions,
-  Box
-} from '@material-ui/core';
+import { makeStyles, Paper, Typography, Toolbar, Box } from '@material-ui/core';
 import TreeView from '@material-ui/lab/TreeView';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
@@ -17,11 +8,13 @@ import AddIcon from '@material-ui/icons/Add';
 import TreeItem from '@material-ui/lab/TreeItem';
 import CategoryRoundedIcon from '@material-ui/icons/CategoryRounded';
 import Layout from 'components/admin/layouts';
-import { Button, Dialog, TableHeader } from 'components/UI';
+import { Button, TableHeader } from 'components/UI';
 import Edit from 'components/admin/category/Edit';
 import Add from 'components/admin/category/Add';
 import { categoryActions, selectCategories } from 'redux/features/category/slice';
 import { Category } from 'types/category';
+import Delete from 'components/admin/category/Delete';
+import { uiActions } from 'redux/features/ui/slice';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -33,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
     minWidth: 240,
     overflow: 'scroll'
   },
-  treeview: {
+  treeView: {
     height: 'max-content',
     padding: theme.spacing(2),
     paddingTop: 0,
@@ -111,6 +104,7 @@ const Categories = () => {
   const classes = useStyles();
   const categories = useAppSelector(selectCategories);
   const dispatch = useAppDispatch();
+  const { showModal } = uiActions;
   const [selected, setSelected] = useState<string>('');
   const [expanded, setExpanded] = useState<string[]>([]);
   const [showEdit, setShowEdit] = useState(false);
@@ -128,13 +122,9 @@ const Categories = () => {
 
   const handleEdit = (e: React.ChangeEvent, category: Category) => {
     setCategoryRecord(category);
+    dispatch(showModal());
     setShowEdit(true);
     e.stopPropagation();
-  };
-
-  const handleDelete = (id: string) => {
-    dispatch(categoryActions.deleteCategory(id));
-    setShowDelete(false);
   };
 
   const renderTree = (categories: Category[]) => {
@@ -157,12 +147,13 @@ const Categories = () => {
                 </Box>
               )}
               <Typography className={classes.labelText}>{category.name}</Typography>
-              {selected === (category._id || '') ? (
+              {selected === category._id ? (
                 <>
                   <Button onClick={(e: React.ChangeEvent) => handleEdit(e, category)} text="EDIT" />
                   <Button
                     onClick={(e) => {
                       setCategoryRecord(category);
+                      dispatch(showModal());
                       setShowDelete(true);
                       e.stopPropagation();
                     }}
@@ -190,9 +181,7 @@ const Categories = () => {
   };
 
   useEffect(() => {
-    if (!categories.length) {
-      dispatch(categoryActions.getCategories());
-    }
+    !categories.length && dispatch(categoryActions.getCategories());
   }, []);
 
   return (
@@ -202,7 +191,10 @@ const Categories = () => {
         <Paper className={classes.rootTree}>
           <Toolbar>
             <Button
-              onClick={() => setShowAdd(true)}
+              onClick={() => {
+                dispatch(showModal());
+                setShowAdd(true);
+              }}
               variant="outlined"
               startIcon={<AddIcon />}
               className={classes.newButton}
@@ -210,7 +202,7 @@ const Categories = () => {
             />
           </Toolbar>
           <TreeView
-            className={classes.treeview}
+            className={classes.treeView}
             defaultCollapseIcon={<ExpandMoreIcon />}
             defaultExpandIcon={<ChevronRightIcon />}
             expanded={expanded}
@@ -223,39 +215,15 @@ const Categories = () => {
         </Paper>
         {showEdit && (
           <Edit
-            {...{
-              categories,
-              categoryRecord,
-              showEdit,
-              setShowEdit
-            }}
+            categories={categories}
+            category={categoryRecord}
+            show={showEdit}
+            setShow={setShowEdit}
           />
         )}
-        {showAdd && (
-          <Add
-            {...{
-              categories,
-              showAdd,
-              setShowAdd
-            }}
-          />
-        )}
+        {showAdd && <Add categories={categories} show={showAdd} setShow={setShowAdd} />}
         {showDelete && (
-          <Dialog show={showDelete} setShow={setShowDelete} title="DELETE CATEGORY">
-            <DialogContent>
-              <DialogContentText>
-                Are you sure to delete <strong>{categoryRecord && categoryRecord.name}</strong>?
-              </DialogContentText>
-            </DialogContent>
-            <DialogActions>
-              <Button
-                onClick={() => handleDelete(categoryRecord._id || '')}
-                color="secondary"
-                text="DELETE"
-              />
-              <Button onClick={() => setShowDelete(false)} color="default" text="CANCEL" />
-            </DialogActions>
-          </Dialog>
+          <Delete show={showDelete} setShow={setShowDelete} category={categoryRecord} />
         )}
       </div>
     </Layout>

@@ -1,21 +1,23 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { useAppDispatch } from 'redux/hook';
+import { useAppDispatch, useAppSelector } from 'redux/hook';
 import {
   makeStyles,
   useTheme,
   useMediaQuery,
   DialogContent,
   DialogActions,
-  Fab
+  Fab,
+  CircularProgress
 } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import { Input, Select, Button, Dialog, RadioGroup } from 'components/UI';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import { categoryActions } from 'redux/features/category/slice';
+import { categoryActions, selectLoadingCategory } from 'redux/features/category/slice';
 import { Category } from 'types/category';
 import { createCategoryList } from 'utils/functions';
+import { selectModal } from 'redux/features/ui/slice';
 
 const useStyles = makeStyles((theme) => ({
   upload: {
@@ -43,16 +45,18 @@ const validationSchema = Yup.object().shape({
 
 type Props = {
   categories: Category[];
-  showAdd: boolean;
+  show: boolean;
   // eslint-disable-next-line no-unused-vars
-  setShowAdd: (params: boolean) => void;
+  setShow: (params: boolean) => void;
 };
 
-const CategoryAdd = ({ categories, showAdd, setShowAdd }: Props) => {
+const CategoryAdd = ({ categories, show, setShow }: Props) => {
   const classes = useStyles();
   const dispatch = useAppDispatch();
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.up('sm'));
+  const loading = useAppSelector(selectLoadingCategory);
+  const modal = useAppSelector(selectModal);
   const [categoryImg, setCategoryImg] = useState<Blob | MediaSource | null>(null);
   const [categoryImgReset, setCategoryImgReset] = useState('');
 
@@ -71,7 +75,6 @@ const CategoryAdd = ({ categories, showAdd, setShowAdd }: Props) => {
     validationSchema,
     onSubmit: (values) => {
       dispatch(categoryActions.addCategory(values));
-      setShowAdd(false);
     }
   });
 
@@ -82,8 +85,12 @@ const CategoryAdd = ({ categories, showAdd, setShowAdd }: Props) => {
     formIk.setFieldValue('image', file);
   };
 
+  useEffect(() => {
+    !modal && setShow(false);
+  }, [modal]);
+
   return (
-    <Dialog show={showAdd} setShow={setShowAdd} title="CATEGORY ADD">
+    <Dialog show={show} setShow={setShow} title="CATEGORY ADD">
       <DialogContent dividers>
         <form onSubmit={formIk.handleSubmit}>
           <Input
@@ -146,8 +153,9 @@ const CategoryAdd = ({ categories, showAdd, setShowAdd }: Props) => {
         </form>
       </DialogContent>
       <DialogActions>
+        {loading && <CircularProgress size={25} />}
         <Button
-          disabled={!(formIk.isValid && formIk.dirty)}
+          disabled={!(formIk.isValid && formIk.dirty) || loading}
           onClick={() => formIk.submitForm()}
           text="ADD"
         />
@@ -175,8 +183,8 @@ CategoryAdd.propTypes = {
       image: PropTypes.string
     })
   ),
-  showAdd: PropTypes.bool,
-  setShowAdd: PropTypes.func
+  show: PropTypes.bool,
+  setShow: PropTypes.func
 };
 
 export default CategoryAdd;

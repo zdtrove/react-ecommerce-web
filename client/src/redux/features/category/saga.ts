@@ -1,5 +1,5 @@
 import { Category } from 'types/category';
-import { call, all, put, takeEvery } from 'redux-saga/effects';
+import { call, all, put, takeEvery, delay } from 'redux-saga/effects';
 import { categoryActions } from './slice';
 import { PayloadAction } from '@reduxjs/toolkit';
 import {
@@ -11,18 +11,24 @@ import {
 import { addDataApi, deleteDataApi, getAllDataApi, updateDataApi } from 'apis/commonApi';
 import { ENDPOINTS } from 'constants/index';
 import { imageUpload } from 'utils/upload';
+import { uiActions } from '../ui/slice';
 
 const {
   addCategory,
+  addCategorySuccess,
   addCategoryFail,
   getCategories,
   getCategoriesSuccess,
   getCategoriesFail,
   updateCategory,
+  updateCategorySuccess,
   updateCategoryFail,
   deleteCategory,
+  deleteCategorySuccess,
   deleteCategoryFail
 } = categoryActions;
+
+const { hideModal } = uiActions;
 
 function* getCategoriesSaga() {
   try {
@@ -51,6 +57,9 @@ function* updateCategorySaga(action: PayloadAction<Category>) {
     const { status } = res;
     if (status === 200) {
       yield put(getCategories());
+      yield delay(1000);
+      yield put(updateCategorySuccess());
+      yield put(hideModal());
     }
   } catch (error) {
     console.log(error);
@@ -73,6 +82,9 @@ function* addCategorySaga(action: PayloadAction<Category>) {
     const { status } = res;
     if (status === 201) {
       yield put(getCategories());
+      yield delay(1000);
+      yield put(addCategorySuccess());
+      yield put(hideModal());
     }
   } catch (error) {
     console.log(error);
@@ -90,6 +102,9 @@ function* deleteCategorySaga(action: PayloadAction<string>) {
     const { status } = res;
     if (status === 200) {
       yield put(getCategories());
+      yield delay(1000);
+      yield put(deleteCategorySuccess());
+      yield put(hideModal());
     }
   } catch (error) {
     console.log(error);

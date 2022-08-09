@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useAppDispatch, useAppSelector } from 'redux/hook';
 import {
@@ -7,7 +7,8 @@ import {
   Fab,
   useMediaQuery,
   makeStyles,
-  useTheme
+  useTheme,
+  CircularProgress
 } from '@material-ui/core';
 import { Input, Select, Button, Dialog } from 'components/UI';
 import { useFormik } from 'formik';
@@ -17,9 +18,10 @@ import LocalAtmIcon from '@material-ui/icons/LocalAtm';
 import AddIcon from '@material-ui/icons/Add';
 import HighlightOffIcon from '@material-ui/icons/HighlightOff';
 import { Product } from 'types/product';
-import { productActions } from 'redux/features/product/slice';
+import { productActions, selectLoadingProduct } from 'redux/features/product/slice';
 import { createCategoryList, imageShow } from 'utils/functions';
 import { selectCategories } from 'redux/features/category/slice';
+import { selectModal } from 'redux/features/ui/slice';
 
 const useStyles = makeStyles(() => ({
   upload: {
@@ -70,13 +72,13 @@ const validationSchema = Yup.object().shape({
 });
 
 type Props = {
-  showEdit: boolean;
+  show: boolean;
   // eslint-disable-next-line no-unused-vars
-  setShowEdit: (param: boolean) => void;
+  setShow: (param: boolean) => void;
   product: Product;
 };
 
-const Edit = ({ showEdit, setShowEdit, product }: Props) => {
+const Edit = ({ show, setShow, product }: Props) => {
   const dispatch = useAppDispatch();
   const classes = useStyles();
   const theme = useTheme();
@@ -94,6 +96,8 @@ const Edit = ({ showEdit, setShowEdit, product }: Props) => {
     images
   } = product;
   const categories = useAppSelector(selectCategories);
+  const loading = useAppSelector(selectLoadingProduct);
+  const modal = useAppSelector(selectModal);
   const [imagesNew, setImagesChange] = useState<any[]>([]);
   const [imagesOld, setImagesOld] = useState<any[]>(images || []);
 
@@ -116,7 +120,6 @@ const Edit = ({ showEdit, setShowEdit, product }: Props) => {
     validationSchema,
     onSubmit: (values) => {
       dispatch(productActions.updateProduct({ _id, ...values }));
-      setShowEdit(false);
     }
   });
 
@@ -151,8 +154,12 @@ const Edit = ({ showEdit, setShowEdit, product }: Props) => {
     formIk.setFieldValue('imagesOld', imagesNewChoose);
   };
 
+  useEffect(() => {
+    !modal && setShow(false);
+  }, [modal]);
+
   return (
-    <Dialog show={showEdit} setShow={setShowEdit} title="PRODUCT EDIT">
+    <Dialog show={show} setShow={setShow} title="PRODUCT EDIT">
       <DialogContent dividers>
         <form onSubmit={formIk.handleSubmit}>
           <Input
@@ -252,8 +259,9 @@ const Edit = ({ showEdit, setShowEdit, product }: Props) => {
         </form>
       </DialogContent>
       <DialogActions>
+        {loading && <CircularProgress size={25} />}
         <Button
-          disabled={!(formIk.isValid && formIk.dirty)}
+          disabled={!(formIk.isValid && formIk.dirty) || loading}
           onClick={() => formIk.submitForm()}
           text="SAVE"
         />
@@ -269,8 +277,8 @@ const Edit = ({ showEdit, setShowEdit, product }: Props) => {
 };
 
 Edit.propTypes = {
-  showEdit: PropTypes.bool,
-  setShowEdit: PropTypes.func,
+  show: PropTypes.bool,
+  setShow: PropTypes.func,
   product: PropTypes.shape({
     _id: PropTypes.string,
     name: PropTypes.string,

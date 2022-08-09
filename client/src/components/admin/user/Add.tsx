@@ -1,6 +1,6 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { useAppDispatch } from 'redux/hook';
+import { useAppDispatch, useAppSelector } from 'redux/hook';
 import {
   makeStyles,
   DialogContent,
@@ -8,7 +8,8 @@ import {
   IconButton,
   InputAdornment,
   Zoom,
-  Tooltip
+  Tooltip,
+  CircularProgress
 } from '@material-ui/core';
 import { Input, RadioGroup, Select, Checkboxes, Button, Dialog } from 'components/UI';
 import { userConst } from 'constants/index';
@@ -20,8 +21,9 @@ import LockRoundedIcon from '@material-ui/icons/LockRounded';
 import VisibilityRoundedIcon from '@material-ui/icons/VisibilityRounded';
 import VisibilityOffRoundedIcon from '@material-ui/icons/VisibilityOffRounded';
 import EmailRoundedIcon from '@material-ui/icons/EmailRounded';
-import { userActions } from 'redux/features/user/slice';
+import { selectLoadingUser, userActions } from 'redux/features/user/slice';
 import { User } from 'types/user';
+import { selectModal } from 'redux/features/ui/slice';
 
 const { GENDER, CITY, PAYMENT_METHODS, ROLES } = userConst;
 
@@ -62,14 +64,16 @@ const initialValues: User = {
 };
 
 type Props = {
-  showAdd: boolean;
+  show: boolean;
   // eslint-disable-next-line no-unused-vars
-  setShowAdd: (param: boolean) => void;
+  setShow: (param: boolean) => void;
 };
 
-const Add = ({ showAdd, setShowAdd }: Props) => {
+const Add = ({ show, setShow }: Props) => {
   const classes = useStyles();
   const dispatch = useAppDispatch();
+  const loading = useAppSelector(selectLoadingUser);
+  const modal = useAppSelector(selectModal);
   const [showPass, setShowPass] = useState(false);
   const [showPassCf, setShowPassCf] = useState(false);
   const [typePass, setTypePass] = useState('password');
@@ -92,7 +96,6 @@ const Add = ({ showAdd, setShowAdd }: Props) => {
     validationSchema,
     onSubmit: (values) => {
       dispatch(userActions.addUser(values));
-      setShowAdd(false);
     }
   });
 
@@ -106,8 +109,12 @@ const Add = ({ showAdd, setShowAdd }: Props) => {
     setTypePassCf(showPassCf ? 'password' : 'text');
   };
 
+  useEffect(() => {
+    !modal && setShow(false);
+  }, [modal]);
+
   return (
-    <Dialog show={showAdd} setShow={setShowAdd} title="USER EDIT">
+    <Dialog show={show} setShow={setShow} title="USER EDIT">
       <DialogContent dividers>
         <form onSubmit={formIk.handleSubmit}>
           <Input
@@ -203,8 +210,9 @@ const Add = ({ showAdd, setShowAdd }: Props) => {
         </form>
       </DialogContent>
       <DialogActions>
+        {loading && <CircularProgress size={25} />}
         <Button
-          disabled={!(formIk.isValid && formIk.dirty)}
+          disabled={!(formIk.isValid && formIk.dirty) || loading}
           onClick={() => formIk.submitForm()}
           text="SAVE"
         />
@@ -220,8 +228,8 @@ const Add = ({ showAdd, setShowAdd }: Props) => {
 };
 
 Add.propTypes = {
-  showAdd: PropTypes.bool,
-  setShowAdd: PropTypes.func
+  show: PropTypes.bool,
+  setShow: PropTypes.func
 };
 
 export default Add;

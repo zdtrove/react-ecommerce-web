@@ -1,3 +1,4 @@
+import { uiActions } from 'redux/features/ui/slice';
 import { Product } from 'types/product';
 import { call, all, put, takeEvery, delay, takeLatest } from 'redux-saga/effects';
 import { productActions } from './slice';
@@ -23,13 +24,16 @@ import { CartItem, CartItems, ProductListCart } from 'types/cart';
 
 const {
   addProduct,
+  addProductSuccess,
   addProductFail,
   getProducts,
   getProductsSuccess,
   getProductsFail,
   updateProduct,
+  updateProductSuccess,
   updateProductFail,
   deleteProduct,
+  deleteProductSuccess,
   deleteProductFail,
   getProductsAddOrRemoveCart,
   getProductsSearchBar,
@@ -37,6 +41,8 @@ const {
   rating,
   ratingSuccess
 } = productActions;
+
+const { hideModal } = uiActions;
 
 function* getProductsSearchBarSaga(action: PayloadAction<string>) {
   try {
@@ -112,6 +118,9 @@ function* addProductSaga(action: PayloadAction<Product>) {
     const { status } = res;
     if (status === 201) {
       yield put(getProducts());
+      yield delay(1000);
+      yield put(addProductSuccess());
+      yield put(hideModal());
     }
   } catch (error) {
     console.log(error);
@@ -135,6 +144,9 @@ function* updateProductSaga(action: PayloadAction<Product>) {
     const { status } = res;
     if (status === 200) {
       yield put(getProducts());
+      yield delay(1000);
+      yield put(updateProductSuccess());
+      yield put(hideModal());
     }
   } catch (error) {
     console.log(error);
@@ -152,6 +164,9 @@ function* deleteProductSaga(action: PayloadAction<string>) {
     const { status } = res;
     if (status === 200) {
       yield put(getProducts());
+      yield delay(1000);
+      yield put(deleteProductSuccess());
+      yield put(hideModal());
     }
   } catch (error) {
     console.log(error);

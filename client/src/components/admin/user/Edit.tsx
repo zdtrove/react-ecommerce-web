@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
-import { useAppDispatch } from 'redux/hook';
-import { DialogContent, DialogActions } from '@material-ui/core';
+import { useAppDispatch, useAppSelector } from 'redux/hook';
+import { DialogContent, DialogActions, CircularProgress } from '@material-ui/core';
 import { Input, RadioGroup, Select, Checkboxes, Button, Dialog } from 'components/UI';
 import { userConst } from 'constants/index';
 import { useFormik } from 'formik';
@@ -8,7 +8,9 @@ import * as Yup from 'yup';
 import AccountCircleRoundedIcon from '@material-ui/icons/AccountCircleRounded';
 import PhoneAndroidRoundedIcon from '@material-ui/icons/PhoneAndroidRounded';
 import { User } from 'types/user';
-import { userActions } from 'redux/features/user/slice';
+import { selectLoadingUser, userActions } from 'redux/features/user/slice';
+import { selectModal } from 'redux/features/ui/slice';
+import { useEffect } from 'react';
 
 const { GENDER, CITY, PAYMENT_METHODS, ROLES } = userConst;
 
@@ -19,15 +21,17 @@ const validationSchema = Yup.object().shape({
 });
 
 type Props = {
-  showEdit: boolean;
+  show: boolean;
   // eslint-disable-next-line no-unused-vars
-  setShowEdit: (param: boolean) => void;
-  userRecord: User;
+  setShow: (param: boolean) => void;
+  user: User;
 };
 
-const Edit = ({ showEdit, setShowEdit, userRecord }: Props) => {
+const Edit = ({ show, setShow, user }: Props) => {
   const dispatch = useAppDispatch();
-  const { _id, email, fullName, phone, gender, city, payments, role, wishlist } = userRecord;
+  const loading = useAppSelector(selectLoadingUser);
+  const modal = useAppSelector(selectModal);
+  const { _id, email, fullName, phone, gender, city, payments, role, wishlist } = user;
 
   let initialValues: User = {
     email,
@@ -57,12 +61,15 @@ const Edit = ({ showEdit, setShowEdit, userRecord }: Props) => {
     validationSchema,
     onSubmit: (values) => {
       dispatch(userActions.updateUser({ _id, ...values }));
-      setShowEdit(false);
     }
   });
 
+  useEffect(() => {
+    !modal && setShow(false);
+  }, [modal]);
+
   return (
-    <Dialog show={showEdit} setShow={setShowEdit} title="USER EDIT">
+    <Dialog show={show} setShow={setShow} title="USER EDIT">
       <DialogContent dividers>
         <form onSubmit={formIk.handleSubmit}>
           <Input name="email" label="Email" type="email" value={formIk.values.email} disabled />
@@ -96,8 +103,9 @@ const Edit = ({ showEdit, setShowEdit, userRecord }: Props) => {
         </form>
       </DialogContent>
       <DialogActions>
+        {loading && <CircularProgress size={25} />}
         <Button
-          disabled={!(formIk.isValid && formIk.dirty)}
+          disabled={!(formIk.isValid && formIk.dirty) || loading}
           onClick={() => formIk.submitForm()}
           text="SAVE"
         />
@@ -113,9 +121,9 @@ const Edit = ({ showEdit, setShowEdit, userRecord }: Props) => {
 };
 
 Edit.propTypes = {
-  showEdit: PropTypes.bool,
-  setShowEdit: PropTypes.func,
-  userRecord: PropTypes.shape({
+  show: PropTypes.bool,
+  setShow: PropTypes.func,
+  user: PropTypes.shape({
     _id: PropTypes.string,
     email: PropTypes.string,
     fullName: PropTypes.string,

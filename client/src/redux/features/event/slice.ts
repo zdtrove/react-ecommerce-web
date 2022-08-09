@@ -25,6 +25,9 @@ const eventSlice = createSlice({
     addEvent(state, action: PayloadAction<Event>) {
       state.loading = true;
     },
+    addEventSuccess(state) {
+      state.loading = false;
+    },
     addEventFail(state) {
       state.loading = false;
     },
@@ -32,12 +35,18 @@ const eventSlice = createSlice({
     updateEvent(state, action: PayloadAction<Event>) {
       state.loading = true;
     },
+    updateEventSuccess(state) {
+      state.loading = false;
+    },
     updateEventFail(state) {
       state.loading = false;
     },
     // eslint-disable-next-line no-unused-vars
     deleteEvent(state, action: PayloadAction<string>) {
       state.loading = true;
+    },
+    deleteEventSuccess(state) {
+      state.loading = false;
     },
     deleteEventFail(state) {
       state.loading = false;

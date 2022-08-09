@@ -1,14 +1,16 @@
 import PropTypes from 'prop-types';
-import { useAppDispatch } from 'redux/hook';
-import { DialogContent, DialogActions } from '@material-ui/core';
+import { useAppDispatch, useAppSelector } from 'redux/hook';
+import { DialogContent, DialogActions, CircularProgress } from '@material-ui/core';
 import { Input, Button, Dialog } from 'components/UI';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import StorefrontIcon from '@material-ui/icons/Storefront';
 import HomeIcon from '@material-ui/icons/Home';
 import PersonPinCircleIcon from '@material-ui/icons/PersonPinCircle';
-import { storeActions } from 'redux/features/store/slice';
+import { selectLoadingStore, storeActions } from 'redux/features/store/slice';
 import { Store } from 'types/store';
+import { useEffect } from 'react';
+import { selectModal } from 'redux/features/ui/slice';
 
 const validationSchema = Yup.object().shape({
   name: Yup.string().required('Name is required').max(64, 'Name max length is 64'),
@@ -26,25 +28,30 @@ const initialValues: Store = {
 };
 
 type Props = {
-  showAdd: boolean;
+  show: boolean;
   // eslint-disable-next-line no-unused-vars
-  setShowAdd: (param: boolean) => void;
+  setShow: (param: boolean) => void;
 };
 
-const Add = ({ showAdd, setShowAdd }: Props) => {
+const Add = ({ show, setShow }: Props) => {
   const dispatch = useAppDispatch();
+  const loading = useAppSelector(selectLoadingStore);
+  const modal = useAppSelector(selectModal);
 
   const formIk = useFormik({
     initialValues,
     validationSchema,
     onSubmit: (values) => {
       dispatch(storeActions.addStore(values));
-      setShowAdd(false);
     }
   });
 
+  useEffect(() => {
+    !modal && setShow(false);
+  }, [modal]);
+
   return (
-    <Dialog show={showAdd} setShow={setShowAdd} title="STORE ADD">
+    <Dialog show={show} setShow={setShow} title="STORE ADD">
       <DialogContent dividers>
         <form onSubmit={formIk.handleSubmit}>
           <Input
@@ -86,8 +93,9 @@ const Add = ({ showAdd, setShowAdd }: Props) => {
         </form>
       </DialogContent>
       <DialogActions>
+        {loading && <CircularProgress size={25} />}
         <Button
-          disabled={!(formIk.isValid && formIk.dirty)}
+          disabled={!(formIk.isValid && formIk.dirty) || loading}
           onClick={() => formIk.submitForm()}
           text="SAVE"
         />
@@ -103,8 +111,8 @@ const Add = ({ showAdd, setShowAdd }: Props) => {
 };
 
 Add.propTypes = {
-  showAdd: PropTypes.bool,
-  setShowAdd: PropTypes.func
+  show: PropTypes.bool,
+  setShow: PropTypes.func
 };
 
 export default Add;

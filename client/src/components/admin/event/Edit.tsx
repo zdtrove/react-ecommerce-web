@@ -1,15 +1,16 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { useAppDispatch } from 'redux/hook';
-import { DialogContent, DialogActions } from '@material-ui/core';
+import { useAppDispatch, useAppSelector } from 'redux/hook';
+import { DialogContent, DialogActions, CircularProgress } from '@material-ui/core';
 import { Input, Button, Dialog } from 'components/UI';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import EventNoteIcon from '@material-ui/icons/EventNote';
-import { eventActions } from 'redux/features/event/slice';
+import { eventActions, selectLoadingEvent } from 'redux/features/event/slice';
 import { Event } from 'types/event';
 import DateFnsUtils from '@date-io/date-fns';
 import { MuiPickersUtilsProvider, KeyboardDatePicker } from '@material-ui/pickers';
+import { selectModal } from 'redux/features/ui/slice';
 
 const validationSchema = Yup.object().shape({
   name: Yup.string().required('Name is required').max(64, 'Name max length is 64'),
@@ -21,15 +22,17 @@ const validationSchema = Yup.object().shape({
 });
 
 type Props = {
-  showEdit: boolean;
+  show: boolean;
   // eslint-disable-next-line no-unused-vars
-  setShowEdit: (param: boolean) => void;
-  eventRecord: Event;
+  setShow: (param: boolean) => void;
+  event: Event;
 };
 
-const Edit = ({ showEdit, setShowEdit, eventRecord }: Props) => {
+const Edit = ({ show, setShow, event }: Props) => {
   const dispatch = useAppDispatch();
-  const { _id, name, enName, description, enDescription, startDate, endDate } = eventRecord;
+  const loading = useAppSelector(selectLoadingEvent);
+  const modal = useAppSelector(selectModal);
+  const { _id, name, enName, description, enDescription, startDate, endDate } = event;
   const [startDateEdit, setStartDateEdit] = useState<Date | null>(startDate);
   const [endDateEdit, setEndDateEdit] = useState<Date | null>(endDate);
 
@@ -47,7 +50,6 @@ const Edit = ({ showEdit, setShowEdit, eventRecord }: Props) => {
     validationSchema,
     onSubmit: (values) => {
       dispatch(eventActions.updateEvent({ _id, ...values }));
-      setShowEdit(false);
     }
   });
 
@@ -61,8 +63,12 @@ const Edit = ({ showEdit, setShowEdit, eventRecord }: Props) => {
     formIk.setFieldValue('endDate', date);
   };
 
+  useEffect(() => {
+    !modal && setShow(false);
+  }, [modal]);
+
   return (
-    <Dialog show={showEdit} setShow={setShowEdit} title="EVENT ADD">
+    <Dialog show={show} setShow={setShow} title="EVENT ADD">
       <DialogContent dividers>
         <form onSubmit={formIk.handleSubmit}>
           <Input
@@ -130,8 +136,9 @@ const Edit = ({ showEdit, setShowEdit, eventRecord }: Props) => {
         </form>
       </DialogContent>
       <DialogActions>
+        {loading && <CircularProgress size={25} />}
         <Button
-          disabled={!(formIk.isValid && formIk.dirty)}
+          disabled={!(formIk.isValid && formIk.dirty) || loading}
           onClick={() => formIk.submitForm()}
           text="SAVE"
         />
@@ -147,8 +154,8 @@ const Edit = ({ showEdit, setShowEdit, eventRecord }: Props) => {
 };
 
 Edit.propTypes = {
-  showEdit: PropTypes.bool,
-  setShowEdit: PropTypes.func
+  show: PropTypes.bool,
+  setShow: PropTypes.func
 };
 
 export default Edit;

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from 'redux/hook';
 import Layout from 'components/admin/layouts';
-import { Input, Button, Dialog, Table, TableHeader, TablePaginationActions } from 'components/UI';
+import { Input, Button, Table, TableHeader, TablePaginationActions } from 'components/UI';
 import {
   makeStyles,
   Paper,
@@ -9,10 +9,7 @@ import {
   TableRow,
   TableCell,
   TablePagination,
-  Toolbar,
-  DialogContent,
-  DialogContentText,
-  DialogActions
+  Toolbar
 } from '@material-ui/core';
 import StoreMallDirectoryIcon from '@material-ui/icons/StoreMallDirectory';
 import AddIcon from '@material-ui/icons/Add';
@@ -22,6 +19,8 @@ import Edit from 'components/admin/store/Edit';
 import Add from 'components/admin/store/Add';
 import { Store } from 'types/store';
 import { storeActions, selectStores } from 'redux/features/store/slice';
+import Delete from 'components/admin/store/Delete';
+import { uiActions } from 'redux/features/ui/slice';
 
 const useStyles = makeStyles((theme) => ({
   marginBtn: {
@@ -62,6 +61,7 @@ const Stores = () => {
   const dispatch = useAppDispatch();
   const classes = useStyles();
   const stores = useAppSelector(selectStores);
+  const { showModal } = uiActions;
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [showDetail, setShowDetail] = useState(false);
@@ -81,11 +81,6 @@ const Stores = () => {
     setPage(0);
   };
 
-  const handleDeleteStore = (id: string) => {
-    dispatch(storeActions.deleteStore(id));
-    setShowDelete(false);
-  };
-
   useEffect(() => {
     setStoreList(stores);
   }, [stores]);
@@ -99,7 +94,7 @@ const Stores = () => {
   useEffect(() => {
     setPage(0);
     setStoreList(
-      stores.filter((store: Store) => store.name.toLowerCase().includes(searchValue.toLowerCase()))
+      stores.filter((store) => store.name.toLowerCase().includes(searchValue.toLowerCase()))
     );
   }, [searchValue]);
 
@@ -116,7 +111,10 @@ const Stores = () => {
             value={searchValue}
           />
           <Button
-            onClick={() => setShowAdd(true)}
+            onClick={() => {
+              dispatch(showModal());
+              setShowAdd(true);
+            }}
             variant="outlined"
             startIcon={<AddIcon />}
             text="ADD NEW"
@@ -125,7 +123,7 @@ const Stores = () => {
         <Table headers={['Name', 'Address', 'Region', 'Actions']}>
           {storeList
             .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-            .map((store: Store, idx: number) => (
+            .map((store, idx) => (
               <TableRow key={idx}>
                 <TableCell>{store.name}</TableCell>
                 <TableCell>{store.address}</TableCell>
@@ -143,6 +141,7 @@ const Stores = () => {
                   <Button
                     onClick={() => {
                       setStoreRecord(store);
+                      dispatch(showModal());
                       setShowEdit(true);
                     }}
                     className={classes.marginBtn}
@@ -154,6 +153,7 @@ const Stores = () => {
                     text="DELETE"
                     onClick={() => {
                       setStoreRecord(store);
+                      dispatch(showModal());
                       setShowDelete(true);
                     }}
                   />
@@ -172,49 +172,10 @@ const Stores = () => {
           ActionsComponent={TablePaginationActions}
         />
       </TableContainer>
-      {showAdd && (
-        <Add
-          {...{
-            showAdd,
-            setShowAdd
-          }}
-        />
-      )}
-      {showDetail && (
-        <Detail
-          {...{
-            showDetail,
-            setShowDetail,
-            storeRecord
-          }}
-        />
-      )}
-      {showEdit && (
-        <Edit
-          {...{
-            showEdit,
-            setShowEdit,
-            storeRecord
-          }}
-        />
-      )}
-      {showDelete && (
-        <Dialog show={showDelete} setShow={setShowDelete} title="DELETE EVENT">
-          <DialogContent>
-            <DialogContentText>
-              Are you sure to delete <strong>{storeRecord?.name}</strong>?
-            </DialogContentText>
-          </DialogContent>
-          <DialogActions>
-            <Button
-              onClick={() => handleDeleteStore(storeRecord?._id || '')}
-              color="secondary"
-              text="DELETE"
-            />
-            <Button onClick={() => setShowDelete(false)} color="default" text="CANCEL" />
-          </DialogActions>
-        </Dialog>
-      )}
+      {showAdd && <Add show={showAdd} setShow={setShowAdd} />}
+      {showDetail && <Detail show={showDetail} setShow={setShowDetail} store={storeRecord} />}
+      {showEdit && <Edit show={showEdit} setShow={setShowEdit} store={storeRecord} />}
+      {showDelete && <Delete show={showDelete} setShow={setShowDelete} store={storeRecord} />}
     </Layout>
   );
 };

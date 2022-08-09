@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useAppDispatch, useAppSelector } from 'redux/hook';
 import {
@@ -7,7 +7,8 @@ import {
   Fab,
   useMediaQuery,
   makeStyles,
-  useTheme
+  useTheme,
+  CircularProgress
 } from '@material-ui/core';
 import { Input, Button, Dialog, Select } from 'components/UI';
 import { useFormik } from 'formik';
@@ -16,10 +17,11 @@ import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import LocalAtmIcon from '@material-ui/icons/LocalAtm';
 import AddIcon from '@material-ui/icons/Add';
 import HighlightOffIcon from '@material-ui/icons/HighlightOff';
-import { productActions } from 'redux/features/product/slice';
+import { productActions, selectLoadingProduct } from 'redux/features/product/slice';
 import { createCategoryList, imageShow } from 'utils/functions';
 import { selectCategories } from 'redux/features/category/slice';
 import { Product } from 'types/product';
+import { selectModal } from 'redux/features/ui/slice';
 
 const useStyles = makeStyles(() => ({
   upload: {
@@ -83,17 +85,19 @@ const initialValues: Product = {
 };
 
 type Props = {
-  showAdd: boolean;
+  show: boolean;
   // eslint-disable-next-line no-unused-vars
-  setShowAdd: (param: boolean) => void;
+  setShow: (param: boolean) => void;
 };
 
-const Add = ({ showAdd, setShowAdd }: Props) => {
+const Add = ({ show, setShow }: Props) => {
   const dispatch = useAppDispatch();
   const classes = useStyles();
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.up('sm'));
   const categories = useAppSelector(selectCategories);
+  const loading = useAppSelector(selectLoadingProduct);
+  const modal = useAppSelector(selectModal);
   const [images, setImages] = useState<any[]>([]);
 
   const handleChangeImage = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -122,12 +126,15 @@ const Add = ({ showAdd, setShowAdd }: Props) => {
     validationSchema,
     onSubmit: (values) => {
       dispatch(productActions.addProduct({ ...values, images }));
-      setShowAdd(false);
     }
   });
 
+  useEffect(() => {
+    !modal && setShow(false);
+  }, [modal]);
+
   return (
-    <Dialog show={showAdd} setShow={setShowAdd} title="PRODUCT ADD">
+    <Dialog show={show} setShow={setShow} title="PRODUCT ADD">
       <DialogContent dividers>
         <form onSubmit={formIk.handleSubmit}>
           <Input
@@ -218,8 +225,9 @@ const Add = ({ showAdd, setShowAdd }: Props) => {
         </form>
       </DialogContent>
       <DialogActions>
+        {loading && <CircularProgress size={25} />}
         <Button
-          disabled={!(formIk.isValid && formIk.dirty)}
+          disabled={!(formIk.isValid && formIk.dirty) || loading}
           onClick={() => formIk.submitForm()}
           text="SAVE"
         />
@@ -235,8 +243,8 @@ const Add = ({ showAdd, setShowAdd }: Props) => {
 };
 
 Add.propTypes = {
-  showAdd: PropTypes.bool,
-  setShowAdd: PropTypes.func
+  show: PropTypes.bool,
+  setShow: PropTypes.func
 };
 
 export default Add;

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from 'redux/hook';
 import Layout from 'components/admin/layouts';
-import { Input, Button, Dialog, Table, TableHeader, TablePaginationActions } from 'components/UI';
+import { Input, Button, Table, TableHeader, TablePaginationActions } from 'components/UI';
 import {
   makeStyles,
   Paper,
@@ -9,10 +9,7 @@ import {
   TableRow,
   TableCell,
   TablePagination,
-  Toolbar,
-  DialogContent,
-  DialogContentText,
-  DialogActions
+  Toolbar
 } from '@material-ui/core';
 import EventNoteIcon from '@material-ui/icons/EventNote';
 import AddIcon from '@material-ui/icons/Add';
@@ -22,6 +19,8 @@ import Edit from 'components/admin/event/Edit';
 import Add from 'components/admin/event/Add';
 import { Event } from 'types/event';
 import { eventActions, selectEvents } from 'redux/features/event/slice';
+import Delete from 'components/admin/event/Delete';
+import { uiActions } from 'redux/features/ui/slice';
 
 const useStyles = makeStyles((theme) => ({
   marginBtn: {
@@ -62,6 +61,7 @@ const Events = () => {
   const dispatch = useAppDispatch();
   const classes = useStyles();
   const events = useAppSelector(selectEvents);
+  const { showModal } = uiActions;
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [showDetail, setShowDetail] = useState(false);
@@ -81,11 +81,6 @@ const Events = () => {
     setPage(0);
   };
 
-  const handleDeleteEvent = (id: string) => {
-    dispatch(eventActions.deleteEvent(id));
-    setShowDelete(false);
-  };
-
   useEffect(() => {
     setEventList(events);
   }, [events]);
@@ -99,7 +94,7 @@ const Events = () => {
   useEffect(() => {
     setPage(0);
     setEventList(
-      events.filter((event: Event) => event.name.toLowerCase().includes(searchValue.toLowerCase()))
+      events.filter((event) => event.name.toLowerCase().includes(searchValue.toLowerCase()))
     );
   }, [searchValue]);
 
@@ -116,7 +111,10 @@ const Events = () => {
             value={searchValue}
           />
           <Button
-            onClick={() => setShowAdd(true)}
+            onClick={() => {
+              dispatch(showModal());
+              setShowAdd(true);
+            }}
             variant="outlined"
             startIcon={<AddIcon />}
             text="ADD NEW"
@@ -125,7 +123,7 @@ const Events = () => {
         <Table headers={['Name', 'Description', 'Start Date', 'End Date', 'Actions']}>
           {eventList
             .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-            .map((event: Event, idx: number) => (
+            .map((event, idx) => (
               <TableRow key={idx}>
                 <TableCell>{event.name}</TableCell>
                 <TableCell>{event.description}</TableCell>
@@ -144,6 +142,7 @@ const Events = () => {
                   <Button
                     onClick={() => {
                       setEventRecord(event);
+                      dispatch(showModal());
                       setShowEdit(true);
                     }}
                     className={classes.marginBtn}
@@ -155,6 +154,7 @@ const Events = () => {
                     text="DELETE"
                     onClick={() => {
                       setEventRecord(event);
+                      dispatch(showModal());
                       setShowDelete(true);
                     }}
                   />
@@ -173,49 +173,10 @@ const Events = () => {
           ActionsComponent={TablePaginationActions}
         />
       </TableContainer>
-      {showAdd && (
-        <Add
-          {...{
-            showAdd,
-            setShowAdd
-          }}
-        />
-      )}
-      {showDetail && (
-        <Detail
-          {...{
-            showDetail,
-            setShowDetail,
-            eventRecord
-          }}
-        />
-      )}
-      {showEdit && (
-        <Edit
-          {...{
-            showEdit,
-            setShowEdit,
-            eventRecord
-          }}
-        />
-      )}
-      {showDelete && (
-        <Dialog show={showDelete} setShow={setShowDelete} title="DELETE EVENT">
-          <DialogContent>
-            <DialogContentText>
-              Are you sure to delete <strong>{eventRecord?.name}</strong>?
-            </DialogContentText>
-          </DialogContent>
-          <DialogActions>
-            <Button
-              onClick={() => handleDeleteEvent(eventRecord?._id || '')}
-              color="secondary"
-              text="DELETE"
-            />
-            <Button onClick={() => setShowDelete(false)} color="default" text="CANCEL" />
-          </DialogActions>
-        </Dialog>
-      )}
+      {showAdd && <Add show={showAdd} setShow={setShowAdd} />}
+      {showDetail && <Detail show={showDetail} setShow={setShowDetail} event={eventRecord} />}
+      {showEdit && <Edit show={showEdit} setShow={setShowEdit} event={eventRecord} />}
+      {showDelete && <Delete show={showDelete} setShow={setShowDelete} event={eventRecord} />}
     </Layout>
   );
 };

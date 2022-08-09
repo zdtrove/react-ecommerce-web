@@ -26,19 +26,19 @@ const useStyles = makeStyles(() => ({
 
 type Props = {
   category: Category;
-  showDetail: boolean;
+  show: boolean;
   // eslint-disable-next-line no-unused-vars
-  setShowDetail: (param: boolean) => void;
+  setShow: (param: boolean) => void;
   product: Product;
 };
 
-const Detail = ({ category, showDetail, setShowDetail, product }: Props) => {
+const Detail = ({ category, show, setShow, product }: Props) => {
   const classes = useStyles();
   const { name, description, price, sold, star, images } = product;
 
   return (
     <>
-      <Dialog show={showDetail} setShow={setShowDetail} title="PRODUCT DETAIL">
+      <Dialog show={show} setShow={setShow} title="PRODUCT DETAIL">
         <DialogContent dividers>
           <Typography variant="h6">Name</Typography>
           <DialogContentText>{name}</DialogContentText>
@@ -75,8 +75,8 @@ const Detail = ({ category, showDetail, setShowDetail, product }: Props) => {
 };
 
 Detail.propTypes = {
-  showDetail: PropTypes.bool,
-  setShowDetail: PropTypes.func,
+  show: PropTypes.bool,
+  setShow: PropTypes.func,
   product: PropTypes.shape({
     name: PropTypes.string,
     description: PropTypes.string,

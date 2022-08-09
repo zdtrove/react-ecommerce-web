@@ -36,17 +36,26 @@ const productSlice = createSlice({
     addProduct(state, action: PayloadAction<Product>) {
       state.loading = true;
     },
+    addProductSuccess(state) {
+      state.loading = false;
+    },
     addProductFail(state) {
       state.loading = false;
     },
     updateProduct(state, action: PayloadAction<Product>) {
       state.loading = true;
     },
+    updateProductSuccess(state) {
+      state.loading = false;
+    },
     updateProductFail(state) {
       state.loading = false;
     },
     deleteProduct(state, action: PayloadAction<string>) {
       state.loading = true;
+    },
+    deleteProductSuccess(state) {
+      state.loading = false;
     },
     deleteProductFail(state) {
       state.loading = false;

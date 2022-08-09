@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from 'redux/hook';
 import Layout from 'components/admin/layouts';
-import { Input, Button, Dialog, Table, TableHeader, TablePaginationActions } from 'components/UI';
+import { Input, Button, Table, TableHeader, TablePaginationActions } from 'components/UI';
 import {
   Paper,
   makeStyles,
@@ -9,10 +9,7 @@ import {
   TableRow,
   TableCell,
   TablePagination,
-  Toolbar,
-  DialogContent,
-  DialogContentText,
-  DialogActions
+  Toolbar
 } from '@material-ui/core';
 import GroupRoundedIcon from '@material-ui/icons/GroupRounded';
 import AddIcon from '@material-ui/icons/Add';
@@ -22,6 +19,8 @@ import Edit from 'components/admin/user/Edit';
 import Add from 'components/admin/user/Add';
 import { User } from 'types/user';
 import { userActions, selectUsers } from 'redux/features/user/slice';
+import Delete from 'components/admin/user/Delete';
+import { uiActions } from 'redux/features/ui/slice';
 
 const useStyles = makeStyles((theme) => ({
   marginBtn: {
@@ -62,6 +61,7 @@ const Users = () => {
   const dispatch = useAppDispatch();
   const classes = useStyles();
   const users = useAppSelector(selectUsers);
+  const { showModal } = uiActions;
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [showDetail, setShowDetail] = useState(false);
@@ -81,11 +81,6 @@ const Users = () => {
     setPage(0);
   };
 
-  const handleDeleteUser = (id: string) => {
-    dispatch(userActions.deleteUser(id));
-    setShowDelete(false);
-  };
-
   useEffect(() => {
     setUserList(users);
   }, [users]);
@@ -99,7 +94,7 @@ const Users = () => {
   useEffect(() => {
     setPage(0);
     setUserList(
-      users.filter((user: User) => user.fullName.toLowerCase().includes(searchValue.toLowerCase()))
+      users.filter((user) => user.fullName.toLowerCase().includes(searchValue.toLowerCase()))
     );
   }, [searchValue]);
 
@@ -116,51 +111,54 @@ const Users = () => {
             value={searchValue}
           />
           <Button
-            onClick={() => setShowAdd(true)}
+            onClick={() => {
+              dispatch(showModal());
+              setShowAdd(true);
+            }}
             variant="outlined"
             startIcon={<AddIcon />}
             text="ADD NEW"
           />
         </Toolbar>
         <Table headers={['Full Name', 'Email', 'Phone', 'Role', 'Actions']}>
-          {userList
-            .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-            .map((user: User, idx: number) => (
-              <TableRow key={idx}>
-                <TableCell>{user.fullName}</TableCell>
-                <TableCell>{user.email}</TableCell>
-                <TableCell>{user.phone}</TableCell>
-                <TableCell>{user.role}</TableCell>
-                <TableCell>
-                  <Button
-                    onClick={() => {
-                      setUserRecord(user);
-                      setShowDetail(true);
-                    }}
-                    className={classes.marginBtn}
-                    text="DETAIL"
-                    color="default"
-                  />
-                  <Button
-                    onClick={() => {
-                      setUserRecord(user);
-                      setShowEdit(true);
-                    }}
-                    className={classes.marginBtn}
-                    text="EDIT"
-                  />
-                  <Button
-                    className={classes.marginBtn}
-                    color="secondary"
-                    text="DELETE"
-                    onClick={() => {
-                      setUserRecord(user);
-                      setShowDelete(true);
-                    }}
-                  />
-                </TableCell>
-              </TableRow>
-            ))}
+          {userList.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((user, idx) => (
+            <TableRow key={idx}>
+              <TableCell>{user.fullName}</TableCell>
+              <TableCell>{user.email}</TableCell>
+              <TableCell>{user.phone}</TableCell>
+              <TableCell>{user.role}</TableCell>
+              <TableCell>
+                <Button
+                  onClick={() => {
+                    setUserRecord(user);
+                    setShowDetail(true);
+                  }}
+                  className={classes.marginBtn}
+                  text="DETAIL"
+                  color="default"
+                />
+                <Button
+                  onClick={() => {
+                    setUserRecord(user);
+                    dispatch(showModal());
+                    setShowEdit(true);
+                  }}
+                  className={classes.marginBtn}
+                  text="EDIT"
+                />
+                <Button
+                  className={classes.marginBtn}
+                  color="secondary"
+                  text="DELETE"
+                  onClick={() => {
+                    setUserRecord(user);
+                    dispatch(showModal());
+                    setShowDelete(true);
+                  }}
+                />
+              </TableCell>
+            </TableRow>
+          ))}
         </Table>
         <TablePagination
           rowsPerPageOptions={[3, 6, 10, 25, 50]}
@@ -173,49 +171,10 @@ const Users = () => {
           ActionsComponent={TablePaginationActions}
         />
       </TableContainer>
-      {showAdd && (
-        <Add
-          {...{
-            showAdd,
-            setShowAdd
-          }}
-        />
-      )}
-      {showDetail && (
-        <Detail
-          {...{
-            showDetail,
-            setShowDetail,
-            userRecord
-          }}
-        />
-      )}
-      {showEdit && (
-        <Edit
-          {...{
-            showEdit,
-            setShowEdit,
-            userRecord
-          }}
-        />
-      )}
-      {showDelete && (
-        <Dialog show={showDelete} setShow={setShowDelete} title="DELETE USER">
-          <DialogContent>
-            <DialogContentText>
-              Are you sure to delete <strong>{userRecord?.fullName}</strong>?
-            </DialogContentText>
-          </DialogContent>
-          <DialogActions>
-            <Button
-              onClick={() => handleDeleteUser(userRecord?._id!)}
-              color="secondary"
-              text="DELETE"
-            />
-            <Button onClick={() => setShowDelete(false)} color="default" text="CANCEL" />
-          </DialogActions>
-        </Dialog>
-      )}
+      {showAdd && <Add show={showAdd} setShow={setShowAdd} />}
+      {showDetail && <Detail show={showDetail} setShow={setShowDetail} user={userRecord} />}
+      {showEdit && <Edit show={showEdit} setShow={setShowEdit} user={userRecord} />}
+      {showDelete && <Delete show={showDelete} setShow={setShowDelete} user={userRecord} />}
     </Layout>
   );
 };

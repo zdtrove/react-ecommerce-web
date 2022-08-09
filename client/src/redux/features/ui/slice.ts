@@ -8,7 +8,8 @@ const initialState: UiState = {
     message: null,
     status: 'warning'
   },
-  backdrop: false
+  backdrop: false,
+  modal: false
 };
 
 const uiSlice = createSlice({
@@ -30,6 +31,12 @@ const uiSlice = createSlice({
     },
     hideBackdrop(state) {
       state.backdrop = false;
+    },
+    showModal(state) {
+      state.modal = true;
+    },
+    hideModal(state) {
+      state.modal = false;
     }
   }
 });
@@ -40,6 +47,7 @@ export const uiActions = uiSlice.actions;
 // Selectors
 export const selectSnackbar = (state: AppState) => state.ui.snackbar;
 export const selectBackdrop = (state: AppState) => state.ui.backdrop;
+export const selectModal = (state: AppState) => state.ui.modal;
 
 // Reducer
 const uiReducer = uiSlice.reducer;

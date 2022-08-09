@@ -1,23 +1,29 @@
 import { AddOrUpdateResponse } from 'types/common';
 import { PayloadAction } from '@reduxjs/toolkit';
-import { call, all, put, takeEvery } from 'redux-saga/effects';
+import { call, all, put, takeEvery, delay } from 'redux-saga/effects';
 import { DeleteResponse, ListResponse } from 'types/common';
 import { User } from 'types/user';
 import { userActions } from './slice';
 import { addDataApi, deleteDataApi, getAllDataApi, updateDataApi } from 'apis/commonApi';
 import { ENDPOINTS } from 'constants/index';
+import { uiActions } from 'redux/features/ui/slice';
 
 const {
   addUser,
+  addUserSuccess,
   addUserFail,
   getUsers,
   getUsersSuccess,
   getUsersFail,
   updateUser,
+  updateUserSuccess,
   updateUserFail,
   deleteUserFail,
-  deleteUser
+  deleteUser,
+  deleteUserSuccess
 } = userActions;
+
+const { hideModal } = uiActions;
 
 function* getUsersSaga() {
   try {
@@ -42,6 +48,9 @@ function* addUserSaga(action: PayloadAction<User>) {
     const { status } = res;
     if (status === 201) {
       yield put(getUsers());
+      yield delay(1000);
+      yield put(addUserSuccess());
+      yield put(hideModal());
     }
   } catch (error) {
     console.log(error);
@@ -59,6 +68,9 @@ function* updateUserSaga(action: PayloadAction<User>) {
     const { status } = res;
     if (status === 200) {
       yield put(getUsers());
+      yield delay(1000);
+      yield put(updateUserSuccess());
+      yield put(hideModal());
     }
   } catch (error) {
     console.log(error);
@@ -76,6 +88,9 @@ function* deleteUserSaga(action: PayloadAction<string>) {
     const { status } = res;
     if (status === 200) {
       yield put(getUsers());
+      yield delay(1000);
+      yield put(deleteUserSuccess());
+      yield put(hideModal());
     }
   } catch (error) {
     console.log(error);

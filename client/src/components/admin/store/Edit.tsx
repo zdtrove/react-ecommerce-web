@@ -1,14 +1,16 @@
 import PropTypes from 'prop-types';
-import { useAppDispatch } from 'redux/hook';
-import { DialogContent, DialogActions } from '@material-ui/core';
+import { useAppDispatch, useAppSelector } from 'redux/hook';
+import { DialogContent, DialogActions, CircularProgress } from '@material-ui/core';
 import { Input, Button, Dialog } from 'components/UI';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import StorefrontIcon from '@material-ui/icons/Storefront';
 import HomeIcon from '@material-ui/icons/Home';
 import PersonPinCircleIcon from '@material-ui/icons/PersonPinCircle';
-import { storeActions } from 'redux/features/store/slice';
+import { selectLoadingStore, storeActions } from 'redux/features/store/slice';
 import { Store } from 'types/store';
+import { useEffect } from 'react';
+import { selectModal } from 'redux/features/ui/slice';
 
 const validationSchema = Yup.object().shape({
   name: Yup.string().required('Name is required').max(64, 'Name max length is 64'),
@@ -17,15 +19,17 @@ const validationSchema = Yup.object().shape({
 });
 
 type Props = {
-  showEdit: boolean;
+  show: boolean;
   // eslint-disable-next-line no-unused-vars
-  setShowEdit: (param: boolean) => void;
-  storeRecord: Store;
+  setShow: (param: boolean) => void;
+  store: Store;
 };
 
-const Edit = ({ showEdit, setShowEdit, storeRecord }: Props) => {
+const Edit = ({ show, setShow, store }: Props) => {
   const dispatch = useAppDispatch();
-  const { _id, name, enName, address, enAddress, region, enRegion } = storeRecord;
+  const loading = useAppSelector(selectLoadingStore);
+  const modal = useAppSelector(selectModal);
+  const { _id, name, enName, address, enAddress, region, enRegion } = store;
 
   const initialValues: Store = {
     name,
@@ -41,12 +45,15 @@ const Edit = ({ showEdit, setShowEdit, storeRecord }: Props) => {
     validationSchema,
     onSubmit: (values) => {
       dispatch(storeActions.updateStore({ _id, ...values }));
-      setShowEdit(false);
     }
   });
 
+  useEffect(() => {
+    !modal && setShow(false);
+  }, [modal]);
+
   return (
-    <Dialog show={showEdit} setShow={setShowEdit} title="STORE EDIT">
+    <Dialog show={show} setShow={setShow} title="STORE EDIT">
       <DialogContent dividers>
         <form onSubmit={formIk.handleSubmit}>
           <Input
@@ -88,8 +95,9 @@ const Edit = ({ showEdit, setShowEdit, storeRecord }: Props) => {
         </form>
       </DialogContent>
       <DialogActions>
+        {loading && <CircularProgress size={25} />}
         <Button
-          disabled={!(formIk.isValid && formIk.dirty)}
+          disabled={!(formIk.isValid && formIk.dirty) || loading}
           onClick={() => formIk.submitForm()}
           text="SAVE"
         />
@@ -105,8 +113,8 @@ const Edit = ({ showEdit, setShowEdit, storeRecord }: Props) => {
 };
 
 Edit.propTypes = {
-  showEdit: PropTypes.bool,
-  setShowEdit: PropTypes.func
+  show: PropTypes.bool,
+  setShow: PropTypes.func
 };
 
 export default Edit;

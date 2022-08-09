@@ -1,22 +1,28 @@
 import { PayloadAction } from '@reduxjs/toolkit';
 import { addDataApi, deleteDataApi, getAllDataApi, updateDataApi } from 'apis/commonApi';
 import { ENDPOINTS } from 'constants/index';
-import { call, all, put, takeEvery } from 'redux-saga/effects';
+import { call, all, put, takeEvery, delay } from 'redux-saga/effects';
 import { AddOrUpdateResponse, DeleteResponse, ListResponse } from 'types/common';
 import { Store } from 'types/store';
+import { uiActions } from '../ui/slice';
 import { storeActions } from './slice';
 
 const {
   addStore,
+  addStoreSuccess,
   addStoreFail,
   getStores,
   getStoresSuccess,
   getStoresFail,
   updateStore,
+  updateStoreSuccess,
   updateStoreFail,
   deleteStore,
+  deleteStoreSuccess,
   deleteStoreFail
 } = storeActions;
+
+const { hideModal } = uiActions;
 
 function* getStoresSaga() {
   try {
@@ -41,6 +47,9 @@ function* addStoreSaga(action: PayloadAction<Store>) {
     const { status } = res;
     if (status === 201) {
       yield put(getStores());
+      yield delay(1000);
+      yield put(addStoreSuccess());
+      yield put(hideModal());
     }
   } catch (error) {
     console.log(error);
@@ -58,6 +67,9 @@ function* updateStoreSaga(action: PayloadAction<Store>) {
     const { status } = res;
     if (status === 200) {
       yield put(getStores());
+      yield delay(1000);
+      yield put(updateStoreSuccess());
+      yield put(hideModal());
     }
   } catch (error) {
     console.log(error);
@@ -75,6 +87,9 @@ function* deleteStoreSaga(action: PayloadAction<string>) {
     const { status } = res;
     if (status === 200) {
       yield put(getStores());
+      yield delay(1000);
+      yield put(deleteStoreSuccess());
+      yield put(hideModal());
     }
   } catch (error) {
     console.log(error);

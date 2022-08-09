@@ -27,6 +27,9 @@ const userSlice = createSlice({
     addUser(state, action: PayloadAction<User>) {
       state.loading = true;
     },
+    addUserSuccess(state) {
+      state.loading = false;
+    },
     addUserFail(state) {
       state.loading = false;
     },
@@ -34,12 +37,18 @@ const userSlice = createSlice({
     updateUser(state, action: PayloadAction<User>) {
       state.loading = true;
     },
+    updateUserSuccess(state) {
+      state.loading = false;
+    },
     updateUserFail(state) {
       state.loading = false;
     },
     // eslint-disable-next-line no-unused-vars
     deleteUser(state, action: PayloadAction<string>) {
       state.loading = true;
+    },
+    deleteUserSuccess(state) {
+      state.loading = false;
     },
     deleteUserFail(state) {
       state.loading = false;

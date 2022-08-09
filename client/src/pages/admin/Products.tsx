@@ -5,16 +5,13 @@ import {
   TableContainer,
   TablePagination,
   TableRow,
-  Toolbar,
-  DialogContent,
-  DialogContentText,
-  DialogActions
+  Toolbar
 } from '@material-ui/core';
 import Layout from 'components/admin/layouts';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import SearchIcon from '@material-ui/icons/Search';
 import AddIcon from '@material-ui/icons/Add';
-import { Button, Input, Dialog, Table, TableHeader, TablePaginationActions } from 'components/UI';
+import { Button, Input, Table, TableHeader, TablePaginationActions } from 'components/UI';
 import { useEffect, useState } from 'react';
 import Add from 'components/admin/product/Add';
 import Detail from 'components/admin/product/Detail';
@@ -25,6 +22,8 @@ import { useAppDispatch, useAppSelector } from 'redux/hook';
 import { findCategoryById } from 'utils/functions';
 import { categoryActions, selectCategories } from 'redux/features/category/slice';
 import { Category } from 'types/category';
+import { uiActions } from 'redux/features/ui/slice';
+import Delete from 'components/admin/product/Delete';
 
 const useStyles = makeStyles((theme) => ({
   marginBtn: {
@@ -66,6 +65,7 @@ const Products = () => {
   const classes = useStyles();
   const products = useAppSelector(selectProducts);
   const categories = useAppSelector(selectCategories);
+  const { showModal } = uiActions;
   const [searchValue, setSearchValue] = useState('');
   const [showAdd, setShowAdd] = useState(false);
   const [page, setPage] = useState(0);
@@ -86,15 +86,10 @@ const Products = () => {
     setPage(0);
   };
 
-  const handleDeleteProduct = (id: string) => {
-    dispatch(productActions.deleteProduct(id));
-    setShowDelete(false);
-  };
-
   useEffect(() => {
     let temp = products;
     if (searchValue) {
-      temp = products.filter((product: Product) =>
+      temp = products.filter((product) =>
         product.name.toLowerCase().includes(searchValue.toLowerCase())
       );
     }
@@ -102,20 +97,14 @@ const Products = () => {
   }, [products]);
 
   useEffect(() => {
-    if (!products.length) {
-      dispatch(productActions.getProducts());
-    }
-    if (!categories.length) {
-      dispatch(categoryActions.getCategories());
-    }
+    !products.length && dispatch(productActions.getProducts());
+    !categories.length && dispatch(categoryActions.getCategories());
   }, []);
 
   useEffect(() => {
     setPage(0);
     setProductList(
-      products.filter((product: Product) =>
-        product.name.toLowerCase().includes(searchValue.toLowerCase())
-      )
+      products.filter((product) => product.name.toLowerCase().includes(searchValue.toLowerCase()))
     );
   }, [searchValue]);
 
@@ -132,7 +121,10 @@ const Products = () => {
             value={searchValue}
           />
           <Button
-            onClick={() => setShowAdd(true)}
+            onClick={() => {
+              dispatch(showModal());
+              setShowAdd(true);
+            }}
             variant="outlined"
             startIcon={<AddIcon />}
             text="ADD NEW"
@@ -141,7 +133,7 @@ const Products = () => {
         <Table headers={['Name', 'Description', 'Price', 'Actions']}>
           {productList
             .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-            .map((productItem: Product, idx: number) => (
+            .map((productItem, idx) => (
               <TableRow key={idx}>
                 <TableCell>{productItem.name}</TableCell>
                 <TableCell>{productItem.description}</TableCell>
@@ -160,6 +152,7 @@ const Products = () => {
                   <Button
                     onClick={() => {
                       setProduct(productItem);
+                      dispatch(showModal());
                       setShowEdit(true);
                     }}
                     className={classes.marginBtn}
@@ -171,6 +164,7 @@ const Products = () => {
                     text="DELETE"
                     onClick={() => {
                       setProduct(productItem);
+                      dispatch(showModal());
                       setShowDelete(true);
                     }}
                   />
@@ -189,51 +183,12 @@ const Products = () => {
           ActionsComponent={TablePaginationActions}
         />
       </TableContainer>
-      {showAdd && (
-        <Add
-          {...{
-            products,
-            showAdd,
-            setShowAdd
-          }}
-        />
-      )}
+      {showAdd && <Add show={showAdd} setShow={setShowAdd} />}
       {showDetail && (
-        <Detail
-          {...{
-            category,
-            showDetail,
-            setShowDetail,
-            product
-          }}
-        />
+        <Detail category={category} show={showDetail} setShow={setShowDetail} product={product} />
       )}
-      {showEdit && (
-        <Edit
-          {...{
-            showEdit,
-            setShowEdit,
-            product
-          }}
-        />
-      )}
-      {showDelete && (
-        <Dialog show={showDelete} setShow={setShowDelete} title="DELETE PRODUCT">
-          <DialogContent>
-            <DialogContentText>
-              Are you sure to delete <strong>{product?.name}</strong>?
-            </DialogContentText>
-          </DialogContent>
-          <DialogActions>
-            <Button
-              onClick={() => handleDeleteProduct(product?._id || '')}
-              color="secondary"
-              text="DELETE"
-            />
-            <Button onClick={() => setShowDelete(false)} color="default" text="CANCEL" />
-          </DialogActions>
-        </Dialog>
-      )}
+      {showEdit && <Edit show={showEdit} setShow={setShowEdit} product={product} />}
+      {showDelete && <Delete show={showDelete} setShow={setShowDelete} product={product} />}
     </Layout>
   );
 };

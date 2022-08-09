@@ -19,6 +19,7 @@ export type decodedType = {
 export type UiState = {
   snackbar: Snackbar;
   backdrop: boolean;
+  modal: boolean;
 };
 
 export type Snackbar = {

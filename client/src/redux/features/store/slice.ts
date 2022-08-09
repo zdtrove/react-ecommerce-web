@@ -25,6 +25,9 @@ const storeSlice = createSlice({
     addStore(state, action: PayloadAction<Store>) {
       state.loading = true;
     },
+    addStoreSuccess(state) {
+      state.loading = false;
+    },
     addStoreFail(state) {
       state.loading = false;
     },
@@ -32,12 +35,18 @@ const storeSlice = createSlice({
     updateStore(state, action: PayloadAction<Store>) {
       state.loading = true;
     },
+    updateStoreSuccess(state) {
+      state.loading = false;
+    },
     updateStoreFail(state) {
       state.loading = false;
     },
     // eslint-disable-next-line no-unused-vars
     deleteStore(state, action: PayloadAction<string>) {
       state.loading = true;
+    },
+    deleteStoreSuccess(state) {
+      state.loading = false;
     },
     deleteStoreFail(state) {
       state.loading = false;

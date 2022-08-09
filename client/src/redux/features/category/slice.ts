@@ -25,6 +25,9 @@ const categorySlice = createSlice({
     updateCategory(state, action: PayloadAction<Category>) {
       state.loading = true;
     },
+    updateCategorySuccess(state) {
+      state.loading = false;
+    },
     updateCategoryFail(state) {
       state.loading = false;
     },
@@ -32,12 +35,18 @@ const categorySlice = createSlice({
     addCategory(state, action: PayloadAction<Category>) {
       state.loading = true;
     },
+    addCategorySuccess(state) {
+      state.loading = false;
+    },
     addCategoryFail(state) {
       state.loading = false;
     },
     // eslint-disable-next-line no-unused-vars
     deleteCategory(state, action: PayloadAction<string>) {
       state.loading = true;
+    },
+    deleteCategorySuccess(state) {
+      state.loading = false;
     },
     deleteCategoryFail(state) {
       state.loading = false;

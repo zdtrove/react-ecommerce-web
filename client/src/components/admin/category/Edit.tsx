@@ -1,21 +1,23 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { useAppDispatch } from 'redux/hook';
+import { useAppDispatch, useAppSelector } from 'redux/hook';
 import {
   makeStyles,
   useTheme,
   useMediaQuery,
   DialogContent,
   DialogActions,
-  Fab
+  Fab,
+  CircularProgress
 } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import { Input, Select, Button, Dialog, RadioGroup } from 'components/UI';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import { categoryActions } from 'redux/features/category/slice';
+import { categoryActions, selectLoadingCategory } from 'redux/features/category/slice';
 import { Category } from 'types/category';
 import { createCategoryList } from 'utils/functions';
+import { selectModal } from 'redux/features/ui/slice';
 
 const useStyles = makeStyles((theme) => ({
   upload: {
@@ -43,18 +45,20 @@ const validationSchema = Yup.object().shape({
 
 type Props = {
   categories: Category[];
-  showEdit: boolean;
+  show: boolean;
   // eslint-disable-next-line no-unused-vars
-  setShowEdit: (params: boolean) => void;
-  categoryRecord: Category;
+  setShow: (params: boolean) => void;
+  category: Category;
 };
 
-const CategoryEdit = ({ categories, showEdit, setShowEdit, categoryRecord }: Props) => {
+const CategoryEdit = ({ categories, show, setShow, category }: Props) => {
   const classes = useStyles();
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.up('sm'));
   const dispatch = useAppDispatch();
-  const { _id, name, enName, icon, isMenu, parentId, image, children } = categoryRecord;
+  const loading = useAppSelector(selectLoadingCategory);
+  const modal = useAppSelector(selectModal);
+  const { _id, name, enName, icon, isMenu, parentId, image, children } = category;
   const [categoryImg, setCategoryImg] = useState<Blob | MediaSource | null>(null);
   const [categoryImgReset, setCategoryImgReset] = useState('');
 
@@ -73,7 +77,6 @@ const CategoryEdit = ({ categories, showEdit, setShowEdit, categoryRecord }: Pro
     validationSchema,
     onSubmit: (values) => {
       dispatch(categoryActions.updateCategory({ _id, ...values }));
-      setShowEdit(false);
     }
   });
 
@@ -84,8 +87,12 @@ const CategoryEdit = ({ categories, showEdit, setShowEdit, categoryRecord }: Pro
     formIk.setFieldValue('image', file);
   };
 
+  useEffect(() => {
+    !modal && setShow(false);
+  }, [modal]);
+
   return (
-    <Dialog show={showEdit} setShow={setShowEdit} title="CATEGORY EDIT">
+    <Dialog show={show} setShow={setShow} title="CATEGORY EDIT">
       <DialogContent dividers>
         <form onSubmit={formIk.handleSubmit}>
           <Input
@@ -148,8 +155,9 @@ const CategoryEdit = ({ categories, showEdit, setShowEdit, categoryRecord }: Pro
         </form>
       </DialogContent>
       <DialogActions>
+        {loading && <CircularProgress size={25} />}
         <Button
-          disabled={!(formIk.isValid && formIk.dirty)}
+          disabled={!(formIk.isValid && formIk.dirty) || loading}
           onClick={() => formIk.submitForm()}
           text="SAVE"
         />
@@ -169,9 +177,9 @@ const CategoryEdit = ({ categories, showEdit, setShowEdit, categoryRecord }: Pro
 
 CategoryEdit.propTypes = {
   categories: PropTypes.arrayOf(PropTypes.any),
-  showEdit: PropTypes.bool,
-  setShowEdit: PropTypes.func,
-  categoryRecord: PropTypes.any
+  show: PropTypes.bool,
+  setShow: PropTypes.func,
+  category: PropTypes.any
 };
 
 export default CategoryEdit;
