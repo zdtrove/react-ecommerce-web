@@ -70,6 +70,7 @@ export type ListRated = {
   userId: string;
   star: number;
   message: string;
+  name?: string;
 };
 
 export type ProductState = {

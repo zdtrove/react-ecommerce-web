@@ -1,7 +1,12 @@
 import {
   Box,
   CircularProgress,
+  DialogContent,
+  Divider,
   IconButton,
+  List,
+  ListItem,
+  ListItemText,
   makeStyles,
   Toolbar,
   Tooltip,
@@ -9,7 +14,7 @@ import {
   Zoom
 } from '@material-ui/core';
 import Layout from 'components/layouts';
-import { useEffect, useState } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { productActions, selectProducts, selectLoadingRating } from 'redux/features/product/slice';
 import { useAppDispatch, useAppSelector } from 'redux/hook';
@@ -20,7 +25,7 @@ import CloseIcon from '@material-ui/icons/Close';
 import { formatNumber } from 'utils/functions';
 import ProductItem from 'components/product/ProductItem';
 import StarIcon from '@material-ui/icons/Star';
-import { Button, Input } from 'components/UI';
+import { Button, Dialog, Input } from 'components/UI';
 import { cartActions } from 'redux/features/cart/slice';
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 import FavoriteIcon from '@material-ui/icons/Favorite';
@@ -37,11 +42,15 @@ import { ENDPOINTS } from 'constants/index';
 import { addWishlistApi, removeWishlistApi } from 'apis/commonApi';
 import { selectIsLoggedIn, selectUser } from 'redux/features/auth/slice';
 import { ListRated, Product, StarByNumber } from 'types/product';
+import { selectUsers } from 'redux/features/user/slice';
 
 const useStyles = makeStyles((theme) => ({
   root: {
     marginTop: 80,
-    paddingBottom: theme.spacing(6)
+    paddingBottom: theme.spacing(6),
+    '& .MuiDialogContent-root::-webkit-scrollbar': {
+      display: 'block !important'
+    }
   },
   gallery: {
     height: 600,
@@ -199,6 +208,24 @@ const useStyles = makeStyles((theme) => ({
   disabled: {
     pointerEvents: 'none',
     cursor: 'default !important'
+  },
+  viewAllRated: {
+    marginLeft: 10,
+    fontWeight: 'bold',
+    cursor: 'pointer',
+    color: 'blue',
+    '&:hover': {
+      textDecoration: 'underline',
+      textUnderlineOffset: '2px'
+    }
+  },
+  listRated: {
+    '& .MuiListItemText-primary': {
+      fontWeight: 700
+    }
+  },
+  dialogRated: {
+    padding: '0 !important'
   }
 }));
 
@@ -208,6 +235,7 @@ const ProductPage = () => {
   const dispatch = useAppDispatch();
   const isLoggedIn = useAppSelector(selectIsLoggedIn);
   const user = useAppSelector(selectUser);
+  const users = useAppSelector(selectUsers);
   const products = useAppSelector(selectProducts);
   const loadingRating = useAppSelector(selectLoadingRating);
   const { addToCart } = cartActions;
@@ -224,6 +252,8 @@ const ProductPage = () => {
   const [productsRelated, setProductsRelated] = useState<Product[]>([]);
   const [message, setMessage] = useState('');
   const [starByNumber, setStarByNumber] = useState<StarByNumber>({} as StarByNumber);
+  const [show, setShow] = useState(false);
+  const [listRated, setListRated] = useState<ListRated[]>([]);
 
   const handleAddWishlist = async () => {
     if (isLoggedIn) {
@@ -309,9 +339,17 @@ const ProductPage = () => {
         {renderStar(3)}
         {renderStar(4)}
         {renderStar(5)}
-        <Typography style={{ marginLeft: 10, fontWeight: 'bold' }}>
-          {product?.star?.list?.length} Rated
-        </Typography>
+        <Tooltip
+          TransitionComponent={Zoom}
+          arrow
+          title="View all rated"
+          placement="top"
+          onClick={() => setShow(true)}
+        >
+          <Typography className={classes.viewAllRated}>
+            {product?.star?.list?.length} Rated
+          </Typography>
+        </Tooltip>
       </Box>
     );
   };
@@ -559,6 +597,22 @@ const ProductPage = () => {
         four: calculatePercent(listStar, 4),
         five: calculatePercent(listStar, 5)
       });
+      const listRatedProduct = product?.star?.list;
+      const listRatedTemp: ListRated[] = [];
+      users?.length &&
+        users?.map((user) => {
+          listRatedProduct.map((rated) => {
+            if (user._id === rated.userId) {
+              listRatedTemp.push({
+                userId: rated.userId,
+                name: user.fullName,
+                star: rated.star,
+                message: rated.message
+              });
+            }
+          });
+        });
+      setListRated(listRatedTemp);
     } else {
       setRated(0);
       setMessage('');
@@ -606,6 +660,28 @@ const ProductPage = () => {
         {renderRelated()}
       </Box>
       {renderLightBox()}
+      <Dialog show={show} setShow={setShow} title="LIST RATED">
+        <DialogContent className={classes.dialogRated}>
+          {listRated.length > 0 &&
+            listRated.map((rated, index) => (
+              <Fragment key={rated.userId}>
+                <List dense className={classes.listRated}>
+                  <ListItem>
+                    <ListItemText primary={rated.name} secondary={rated.message} />
+                    <Box className={classes.average} display="flex" alignItems="center">
+                      {rated.star >= 1 ? <StarIcon /> : <StarOutlineIcon />}
+                      {rated.star >= 2 ? <StarIcon /> : <StarOutlineIcon />}
+                      {rated.star >= 3 ? <StarIcon /> : <StarOutlineIcon />}
+                      {rated.star >= 4 ? <StarIcon /> : <StarOutlineIcon />}
+                      {rated.star >= 5 ? <StarIcon /> : <StarOutlineIcon />}
+                    </Box>
+                  </ListItem>
+                </List>
+                {index + 1 !== listRated.length && <Divider />}
+              </Fragment>
+            ))}
+        </DialogContent>
+      </Dialog>
     </Layout>
   );
 };

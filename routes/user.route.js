@@ -3,7 +3,7 @@ const { auth, onlyAdmin } = require('../middleware/auth.middleware')
 const { getUsers, updateUser, deleteUser, addUser, addWishlist, removeWishlist } = require('../controllers/user.controller')
 
 router.route('/users')
-	.get(auth, onlyAdmin, getUsers)
+	.get(getUsers)
 	.post(auth, onlyAdmin, addUser)
 
 router.route('/user/:id')

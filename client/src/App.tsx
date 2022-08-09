@@ -25,27 +25,22 @@ import UseScrollToTop from 'hooks/useScrollToTop';
 import { productActions, selectProducts } from 'redux/features/product/slice';
 import { categoryActions, selectCategories } from 'redux/features/category/slice';
 import './styles.css';
+import { selectUsers, userActions } from 'redux/features/user/slice';
 
 function App() {
   const dispatch = useAppDispatch();
   const { getProducts } = productActions;
   const { getCategories } = categoryActions;
+  const { getUsers } = userActions;
   const products = useAppSelector(selectProducts);
   const categories = useAppSelector(selectCategories);
+  const users = useAppSelector(selectUsers);
 
   useEffect(() => {
     dispatch(authActions.getLoggedUser());
-  }, [dispatch]);
-
-  useEffect(() => {
+    !users.length && dispatch(getUsers());
     !categories.length && dispatch(getCategories());
-  }, []);
-
-  useEffect(() => {
     !products.length && dispatch(getProducts());
-  }, []);
-
-  useEffect(() => {
     console.log(`Last Updated: ${new Date('2022-08-03')}`);
   }, []);
 

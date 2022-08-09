@@ -175,7 +175,7 @@ const ProductItem = ({ product }: Props) => {
     const average = product?.star?.average!;
     return (
       <Box className={classes.average} display="flex" alignItems="center">
-        <Typography variant="subtitle2" style={{ color: 'orange', marginRight: 5 }}>
+        <Typography variant="subtitle2" style={{ color: 'orange', marginRight: 5, marginTop: 3 }}>
           {product?.star?.average.toFixed(1)}
         </Typography>
         {average >= 1 ? <StarIcon /> : <StarOutlineIcon />}
