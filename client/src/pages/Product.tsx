@@ -120,7 +120,10 @@ const useStyles = makeStyles((theme) => ({
   related: {
     backgroundColor: theme.palette.primary.light,
     padding: `${theme.spacing(1.5)}px`,
-    marginTop: theme.spacing(6)
+    marginTop: theme.spacing(6),
+    '& .swiper-button-disabled': {
+      pointerEvents: 'initial'
+    }
   },
   addToCart: {
     backgroundColor: theme.palette.green.dark,
@@ -226,8 +229,10 @@ const ProductPage = () => {
     if (isLoggedIn) {
       setLoading(true);
       await addWishlistApi(ENDPOINTS.users.getOne, { productId: product?._id!, user: user! });
-      setLoading(false);
       setFavorite(true);
+      setTimeout(() => {
+        setLoading(false);
+      }, 500);
     } else {
       dispatch(
         showSnackbar({
@@ -242,8 +247,10 @@ const ProductPage = () => {
     if (isLoggedIn) {
       setLoading(true);
       await removeWishlistApi(ENDPOINTS.users.getOne, { productId: product?._id!, user: user! });
-      setLoading(false);
       setFavorite(false);
+      setTimeout(() => {
+        setLoading(false);
+      }, 500);
     } else {
       dispatch(
         showSnackbar({
@@ -314,11 +321,11 @@ const ProductPage = () => {
       <Box className={classes.line} display="flex" alignItems="center">
         <Typography style={{ width: 10 }}>{starNumber}</Typography>
         <Box style={{ marginLeft: 5, width: 100 }} display="flex" alignItems="center">
-          <StarIcon />
-          <StarIcon />
-          <StarIcon />
-          <StarIcon />
-          <StarIcon />
+          {starNumber >= 1 ? <StarIcon /> : <StarOutlineIcon />}
+          {starNumber >= 2 ? <StarIcon /> : <StarOutlineIcon />}
+          {starNumber >= 3 ? <StarIcon /> : <StarOutlineIcon />}
+          {starNumber >= 4 ? <StarIcon /> : <StarOutlineIcon />}
+          {starNumber >= 5 ? <StarIcon /> : <StarOutlineIcon />}
         </Box>
         <div className={classes.percent}>
           <p style={{ width: `${percent || 0}%` }} />

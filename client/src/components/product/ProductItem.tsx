@@ -127,8 +127,10 @@ const ProductItem = ({ product }: Props) => {
       setLoading(true);
       await addWishlistApi(ENDPOINTS.users.getOne, { productId: product?._id!, user: user! });
       dispatch(addToWishlist(product?._id!));
-      setLoading(false);
       setFavorite(true);
+      setTimeout(() => {
+        setLoading(false);
+      }, 500);
     } else {
       dispatch(
         showSnackbar({
@@ -144,8 +146,10 @@ const ProductItem = ({ product }: Props) => {
       setLoading(true);
       await removeWishlistApi(ENDPOINTS.users.getOne, { productId: product?._id!, user: user! });
       dispatch(removeFromWishlist(product?._id!));
-      setLoading(false);
       setFavorite(false);
+      setTimeout(() => {
+        setLoading(false);
+      }, 500);
     } else {
       dispatch(
         showSnackbar({

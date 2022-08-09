@@ -176,7 +176,7 @@ function* ratingSaga(
     const { status } = res;
     if (status === 200) {
       yield put(getProducts());
-      yield delay(1000);
+      yield delay(500);
       yield put(ratingSuccess());
     }
   } catch (error) {
