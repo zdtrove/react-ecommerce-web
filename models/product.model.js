@@ -84,8 +84,14 @@ const productSchema = new mongoose.Schema({
         },
         list: [{
             userId: String,
+            userName: String,
+            date: Date,
             star: Number,
-            message: String
+            message: String,
+            images: {
+                type: Array,
+                default: []
+            }
         }]
     },
     configuration: {

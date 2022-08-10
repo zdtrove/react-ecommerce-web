@@ -71,15 +71,17 @@ exports.updateProduct = async (req, res) => {
 
 exports.ratingProduct = async (req, res) => {
     try {
-        const { starNumber, userId, message } = req.body
+        const { starNumber, userId, userName, date, message, images } = req.body
         const { star: { list }} = await Product.findOne({ _id: req.params.id });
         const listTemp = [...list];
         const index = listTemp.findIndex((item) => item.userId === userId);
         if (index >= 0) {
             listTemp[index].star = starNumber;
             listTemp[index].message = message;
+            listTemp[index].date = date;
+            listTemp[index].images = images;
         } else {
-            listTemp.push({ userId: userId, star: starNumber, message });
+            listTemp.push({ userId, userName, date, star: starNumber, message, images });
         }
         const sum = listTemp.reduce((accumulator, object) => accumulator + object.star, 0);
         const average = (sum / listTemp.length) || 0;

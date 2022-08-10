@@ -23,7 +23,7 @@ export type Product = {
   imagesOld?: any[];
   imagesNew?: any[];
   sold: number;
-  star?: Star;
+  star: Star;
   configuration?: Configuration;
   inCart?: boolean;
 };
@@ -70,7 +70,11 @@ export type ListRated = {
   userId: string;
   star: number;
   message: string;
-  name?: string;
+  userName: string;
+  date: Date;
+  images?: any[];
+  imagesOld?: any[];
+  imagesNew?: any[];
 };
 
 export type ProductState = {

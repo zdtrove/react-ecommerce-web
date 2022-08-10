@@ -1,10 +1,22 @@
-import { Box, Typography, makeStyles, Tooltip, Zoom, CircularProgress } from '@material-ui/core';
+import {
+  Box,
+  Typography,
+  makeStyles,
+  Tooltip,
+  Zoom,
+  CircularProgress,
+  DialogContent,
+  List,
+  ListItem,
+  ListItemText,
+  Divider
+} from '@material-ui/core';
 import { Product } from 'types/product';
 import { formatNumber } from 'utils/functions';
 import StarIcon from '@material-ui/icons/Star';
 import StarOutlineIcon from '@material-ui/icons/StarOutline';
 import StarHalfIcon from '@material-ui/icons/StarHalf';
-import { Button } from 'components/UI';
+import { Button, Dialog } from 'components/UI';
 import { useAppDispatch, useAppSelector } from 'redux/hook';
 import { cartActions } from 'redux/features/cart/slice';
 import { selectProducts } from 'redux/features/product/slice';
@@ -12,13 +24,14 @@ import { useHistory } from 'react-router-dom';
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
-import { useEffect, useState } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import { selectIsLoggedIn, selectUser, selectWishlist } from 'redux/features/auth/slice';
 import { addWishlistApi, removeWishlistApi } from 'apis/commonApi';
 import { ENDPOINTS } from 'constants/index';
 import clsx from 'clsx';
 import { uiActions } from 'redux/features/ui/slice';
 import { authActions } from 'redux/features/auth/slice';
+import moment from 'moment';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -101,6 +114,16 @@ const useStyles = makeStyles((theme) => ({
       height: 'auto',
       marginRight: 0
     }
+  },
+  dialogRated: {
+    padding: '0 !important'
+  },
+  listRated: {},
+  viewAllRated: {
+    marginLeft: 5,
+    fontWeight: 'bold',
+    color: 'blue',
+    cursor: 'pointer'
   }
 }));
 
@@ -118,9 +141,19 @@ const ProductItem = ({ product }: Props) => {
   const { addToCart } = cartActions;
   const { showSnackbar } = uiActions;
   const { addToWishlist, removeFromWishlist } = authActions;
+  const {
+    _id,
+    images,
+    name,
+    price,
+    star: { list },
+    inCart,
+    sold
+  } = product;
   const products = useAppSelector(selectProducts);
   const [favorite, setFavorite] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [show, setShow] = useState(false);
 
   const handleAddWishlist = async () => {
     if (isLoggedIn) {
@@ -183,35 +216,49 @@ const ProductItem = ({ product }: Props) => {
         {renderStar(3)}
         {renderStar(4)}
         {renderStar(5)}
-        <Typography style={{ marginLeft: 5, fontWeight: 'bold' }}>
-          <small>({product?.star?.list?.length})</small>
-        </Typography>
+        {list.length ? (
+          <Tooltip
+            onClick={() => setShow(true)}
+            TransitionComponent={Zoom}
+            arrow
+            title="View all rated"
+            placement="top"
+          >
+            <Typography className={classes.viewAllRated}>
+              <small>({product?.star?.list?.length})</small>
+            </Typography>
+          </Tooltip>
+        ) : (
+          <Typography style={{ marginLeft: 5 }}>
+            <small>({product?.star?.list?.length})</small>
+          </Typography>
+        )}
       </Box>
     );
   };
 
   useEffect(() => {
     if (wishlist.length) {
-      setFavorite(wishlist.some((value) => value === product._id));
+      setFavorite(wishlist.some((value) => value === _id));
     }
   }, [wishlist]);
 
   return (
-    <div className={classes.root} key={product._id}>
-      <figure onClick={() => history.push(`/product/${product._id}`)}>
-        <img src={product.images && product.images[0].url} alt="" />
+    <div className={classes.root}>
+      <figure onClick={() => history.push(`/product/${_id}`)}>
+        <img src={images && images[0].url} alt="" />
       </figure>
       <Typography
-        onClick={() => history.push(`/product/${product._id}`)}
+        onClick={() => history.push(`/product/${_id}`)}
         className={classes.name}
         variant="subtitle2"
       >
-        {product.name}
+        {name}
       </Typography>
       <Box display="flex" justifyContent="left" alignItems="center">
         <AttachMoneyIcon style={{ color: 'green' }} />
         <Typography className={classes.price} color="secondary" variant="h5">
-          {formatNumber(product.price)}
+          {formatNumber(price)}
         </Typography>
       </Box>
       <Box
@@ -248,7 +295,7 @@ const ProductItem = ({ product }: Props) => {
         </Box>
       </Box>
       <Box className={classes.action} display="flex" justifyContent="left" alignItems="center">
-        {product.inCart ? (
+        {inCart ? (
           <Button variant="contained" disabled text="In Cart" />
         ) : (
           <Button
@@ -260,10 +307,46 @@ const ProductItem = ({ product }: Props) => {
         <Typography variant="subtitle2">
           Sold{' '}
           <small>
-            <b>({product.sold})</b>
+            <b>({sold})</b>
           </small>
         </Typography>
       </Box>
+      <Dialog show={show} setShow={setShow} title="LIST RATED">
+        <DialogContent className={classes.dialogRated}>
+          {list.length > 0 &&
+            list.map((rated, index) => (
+              <Fragment key={rated.userId}>
+                <List dense className={classes.listRated}>
+                  <ListItem>
+                    <ListItemText
+                      primary={
+                        <Box display="flex" justifyContent="space-between" alignItems="center">
+                          <Typography variant="h6">
+                            <p style={{ fontWeight: 700, margin: 0, lineHeight: '10px' }}>
+                              {rated.userName}
+                            </p>
+                            <small style={{ fontSize: 12 }}>
+                              {moment(rated.date).format('DD/MM/YYYY - HH:mm:ss')}
+                            </small>
+                          </Typography>
+                          <Box className={classes.average} display="flex" alignItems="center">
+                            {rated.star >= 1 ? <StarIcon /> : <StarOutlineIcon />}
+                            {rated.star >= 2 ? <StarIcon /> : <StarOutlineIcon />}
+                            {rated.star >= 3 ? <StarIcon /> : <StarOutlineIcon />}
+                            {rated.star >= 4 ? <StarIcon /> : <StarOutlineIcon />}
+                            {rated.star >= 5 ? <StarIcon /> : <StarOutlineIcon />}
+                          </Box>
+                        </Box>
+                      }
+                      secondary={rated.message}
+                    />
+                  </ListItem>
+                </List>
+                {index + 1 !== list.length && <Divider />}
+              </Fragment>
+            ))}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

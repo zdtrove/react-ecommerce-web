@@ -93,7 +93,8 @@ const Edit = ({ show, setShow, product }: Props) => {
     enShortDescription,
     categoryId,
     price,
-    images
+    images,
+    star
   } = product;
   const categories = useAppSelector(selectCategories);
   const loading = useAppSelector(selectLoadingProduct);
@@ -112,7 +113,8 @@ const Edit = ({ show, setShow, product }: Props) => {
     imagesOld: product.images,
     imagesNew: [],
     categoryId,
-    sold: 0
+    sold: 0,
+    star
   };
 
   const formIk = useFormik({

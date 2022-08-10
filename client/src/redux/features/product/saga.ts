@@ -179,10 +179,21 @@ function* ratingSaga(
     productId: string;
     starNumber: number;
     userId: string;
+    userName: string;
+    date: Date;
     message: string;
+    imagesOld: any[];
+    imagesNew: any[];
+    images: any[];
   }>
 ) {
   try {
+    let imagesNew: cloudinaryImageType[] = [];
+    let imagesOld: cloudinaryImageType[] = action.payload.imagesOld || [];
+    if (action.payload.imagesNew) {
+      imagesNew = yield call(imagesUpload, action.payload.imagesNew);
+    }
+    action.payload.images = [...imagesOld, ...imagesNew];
     const res: Response<Product> = yield call(
       ratingProductApi,
       ENDPOINTS.products.getOne,

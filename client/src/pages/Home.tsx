@@ -89,31 +89,27 @@ const Home = () => {
   const history = useHistory();
   const products = useAppSelector(selectProducts);
   const categories = useAppSelector(selectCategories);
-  const [productsPhone, setProductsPhone] = useState<Product[]>([]);
-  const [productsLaptop, setProductsLaptop] = useState<Product[]>([]);
-  const [productsTablet, setProductsTablet] = useState<Product[]>([]);
-  const [productsWatch, setProductsWatch] = useState<Product[]>([]);
-  const [productsRefrigerator, setProductsRefrigerator] = useState<Product[]>([]);
-  const [productsAirConditioner, setProductsAirConditioner] = useState<Product[]>([]);
-  const [productsWashingMachine, setProductsWashingMachine] = useState<Product[]>([]);
-  const [categoriesPhone, setCategoriesPhone] = useState<Category>({} as Category);
-  const [categoriesLaptop, setCategoriesLaptop] = useState<Category>({} as Category);
-  const [categoriesTablet, setCategoriesTablet] = useState<Category>({} as Category);
-  const [categoriesWatch, setCategoriesWatch] = useState<Category>({} as Category);
-  const [categoriesRefrigerator, setCategoriesRefrigerator] = useState<Category>({} as Category);
-  const [categoriesAirConditioner, setCategoriesAirConditioner] = useState<Category>(
-    {} as Category
-  );
-  const [categoriesWashingMachine, setCategoriesWashingMachine] = useState<Category>(
-    {} as Category
-  );
+  const [prodPhone, setProdPhone] = useState<Product[]>([]);
+  const [prodLaptop, setProdLaptop] = useState<Product[]>([]);
+  const [prodTablet, setProdTablet] = useState<Product[]>([]);
+  const [prodWatch, setProdWatch] = useState<Product[]>([]);
+  const [prodRefrigerator, setProdRefrigerator] = useState<Product[]>([]);
+  const [prodAirConditioner, setProdAirConditioner] = useState<Product[]>([]);
+  const [prodWashingMachine, setProdWashingMachine] = useState<Product[]>([]);
+  const [catsPhone, setCatsPhone] = useState<Category>({} as Category);
+  const [catsLaptop, setCatsLaptop] = useState<Category>({} as Category);
+  const [catsTablet, setCatsTablet] = useState<Category>({} as Category);
+  const [catsWatch, setCatsWatch] = useState<Category>({} as Category);
+  const [catsRefrigerator, setCatsRefrigerator] = useState<Category>({} as Category);
+  const [catsAirConditioner, setCatsAirConditioner] = useState<Category>({} as Category);
+  const [catsWashingMachine, setCatsWashingMachine] = useState<Category>({} as Category);
   const [currentCategoryId, setCurrentCategoryId] = useState('');
 
-  const handleSetProducts = (categoryId: string, setProducts: any) => {
-    setProducts(products.filter((product) => product.categoryId === categoryId));
+  const handleSetProducts = (categoryId: string, setProd: any) => {
+    setProd(products.filter((product) => product.categoryId === categoryId));
   };
 
-  const renderProducts = (categories: Category, products: Product[], setProducts: any) => {
+  const renderProducts = (categories: Category, products: Product[], setProd: any) => {
     return (
       <>
         <Box
@@ -132,7 +128,7 @@ const Home = () => {
                 [classes.active]: cat._id === currentCategoryId
               })}
               onClick={() => {
-                handleSetProducts(cat._id!, setProducts);
+                handleSetProducts(cat._id!, setProd);
                 setCurrentCategoryId(cat._id!);
               }}
             >
@@ -167,54 +163,35 @@ const Home = () => {
   };
 
   useEffect(() => {
-    const categoriesPhoneTemp = categories.filter(
-      (cat) => cat._id === HOME_CATEGORY_IDS.smartphone
+    console.log('currentCategoryId', currentCategoryId);
+    const { smartphone, laptop, tablet, watch, refrigerator, airConditioner, washingMachine } =
+      HOME_CATEGORY_IDS;
+    const catsPhone = categories.filter((cat) => cat._id === smartphone)[0];
+    const catsLaptop = categories.filter((cat) => cat._id === laptop)[0];
+    const catsTablet = categories.filter((cat) => cat._id === tablet)[0];
+    const catsWatch = categories.filter((cat) => cat._id === watch)[0];
+    const catsRefrigerator = categories.filter((cat) => cat._id === refrigerator)[0];
+    const catsAirConditioner = categories.filter((cat) => cat._id === airConditioner)[0];
+    const catsWashingMachine = categories.filter((cat) => cat._id === washingMachine)[0];
+    setCatsPhone(catsPhone);
+    setCatsLaptop(catsLaptop);
+    setCatsTablet(catsTablet);
+    setCatsWatch(catsWatch);
+    setCatsRefrigerator(catsRefrigerator);
+    setCatsAirConditioner(catsAirConditioner);
+    setCatsWashingMachine(catsWashingMachine);
+    setProdPhone(products.filter(({ categoryId }) => categoryId === catsPhone.children[0]._id!));
+    setProdLaptop(products.filter(({ categoryId }) => categoryId === catsLaptop.children[0]._id!));
+    setProdTablet(products.filter(({ categoryId }) => categoryId === catsTablet.children[0]._id!));
+    setProdWatch(products.filter(({ categoryId }) => categoryId === catsWatch.children[0]._id!));
+    setProdRefrigerator(
+      products.filter(({ categoryId }) => categoryId === catsRefrigerator.children[0]._id!)
     );
-    const categoriesLaptopTemp = categories.filter((cat) => cat._id === HOME_CATEGORY_IDS.laptop);
-    const categoriesTabletTemp = categories.filter((cat) => cat._id === HOME_CATEGORY_IDS.tablet);
-    const categoriesWatchTemp = categories.filter((cat) => cat._id === HOME_CATEGORY_IDS.watch);
-    const categoriesRefrigeratorTemp = categories.filter(
-      (cat) => cat._id === HOME_CATEGORY_IDS.refrigerator
+    setProdAirConditioner(
+      products.filter(({ categoryId }) => categoryId === catsAirConditioner.children[0]._id!)
     );
-    const categoriesAirConditionerTemp = categories.filter(
-      (cat) => cat._id === HOME_CATEGORY_IDS.airConditioner
-    );
-    const categoriesWashingMachineTemp = categories.filter(
-      (cat) => cat._id === HOME_CATEGORY_IDS.washingMachine
-    );
-    setCategoriesPhone(categoriesPhoneTemp[0]);
-    setCategoriesLaptop(categoriesLaptopTemp[0]);
-    setCategoriesTablet(categoriesTabletTemp[0]);
-    setCategoriesWatch(categoriesWatchTemp[0]);
-    setCategoriesRefrigerator(categoriesRefrigeratorTemp[0]);
-    setCategoriesAirConditioner(categoriesAirConditionerTemp[0]);
-    setCategoriesWashingMachine(categoriesWashingMachineTemp[0]);
-    setProductsPhone(
-      products.filter((product) => product.categoryId === categoriesPhoneTemp[0].children[0]._id!)
-    );
-    setProductsLaptop(
-      products.filter((product) => product.categoryId === categoriesLaptopTemp[0].children[0]._id!)
-    );
-    setProductsTablet(
-      products.filter((product) => product.categoryId === categoriesTabletTemp[0].children[0]._id!)
-    );
-    setProductsWatch(
-      products.filter((product) => product.categoryId === categoriesWatchTemp[0].children[0]._id!)
-    );
-    setProductsRefrigerator(
-      products.filter(
-        (product) => product.categoryId === categoriesRefrigeratorTemp[0].children[0]._id!
-      )
-    );
-    setProductsAirConditioner(
-      products.filter(
-        (product) => product.categoryId === categoriesAirConditionerTemp[0].children[0]._id!
-      )
-    );
-    setProductsWashingMachine(
-      products.filter(
-        (product) => product.categoryId === categoriesWashingMachineTemp[0].children[0]._id!
-      )
+    setProdWashingMachine(
+      products.filter(({ categoryId }) => categoryId === catsWashingMachine.children[0]._id!)
     );
   }, [products]);
 
@@ -276,21 +253,13 @@ const Home = () => {
             <img src="/slider/slider-10.png" alt="slider" />
           </SwiperSlide>
         </Swiper>
-        {renderProducts(categoriesPhone, productsPhone, setProductsPhone)}
-        {renderProducts(categoriesLaptop, productsLaptop, setProductsLaptop)}
-        {renderProducts(categoriesTablet, productsTablet, setProductsTablet)}
-        {renderProducts(categoriesWatch, productsWatch, setProductsWatch)}
-        {renderProducts(categoriesRefrigerator, productsRefrigerator, setProductsRefrigerator)}
-        {renderProducts(
-          categoriesAirConditioner,
-          productsAirConditioner,
-          setProductsAirConditioner
-        )}
-        {renderProducts(
-          categoriesWashingMachine,
-          productsWashingMachine,
-          setProductsWashingMachine
-        )}
+        {renderProducts(catsPhone, prodPhone, setProdPhone)}
+        {renderProducts(catsLaptop, prodLaptop, setProdLaptop)}
+        {renderProducts(catsTablet, prodTablet, setProdTablet)}
+        {renderProducts(catsWatch, prodWatch, setProdWatch)}
+        {renderProducts(catsRefrigerator, prodRefrigerator, setProdRefrigerator)}
+        {renderProducts(catsAirConditioner, prodAirConditioner, setProdAirConditioner)}
+        {renderProducts(catsWashingMachine, prodWashingMachine, setProdWashingMachine)}
       </div>
     </Layout>
   );

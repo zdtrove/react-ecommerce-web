@@ -20,7 +20,7 @@ import HighlightOffIcon from '@material-ui/icons/HighlightOff';
 import { productActions, selectLoadingProduct } from 'redux/features/product/slice';
 import { createCategoryList, imageShow } from 'utils/functions';
 import { selectCategories } from 'redux/features/category/slice';
-import { Product } from 'types/product';
+import { Product, Star } from 'types/product';
 import { selectModal } from 'redux/features/ui/slice';
 
 const useStyles = makeStyles(() => ({
@@ -81,7 +81,8 @@ const initialValues: Product = {
   price: 0,
   images: [],
   categoryId: '',
-  sold: 0
+  sold: 0,
+  star: {} as Star
 };
 
 type Props = {

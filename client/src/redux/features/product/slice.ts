@@ -73,7 +73,11 @@ const productSlice = createSlice({
         productId: string;
         starNumber: number;
         userId: string;
+        userName: string;
+        date: Date;
         message: string;
+        imagesOld: any[];
+        imagesNew: any[];
       }>
     ) {
       state.loadingRating = true;

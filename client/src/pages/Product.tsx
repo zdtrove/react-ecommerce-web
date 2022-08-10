@@ -3,6 +3,7 @@ import {
   CircularProgress,
   DialogContent,
   Divider,
+  Fab,
   IconButton,
   List,
   ListItem,
@@ -11,18 +12,20 @@ import {
   Toolbar,
   Tooltip,
   Typography,
+  useMediaQuery,
+  useTheme,
   Zoom
 } from '@material-ui/core';
 import Layout from 'components/layouts';
 import { Fragment, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { productActions, selectProducts, selectLoadingRating } from 'redux/features/product/slice';
+import { selectProducts, selectLoadingRating, productActions } from 'redux/features/product/slice';
 import { useAppDispatch, useAppSelector } from 'redux/hook';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { FreeMode, Navigation, Thumbs } from 'swiper';
 import clsx from 'clsx';
 import CloseIcon from '@material-ui/icons/Close';
-import { formatNumber } from 'utils/functions';
+import { formatNumber, imageShow } from 'utils/functions';
 import ProductItem from 'components/product/ProductItem';
 import StarIcon from '@material-ui/icons/Star';
 import { Button, Dialog, Input } from 'components/UI';
@@ -42,14 +45,18 @@ import { ENDPOINTS } from 'constants/index';
 import { addWishlistApi, removeWishlistApi } from 'apis/commonApi';
 import { selectIsLoggedIn, selectUser } from 'redux/features/auth/slice';
 import { ListRated, Product, StarByNumber } from 'types/product';
-import { selectUsers } from 'redux/features/user/slice';
+import moment from 'moment';
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
+import AddIcon from '@material-ui/icons/Add';
+import HighlightOffIcon from '@material-ui/icons/HighlightOff';
 
 const useStyles = makeStyles((theme) => ({
   root: {
     marginTop: 80,
     paddingBottom: theme.spacing(6),
-    '& .MuiDialogContent-root::-webkit-scrollbar': {
-      display: 'block !important'
+    '& .MuiFormHelperText-contained': {
+      marginLeft: 0
     }
   },
   gallery: {
@@ -119,7 +126,7 @@ const useStyles = makeStyles((theme) => ({
     }
   },
   detailContainer: {
-    columnGap: theme.spacing(4)
+    columnGap: theme.spacing(2)
   },
   detail: {
     '& .MuiTypography-root': {
@@ -143,7 +150,7 @@ const useStyles = makeStyles((theme) => ({
     columnGap: theme.spacing(1)
   },
   ratedResult: {
-    marginTop: theme.spacing(5)
+    marginTop: theme.spacing(2)
   },
   average: {
     marginBottom: theme.spacing(0.75),
@@ -164,7 +171,7 @@ const useStyles = makeStyles((theme) => ({
     }
   },
   percent: {
-    width: 300,
+    width: 290,
     height: 8,
     backgroundColor: '#ddd',
     borderRadius: 10,
@@ -179,14 +186,14 @@ const useStyles = makeStyles((theme) => ({
     }
   },
   rated: {
-    marginTop: theme.spacing(8),
+    marginTop: theme.spacing(2),
     '& .MuiRating-label': {
       width: 88,
       display: 'flex',
       justifyContent: 'center',
       alignItems: 'center'
     },
-    '& .MuiSvgIcon-root': {
+    '& .MuiSvgIcon-fontSizeInherit': {
       width: 50,
       height: 'auto'
     }
@@ -219,13 +226,48 @@ const useStyles = makeStyles((theme) => ({
       textUnderlineOffset: '2px'
     }
   },
-  listRated: {
-    '& .MuiListItemText-primary': {
-      fontWeight: 700
-    }
-  },
+  listRated: {},
   dialogRated: {
     padding: '0 !important'
+  },
+  upload: {
+    marginTop: theme.spacing(2),
+    '& #upload': {
+      display: 'none'
+    }
+  },
+  imageList: {
+    display: 'flex',
+    alignItems: 'center',
+    columnGap: 15,
+    rowGap: 15,
+    flexWrap: 'wrap',
+    padding: 10,
+    marginTop: 10
+  },
+  imageItem: {
+    position: 'relative',
+    maxWidth: 100,
+    '& img': {
+      border: '1px solid #ddd',
+      padding: 10,
+      width: '100%'
+    },
+    '& span': {
+      position: 'absolute',
+      top: -10,
+      right: -10,
+      width: 24,
+      height: 24,
+      borderRadius: '50%',
+      backgroundColor: 'white',
+      cursor: 'pointer',
+      fontWeight: 'bold'
+    },
+    '& span:hover': {
+      backgroundColor: 'black',
+      color: 'white'
+    }
   }
 }));
 
@@ -233,9 +275,10 @@ const ProductPage = () => {
   const classes = useStyles();
   const { id } = useParams<{ id: string }>();
   const dispatch = useAppDispatch();
+  const theme = useTheme();
+  const matches = useMediaQuery(theme.breakpoints.up('sm'));
   const isLoggedIn = useAppSelector(selectIsLoggedIn);
   const user = useAppSelector(selectUser);
-  const users = useAppSelector(selectUsers);
   const products = useAppSelector(selectProducts);
   const loadingRating = useAppSelector(selectLoadingRating);
   const { addToCart } = cartActions;
@@ -250,10 +293,85 @@ const ProductPage = () => {
   const [loading, setLoading] = useState(false);
   const [product, setProduct] = useState<Product>({} as Product);
   const [productsRelated, setProductsRelated] = useState<Product[]>([]);
-  const [message, setMessage] = useState('');
   const [starByNumber, setStarByNumber] = useState<StarByNumber>({} as StarByNumber);
   const [show, setShow] = useState(false);
-  const [listRated, setListRated] = useState<ListRated[]>([]);
+  const [imagesNew, setImagesChange] = useState<any[]>([]);
+  const [imagesOld, setImagesOld] = useState<any[]>([]);
+
+  const validationSchema = Yup.object().shape({
+    star: Yup.number().required('Rating is required'),
+    message: Yup.string().required('Message is required').max(1000, 'Message max length is 1000')
+  });
+
+  let initialValues: ListRated = {
+    star: 0,
+    message: '',
+    userId: '',
+    userName: '',
+    images: [],
+    date: new Date(),
+    imagesOld: [],
+    imagesNew: []
+  };
+
+  const formIk = useFormik({
+    initialValues,
+    validationSchema,
+    onSubmit: (values) => {
+      if (isLoggedIn) {
+        dispatch(
+          rating({
+            productId: product?._id!,
+            starNumber: values.star,
+            userId: user?._id!,
+            userName: user?.fullName!,
+            date: values.date,
+            message: values.message,
+            imagesOld,
+            imagesNew
+          })
+        );
+      } else {
+        dispatch(
+          showSnackbar({
+            status: 'warning',
+            message: 'You must be logged in to perform this function'
+          })
+        );
+      }
+    }
+  });
+
+  const handleChangeImage = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files || []);
+    let err = '';
+    let imagesNewChoose: any[] = [];
+    files.forEach((file) => {
+      if (!file) return (err = 'File does not exist');
+      if (file.size > 1024 * 1024 * 2) {
+        return (err = 'The image largest is 2mb');
+      }
+      return imagesNewChoose.push(file);
+    });
+    if (err) console.log(err);
+    setImagesChange([...imagesNew, ...imagesNewChoose]);
+    formIk.setFieldValue('imagesNew', [...imagesNew, ...imagesNewChoose]);
+    formIk.setFieldValue('imagesOld', imagesOld);
+  };
+
+  const deleteNewImages = (index: number) => {
+    const imagesNewChoose = [...imagesNew];
+    imagesNewChoose.splice(index, 1);
+    setImagesChange(imagesNewChoose);
+    formIk.setFieldValue('imagesNew', imagesNewChoose);
+  };
+
+  const deleteOldImages = (index: number) => {
+    const imagesNewChoose = [...imagesOld];
+    imagesNewChoose.splice(index, 1);
+    setImagesOld(imagesNewChoose);
+    formIk.setFieldValue('imagesOld', imagesNewChoose);
+  };
 
   const handleAddWishlist = async () => {
     if (isLoggedIn) {
@@ -294,26 +412,6 @@ const ProductPage = () => {
   const handleLightBox = (image: string) => {
     setOpenLightBox(true);
     setCurrentImage(image);
-  };
-
-  const handleRating = async () => {
-    if (isLoggedIn) {
-      dispatch(
-        rating({
-          productId: product?._id!,
-          starNumber: rated!,
-          userId: user?._id!,
-          message
-        })
-      );
-    } else {
-      dispatch(
-        showSnackbar({
-          status: 'warning',
-          message: 'You must be logged in to perform this function'
-        })
-      );
-    }
   };
 
   const renderStar = (star: number) => {
@@ -366,7 +464,7 @@ const ProductPage = () => {
           {starNumber >= 5 ? <StarIcon /> : <StarOutlineIcon />}
         </Box>
         <div className={classes.percent}>
-          <p style={{ width: `${percent || 0}%` }} />
+          <p style={{ width: `${percent || 0}%`, transition: 'width 1s' }} />
         </div>
         <Typography>
           <span style={{ display: 'flex' }}>
@@ -387,16 +485,19 @@ const ProductPage = () => {
 
   const renderRated = () => {
     return (
-      <>
+      <form onSubmit={formIk.handleSubmit}>
         <Box className={classes.rated}>
           <Typography style={{ fontWeight: 700 }} variant="h5">
             Rated:
           </Typography>
           <Box style={{ border: '1px dashed orange', padding: 10, borderRadius: 8 }}>
             <Rating
-              name="simple-controlled"
+              {...formIk.getFieldProps('star')}
               value={rated}
-              onChange={(event, value) => setRated(value)}
+              onChange={(event, value) => {
+                setRated(value);
+                formIk.setFieldValue('star', value);
+              }}
             />
             <Box display="flex" alignItems="center" className={classes.ratedText}>
               <Typography>Very bad</Typography>
@@ -406,24 +507,64 @@ const ProductPage = () => {
               <Typography>Very good</Typography>
             </Box>
           </Box>
+          <div className={classes.upload}>
+            <label htmlFor="upload">
+              <input
+                id="upload"
+                name="images"
+                type="file"
+                accept="image/*"
+                multiple
+                onChange={handleChangeImage}
+              />
+              <Fab
+                color="secondary"
+                variant="extended"
+                size={matches ? 'medium' : 'small'}
+                component="span"
+              >
+                <AddIcon /> Add images
+              </Fab>
+            </label>
+          </div>
+          <div className={classes.imageList}>
+            {imagesOld &&
+              imagesOld.map((img, index) => (
+                <div className={classes.imageItem} key={index}>
+                  {imageShow(img.url)}
+                  <span onClick={() => deleteOldImages(index)}>
+                    <HighlightOffIcon />
+                  </span>
+                </div>
+              ))}
+            {imagesNew &&
+              imagesNew.map((img, index) => (
+                <div className={classes.imageItem} key={index}>
+                  {imageShow(URL.createObjectURL(img))}
+                  <span onClick={() => deleteNewImages(index)}>
+                    <HighlightOffIcon />
+                  </span>
+                </div>
+              ))}
+          </div>
           <Input
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}
+            label="Message"
+            {...formIk.getFieldProps('message')}
+            error={formIk.touched.message && formIk.errors.message}
             multiline
             minRows={4}
-            label="Message"
           />
         </Box>
         <Box display="flex" justifyContent="center" alignItems="center" style={{ marginTop: 10 }}>
           <Button
-            onClick={handleRating}
+            disabled={!(formIk.isValid && formIk.dirty) || loadingRating}
+            onClick={() => formIk.submitForm()}
             text="Send rated"
-            disabled={!(rated && message) || loadingRating}
             style={{ marginRight: 10 }}
           />
           {loadingRating && <CircularProgress size={25} style={{ color: 'green' }} />}
         </Box>
-      </>
+      </form>
     );
   };
 
@@ -580,14 +721,18 @@ const ProductPage = () => {
     }
     if (product?.categoryId) {
       setProductsRelated(
-        products.filter((prt) => prt.categoryId === product.categoryId && prt._id !== product?._id)
+        products.filter(
+          (prod) => prod.categoryId === product.categoryId && prod._id !== product?._id
+        )
       );
     }
     if (product?.star?.list.length) {
-      const myRated = product?.star?.list.filter((item) => item.userId === user?._id);
+      const myRated: ListRated[] = product?.star?.list.filter((item) => item.userId === user?._id);
       if (myRated.length) {
         setRated(myRated[0].star);
-        setMessage(myRated[0].message);
+        setImagesOld(myRated[0]?.images!);
+        formIk.setFieldValue('star', myRated[0].star);
+        formIk.setFieldValue('message', myRated[0].message);
       }
       const listStar = product?.star?.list;
       setStarByNumber({
@@ -597,25 +742,11 @@ const ProductPage = () => {
         four: calculatePercent(listStar, 4),
         five: calculatePercent(listStar, 5)
       });
-      const listRatedProduct = product?.star?.list;
-      const listRatedTemp: ListRated[] = [];
-      users?.length &&
-        users?.map((user) => {
-          listRatedProduct.map((rated) => {
-            if (user._id === rated.userId) {
-              listRatedTemp.push({
-                userId: rated.userId,
-                name: user.fullName,
-                star: rated.star,
-                message: rated.message
-              });
-            }
-          });
-        });
-      setListRated(listRatedTemp);
     } else {
       setRated(0);
-      setMessage('');
+      setImagesOld([]);
+      formIk.setFieldValue('star', 0);
+      formIk.setFieldValue('message', '');
       setStarByNumber({
         one: { value: 0, percent: 0 },
         two: { value: 0, percent: 0 },
@@ -634,7 +765,9 @@ const ProductPage = () => {
   useEffect(() => {
     if (!isLoggedIn) {
       setRated(0);
-      setMessage('');
+      setImagesOld([]);
+      formIk.setFieldValue('star', 0);
+      formIk.setFieldValue('message', '');
     }
   }, [isLoggedIn]);
 
@@ -662,22 +795,56 @@ const ProductPage = () => {
       {renderLightBox()}
       <Dialog show={show} setShow={setShow} title="LIST RATED">
         <DialogContent className={classes.dialogRated}>
-          {listRated.length > 0 &&
-            listRated.map((rated, index) => (
+          {product?.star?.list.length > 0 &&
+            product.star.list.map((rated, index) => (
               <Fragment key={rated.userId}>
                 <List dense className={classes.listRated}>
                   <ListItem>
-                    <ListItemText primary={rated.name} secondary={rated.message} />
-                    <Box className={classes.average} display="flex" alignItems="center">
-                      {rated.star >= 1 ? <StarIcon /> : <StarOutlineIcon />}
-                      {rated.star >= 2 ? <StarIcon /> : <StarOutlineIcon />}
-                      {rated.star >= 3 ? <StarIcon /> : <StarOutlineIcon />}
-                      {rated.star >= 4 ? <StarIcon /> : <StarOutlineIcon />}
-                      {rated.star >= 5 ? <StarIcon /> : <StarOutlineIcon />}
-                    </Box>
+                    <ListItemText
+                      primary={
+                        <Box display="flex" justifyContent="space-between" alignItems="center">
+                          <Typography variant="h6">
+                            <p style={{ fontWeight: 700, margin: 0, lineHeight: '10px' }}>
+                              {rated.userName}
+                            </p>
+                            <small style={{ fontSize: 12 }}>
+                              {moment(rated.date).format('DD/MM/YYYY - HH:mm:ss')}
+                            </small>
+                          </Typography>
+                          <Box className={classes.average} display="flex" alignItems="center">
+                            {rated.star >= 1 ? <StarIcon /> : <StarOutlineIcon />}
+                            {rated.star >= 2 ? <StarIcon /> : <StarOutlineIcon />}
+                            {rated.star >= 3 ? <StarIcon /> : <StarOutlineIcon />}
+                            {rated.star >= 4 ? <StarIcon /> : <StarOutlineIcon />}
+                            {rated.star >= 5 ? <StarIcon /> : <StarOutlineIcon />}
+                          </Box>
+                        </Box>
+                      }
+                      secondary={
+                        <Box>
+                          <Typography>{rated.message}</Typography>
+                          <Box
+                            display="flex"
+                            alignItems="initial"
+                            style={{ columnGap: 5, flexWrap: 'wrap', marginTop: 10 }}
+                          >
+                            {rated?.images?.length! > 0 &&
+                              rated?.images!.map((img, index) => (
+                                <div
+                                  className={classes.imageItem}
+                                  key={index}
+                                  style={{ width: '25%', maxWidth: '100%', cursor: 'pointer' }}
+                                >
+                                  {imageShow(img.url)}
+                                </div>
+                              ))}
+                          </Box>
+                        </Box>
+                      }
+                    />
                   </ListItem>
                 </List>
-                {index + 1 !== listRated.length && <Divider />}
+                {index + 1 !== product.star.list.length && <Divider />}
               </Fragment>
             ))}
         </DialogContent>
