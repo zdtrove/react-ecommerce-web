@@ -6,8 +6,6 @@ import {
   Fab,
   IconButton,
   List,
-  ListItem,
-  ListItemText,
   makeStyles,
   Toolbar,
   Tooltip,
@@ -226,7 +224,9 @@ const useStyles = makeStyles((theme) => ({
       textUnderlineOffset: '2px'
     }
   },
-  listRated: {},
+  listRated: {
+    padding: `${theme.spacing(2)}px ${theme.spacing(3)}px`
+  },
   dialogRated: {
     padding: '0 !important'
   },
@@ -248,6 +248,7 @@ const useStyles = makeStyles((theme) => ({
   imageItem: {
     position: 'relative',
     maxWidth: 100,
+    cursor: 'pointer',
     '& img': {
       border: '1px solid #ddd',
       padding: 10,
@@ -464,7 +465,7 @@ const ProductPage = () => {
           {starNumber >= 5 ? <StarIcon /> : <StarOutlineIcon />}
         </Box>
         <div className={classes.percent}>
-          <p style={{ width: `${percent || 0}%`, transition: 'width 1s' }} />
+          <Typography style={{ width: `${percent || 0}%`, transition: 'width 1s' }} />
         </div>
         <Typography>
           <span style={{ display: 'flex' }}>
@@ -531,7 +532,7 @@ const ProductPage = () => {
             {imagesOld &&
               imagesOld.map((img, index) => (
                 <div className={classes.imageItem} key={index}>
-                  {imageShow(img.url)}
+                  {imageShow(img.url, handleLightBox)}
                   <span onClick={() => deleteOldImages(index)}>
                     <HighlightOffIcon />
                   </span>
@@ -540,7 +541,7 @@ const ProductPage = () => {
             {imagesNew &&
               imagesNew.map((img, index) => (
                 <div className={classes.imageItem} key={index}>
-                  {imageShow(URL.createObjectURL(img))}
+                  {imageShow(URL.createObjectURL(img), handleLightBox)}
                   <span onClick={() => deleteNewImages(index)}>
                     <HighlightOffIcon />
                   </span>
@@ -707,6 +708,67 @@ const ProductPage = () => {
     );
   };
 
+  const renderListRated = () => {
+    return (
+      <Dialog show={show} setShow={setShow} title="LIST RATED">
+        <DialogContent className={classes.dialogRated}>
+          {product?.star?.list.length > 0 &&
+            product.star.list.map((rated, index) => (
+              <Fragment key={rated.userId}>
+                <List dense className={classes.listRated}>
+                  <Box display="flex" justifyContent="space-between" alignItems="center">
+                    <Box>
+                      <Typography
+                        variant="h6"
+                        style={{ fontWeight: 700, margin: 0, lineHeight: '10px' }}
+                      >
+                        {rated.userName}
+                      </Typography>
+                      <Typography
+                        style={{
+                          fontSize: 12,
+                          marginTop: 10,
+                          fontWeight: 'bold',
+                          fontStyle: 'italic'
+                        }}
+                      >
+                        {moment(rated.date).format('DD/MM/YYYY - HH:mm:ss')}
+                      </Typography>
+                    </Box>
+                    <Box className={classes.average} display="flex" alignItems="center">
+                      {rated.star >= 1 ? <StarIcon /> : <StarOutlineIcon />}
+                      {rated.star >= 2 ? <StarIcon /> : <StarOutlineIcon />}
+                      {rated.star >= 3 ? <StarIcon /> : <StarOutlineIcon />}
+                      {rated.star >= 4 ? <StarIcon /> : <StarOutlineIcon />}
+                      {rated.star >= 5 ? <StarIcon /> : <StarOutlineIcon />}
+                    </Box>
+                  </Box>
+                  <span>{rated.message}</span>
+                  <Box
+                    display="flex"
+                    alignItems="initial"
+                    style={{ columnGap: 5, flexWrap: 'wrap', marginTop: 10 }}
+                  >
+                    {rated?.images?.length! > 0 &&
+                      rated?.images!.map((img, index) => (
+                        <div
+                          className={classes.imageItem}
+                          key={index}
+                          style={{ width: '24%', maxWidth: '100%', cursor: 'pointer' }}
+                        >
+                          {imageShow(img.url, handleLightBox)}
+                        </div>
+                      ))}
+                  </Box>
+                </List>
+                {index + 1 !== product.star.list.length && <Divider />}
+              </Fragment>
+            ))}
+        </DialogContent>
+      </Dialog>
+    );
+  };
+
   useEffect(() => {
     if (user?._id) {
       setFavorite(user.wishlist.some((value) => value === product?._id));
@@ -793,62 +855,7 @@ const ProductPage = () => {
         {renderRelated()}
       </Box>
       {renderLightBox()}
-      <Dialog show={show} setShow={setShow} title="LIST RATED">
-        <DialogContent className={classes.dialogRated}>
-          {product?.star?.list.length > 0 &&
-            product.star.list.map((rated, index) => (
-              <Fragment key={rated.userId}>
-                <List dense className={classes.listRated}>
-                  <ListItem>
-                    <ListItemText
-                      primary={
-                        <Box display="flex" justifyContent="space-between" alignItems="center">
-                          <Typography variant="h6">
-                            <p style={{ fontWeight: 700, margin: 0, lineHeight: '10px' }}>
-                              {rated.userName}
-                            </p>
-                            <small style={{ fontSize: 12 }}>
-                              {moment(rated.date).format('DD/MM/YYYY - HH:mm:ss')}
-                            </small>
-                          </Typography>
-                          <Box className={classes.average} display="flex" alignItems="center">
-                            {rated.star >= 1 ? <StarIcon /> : <StarOutlineIcon />}
-                            {rated.star >= 2 ? <StarIcon /> : <StarOutlineIcon />}
-                            {rated.star >= 3 ? <StarIcon /> : <StarOutlineIcon />}
-                            {rated.star >= 4 ? <StarIcon /> : <StarOutlineIcon />}
-                            {rated.star >= 5 ? <StarIcon /> : <StarOutlineIcon />}
-                          </Box>
-                        </Box>
-                      }
-                      secondary={
-                        <Box>
-                          <Typography>{rated.message}</Typography>
-                          <Box
-                            display="flex"
-                            alignItems="initial"
-                            style={{ columnGap: 5, flexWrap: 'wrap', marginTop: 10 }}
-                          >
-                            {rated?.images?.length! > 0 &&
-                              rated?.images!.map((img, index) => (
-                                <div
-                                  className={classes.imageItem}
-                                  key={index}
-                                  style={{ width: '25%', maxWidth: '100%', cursor: 'pointer' }}
-                                >
-                                  {imageShow(img.url)}
-                                </div>
-                              ))}
-                          </Box>
-                        </Box>
-                      }
-                    />
-                  </ListItem>
-                </List>
-                {index + 1 !== product.star.list.length && <Divider />}
-              </Fragment>
-            ))}
-        </DialogContent>
-      </Dialog>
+      {renderListRated()}
     </Layout>
   );
 };

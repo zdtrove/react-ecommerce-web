@@ -17,6 +17,9 @@ import clsx from 'clsx';
 import { useHistory } from 'react-router-dom';
 import { HOME_CATEGORY_IDS } from 'constants/index';
 
+const { smartphone, laptop, tablet, watch, refrigerator, airConditioner, washingMachine } =
+  HOME_CATEGORY_IDS;
+
 const useStyles = makeStyles((theme) => ({
   root: {
     paddingBottom: theme.spacing(6)
@@ -103,13 +106,25 @@ const Home = () => {
   const [catsRefrigerator, setCatsRefrigerator] = useState<Category>({} as Category);
   const [catsAirConditioner, setCatsAirConditioner] = useState<Category>({} as Category);
   const [catsWashingMachine, setCatsWashingMachine] = useState<Category>({} as Category);
-  const [currentCategoryId, setCurrentCategoryId] = useState('');
+  const [currentCatsPhoneId, setCurrentCatsPhoneId] = useState('');
+  const [currentCatsLaptopId, setCurrentCatsLaptopId] = useState('');
+  const [currentCatsTabletId, setCurrentCatsTabletId] = useState('');
+  const [currentCatsWatchId, setCurrentCatsWatchId] = useState('');
+  const [currentCatsRefrigeratorId, setCurrentCatsRefrigeratorId] = useState('');
+  const [currentCatsAirConditionerId, setCurrentCatsAirConditionerId] = useState('');
+  const [currentCatsWashingMachineId, setCurrentCatsWashingMachineId] = useState('');
 
   const handleSetProducts = (categoryId: string, setProd: any) => {
     setProd(products.filter((product) => product.categoryId === categoryId));
   };
 
-  const renderProducts = (categories: Category, products: Product[], setProd: any) => {
+  const renderProducts = (
+    categories: Category,
+    products: Product[],
+    setProd: any,
+    currentCatsId: string,
+    setCurrentCatsId: any
+  ) => {
     return (
       <>
         <Box
@@ -125,11 +140,11 @@ const Home = () => {
               display="flex"
               justifyContent="center"
               className={clsx(classes.categoryLogo, {
-                [classes.active]: cat._id === currentCategoryId
+                [classes.active]: cat._id === currentCatsId
               })}
               onClick={() => {
                 handleSetProducts(cat._id!, setProd);
-                setCurrentCategoryId(cat._id!);
+                setCurrentCatsId(cat._id!);
               }}
             >
               <img src={cat.image!} alt="category" />
@@ -163,9 +178,6 @@ const Home = () => {
   };
 
   useEffect(() => {
-    console.log('currentCategoryId', currentCategoryId);
-    const { smartphone, laptop, tablet, watch, refrigerator, airConditioner, washingMachine } =
-      HOME_CATEGORY_IDS;
     const catsPhone = categories.filter((cat) => cat._id === smartphone)[0];
     const catsLaptop = categories.filter((cat) => cat._id === laptop)[0];
     const catsTablet = categories.filter((cat) => cat._id === tablet)[0];
@@ -193,6 +205,26 @@ const Home = () => {
     setProdWashingMachine(
       products.filter(({ categoryId }) => categoryId === catsWashingMachine.children[0]._id!)
     );
+    currentCatsPhoneId &&
+      setProdPhone(products.filter(({ categoryId }) => categoryId === currentCatsPhoneId));
+    currentCatsLaptopId &&
+      setProdLaptop(products.filter(({ categoryId }) => categoryId === currentCatsLaptopId));
+    currentCatsTabletId &&
+      setProdTablet(products.filter(({ categoryId }) => categoryId === currentCatsTabletId));
+    currentCatsWatchId &&
+      setProdWatch(products.filter(({ categoryId }) => categoryId === currentCatsWatchId));
+    currentCatsRefrigeratorId &&
+      setProdRefrigerator(
+        products.filter(({ categoryId }) => categoryId === currentCatsRefrigeratorId)
+      );
+    currentCatsAirConditionerId &&
+      setProdAirConditioner(
+        products.filter(({ categoryId }) => categoryId === currentCatsAirConditionerId)
+      );
+    currentCatsWashingMachineId &&
+      setProdWashingMachine(
+        products.filter(({ categoryId }) => categoryId === currentCatsWashingMachineId)
+      );
   }, [products]);
 
   return (
@@ -253,13 +285,55 @@ const Home = () => {
             <img src="/slider/slider-10.png" alt="slider" />
           </SwiperSlide>
         </Swiper>
-        {renderProducts(catsPhone, prodPhone, setProdPhone)}
-        {renderProducts(catsLaptop, prodLaptop, setProdLaptop)}
-        {renderProducts(catsTablet, prodTablet, setProdTablet)}
-        {renderProducts(catsWatch, prodWatch, setProdWatch)}
-        {renderProducts(catsRefrigerator, prodRefrigerator, setProdRefrigerator)}
-        {renderProducts(catsAirConditioner, prodAirConditioner, setProdAirConditioner)}
-        {renderProducts(catsWashingMachine, prodWashingMachine, setProdWashingMachine)}
+        {renderProducts(
+          catsPhone,
+          prodPhone,
+          setProdPhone,
+          currentCatsPhoneId,
+          setCurrentCatsPhoneId
+        )}
+        {renderProducts(
+          catsLaptop,
+          prodLaptop,
+          setProdLaptop,
+          currentCatsLaptopId,
+          setCurrentCatsLaptopId
+        )}
+        {renderProducts(
+          catsTablet,
+          prodTablet,
+          setProdTablet,
+          currentCatsTabletId,
+          setCurrentCatsTabletId
+        )}
+        {renderProducts(
+          catsWatch,
+          prodWatch,
+          setProdWatch,
+          currentCatsWatchId,
+          setCurrentCatsWatchId
+        )}
+        {renderProducts(
+          catsRefrigerator,
+          prodRefrigerator,
+          setProdRefrigerator,
+          currentCatsRefrigeratorId,
+          setCurrentCatsRefrigeratorId
+        )}
+        {renderProducts(
+          catsAirConditioner,
+          prodAirConditioner,
+          setProdAirConditioner,
+          currentCatsAirConditionerId,
+          setCurrentCatsAirConditionerId
+        )}
+        {renderProducts(
+          catsWashingMachine,
+          prodWashingMachine,
+          setProdWashingMachine,
+          currentCatsWashingMachineId,
+          setCurrentCatsWashingMachineId
+        )}
       </div>
     </Layout>
   );
