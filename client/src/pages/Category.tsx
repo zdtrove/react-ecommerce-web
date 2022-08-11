@@ -143,6 +143,9 @@ const CategoryPage = () => {
 
   useEffect(() => {
     setProductList(products.filter((product) => categoryIds.includes(product.categoryId)));
+    if (currentCategory._id) {
+      setProductList(products.filter(({ categoryId }) => categoryId === currentCategory._id));
+    }
   }, [categoryIds, products]);
 
   useEffect(() => {

@@ -44,7 +44,7 @@ const useStyles = makeStyles((theme) => ({
       width: '90%',
       textAlign: 'center',
       margin: '0 auto',
-      minHeight: 150,
+      height: 195,
       display: 'flex',
       justifyContent: 'center',
       alignItems: 'center',
@@ -52,7 +52,6 @@ const useStyles = makeStyles((theme) => ({
       '& img': {
         width: '100%',
         transition: 'all 200ms ease-in-out',
-        marginTop: theme.spacing(1.5),
         marginBottom: 0,
         '&:hover': {
           marginBottom: theme.spacing(1.5),
@@ -69,7 +68,8 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: 700,
     padding: '3px 0',
     cursor: 'pointer',
-    textDecorationColor: theme.palette.primary.main,
+    textDecorationColor: `${theme.palette.primary.main} !important`,
+    height: 50,
     '&:hover': {
       textDecoration: 'underline',
       textUnderlineOffset: '2px'
@@ -354,7 +354,8 @@ const ProductItem = ({ product }: Props) => {
                         style={{
                           fontSize: 12,
                           marginTop: 10,
-                          fontWeight: 'bold',
+                          marginBottom: 10,
+                          fontWeight: 500,
                           fontStyle: 'italic'
                         }}
                       >
