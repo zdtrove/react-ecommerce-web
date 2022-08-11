@@ -20,6 +20,8 @@ export type UiState = {
   snackbar: Snackbar;
   backdrop: boolean;
   modal: boolean;
+  lightBox: boolean;
+  lightBoxImage: string;
 };
 
 export type Snackbar = {

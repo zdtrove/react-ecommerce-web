@@ -26,6 +26,7 @@ import { productActions, selectProducts } from 'redux/features/product/slice';
 import { categoryActions, selectCategories } from 'redux/features/category/slice';
 import './styles.css';
 import { selectUsers, userActions } from 'redux/features/user/slice';
+import LightBox from 'components/LightBox';
 
 function App() {
   const dispatch = useAppDispatch();
@@ -70,6 +71,7 @@ function App() {
       <Cart />
       <Snackbar />
       <Backdrop />
+      <LightBox />
     </Router>
   );
 }

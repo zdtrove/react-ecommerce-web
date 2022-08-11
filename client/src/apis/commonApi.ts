@@ -66,7 +66,6 @@ export const ratingProductApi = async (
   }
 ) => {
   try {
-    console.log(data);
     return await axios.patch(`${endpoint}/${data.productId}/rating`, data);
   } catch (err) {
     return err;

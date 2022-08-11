@@ -80,6 +80,7 @@ exports.ratingProduct = async (req, res) => {
             listTemp[index].message = message;
             listTemp[index].date = date;
             listTemp[index].images = images;
+            listTemp[index].userName = userName;
         } else {
             listTemp.push({ userId, userName, date, star: starNumber, message, images });
         }

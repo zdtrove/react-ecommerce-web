@@ -4,7 +4,6 @@ import {
   DialogContent,
   Divider,
   Fab,
-  IconButton,
   List,
   makeStyles,
   Toolbar,
@@ -22,8 +21,7 @@ import { useAppDispatch, useAppSelector } from 'redux/hook';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { FreeMode, Navigation, Thumbs } from 'swiper';
 import clsx from 'clsx';
-import CloseIcon from '@material-ui/icons/Close';
-import { formatNumber, imageShow } from 'utils/functions';
+import { formatNumber } from 'utils/functions';
 import ProductItem from 'components/product/ProductItem';
 import StarIcon from '@material-ui/icons/Star';
 import { Button, Dialog, Input } from 'components/UI';
@@ -97,30 +95,6 @@ const useStyles = makeStyles((theme) => ({
     },
     '& .swiper-button-disabled': {
       pointerEvents: 'initial'
-    }
-  },
-  lightBox: {
-    position: 'fixed',
-    width: '100%',
-    height: '100%',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    backgroundColor: 'rgba(0, 0, 0, 0.7)',
-    zIndex: 9999
-  },
-  hidden: {
-    visibility: 'hidden'
-  },
-  closeLightBox: {
-    position: 'absolute',
-    top: 25,
-    right: 25,
-    color: 'white',
-    backgroundColor: '#ddd6',
-    '&:hover': {
-      backgroundColor: '#9e9e9e'
     }
   },
   detailContainer: {
@@ -283,12 +257,10 @@ const ProductPage = () => {
   const products = useAppSelector(selectProducts);
   const loadingRating = useAppSelector(selectLoadingRating);
   const { addToCart } = cartActions;
-  const { showSnackbar } = uiActions;
+  const { showSnackbar, showLightBox, setLightBoxImage } = uiActions;
   const { rating } = productActions;
   const [thumbsSwiper, setThumbsSwiper] = useState<any>(null);
   const [images, setImages] = useState<string[]>([]);
-  const [openLightBox, setOpenLightBox] = useState(false);
-  const [currentImage, setCurrentImage] = useState('');
   const [rated, setRated] = useState<number | null>(0);
   const [favorite, setFavorite] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -410,11 +382,6 @@ const ProductPage = () => {
     }
   };
 
-  const handleLightBox = (image: string) => {
-    setOpenLightBox(true);
-    setCurrentImage(image);
-  };
-
   const renderStar = (star: number) => {
     const average = product?.star?.average!;
     return average >= star ? (
@@ -532,7 +499,14 @@ const ProductPage = () => {
             {imagesOld &&
               imagesOld.map((img, index) => (
                 <div className={classes.imageItem} key={index}>
-                  {imageShow(img.url, handleLightBox)}
+                  <img
+                    onClick={() => {
+                      dispatch(setLightBoxImage(img.url));
+                      dispatch(showLightBox());
+                    }}
+                    src={img.url}
+                    alt="images"
+                  />
                   <span onClick={() => deleteOldImages(index)}>
                     <HighlightOffIcon />
                   </span>
@@ -541,7 +515,14 @@ const ProductPage = () => {
             {imagesNew &&
               imagesNew.map((img, index) => (
                 <div className={classes.imageItem} key={index}>
-                  {imageShow(URL.createObjectURL(img), handleLightBox)}
+                  <img
+                    onClick={() => {
+                      dispatch(setLightBoxImage(URL.createObjectURL(img)));
+                      dispatch(showLightBox());
+                    }}
+                    src={URL.createObjectURL(img)}
+                    alt="images"
+                  />
                   <span onClick={() => deleteNewImages(index)}>
                     <HighlightOffIcon />
                   </span>
@@ -582,7 +563,14 @@ const ProductPage = () => {
           {images.length > 0 &&
             images.map((image, index) => (
               <SwiperSlide key={index}>
-                <img onClick={() => handleLightBox(image)} src={image} alt="image" />
+                <img
+                  onClick={() => {
+                    dispatch(setLightBoxImage(image));
+                    dispatch(showLightBox());
+                  }}
+                  src={image}
+                  alt="images"
+                />
               </SwiperSlide>
             ))}
         </Swiper>
@@ -689,25 +677,6 @@ const ProductPage = () => {
     );
   };
 
-  const renderLightBox = () => {
-    return (
-      <Box
-        display="flex"
-        justifyContent="center"
-        alignItems="center"
-        position="relative"
-        className={clsx(classes.lightBox, {
-          [classes.hidden]: !openLightBox
-        })}
-      >
-        <IconButton className={classes.closeLightBox} onClick={() => setOpenLightBox(false)}>
-          <CloseIcon />
-        </IconButton>
-        <img src={currentImage} alt="image" />
-      </Box>
-    );
-  };
-
   const renderListRated = () => {
     return (
       <Dialog show={show} setShow={setShow} title="LIST RATED">
@@ -756,7 +725,14 @@ const ProductPage = () => {
                           key={index}
                           style={{ width: '24%', maxWidth: '100%', cursor: 'pointer' }}
                         >
-                          {imageShow(img.url, handleLightBox)}
+                          <img
+                            onClick={() => {
+                              dispatch(setLightBoxImage(img.url));
+                              dispatch(showLightBox());
+                            }}
+                            src={img.url}
+                            alt="images"
+                          />
                         </div>
                       ))}
                   </Box>
@@ -854,7 +830,6 @@ const ProductPage = () => {
         </Box>
         {renderRelated()}
       </Box>
-      {renderLightBox()}
       {renderListRated()}
     </Layout>
   );

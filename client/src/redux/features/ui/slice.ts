@@ -9,7 +9,9 @@ const initialState: UiState = {
     status: 'warning'
   },
   backdrop: false,
-  modal: false
+  modal: false,
+  lightBox: false,
+  lightBoxImage: ''
 };
 
 const uiSlice = createSlice({
@@ -37,6 +39,15 @@ const uiSlice = createSlice({
     },
     hideModal(state) {
       state.modal = false;
+    },
+    showLightBox(state) {
+      state.lightBox = true;
+    },
+    hideLightBox(state) {
+      state.lightBox = false;
+    },
+    setLightBoxImage(state, action: PayloadAction<string>) {
+      state.lightBoxImage = action.payload;
     }
   }
 });
@@ -48,6 +59,8 @@ export const uiActions = uiSlice.actions;
 export const selectSnackbar = (state: AppState) => state.ui.snackbar;
 export const selectBackdrop = (state: AppState) => state.ui.backdrop;
 export const selectModal = (state: AppState) => state.ui.modal;
+export const selectLightBox = (state: AppState) => state.ui.lightBox;
+export const selectLightBoxImage = (state: AppState) => state.ui.lightBoxImage;
 
 // Reducer
 const uiReducer = uiSlice.reducer;

@@ -7,8 +7,6 @@ import {
   CircularProgress,
   DialogContent,
   List,
-  ListItem,
-  ListItemText,
   Divider
 } from '@material-ui/core';
 import { Product } from 'types/product';
@@ -118,12 +116,39 @@ const useStyles = makeStyles((theme) => ({
   dialogRated: {
     padding: '0 !important'
   },
-  listRated: {},
+  listRated: {
+    padding: `${theme.spacing(2)}px ${theme.spacing(3)}px`
+  },
   viewAllRated: {
     marginLeft: 5,
     fontWeight: 'bold',
     color: 'blue',
     cursor: 'pointer'
+  },
+  imageItem: {
+    position: 'relative',
+    maxWidth: 100,
+    cursor: 'pointer',
+    '& img': {
+      border: '1px solid #ddd',
+      padding: 10,
+      width: '100%'
+    },
+    '& span': {
+      position: 'absolute',
+      top: -10,
+      right: -10,
+      width: 24,
+      height: 24,
+      borderRadius: '50%',
+      backgroundColor: 'white',
+      cursor: 'pointer',
+      fontWeight: 'bold'
+    },
+    '& span:hover': {
+      backgroundColor: 'black',
+      color: 'white'
+    }
   }
 }));
 
@@ -139,7 +164,7 @@ const ProductItem = ({ product }: Props) => {
   const wishlist = useAppSelector(selectWishlist);
   const isLoggedIn = useAppSelector(selectIsLoggedIn);
   const { addToCart } = cartActions;
-  const { showSnackbar } = uiActions;
+  const { showSnackbar, showLightBox, setLightBoxImage } = uiActions;
   const { addToWishlist, removeFromWishlist } = authActions;
   const {
     _id,
@@ -317,30 +342,57 @@ const ProductItem = ({ product }: Props) => {
             list.map((rated, index) => (
               <Fragment key={rated.userId}>
                 <List dense className={classes.listRated}>
-                  <ListItem>
-                    <ListItemText
-                      primary={
-                        <Box display="flex" justifyContent="space-between" alignItems="center">
-                          <Typography variant="h6">
-                            <p style={{ fontWeight: 700, margin: 0, lineHeight: '10px' }}>
-                              {rated.userName}
-                            </p>
-                            <small style={{ fontSize: 12 }}>
-                              {moment(rated.date).format('DD/MM/YYYY - HH:mm:ss')}
-                            </small>
-                          </Typography>
-                          <Box className={classes.average} display="flex" alignItems="center">
-                            {rated.star >= 1 ? <StarIcon /> : <StarOutlineIcon />}
-                            {rated.star >= 2 ? <StarIcon /> : <StarOutlineIcon />}
-                            {rated.star >= 3 ? <StarIcon /> : <StarOutlineIcon />}
-                            {rated.star >= 4 ? <StarIcon /> : <StarOutlineIcon />}
-                            {rated.star >= 5 ? <StarIcon /> : <StarOutlineIcon />}
-                          </Box>
-                        </Box>
-                      }
-                      secondary={rated.message}
-                    />
-                  </ListItem>
+                  <Box display="flex" justifyContent="space-between" alignItems="center">
+                    <Box>
+                      <Typography
+                        variant="h6"
+                        style={{ fontWeight: 700, margin: 0, lineHeight: '10px' }}
+                      >
+                        {rated.userName}
+                      </Typography>
+                      <Typography
+                        style={{
+                          fontSize: 12,
+                          marginTop: 10,
+                          fontWeight: 'bold',
+                          fontStyle: 'italic'
+                        }}
+                      >
+                        {moment(rated.date).format('DD/MM/YYYY - HH:mm:ss')}
+                      </Typography>
+                    </Box>
+                    <Box className={classes.average} display="flex" alignItems="center">
+                      {rated.star >= 1 ? <StarIcon /> : <StarOutlineIcon />}
+                      {rated.star >= 2 ? <StarIcon /> : <StarOutlineIcon />}
+                      {rated.star >= 3 ? <StarIcon /> : <StarOutlineIcon />}
+                      {rated.star >= 4 ? <StarIcon /> : <StarOutlineIcon />}
+                      {rated.star >= 5 ? <StarIcon /> : <StarOutlineIcon />}
+                    </Box>
+                  </Box>
+                  <span>{rated.message}</span>
+                  <Box
+                    display="flex"
+                    alignItems="initial"
+                    style={{ columnGap: 5, flexWrap: 'wrap', marginTop: 10 }}
+                  >
+                    {rated?.images?.length! > 0 &&
+                      rated?.images!.map((img, index) => (
+                        <div
+                          className={classes.imageItem}
+                          key={index}
+                          style={{ width: '24%', maxWidth: '100%', cursor: 'pointer' }}
+                        >
+                          <img
+                            onClick={() => {
+                              dispatch(setLightBoxImage(img.url));
+                              dispatch(showLightBox());
+                            }}
+                            src={img.url}
+                            alt="images"
+                          />
+                        </div>
+                      ))}
+                  </Box>
                 </List>
                 {index + 1 !== list.length && <Divider />}
               </Fragment>

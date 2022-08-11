@@ -103,11 +103,9 @@ const useStyles = makeStyles((theme) => ({
     },
     marginRight: theme.spacing(1),
     marginLeft: 0,
-    width: '100%',
-    maxWidth: 300,
+    width: 400,
     [theme.breakpoints.up('sm')]: {
-      marginLeft: theme.spacing(3),
-      width: 'auto'
+      marginLeft: theme.spacing(3)
     }
   },
   searchIcon: {
@@ -148,7 +146,7 @@ const useStyles = makeStyles((theme) => ({
   listProductSearch: {
     position: 'absolute',
     backgroundColor: theme.palette.primary.light,
-    width: 450,
+    width: 400,
     top: 40,
     borderRadius: 5,
     overflowY: 'scroll',

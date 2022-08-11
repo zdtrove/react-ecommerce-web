@@ -93,7 +93,6 @@ const CategoryPage = () => {
   const [sortBy, setSortBy] = useState('');
   const [searchValue, setSearchValue] = useState('');
   const [search, setSearch] = useState('');
-  const [productsByCategoryId, setProductsByCategoryId] = useState<Product[]>([]);
   const [categoriesById, setCategoriesById] = useState<Category>({} as Category);
 
   const sortProduct = (products: Product[]) => {
@@ -123,11 +122,7 @@ const CategoryPage = () => {
   };
 
   useEffect(() => {
-    if (productsByCategoryId.length) {
-      setProductList(
-        searchProduct(sortBy ? sortProduct([...productsByCategoryId]) : [...productsByCategoryId])
-      );
-    } else if (productList.length) {
+    if (productList.length) {
       setProductList(searchProduct(sortBy ? sortProduct([...productList]) : [...productList]));
     }
   }, [search]);
@@ -135,16 +130,6 @@ const CategoryPage = () => {
   useEffect(() => {
     productList.length && setProductList(sortProduct([...productList]));
   }, [sortBy]);
-
-  useEffect(() => {
-    if (productsByCategoryId.length) {
-      let temp = [...productsByCategoryId];
-      sortBy && (temp = sortProduct(temp));
-      setProductList(temp);
-    } else setProductList([]);
-    setSearch('');
-    setSearchValue('');
-  }, [productsByCategoryId]);
 
   useEffect(() => {
     setProductSlice(productList.slice(0, loadMoreNumber));
@@ -176,6 +161,12 @@ const CategoryPage = () => {
     setCurrentCategory({} as Category);
   }, [id]);
 
+  useEffect(() => {
+    if (currentCategory._id) {
+      setSearchValue('');
+    }
+  }, [currentCategory]);
+
   return (
     <Layout>
       <Toolbar />
@@ -195,9 +186,7 @@ const CategoryPage = () => {
                 [classes.active]: cat._id === currentCategory._id
               })}
               onClick={() => {
-                setProductsByCategoryId(
-                  products.filter((product) => product.categoryId === cat._id!)
-                );
+                setProductList(products.filter((product) => product.categoryId === cat._id!));
                 setCurrentCategory(cat);
                 setLoadMoreNumber(LOAD_MORE);
               }}
