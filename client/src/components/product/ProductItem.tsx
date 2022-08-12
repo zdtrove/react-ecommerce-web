@@ -70,6 +70,11 @@ const useStyles = makeStyles((theme) => ({
     cursor: 'pointer',
     textDecorationColor: `${theme.palette.primary.main} !important`,
     height: 50,
+    display: '-webkit-box',
+    '-webkit-line-clamp': 2,
+    '-webkit-box-orient': 'vertical',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
     '&:hover': {
       textDecoration: 'underline',
       textUnderlineOffset: '2px'
@@ -355,7 +360,7 @@ const ProductItem = ({ product }: Props) => {
                           fontSize: 12,
                           marginTop: 10,
                           marginBottom: 10,
-                          fontWeight: 500,
+                          fontWeight: 700,
                           fontStyle: 'italic'
                         }}
                       >
