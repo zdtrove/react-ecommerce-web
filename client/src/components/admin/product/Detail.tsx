@@ -17,6 +17,7 @@ const useStyles = makeStyles(() => ({
   },
   imageItem: {
     maxWidth: 100,
+    cursor: 'pointer',
     '& img': {
       border: '1px solid #ddd',
       padding: 10,

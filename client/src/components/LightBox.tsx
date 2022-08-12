@@ -2,7 +2,13 @@ import { Box, IconButton, makeStyles } from '@material-ui/core';
 import clsx from 'clsx';
 import CloseIcon from '@material-ui/icons/Close';
 import { useAppDispatch, useAppSelector } from 'redux/hook';
-import { selectLightBox, selectLightBoxImage, uiActions } from 'redux/features/ui/slice';
+import {
+  selectLightBox,
+  selectLightBoxImage,
+  selectLightBoxImageNext,
+  selectLightBoxImagePrev,
+  uiActions
+} from 'redux/features/ui/slice';
 
 const useStyles = makeStyles(() => ({
   lightBox: {
@@ -36,7 +42,9 @@ const LightBox = () => {
   const dispatch = useAppDispatch();
   const lightBox = useAppSelector(selectLightBox);
   const lightBoxImage = useAppSelector(selectLightBoxImage);
-  const { hideLightBox } = uiActions;
+  const lightBoxImagePrev = useAppSelector(selectLightBoxImagePrev);
+  const lightBoxImageNext = useAppSelector(selectLightBoxImageNext);
+  const { hideLightBox, setLightBoxImage } = uiActions;
 
   return (
     <Box
@@ -51,7 +59,9 @@ const LightBox = () => {
       <IconButton className={classes.closeLightBox} onClick={() => dispatch(hideLightBox())}>
         <CloseIcon />
       </IconButton>
+      <button onClick={() => dispatch(setLightBoxImage(lightBoxImagePrev))}>Prev</button>
       <img src={lightBoxImage} alt="image" />
+      <button onClick={() => dispatch(setLightBoxImage(lightBoxImageNext))}>Next</button>
     </Box>
   );
 };
