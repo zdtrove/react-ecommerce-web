@@ -18,10 +18,10 @@ import LocalAtmIcon from '@material-ui/icons/LocalAtm';
 import AddIcon from '@material-ui/icons/Add';
 import HighlightOffIcon from '@material-ui/icons/HighlightOff';
 import { productActions, selectLoadingProduct } from 'redux/features/product/slice';
-import { createCategoryList, imageShow } from 'utils/functions';
+import { createCategoryList } from 'utils/functions';
 import { selectCategories } from 'redux/features/category/slice';
 import { Product, Star } from 'types/product';
-import { selectModal } from 'redux/features/ui/slice';
+import { selectModal, uiActions } from 'redux/features/ui/slice';
 
 const useStyles = makeStyles(() => ({
   upload: {
@@ -96,6 +96,7 @@ const Add = ({ show, setShow }: Props) => {
   const classes = useStyles();
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.up('sm'));
+  const { setLightBoxImage, showLightBox } = uiActions;
   const categories = useAppSelector(selectCategories);
   const loading = useAppSelector(selectLoadingProduct);
   const modal = useAppSelector(selectModal);
@@ -216,7 +217,13 @@ const Add = ({ show, setShow }: Props) => {
           <div className={classes.imageList}>
             {images.map((img, index) => (
               <div className={classes.imageItem} key={index}>
-                {imageShow(URL.createObjectURL(img))}
+                <img
+                  onClick={() => {
+                    dispatch(setLightBoxImage(URL.createObjectURL(img)));
+                    dispatch(showLightBox());
+                  }}
+                  src={URL.createObjectURL(img)}
+                />
                 <span onClick={() => deleteImages(index)}>
                   <HighlightOffIcon />
                 </span>

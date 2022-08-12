@@ -19,9 +19,9 @@ import AddIcon from '@material-ui/icons/Add';
 import HighlightOffIcon from '@material-ui/icons/HighlightOff';
 import { Product } from 'types/product';
 import { productActions, selectLoadingProduct } from 'redux/features/product/slice';
-import { createCategoryList, imageShow } from 'utils/functions';
+import { createCategoryList } from 'utils/functions';
 import { selectCategories } from 'redux/features/category/slice';
-import { selectModal } from 'redux/features/ui/slice';
+import { selectModal, uiActions } from 'redux/features/ui/slice';
 
 const useStyles = makeStyles(() => ({
   upload: {
@@ -83,6 +83,7 @@ const Edit = ({ show, setShow, product }: Props) => {
   const classes = useStyles();
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.up('sm'));
+  const { setLightBoxImage, showLightBox } = uiActions;
   const {
     _id,
     name,
@@ -242,7 +243,13 @@ const Edit = ({ show, setShow, product }: Props) => {
             {imagesOld &&
               imagesOld.map((img, index) => (
                 <div className={classes.imageItem} key={index}>
-                  {imageShow(img.url)}
+                  <img
+                    onClick={() => {
+                      dispatch(setLightBoxImage(img.url));
+                      dispatch(showLightBox());
+                    }}
+                    src={img.url}
+                  />
                   <span onClick={() => deleteOldImages(index)}>
                     <HighlightOffIcon />
                   </span>
@@ -251,7 +258,13 @@ const Edit = ({ show, setShow, product }: Props) => {
             {imagesNew &&
               imagesNew.map((img, index) => (
                 <div className={classes.imageItem} key={index}>
-                  {imageShow(URL.createObjectURL(img))}
+                  <img
+                    onClick={() => {
+                      dispatch(setLightBoxImage(URL.createObjectURL(img)));
+                      dispatch(showLightBox());
+                    }}
+                    src={URL.createObjectURL(img)}
+                  />
                   <span onClick={() => deleteNewImages(index)}>
                     <HighlightOffIcon />
                   </span>

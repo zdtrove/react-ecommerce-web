@@ -36,14 +36,6 @@ export const findCategoryById = (categories: Category[], id: string, category: C
   return category;
 };
 
-export const imageShow = (src: any, handleLightBox?: any) => {
-  if (handleLightBox) {
-    return <img onClick={() => handleLightBox(src)} src={src} alt="images" />;
-  } else {
-    return <img src={src} alt="images" />;
-  }
-};
-
 export const findIndex = (items: any[], payload: any) => {
   return items.findIndex((item) => item._id === payload._id);
 };

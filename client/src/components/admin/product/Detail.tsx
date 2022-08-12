@@ -2,8 +2,9 @@ import PropTypes from 'prop-types';
 import { makeStyles, DialogContent, DialogContentText, Typography, Box } from '@material-ui/core';
 import { Dialog } from 'components/UI';
 import { Product } from 'types/product';
-import { imageShow } from 'utils/functions';
 import { Category } from 'types/category';
+import { uiActions } from 'redux/features/ui/slice';
+import { useAppDispatch } from 'redux/hook';
 
 const useStyles = makeStyles(() => ({
   imageList: {
@@ -34,6 +35,8 @@ type Props = {
 
 const Detail = ({ category, show, setShow, product }: Props) => {
   const classes = useStyles();
+  const dispatch = useAppDispatch();
+  const { setLightBoxImage, showLightBox } = uiActions;
   const { name, description, price, sold, star, images } = product;
 
   return (
@@ -64,7 +67,13 @@ const Detail = ({ category, show, setShow, product }: Props) => {
             {images &&
               images.map((img, index) => (
                 <div className={classes.imageItem} key={index}>
-                  {imageShow(img.url)}
+                  <img
+                    onClick={() => {
+                      dispatch(setLightBoxImage(img.url));
+                      dispatch(showLightBox());
+                    }}
+                    src={img.url}
+                  />
                 </div>
               ))}
           </div>

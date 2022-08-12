@@ -769,6 +769,7 @@ const ProductPage = () => {
       if (myRated.length) {
         setRated(myRated[0].star);
         setImagesOld(myRated[0]?.images!);
+        setImagesChange([]);
         formIk.setFieldValue('star', myRated[0].star);
         formIk.setFieldValue('message', myRated[0].message);
       }
