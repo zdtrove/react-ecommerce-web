@@ -5,10 +5,11 @@ import { useAppDispatch, useAppSelector } from 'redux/hook';
 import {
   selectLightBox,
   selectLightBoxImage,
-  selectLightBoxImageNext,
-  selectLightBoxImagePrev,
-  uiActions
+  uiActions,
+  selectLightBoxImageList
 } from 'redux/features/ui/slice';
+import NavigateBeforeIcon from '@material-ui/icons/NavigateBefore';
+import NavigateNextIcon from '@material-ui/icons/NavigateNext';
 
 const useStyles = makeStyles(() => ({
   lightBox: {
@@ -34,6 +35,14 @@ const useStyles = makeStyles(() => ({
     '&:hover': {
       backgroundColor: '#9e9e9e'
     }
+  },
+  nextPrev: {
+    color: 'white',
+    padding: 8,
+    margin: '0 20px',
+    '& .MuiSvgIcon-root': {
+      fontSize: 50
+    }
   }
 }));
 
@@ -42,9 +51,30 @@ const LightBox = () => {
   const dispatch = useAppDispatch();
   const lightBox = useAppSelector(selectLightBox);
   const lightBoxImage = useAppSelector(selectLightBoxImage);
-  const lightBoxImagePrev = useAppSelector(selectLightBoxImagePrev);
-  const lightBoxImageNext = useAppSelector(selectLightBoxImageNext);
+  const lightBoxImageList = useAppSelector(selectLightBoxImageList);
   const { hideLightBox, setLightBoxImage } = uiActions;
+
+  const handlePrevLightBox = () => {
+    if (lightBoxImageList) {
+      const index = lightBoxImageList.findIndex((item) => item === lightBoxImage);
+      if (index > 0) {
+        dispatch(setLightBoxImage(lightBoxImageList[index - 1]));
+      } else {
+        dispatch(setLightBoxImage(lightBoxImageList[lightBoxImageList.length - 1]));
+      }
+    }
+  };
+
+  const handleNextLightBox = () => {
+    if (lightBoxImageList) {
+      const index = lightBoxImageList.findIndex((item) => item === lightBoxImage);
+      if (index < lightBoxImageList.length - 1) {
+        dispatch(setLightBoxImage(lightBoxImageList[index + 1]));
+      } else {
+        dispatch(setLightBoxImage(lightBoxImageList[0]));
+      }
+    }
+  };
 
   return (
     <Box
@@ -59,9 +89,13 @@ const LightBox = () => {
       <IconButton className={classes.closeLightBox} onClick={() => dispatch(hideLightBox())}>
         <CloseIcon />
       </IconButton>
-      <button onClick={() => dispatch(setLightBoxImage(lightBoxImagePrev))}>Prev</button>
+      <IconButton className={classes.nextPrev} onClick={handlePrevLightBox}>
+        <NavigateBeforeIcon />
+      </IconButton>
       <img src={lightBoxImage} alt="image" />
-      <button onClick={() => dispatch(setLightBoxImage(lightBoxImageNext))}>Next</button>
+      <IconButton className={classes.nextPrev} onClick={handleNextLightBox}>
+        <NavigateNextIcon />
+      </IconButton>
     </Box>
   );
 };

@@ -12,8 +12,7 @@ const initialState: UiState = {
   modal: false,
   lightBox: false,
   lightBoxImage: '',
-  lightBoxImagePrev: '',
-  lightBoxImageNext: ''
+  lightBoxImageList: []
 };
 
 const uiSlice = createSlice({
@@ -51,11 +50,8 @@ const uiSlice = createSlice({
     setLightBoxImage(state, action: PayloadAction<string>) {
       state.lightBoxImage = action.payload;
     },
-    setLightBoxImagePrev(state, action: PayloadAction<string>) {
-      state.lightBoxImagePrev = action.payload;
-    },
-    setLightBoxImageNext(state, action: PayloadAction<string>) {
-      state.lightBoxImageNext = action.payload;
+    setLightBoxImageList(state, action: PayloadAction<any[] | undefined>) {
+      state.lightBoxImageList = action.payload;
     }
   }
 });
@@ -69,8 +65,7 @@ export const selectBackdrop = (state: AppState) => state.ui.backdrop;
 export const selectModal = (state: AppState) => state.ui.modal;
 export const selectLightBox = (state: AppState) => state.ui.lightBox;
 export const selectLightBoxImage = (state: AppState) => state.ui.lightBoxImage;
-export const selectLightBoxImagePrev = (state: AppState) => state.ui.lightBoxImagePrev;
-export const selectLightBoxImageNext = (state: AppState) => state.ui.lightBoxImageNext;
+export const selectLightBoxImageList = (state: AppState) => state.ui.lightBoxImageList;
 
 // Reducer
 const uiReducer = uiSlice.reducer;

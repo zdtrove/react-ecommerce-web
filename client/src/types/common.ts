@@ -22,8 +22,7 @@ export type UiState = {
   modal: boolean;
   lightBox: boolean;
   lightBoxImage: string;
-  lightBoxImagePrev: string;
-  lightBoxImageNext: string;
+  lightBoxImageList: any[] | undefined;
 };
 
 export type Snackbar = {

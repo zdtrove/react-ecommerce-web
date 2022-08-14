@@ -154,6 +154,18 @@ const useStyles = makeStyles((theme) => ({
       backgroundColor: 'black',
       color: 'white'
     }
+  },
+  hoverDetail: {
+    position: 'absolute',
+    top: 0,
+    right: -250,
+    width: 200,
+    height: 400,
+    backgroundColor: 'rgba(0, 0, 0, 0.7)',
+    color: 'white',
+    padding: 20,
+    zIndex: 1,
+    display: 'none'
   }
 }));
 
@@ -405,6 +417,9 @@ const ProductItem = ({ product }: Props) => {
             ))}
         </DialogContent>
       </Dialog>
+      <Box className={classes.hoverDetail}>
+        <Typography>Product detail</Typography>
+      </Box>
     </div>
   );
 };

@@ -50,11 +50,14 @@ const useStyles = makeStyles((theme) => ({
   },
   categoryLogo: {
     backgroundColor: 'white',
-    border: '1px solid #e0e0e0',
+    border: '2.5px solid #e0e0e0',
     borderRadius: 52,
     cursor: 'pointer',
     padding: '6px 13px',
-    minWidth: 120
+    minWidth: 120,
+    '&:hover': {
+      border: '2.5px solid chartreuse'
+    }
   },
   listTitle: {
     backgroundColor: 'transparent !important',

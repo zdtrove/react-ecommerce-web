@@ -37,11 +37,7 @@ import 'swiper/css/free-mode';
 import 'swiper/css/navigation';
 import 'swiper/css/thumbs';
 import { Rating } from '@material-ui/lab';
-import {
-  selectLightBoxImageNext,
-  selectLightBoxImagePrev,
-  uiActions
-} from 'redux/features/ui/slice';
+import { uiActions, selectLightBoxImageList } from 'redux/features/ui/slice';
 import { ENDPOINTS } from 'constants/index';
 import { addWishlistApi, removeWishlistApi } from 'apis/commonApi';
 import { selectIsLoggedIn, selectUser } from 'redux/features/auth/slice';
@@ -261,14 +257,9 @@ const ProductPage = () => {
   const user = useAppSelector(selectUser);
   const products = useAppSelector(selectProducts);
   const loadingRating = useAppSelector(selectLoadingRating);
+  const lightBoxImageList = useAppSelector(selectLightBoxImageList);
   const { addToCart } = cartActions;
-  const {
-    showSnackbar,
-    showLightBox,
-    setLightBoxImage,
-    setLightBoxImagePrev,
-    setLightBoxImageNext
-  } = uiActions;
+  const { showSnackbar, showLightBox, setLightBoxImage, setLightBoxImageList } = uiActions;
   const { rating } = productActions;
   const [thumbsSwiper, setThumbsSwiper] = useState<any>(null);
   const [images, setImages] = useState<string[]>([]);
@@ -281,8 +272,7 @@ const ProductPage = () => {
   const [show, setShow] = useState(false);
   const [imagesNew, setImagesChange] = useState<any[]>([]);
   const [imagesOld, setImagesOld] = useState<any[]>([]);
-  const lightBoxImagePrev = useAppSelector(selectLightBoxImagePrev);
-  const lightBoxImageNext = useAppSelector(selectLightBoxImageNext);
+  console.log('lightBoxImageList', lightBoxImageList);
 
   const validationSchema = Yup.object().shape({
     star: Yup.number().required('Rating is required'),
@@ -578,6 +568,7 @@ const ProductPage = () => {
               <SwiperSlide key={index}>
                 <img
                   onClick={() => {
+                    dispatch(setLightBoxImageList(images));
                     dispatch(setLightBoxImage(image));
                     dispatch(showLightBox());
                   }}
@@ -740,18 +731,8 @@ const ProductPage = () => {
                         >
                           <img
                             onClick={() => {
-                              console.log(rated?.images);
-                              console.log(img);
-                              const index = rated?.images?.findIndex(
-                                (item) => item.public_id === img.public_id
-                              );
-                              console.log('index', index);
-                              if (index! > 0) {
-                                dispatch(setLightBoxImagePrev(rated?.images![index! - 1].url));
-                              }
-                              if (index! < rated?.images?.length!) {
-                                dispatch(setLightBoxImageNext(rated?.images![index! + 1].url));
-                              }
+                              const listImages = rated?.images!.map((item) => item.url);
+                              dispatch(setLightBoxImageList(listImages));
                               dispatch(setLightBoxImage(img.url));
                               dispatch(showLightBox());
                             }}
@@ -769,14 +750,6 @@ const ProductPage = () => {
       </Dialog>
     );
   };
-
-  useEffect(() => {
-    console.log('lightBoxImagePrev', lightBoxImagePrev);
-  }, [lightBoxImagePrev]);
-
-  useEffect(() => {
-    console.log('lightBoxImageNext', lightBoxImageNext);
-  }, [lightBoxImageNext]);
 
   useEffect(() => {
     if (user?._id) {
