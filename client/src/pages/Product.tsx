@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import {
   Box,
   CircularProgress,
@@ -37,7 +36,7 @@ import 'swiper/css/free-mode';
 import 'swiper/css/navigation';
 import 'swiper/css/thumbs';
 import { Rating } from '@material-ui/lab';
-import { uiActions, selectLightBoxImageList } from 'redux/features/ui/slice';
+import { uiActions } from 'redux/features/ui/slice';
 import { ENDPOINTS } from 'constants/index';
 import { addWishlistApi, removeWishlistApi } from 'apis/commonApi';
 import { selectIsLoggedIn, selectUser } from 'redux/features/auth/slice';
@@ -257,7 +256,6 @@ const ProductPage = () => {
   const user = useAppSelector(selectUser);
   const products = useAppSelector(selectProducts);
   const loadingRating = useAppSelector(selectLoadingRating);
-  const lightBoxImageList = useAppSelector(selectLightBoxImageList);
   const { addToCart } = cartActions;
   const { showSnackbar, showLightBox, setLightBoxImage, setLightBoxImageList } = uiActions;
   const { rating } = productActions;
@@ -791,6 +789,13 @@ const ProductPage = () => {
   useEffect(() => {
     const productTemp = products.filter((product) => product._id === id);
     setProduct(productTemp[0]);
+    if (product) {
+      setProductsRelated(
+        products.filter(
+          (prod) => prod.categoryId === product.categoryId && prod._id !== product?._id
+        )
+      );
+    }
   }, [id, products]);
 
   useEffect(() => {
