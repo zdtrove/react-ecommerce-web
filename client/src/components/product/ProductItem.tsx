@@ -303,7 +303,7 @@ const ProductItem = ({ product }: Props) => {
         </figure>
         <Box className={`${classes.hoverDetail} hover-detail`}>
           <Box style={{ padding: 10 }}>
-            <Typography variant="h6">{product.name}</Typography>
+            <Typography variant="h6">{product?.name}</Typography>
           </Box>
         </Box>
       </Box>
@@ -376,7 +376,7 @@ const ProductItem = ({ product }: Props) => {
           </small>
         </Typography>
       </Box>
-      <Dialog show={show} setShow={setShow} title={product.name}>
+      <Dialog show={show} setShow={setShow} title={product?.name}>
         <DialogContent className={classes.dialogRated}>
           {list.length > 0 &&
             list.map((rated, index) => (

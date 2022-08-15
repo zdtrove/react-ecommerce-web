@@ -666,7 +666,7 @@ const ProductPage = () => {
 
   const renderListRated = () => {
     return (
-      <Dialog show={show} setShow={setShow} title={product.name}>
+      <Dialog show={show} setShow={setShow} title={product?.name}>
         <DialogContent className={classes.dialogRated}>
           {product?.star?.list.length > 0 &&
             product.star.list.map((rated, index) => (
