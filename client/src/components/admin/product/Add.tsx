@@ -21,7 +21,7 @@ import { productActions, selectLoadingProduct } from 'redux/features/product/sli
 import { createCategoryList } from 'utils/functions';
 import { selectCategories } from 'redux/features/category/slice';
 import { Product, Star } from 'types/product';
-import { selectModal, uiActions } from 'redux/features/ui/slice';
+import { selectModal } from 'redux/features/ui/slice';
 
 const useStyles = makeStyles(() => ({
   upload: {
@@ -97,7 +97,6 @@ const Add = ({ show, setShow }: Props) => {
   const classes = useStyles();
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.up('sm'));
-  const { setLightBoxImage, showLightBox } = uiActions;
   const categories = useAppSelector(selectCategories);
   const loading = useAppSelector(selectLoadingProduct);
   const modal = useAppSelector(selectModal);
@@ -218,13 +217,7 @@ const Add = ({ show, setShow }: Props) => {
           <div className={classes.imageList}>
             {images.map((img, index) => (
               <div className={classes.imageItem} key={index}>
-                <img
-                  onClick={() => {
-                    dispatch(setLightBoxImage(URL.createObjectURL(img)));
-                    dispatch(showLightBox());
-                  }}
-                  src={URL.createObjectURL(img)}
-                />
+                <img src={URL.createObjectURL(img)} />
                 <span onClick={() => deleteImages(index)}>
                   <HighlightOffIcon />
                 </span>

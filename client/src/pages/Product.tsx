@@ -272,7 +272,6 @@ const ProductPage = () => {
   const [show, setShow] = useState(false);
   const [imagesNew, setImagesChange] = useState<any[]>([]);
   const [imagesOld, setImagesOld] = useState<any[]>([]);
-  console.log('lightBoxImageList', lightBoxImageList);
 
   const validationSchema = Yup.object().shape({
     star: Yup.number().required('Rating is required'),
@@ -502,14 +501,7 @@ const ProductPage = () => {
             {imagesOld &&
               imagesOld.map((img, index) => (
                 <div className={classes.imageItem} key={index}>
-                  <img
-                    onClick={() => {
-                      dispatch(setLightBoxImage(img.url));
-                      dispatch(showLightBox());
-                    }}
-                    src={img.url}
-                    alt="images"
-                  />
+                  <img src={img} alt="images" />
                   <span onClick={() => deleteOldImages(index)}>
                     <HighlightOffIcon />
                   </span>
@@ -518,14 +510,7 @@ const ProductPage = () => {
             {imagesNew &&
               imagesNew.map((img, index) => (
                 <div className={classes.imageItem} key={index}>
-                  <img
-                    onClick={() => {
-                      dispatch(setLightBoxImage(URL.createObjectURL(img)));
-                      dispatch(showLightBox());
-                    }}
-                    src={URL.createObjectURL(img)}
-                    alt="images"
-                  />
+                  <img src={URL.createObjectURL(img)} alt="images" />
                   <span onClick={() => deleteNewImages(index)}>
                     <HighlightOffIcon />
                   </span>
@@ -774,7 +759,8 @@ const ProductPage = () => {
       const myRated: ListRated[] = product?.star?.list.filter((item) => item.userId === user?._id);
       if (myRated.length) {
         setRated(myRated[0].star);
-        setImagesOld(myRated[0]?.images!);
+        const listImages = myRated[0]?.images!.map((item) => item.url);
+        setImagesOld(listImages);
         setImagesChange([]);
         formIk.setFieldValue('star', myRated[0].star);
         formIk.setFieldValue('message', myRated[0].message);

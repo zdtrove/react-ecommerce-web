@@ -10,6 +10,7 @@ import {
 } from 'redux/features/ui/slice';
 import NavigateBeforeIcon from '@material-ui/icons/NavigateBefore';
 import NavigateNextIcon from '@material-ui/icons/NavigateNext';
+import { useEffect, useState } from 'react';
 
 const useStyles = makeStyles(() => ({
   lightBox: {
@@ -21,7 +22,10 @@ const useStyles = makeStyles(() => ({
     right: 0,
     bottom: 0,
     backgroundColor: 'rgba(0, 0, 0, 0.7)',
-    zIndex: 9999
+    zIndex: 9999,
+    '& .Mui-disabled': {
+      color: '#ddd6 !important'
+    }
   },
   hidden: {
     visibility: 'hidden'
@@ -53,28 +57,37 @@ const LightBox = () => {
   const lightBoxImage = useAppSelector(selectLightBoxImage);
   const lightBoxImageList = useAppSelector(selectLightBoxImageList);
   const { hideLightBox, setLightBoxImage } = uiActions;
+  const [disabledPrev, setDisabledPrev] = useState(false);
+  const [disabledNext, setDisabledNext] = useState(false);
 
   const handlePrevLightBox = () => {
     if (lightBoxImageList) {
       const index = lightBoxImageList.findIndex((item) => item === lightBoxImage);
-      if (index > 0) {
-        dispatch(setLightBoxImage(lightBoxImageList[index - 1]));
-      } else {
-        dispatch(setLightBoxImage(lightBoxImageList[lightBoxImageList.length - 1]));
-      }
+      index > 0 && dispatch(setLightBoxImage(lightBoxImageList[index - 1]));
+      index === 1 && setDisabledPrev(true);
+      setDisabledNext(false);
     }
   };
 
   const handleNextLightBox = () => {
     if (lightBoxImageList) {
       const index = lightBoxImageList.findIndex((item) => item === lightBoxImage);
-      if (index < lightBoxImageList.length - 1) {
+      index < lightBoxImageList.length - 1 &&
         dispatch(setLightBoxImage(lightBoxImageList[index + 1]));
-      } else {
-        dispatch(setLightBoxImage(lightBoxImageList[0]));
-      }
+      index === lightBoxImageList.length - 2 && setDisabledNext(true);
+      setDisabledPrev(false);
     }
   };
+
+  useEffect(() => {
+    if (lightBoxImageList) {
+      const index = lightBoxImageList.findIndex((item) => item === lightBoxImage);
+      setDisabledPrev(index === 0);
+      index !== -1 && index === lightBoxImageList.length - 1
+        ? setDisabledNext(true)
+        : setDisabledNext(false);
+    }
+  }, [lightBoxImage]);
 
   return (
     <Box
@@ -89,11 +102,11 @@ const LightBox = () => {
       <IconButton className={classes.closeLightBox} onClick={() => dispatch(hideLightBox())}>
         <CloseIcon />
       </IconButton>
-      <IconButton className={classes.nextPrev} onClick={handlePrevLightBox}>
+      <IconButton disabled={disabledPrev} className={classes.nextPrev} onClick={handlePrevLightBox}>
         <NavigateBeforeIcon />
       </IconButton>
       <img src={lightBoxImage} alt="image" />
-      <IconButton className={classes.nextPrev} onClick={handleNextLightBox}>
+      <IconButton disabled={disabledNext} className={classes.nextPrev} onClick={handleNextLightBox}>
         <NavigateNextIcon />
       </IconButton>
     </Box>

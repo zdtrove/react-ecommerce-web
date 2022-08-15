@@ -37,7 +37,7 @@ type Props = {
 const Detail = ({ category, show, setShow, product }: Props) => {
   const classes = useStyles();
   const dispatch = useAppDispatch();
-  const { setLightBoxImage, showLightBox } = uiActions;
+  const { setLightBoxImage, showLightBox, setLightBoxImageList } = uiActions;
   const { name, description, price, sold, star, images } = product;
 
   return (
@@ -70,6 +70,8 @@ const Detail = ({ category, show, setShow, product }: Props) => {
                 <div className={classes.imageItem} key={index}>
                   <img
                     onClick={() => {
+                      const listImages = images.map((item) => item.url);
+                      dispatch(setLightBoxImageList(listImages));
                       dispatch(setLightBoxImage(img.url));
                       dispatch(showLightBox());
                     }}
