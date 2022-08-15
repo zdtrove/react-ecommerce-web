@@ -7,14 +7,15 @@ import {
   CircularProgress,
   DialogContent,
   List,
-  Divider
+  Divider,
+  Button
 } from '@material-ui/core';
 import { Product } from 'types/product';
 import { formatNumber } from 'utils/functions';
 import StarIcon from '@material-ui/icons/Star';
 import StarOutlineIcon from '@material-ui/icons/StarOutline';
 import StarHalfIcon from '@material-ui/icons/StarHalf';
-import { Button, Dialog } from 'components/UI';
+import { Dialog } from 'components/UI';
 import { useAppDispatch, useAppSelector } from 'redux/hook';
 import { cartActions } from 'redux/features/cart/slice';
 import { selectProducts } from 'redux/features/product/slice';
@@ -158,14 +159,23 @@ const useStyles = makeStyles((theme) => ({
   hoverDetail: {
     position: 'absolute',
     top: 0,
-    right: -250,
-    width: 200,
-    height: 400,
+    right: 0,
+    width: '100%',
+    height: '100%',
     backgroundColor: 'rgba(0, 0, 0, 0.7)',
     color: 'white',
-    padding: 20,
+    overflowY: 'scroll',
+    opacity: 0,
+    visibility: 'hidden',
+    transition: 'all .5s ease',
     zIndex: 1,
     display: 'none'
+  },
+  mainImage: {
+    '&:hover .hover-detail': {
+      opacity: 1,
+      visibility: 'visible'
+    }
   }
 }));
 
@@ -181,7 +191,7 @@ const ProductItem = ({ product }: Props) => {
   const wishlist = useAppSelector(selectWishlist);
   const isLoggedIn = useAppSelector(selectIsLoggedIn);
   const { addToCart } = cartActions;
-  const { showSnackbar, showLightBox, setLightBoxImage } = uiActions;
+  const { showSnackbar, showLightBox, setLightBoxImage, setLightBoxImageList } = uiActions;
   const { addToWishlist, removeFromWishlist } = authActions;
   const {
     _id,
@@ -287,9 +297,16 @@ const ProductItem = ({ product }: Props) => {
 
   return (
     <div className={classes.root}>
-      <figure onClick={() => history.push(`/product/${_id}`)}>
-        <img src={images && images[0].url} alt="" />
-      </figure>
+      <Box className={classes.mainImage}>
+        <figure onClick={() => history.push(`/product/${_id}`)}>
+          <img src={images && images[0].url} alt="" />
+        </figure>
+        <Box className={`${classes.hoverDetail} hover-detail`}>
+          <Box style={{ padding: 10 }}>
+            <Typography variant="h6">{product.name}</Typography>
+          </Box>
+        </Box>
+      </Box>
       <Typography
         onClick={() => history.push(`/product/${_id}`)}
         className={classes.name}
@@ -298,7 +315,7 @@ const ProductItem = ({ product }: Props) => {
         {name}
       </Typography>
       <Box display="flex" justifyContent="left" alignItems="center">
-        <AttachMoneyIcon style={{ color: 'green' }} />
+        <AttachMoneyIcon style={{ color: 'green', marginLeft: -5 }} />
         <Typography className={classes.price} color="secondary" variant="h5">
           {formatNumber(price)}
         </Typography>
@@ -338,22 +355,28 @@ const ProductItem = ({ product }: Props) => {
       </Box>
       <Box className={classes.action} display="flex" justifyContent="left" alignItems="center">
         {inCart ? (
-          <Button variant="contained" disabled text="In Cart" />
+          <Button variant="contained" style={{ textTransform: 'none' }}>
+            <small>In Cart</small>
+          </Button>
         ) : (
           <Button
             className={classes.addToCart}
+            variant="contained"
+            color="primary"
             onClick={() => dispatch(addToCart({ product, products, inCart: true }))}
-            text="Add To Cart"
-          />
+            style={{ textTransform: 'none' }}
+          >
+            <small>Add To Cart</small>
+          </Button>
         )}
         <Typography variant="subtitle2">
-          Sold{' '}
+          <small>Sold</small>{' '}
           <small>
             <b>({sold})</b>
           </small>
         </Typography>
       </Box>
-      <Dialog show={show} setShow={setShow} title="LIST RATED">
+      <Dialog show={show} setShow={setShow} title={product.name}>
         <DialogContent className={classes.dialogRated}>
           {list.length > 0 &&
             list.map((rated, index) => (
@@ -402,6 +425,8 @@ const ProductItem = ({ product }: Props) => {
                         >
                           <img
                             onClick={() => {
+                              const listImages = rated?.images!.map((item) => item.url);
+                              dispatch(setLightBoxImageList(listImages));
                               dispatch(setLightBoxImage(img.url));
                               dispatch(showLightBox());
                             }}
@@ -417,9 +442,6 @@ const ProductItem = ({ product }: Props) => {
             ))}
         </DialogContent>
       </Dialog>
-      <Box className={classes.hoverDetail}>
-        <Typography>Product detail</Typography>
-      </Box>
     </div>
   );
 };

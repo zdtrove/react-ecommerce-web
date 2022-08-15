@@ -68,7 +68,10 @@ const useStyles = makeStyles((theme) => ({
   },
   box: {
     backgroundColor: theme.palette.primary.light,
-    padding: `${theme.spacing(1.5)}px`
+    padding: `${theme.spacing(1.5)}px`,
+    '& .swiper-button-disabled': {
+      pointerEvents: 'initial !important'
+    }
   },
   viewAll: {
     backgroundColor: 'white',

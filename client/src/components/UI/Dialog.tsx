@@ -41,7 +41,7 @@ const MuiDialog = ({ show, setShow, title, children }: Props) => {
   return (
     <Dialog classes={{ paper: classes.root }} open={show}>
       <DialogTitle>
-        {title}
+        <b>{title}</b>
         <IconButton aria-label="close" className={classes.closeBtn} onClick={() => setShow(false)}>
           <CloseIcon />
         </IconButton>
