@@ -499,7 +499,7 @@ const ProductPage = () => {
             {imagesOld &&
               imagesOld.map((img, index) => (
                 <div className={classes.imageItem} key={index}>
-                  <img src={img} alt="images" />
+                  <img src={img.url} alt="images" />
                   <span onClick={() => deleteOldImages(index)}>
                     <HighlightOffIcon />
                   </span>
@@ -757,8 +757,7 @@ const ProductPage = () => {
       const myRated: ListRated[] = product?.star?.list.filter((item) => item.userId === user?._id);
       if (myRated.length) {
         setRated(myRated[0].star);
-        const listImages = myRated[0]?.images!.map((item) => item.url);
-        setImagesOld(listImages);
+        setImagesOld(myRated[0]?.images!);
         setImagesChange([]);
         formIk.setFieldValue('star', myRated[0].star);
         formIk.setFieldValue('message', myRated[0].message);
