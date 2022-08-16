@@ -23,6 +23,7 @@ export type UiState = {
   lightBox: boolean;
   lightBoxImage: string;
   lightBoxImageList: any[] | undefined;
+  progress: number;
 };
 
 export type Snackbar = {

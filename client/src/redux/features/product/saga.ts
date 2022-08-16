@@ -42,7 +42,7 @@ const {
   ratingSuccess
 } = productActions;
 
-const { hideModal } = uiActions;
+const { hideModal, setProgress } = uiActions;
 
 function* getProductsSearchBarSaga(action: PayloadAction<string>) {
   try {
@@ -67,6 +67,15 @@ function* getProductsSearchBarSaga(action: PayloadAction<string>) {
 
 function* getProductsSaga() {
   try {
+    yield put(setProgress(10));
+    yield put(setProgress(20));
+    yield put(setProgress(30));
+    yield put(setProgress(40));
+    yield put(setProgress(50));
+    yield put(setProgress(60));
+    yield put(setProgress(70));
+    yield put(setProgress(80));
+    yield put(setProgress(90));
     const res: ListResponse<Product> = yield call(getAllDataApi, ENDPOINTS.products.getAll);
     const { status, data } = res;
     if (status === 200) {
@@ -81,10 +90,12 @@ function* getProductsSaga() {
         });
       }
       yield put(getProductsSuccess(tempData));
+      yield put(setProgress(100));
     }
   } catch (error) {
     console.log(error);
     yield put(getProductsFail());
+    yield put(setProgress(100));
   }
 }
 

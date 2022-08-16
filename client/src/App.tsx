@@ -27,6 +27,8 @@ import { categoryActions, selectCategories } from 'redux/features/category/slice
 import './styles.css';
 import { selectUsers, userActions } from 'redux/features/user/slice';
 import LightBox from 'components/LightBox';
+import LoadingBar from 'react-top-loading-bar';
+import { selectProgress } from 'redux/features/ui/slice';
 
 function App() {
   const dispatch = useAppDispatch();
@@ -36,6 +38,7 @@ function App() {
   const products = useAppSelector(selectProducts);
   const categories = useAppSelector(selectCategories);
   const users = useAppSelector(selectUsers);
+  const progress = useAppSelector(selectProgress);
 
   useEffect(() => {
     dispatch(authActions.getLoggedUser());
@@ -72,6 +75,7 @@ function App() {
       <Snackbar />
       <Backdrop />
       <LightBox />
+      <LoadingBar color="#00ff1b" progress={progress} height={4} loaderSpeed={2000} />
     </Router>
   );
 }
