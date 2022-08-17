@@ -21,7 +21,6 @@ axios.interceptors.request.use(
         Authorization: localStorage.getItem(ACCESS_TOKEN)
       });
     }
-    // store.dispatch({ type: showBackdrop.type });
 
     return config;
   },
@@ -44,7 +43,6 @@ axios.interceptors.response.use(
         });
       }
     }
-    // store.dispatch({ type: hideBackdrop.type });
 
     return response;
   },
@@ -54,10 +52,8 @@ axios.interceptors.response.use(
     if (data.name === JWT_INVALID) {
       store.dispatch({ type: logoutSuccess.type });
       localStorage.removeItem(ACCESS_TOKEN);
-      if (data.role) {
-        window.location.href = data.role === ADMIN ? ROUTES.admin.login : ROUTES.home.login;
-      } else {
-        window.location.href = ROUTES.home.login;
+      if (data.role === ADMIN) {
+        window.location.href = ROUTES.admin.login;
       }
     }
 
@@ -70,8 +66,6 @@ axios.interceptors.response.use(
     }
     if (data.name !== JWT_INVALID) {
       console.log('error.response', error.response);
-      // store.dispatch({ type: clearToken.type });
-      // window.location.href = ROUTES.home.login;
       store.dispatch({
         type: showSnackbar.type,
         payload: {
@@ -80,7 +74,6 @@ axios.interceptors.response.use(
         }
       });
     }
-    // store.dispatch({ type: hideBackdrop });
 
     return Promise.reject(error);
   }

@@ -11,7 +11,8 @@ import {
   Typography,
   useMediaQuery,
   useTheme,
-  Zoom
+  Zoom,
+  Button as MuiButton
 } from '@material-ui/core';
 import Layout from 'components/layouts';
 import { Fragment, useEffect, useState } from 'react';
@@ -115,7 +116,9 @@ const useStyles = makeStyles((theme) => ({
   },
   addToCart: {
     backgroundColor: theme.palette.green.dark,
-    marginLeft: 0
+    marginLeft: 0,
+    borderRadius: 20,
+    padding: '2px 16px'
   },
   action: {
     marginTop: theme.spacing(1),
@@ -405,17 +408,21 @@ const ProductPage = () => {
         {renderStar(3)}
         {renderStar(4)}
         {renderStar(5)}
-        <Tooltip
-          TransitionComponent={Zoom}
-          arrow
-          title="View all rated"
-          placement="top"
-          onClick={() => setShow(true)}
-        >
-          <Typography className={classes.viewAllRated}>
-            {product?.star?.list?.length} Rated
-          </Typography>
-        </Tooltip>
+        {product?.star?.list?.length > 0 ? (
+          <Tooltip
+            TransitionComponent={Zoom}
+            arrow
+            title="View all rated"
+            placement="top"
+            onClick={() => setShow(true)}
+          >
+            <Typography className={classes.viewAllRated}>
+              {product?.star?.list?.length} Rated
+            </Typography>
+          </Tooltip>
+        ) : (
+          <Typography style={{ marginLeft: 10, fontWeight: 700, marginTop: 3 }}>0 Rated</Typography>
+        )}
       </Box>
     );
   };
@@ -622,13 +629,23 @@ const ProductPage = () => {
         </Box>
         <Box className={classes.action} display="flex" justifyContent="left" alignItems="center">
           {product?.inCart ? (
-            <Button variant="contained" disabled text="In Cart" />
+            <MuiButton
+              variant="contained"
+              style={{ textTransform: 'none', padding: '2px 16px', borderRadius: 20 }}
+              disabled
+            >
+              <small>In Cart</small>
+            </MuiButton>
           ) : (
-            <Button
+            <MuiButton
               className={classes.addToCart}
+              variant="contained"
+              color="primary"
               onClick={() => dispatch(addToCart({ product, products, inCart: true }))}
-              text="Add To Cart"
-            />
+              style={{ textTransform: 'none' }}
+            >
+              <small>Add To Cart</small>
+            </MuiButton>
           )}
           <Typography variant="subtitle2">
             Sold{' '}

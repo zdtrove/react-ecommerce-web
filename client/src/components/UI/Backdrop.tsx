@@ -1,4 +1,4 @@
-import { makeStyles, Backdrop as MuiBackdrop, CircularProgress } from '@material-ui/core';
+import { makeStyles, Backdrop as MuiBackdrop } from '@material-ui/core';
 import { useAppSelector } from 'redux/hook';
 import { selectBackdrop } from 'redux/features/ui/slice';
 
@@ -12,11 +12,7 @@ const Backdrop = () => {
   const backdrop = useAppSelector(selectBackdrop);
   const classes = useStyles();
 
-  return (
-    <MuiBackdrop classes={{ root: classes.backdrop }} open={backdrop}>
-      <CircularProgress />
-    </MuiBackdrop>
-  );
+  return <MuiBackdrop classes={{ root: classes.backdrop }} open={backdrop}></MuiBackdrop>;
 };
 
 export default Backdrop;

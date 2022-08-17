@@ -355,7 +355,7 @@ const ProductItem = ({ product }: Props) => {
       </Box>
       <Box className={classes.action} display="flex" justifyContent="left" alignItems="center">
         {inCart ? (
-          <Button variant="contained" style={{ textTransform: 'none' }}>
+          <Button variant="contained" style={{ textTransform: 'none' }} disabled>
             <small>In Cart</small>
           </Button>
         ) : (

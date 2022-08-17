@@ -42,7 +42,7 @@ const {
   ratingSuccess
 } = productActions;
 
-const { hideModal, setProgress } = uiActions;
+const { hideModal, setProgress, showBackdrop, hideBackdrop } = uiActions;
 
 function* getProductsSearchBarSaga(action: PayloadAction<string>) {
   try {
@@ -67,6 +67,7 @@ function* getProductsSearchBarSaga(action: PayloadAction<string>) {
 
 function* getProductsSaga() {
   try {
+    yield put(showBackdrop());
     yield put(setProgress(15));
     yield delay(350);
     yield put(setProgress(30));
@@ -95,11 +96,13 @@ function* getProductsSaga() {
       }
       yield put(getProductsSuccess(tempData));
       yield put(setProgress(100));
+      yield put(hideBackdrop());
     }
   } catch (error) {
     console.log(error);
     yield put(getProductsFail());
     yield put(setProgress(100));
+    yield put(hideBackdrop());
   }
 }
 
