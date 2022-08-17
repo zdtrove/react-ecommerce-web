@@ -75,7 +75,7 @@ function App() {
       <Snackbar />
       <Backdrop />
       <LightBox />
-      <LoadingBar color="#00ff1b" progress={progress} height={4} loaderSpeed={2000} />
+      <LoadingBar color="#00ff1b" progress={progress} height={3} loaderSpeed={2000} />
     </Router>
   );
 }

@@ -191,7 +191,7 @@ const Layout = ({ children }: Props) => {
   const isLoggedIn = useAppSelector(selectIsLoggedIn);
   const { openCart } = cartActions;
   const { getProductsSearchBar, getProductsSearchBarSuccess } = productActions;
-  const { ref, isComponentVisible, setIsComponentVisible } = useComponentVisible(true);
+  const { ref, isComponentVisible, setIsComponentVisible } = useComponentVisible(false);
   const { USER } = userRoles;
   const [language, setLanguage] = useState('en');
 

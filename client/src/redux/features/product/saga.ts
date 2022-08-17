@@ -67,15 +67,19 @@ function* getProductsSearchBarSaga(action: PayloadAction<string>) {
 
 function* getProductsSaga() {
   try {
-    yield put(setProgress(10));
-    yield put(setProgress(20));
+    yield put(setProgress(15));
+    yield delay(350);
     yield put(setProgress(30));
-    yield put(setProgress(40));
-    yield put(setProgress(50));
+    yield delay(300);
+    yield put(setProgress(45));
+    yield delay(300);
     yield put(setProgress(60));
-    yield put(setProgress(70));
-    yield put(setProgress(80));
+    yield delay(250);
+    yield put(setProgress(75));
+    yield delay(200);
     yield put(setProgress(90));
+    yield delay(200);
+    yield put(setProgress(95));
     const res: ListResponse<Product> = yield call(getAllDataApi, ENDPOINTS.products.getAll);
     const { status, data } = res;
     if (status === 200) {

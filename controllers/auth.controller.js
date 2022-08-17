@@ -3,12 +3,12 @@ const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 
 const createAccessToken = payload => {
-    return jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '2h'})
+    return jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '8h'})
     // return jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '30s'})
 }
 
 const createRefreshToken = payload => {
-    return jwt.sign(payload, process.env.REFRESH_TOKEN_SECRET, { expiresIn: '2d' })
+    return jwt.sign(payload, process.env.REFRESH_TOKEN_SECRET, { expiresIn: '7d' })
     // return jwt.sign(payload, process.env.REFRESH_TOKEN_SECRET, { expiresIn: '1d' })
     // return jwt.sign(payload, process.env.REFRESH_TOKEN_SECRET, { expiresIn: '60s' })
 }
