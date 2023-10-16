@@ -45,7 +45,7 @@ function App() {
     !users.length && dispatch(getUsers());
     !categories.length && dispatch(getCategories());
     !products.length && dispatch(getProducts());
-    console.log(`Last Updated: ${new Date('2022-08-15')}`);
+    console.log(`Last Updated: ${new Date()}`);
   }, []);
 
   return (

@@ -45,3 +45,22 @@ export const formatNumber = (value: number) => {
   parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
   return parts.join('.');
 };
+
+export const convertDays = (date: Date): string => {
+  var date1 = new Date(date);
+  var date2 = new Date();
+  var days = Math.round((date2.getTime() - date1.getTime()) / (1000 * 60 * 60 * 24));
+  let result = '';
+
+  if (days <= 7) {
+    result = `${days} days ago`;
+  } else if (days <= 31) {
+    result = `${Math.floor(days / 7)} weeks ago`;
+  } else if (days <= 365) {
+    result = `${Math.floor(days / 30)} months ago`;
+  } else {
+    result = `${Math.floor(days / 365)} years ago`;
+  }
+
+  return result;
+};

@@ -22,7 +22,7 @@ import { useAppDispatch, useAppSelector } from 'redux/hook';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { FreeMode, Navigation, Thumbs } from 'swiper';
 import clsx from 'clsx';
-import { formatNumber } from 'utils/functions';
+import { convertDays, formatNumber } from 'utils/functions';
 import ProductItem from 'components/product/ProductItem';
 import StarIcon from '@material-ui/icons/Star';
 import { Button, Dialog, Input } from 'components/UI';
@@ -159,6 +159,10 @@ const useStyles = makeStyles((theme) => ({
       borderTopLeftRadius: 10,
       borderBottomLeftRadius: 10
     }
+  },
+  formRated: {
+    marginTop: theme.spacing(4),
+    maxWidth: 460
   },
   rated: {
     marginTop: theme.spacing(2),
@@ -460,11 +464,8 @@ const ProductPage = () => {
 
   const renderRated = () => {
     return (
-      <form onSubmit={formIk.handleSubmit}>
+      <form className={classes.formRated} onSubmit={formIk.handleSubmit}>
         <Box className={classes.rated}>
-          <Typography style={{ fontWeight: 700 }} variant="h5">
-            Rated:
-          </Typography>
           <Box style={{ border: '1px dashed orange', padding: 10, borderRadius: 8 }}>
             <Rating
               {...formIk.getFieldProps('star')}
@@ -829,19 +830,35 @@ const ProductPage = () => {
       <Box className={classes.root}>
         <Box className={classes.detailContainer} display="flex">
           {renderGallery()}
-          <Box className={classes.detail}>
-            {renderDetail()}
-            <Box className={classes.ratedResult}>
-              {renderRatedAverage()}
-              {renderStarPercent(5, starByNumber?.five?.percent, starByNumber?.five?.value)}
-              {renderStarPercent(4, starByNumber?.four?.percent, starByNumber?.four?.value)}
-              {renderStarPercent(3, starByNumber?.three?.percent, starByNumber?.three?.value)}
-              {renderStarPercent(2, starByNumber?.two?.percent, starByNumber?.two?.value)}
-              {renderStarPercent(1, starByNumber?.one?.percent, starByNumber?.one?.value)}
-            </Box>
-            {renderRated()}
-          </Box>
+          <Box className={classes.detail}>{renderDetail()}</Box>
         </Box>
+        <div>
+          <h3>
+            List of reviews for <i>{product?.name}</i>
+          </h3>
+          <Box className={classes.ratedResult}>
+            {renderRatedAverage()}
+            {renderStarPercent(5, starByNumber?.five?.percent, starByNumber?.five?.value)}
+            {renderStarPercent(4, starByNumber?.four?.percent, starByNumber?.four?.value)}
+            {renderStarPercent(3, starByNumber?.three?.percent, starByNumber?.three?.value)}
+            {renderStarPercent(2, starByNumber?.two?.percent, starByNumber?.two?.value)}
+            {renderStarPercent(1, starByNumber?.one?.percent, starByNumber?.one?.value)}
+          </Box>
+          <ul style={{ listStyle: 'none', paddingLeft: 0, marginTop: 30 }}>
+            {product?.star?.list.map((item) => (
+              <li key={item.userId}>
+                <p style={{ fontWeight: 700, marginBottom: 0 }}>
+                  <span>{item.userName}</span>
+                </p>
+                <Rating value={item.star} />
+                <p>{item.message}</p>
+                <p style={{ color: '#8f9bb3', fontSize: 12 }}>Đã mua {convertDays(item.date)}</p>
+              </li>
+            ))}
+          </ul>
+          <h4>Write your review</h4>
+          {renderRated()}
+        </div>
         {renderRelated()}
       </Box>
       {renderListRated()}
